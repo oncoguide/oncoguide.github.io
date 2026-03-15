@@ -134,6 +134,16 @@ Categories: `technical`, `design`, `content`, `learning`, `process`
 Python research agent in `agents/research/`, adapted from cancer-news-agent.
 Searches 5 backends, enriches with Claude, generates master guide markdown per topic.
 
+### Setup (env variables -- no config.json needed)
+
+```bash
+# In ~/.zshenv (persistent across sessions):
+export ANTHROPIC_API_KEY="sk-ant-..."
+export SERPER_API_KEY="..."
+export PUBMED_EMAIL="nog.opt.3o@icloud.com"
+# Optional: export OPENFDA_API_KEY="..."
+```
+
 ### CLI Commands
 
 ```bash
