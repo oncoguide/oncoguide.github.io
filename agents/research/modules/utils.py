@@ -9,6 +9,8 @@ from urllib.parse import urlparse
 
 from dateutil import parser as dateutil_parser
 
+logger = logging.getLogger(__name__)
+
 
 def compute_content_hash(topic_id: str, title: str, url: str) -> str:
     """SHA-256 hash for deduplication. Includes topic_id so same finding
@@ -65,3 +67,41 @@ def parse_date(date_str: str | None) -> str | None:
 def now_iso() -> str:
     """Current datetime as ISO string."""
     return datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+
+def load_skill_context(skill_path: str) -> str:
+    """Load a skill file and extract persona, key principles, and learnings.
+
+    Strips YAML frontmatter and section headers. Returns plain text
+    suitable for use as part of a system prompt.
+    """
+    if not os.path.exists(skill_path):
+        logger.warning(f"Skill file not found: {skill_path}")
+        return ""
+
+    with open(skill_path) as f:
+        content = f.read()
+
+    # Strip YAML frontmatter
+    if content.startswith("---"):
+        parts = content.split("---", 2)
+        if len(parts) >= 3:
+            content = parts[2].strip()
+
+    # Extract relevant sections: Persona, Context, Learnings
+    lines = content.split("\n")
+    result_lines = []
+    in_relevant_section = False
+
+    for line in lines:
+        if line.startswith("## "):
+            section_name = line[3:].strip().lower()
+            in_relevant_section = section_name in ("persona", "context", "learnings")
+            if in_relevant_section:
+                if section_name == "learnings":
+                    result_lines.append("\nLEARNINGS FROM PREVIOUS RUNS:")
+                continue
+        if in_relevant_section:
+            result_lines.append(line)
+
+    return "\n".join(result_lines).strip()

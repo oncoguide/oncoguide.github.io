@@ -1,5 +1,6 @@
+import os
 import pytest
-from modules.utils import compute_content_hash, sanitize_text, extract_domain, parse_date
+from modules.utils import compute_content_hash, sanitize_text, extract_domain, parse_date, load_skill_context
 
 
 def test_compute_content_hash_deterministic():
@@ -42,3 +43,31 @@ def test_parse_date_valid():
 
 def test_parse_date_none():
     assert parse_date(None) is None
+
+
+def test_load_skill_context_extracts_persona(tmp_path):
+    skill_file = tmp_path / "test-skill.md"
+    skill_file.write_text(
+        "---\nname: test\ndescription: test skill\n---\n\n"
+        "## Persona\n\nExperienced doctor.\n\n"
+        "## Actions\n\n1. Do things\n"
+    )
+    context = load_skill_context(str(skill_file))
+    assert "Experienced doctor" in context
+    assert "## Persona" not in context  # heading stripped
+
+
+def test_load_skill_context_includes_learnings(tmp_path):
+    skill_file = tmp_path / "test-skill.md"
+    skill_file.write_text(
+        "---\nname: test\ndescription: test\n---\n\n"
+        "## Persona\n\nDoctor.\n\n"
+        "## Learnings\n\n- Always check withdrawal status\n"
+    )
+    context = load_skill_context(str(skill_file))
+    assert "Always check withdrawal status" in context
+
+
+def test_load_skill_context_missing_file():
+    context = load_skill_context("/nonexistent/path.md")
+    assert context == ""
