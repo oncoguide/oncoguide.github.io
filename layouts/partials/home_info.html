@@ -1,0 +1,36 @@
+{{- with site.Params.homeInfoParams }}
+<article class="home-hero" role="banner">
+    <div class="home-hero-inner">
+        <h1 class="home-hero-title">{{ .Title | markdownify }}</h1>
+        <p class="home-hero-subtitle">{{ .Content | markdownify }}</p>
+        <div class="home-hero-mission">
+            <p>{{ i18n "homeMissionText" | default "Every guide on this site is the result of research using AI tools and international medical databases. Non-commercial, ad-free, verified with evidence-based oncology sources." }}</p>
+        </div>
+    </div>
+</article>
+{{- end -}}
+
+{{- /* Featured article — latest from mainSections */ -}}
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true" }}
+{{- $featured := first 1 $pages }}
+{{- with index $featured 0 }}
+<section class="home-featured" aria-label="{{ i18n "homeFeaturedLabel" | default "Featured article" }}">
+    <div class="home-featured-inner">
+        <span class="home-featured-badge">{{ i18n "homeFeaturedBadge" | default "Latest Guide" }}</span>
+        <h2 class="home-featured-title">
+            <a href="{{ .Permalink }}">{{ .Title }}</a>
+        </h2>
+        <p class="home-featured-summary">{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p>
+        <div class="home-featured-meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
+            <span class="home-featured-dot">&middot;</span>
+            <span>{{ .ReadingTime }} {{ i18n "read_time" | default "min read" }}</span>
+        </div>
+        <a href="{{ .Permalink }}" class="home-cta">
+            {{ i18n "homeFeaturedRead" | default "Read the full guide" }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+    </div>
+</section>
+{{- end -}}

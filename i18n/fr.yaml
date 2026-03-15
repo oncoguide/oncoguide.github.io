@@ -1,0 +1,45 @@
+# OncoGuide — Chaînes i18n personnalisées (Français)
+
+disclaimerLabel: "Avertissement Médical"
+disclaimerText: "Le contenu de cet article est à titre informatif uniquement et ne constitue pas un avis médical. Discutez de toute décision médicale avec votre oncologue. En cas de symptômes urgents, contactez immédiatement un médecin."
+
+actionBoxLabel: "Que faire maintenant"
+actionBoxTitle: "Que faire maintenant"
+
+calloutImportant: "Important"
+calloutTip: "Conseil"
+calloutWarning: "Attention"
+
+newsletterCTA: "Restez informé — abonnez-vous pour de nouveaux articles"
+
+# Sections de la page d'accueil
+homeSectionsLabel: "Explorez les sujets"
+homeSectionDiagnosis: "Diagnostic"
+homeSectionDiagnosisDesc: "Guides étape par étape, du premier soupçon au diagnostic complet"
+homeSectionCancerTypes: "Types de cancer"
+homeSectionCancerTypesDesc: "Guides par type de cancer : ce qu'il faut savoir, quelles questions poser"
+homeSectionTreatment: "Accès aux traitements"
+homeSectionTreatmentDesc: "Vos droits, l'accès aux médicaments et les options légales"
+homeSectionImaging: "Centres d'imagerie"
+homeSectionImagingDesc: "TEP-TDM, IRM, scanner : où aller et à quoi s'attendre"
+homeSectionTrials: "Essais cliniques"
+homeSectionTrialsDesc: "Comment trouver et accéder aux études qui pourraient vous aider"
+homeSectionAbout: "À propos"
+homeSectionAboutDesc: "Notre mission : écrit par des patients, pour des patients"
+homeRecentArticles: "Plus d'articles"
+
+# Article en vedette
+homeFeaturedLabel: "Article en vedette"
+homeFeaturedBadge: "Dernier guide"
+homeFeaturedRead: "Lire le guide complet"
+
+# Bloc mission
+homeMissionText: "Quand j'ai ete diagnostique, j'ai decouvert que l'information en oncologie change plus vite que quiconque ne peut suivre. J'ai mis l'IA au travail et j'ai transforme ce que j'ai trouve en ce site."
+homeMissionLink: "Nous contacter"
+
+# Footer
+footerTagline: "Créé par des patients, pour des patients."
+footerDisclaimer: "Informations éducatives uniquement. Ne constitue pas un avis médical. Consultez toujours votre oncologue."
+footerAbout: "À propos"
+footerContact: "Contact"
+footerArchives: "Archives"

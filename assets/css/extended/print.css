@@ -1,0 +1,122 @@
+/* ============================================
+   OncoGuide — Print Stylesheet
+   Patients print articles for doctor visits
+   ============================================ */
+
+@media print {
+  /* Hide non-essential elements */
+  header,
+  .nav,
+  footer,
+  .share-buttons,
+  .post-nav-links,
+  .toc,
+  .theme-toggle,
+  .top-link,
+  .reading-progress,
+  .lang-switch,
+  .social-icons,
+  .breadcrumbs,
+  .newsletter-cta,
+  #searchbox,
+  .paginav {
+    display: none !important;
+  }
+
+  /* Clean layout */
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12pt;
+    line-height: 1.6;
+    color: #000;
+    background: #fff;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .main {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-content {
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+
+  /* Show URLs after links */
+  .post-content a[href]::after {
+    content: " [" attr(href) "]";
+    font-size: 0.85em;
+    color: #555;
+    word-break: break-all;
+  }
+
+  /* Don't show URL for internal/anchor links */
+  .post-content a[href^="#"]::after,
+  .post-content a[href^="javascript"]::after {
+    content: "";
+  }
+
+  /* Ensure disclaimer always prints */
+  .onco-disclaimer {
+    border: 2px solid #000 !important;
+    background: #f5f5f5 !important;
+    padding: 1em !important;
+    page-break-inside: avoid;
+  }
+
+  /* Action box prints clearly */
+  .onco-action-box {
+    border: 2px solid #333 !important;
+    background: #f9f9f9 !important;
+    padding: 1em !important;
+    page-break-inside: avoid;
+  }
+
+  /* Callouts */
+  .onco-callout {
+    border: 1px solid #666 !important;
+    background: #f5f5f5 !important;
+    page-break-inside: avoid;
+  }
+
+  /* Avoid page breaks inside important elements */
+  h2, h3 {
+    page-break-after: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Table styling for print */
+  table {
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #333;
+    padding: 0.5em;
+  }
+
+  th {
+    background: #ddd !important;
+    color: #000 !important;
+  }
+
+  /* Add site attribution at bottom */
+  .post-content::after {
+    content: "Source: OncoGuide — https://oncoguide.github.io";
+    display: block;
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid #ccc;
+    font-size: 0.9em;
+    color: #666;
+    font-style: italic;
+  }
+}

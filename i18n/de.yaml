@@ -1,0 +1,45 @@
+# OncoGuide — Benutzerdefinierte i18n-Strings (Deutsch)
+
+disclaimerLabel: "Medizinischer Haftungsausschluss"
+disclaimerText: "Der Inhalt dieses Artikels dient ausschließlich zu Informationszwecken und stellt keine medizinische Beratung dar. Besprechen Sie jede medizinische Entscheidung mit Ihrem Onkologen. Bei dringenden Symptomen wenden Sie sich sofort an einen Arzt."
+
+actionBoxLabel: "Was jetzt zu tun ist"
+actionBoxTitle: "Was jetzt zu tun ist"
+
+calloutImportant: "Wichtig"
+calloutTip: "Tipp"
+calloutWarning: "Warnung"
+
+newsletterCTA: "Bleiben Sie informiert — abonnieren Sie neue Artikel"
+
+# Homepage-Bereiche
+homeSectionsLabel: "Themen entdecken"
+homeSectionDiagnosis: "Diagnose"
+homeSectionDiagnosisDesc: "Schritt-für-Schritt-Leitfäden vom ersten Verdacht bis zur vollständigen Diagnose"
+homeSectionCancerTypes: "Krebsarten"
+homeSectionCancerTypesDesc: "Patientenleitfäden nach Krebsart: was Sie wissen sollten, was Sie fragen können"
+homeSectionTreatment: "Zugang zur Behandlung"
+homeSectionTreatmentDesc: "Ihre Rechte, Zugang zu Medikamenten und rechtliche Möglichkeiten"
+homeSectionImaging: "Bildgebungszentren"
+homeSectionImagingDesc: "PET-CT, MRT, CT: wohin gehen und was Sie erwartet"
+homeSectionTrials: "Klinische Studien"
+homeSectionTrialsDesc: "Wie Sie Studien finden und an ihnen teilnehmen können"
+homeSectionAbout: "Über uns"
+homeSectionAboutDesc: "Unsere Mission: von Patienten geschrieben, für Patienten"
+homeRecentArticles: "Weitere Artikel"
+
+# Hervorgehobener Artikel
+homeFeaturedLabel: "Hervorgehobener Artikel"
+homeFeaturedBadge: "Neuester Leitfaden"
+homeFeaturedRead: "Den vollstaendigen Leitfaden lesen"
+
+# Missionsblock
+homeMissionText: "Als ich die Diagnose erhielt, entdeckte ich, dass sich die Informationen in der Onkologie schneller aendern, als jeder Mensch mithalten kann. Ich habe KI eingesetzt und das, was ich gefunden habe, in diese Seite verwandelt."
+homeMissionLink: "Kontakt aufnehmen"
+
+# Footer
+footerTagline: "Von Patienten erstellt, für Patienten."
+footerDisclaimer: "Nur zu Bildungszwecken. Keine medizinische Beratung. Konsultieren Sie immer Ihren Onkologen."
+footerAbout: "Über uns"
+footerContact: "Kontakt"
+footerArchives: "Archiv"

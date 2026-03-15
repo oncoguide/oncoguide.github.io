@@ -1,0 +1,52 @@
+{{- /* OncoGuide: Custom footer extensions */ -}}
+
+{{- /* Language dropdown toggle */ -}}
+<script>
+(function() {
+  var dropdown = document.querySelector('.lang-dropdown');
+  if (!dropdown) return;
+  var toggle = dropdown.querySelector('.lang-dropdown-toggle');
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', dropdown.classList.contains('open'));
+  });
+  document.addEventListener('click', function() {
+    dropdown.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  });
+  dropdown.querySelector('.lang-dropdown-menu').addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+})();
+</script>
+
+{{- /* Reading progress bar — only on article pages */ -}}
+{{ if .IsPage }}
+<div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+<script>
+(function() {
+  var bar = document.getElementById('reading-progress');
+  if (!bar) return;
+  window.addEventListener('scroll', function() {
+    var h = document.documentElement;
+    var scrollTop = h.scrollTop || document.body.scrollTop;
+    var scrollHeight = h.scrollHeight - h.clientHeight;
+    var progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    bar.style.width = progress + '%';
+  }, { passive: true });
+})();
+</script>
+{{ end }}
+
+{{- /* OncoGuide Footer Content */ -}}
+<div class="onco-footer">
+  <div class="onco-footer-inner">
+    <div class="onco-footer-section">
+      <p class="onco-footer-tagline">{{ i18n "footerTagline" | default "Created by patients, for patients." }}</p>
+      <p class="onco-footer-disclaimer">{{ i18n "footerDisclaimer" | default "Educational information only. Not medical advice. Always consult your oncologist." }}</p>
+    </div>
+    <div class="onco-footer-section onco-footer-links">
+    </div>
+  </div>
+</div>

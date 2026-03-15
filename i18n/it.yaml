@@ -1,0 +1,45 @@
+# OncoGuide — Stringhe i18n personalizzate (Italiano)
+
+disclaimerLabel: "Avvertenza Medica"
+disclaimerText: "Il contenuto di questo articolo ha scopo puramente informativo e non costituisce consulenza medica. Discuti qualsiasi decisione medica con il tuo oncologo. In caso di sintomi urgenti, contatta immediatamente un medico."
+
+actionBoxLabel: "Cosa fare adesso"
+actionBoxTitle: "Cosa fare adesso"
+
+calloutImportant: "Importante"
+calloutTip: "Suggerimento"
+calloutWarning: "Attenzione"
+
+newsletterCTA: "Resta informato — iscriviti per nuovi articoli"
+
+# Sezioni della homepage
+homeSectionsLabel: "Esplora gli argomenti"
+homeSectionDiagnosis: "Diagnosi"
+homeSectionDiagnosisDesc: "Guide passo dopo passo, dal primo sospetto alla diagnosi completa"
+homeSectionCancerTypes: "Tipi di cancro"
+homeSectionCancerTypesDesc: "Guide per tipo di tumore: cosa sapere, cosa chiedere"
+homeSectionTreatment: "Accesso alle cure"
+homeSectionTreatmentDesc: "I tuoi diritti, accesso ai farmaci e opzioni legali"
+homeSectionImaging: "Centri di diagnostica per immagini"
+homeSectionImagingDesc: "PET-TC, risonanza magnetica, TC: dove andare e cosa aspettarsi"
+homeSectionTrials: "Studi clinici"
+homeSectionTrialsDesc: "Come trovare e accedere agli studi che potrebbero aiutarti"
+homeSectionAbout: "Chi siamo"
+homeSectionAboutDesc: "La nostra missione: scritto da pazienti, per pazienti"
+homeRecentArticles: "Altri articoli"
+
+# Articolo in evidenza
+homeFeaturedLabel: "Articolo in evidenza"
+homeFeaturedBadge: "Ultima guida"
+homeFeaturedRead: "Leggi la guida completa"
+
+# Blocco missione
+homeMissionText: "Quando ho ricevuto la diagnosi, ho scoperto che le informazioni in oncologia cambiano piu' velocemente di quanto chiunque possa seguire. Ho messo l'IA al lavoro e ho trasformato cio' che ho trovato in questo sito."
+homeMissionLink: "Contattaci"
+
+# Footer
+footerTagline: "Creato da pazienti, per pazienti."
+footerDisclaimer: "Solo informazioni educative. Non costituisce consulenza medica. Consulta sempre il tuo oncologo."
+footerAbout: "Chi siamo"
+footerContact: "Contatti"
+footerArchives: "Archivio"

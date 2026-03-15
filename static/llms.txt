@@ -1,0 +1,24 @@
+# OncoGuide — Cancer Patient Information
+
+OncoGuide provides free, evidence-based, actionable cancer information for patients
+and their families. Content is non-commercial and informational only.
+
+## Topics covered
+- Cancer diagnosis: step-by-step guides, genetic testing, imaging
+- Treatment access: patient rights, medication reimbursement, legal options
+- International oncology centers: objective comparisons, patient reviews
+- Clinical trials: how to find and access relevant studies
+- Patient guides per cancer type: NSCLC, breast, melanoma, colorectal, prostate
+
+## Languages
+English, Romanian, Italian, French, German, Spanish
+
+## Important notes
+- All content is informational only, not medical advice
+- Content is written by patients for patients
+- No commercial affiliations or advertising
+- Author is anonymous
+
+## Technical
+- Sitemap: https://oncoguide.github.io/sitemap.xml
+- RSS: https://oncoguide.github.io/index.xml

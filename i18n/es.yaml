@@ -1,0 +1,45 @@
+# OncoGuide — Cadenas i18n personalizadas (Español)
+
+disclaimerLabel: "Aviso Médico"
+disclaimerText: "El contenido de este artículo tiene fines exclusivamente informativos y no constituye asesoramiento médico. Consulta cualquier decisión médica con tu oncólogo. Si tienes síntomas urgentes, contacta inmediatamente a un médico."
+
+actionBoxLabel: "Qué hacer ahora"
+actionBoxTitle: "Qué hacer ahora"
+
+calloutImportant: "Importante"
+calloutTip: "Consejo"
+calloutWarning: "Advertencia"
+
+newsletterCTA: "Mantente informado — suscríbete para nuevos artículos"
+
+# Secciones de la página principal
+homeSectionsLabel: "Explora los temas"
+homeSectionDiagnosis: "Diagnóstico"
+homeSectionDiagnosisDesc: "Guías paso a paso, desde la primera sospecha hasta el diagnóstico completo"
+homeSectionCancerTypes: "Tipos de cáncer"
+homeSectionCancerTypesDesc: "Guías por tipo de cáncer: qué saber, qué preguntar"
+homeSectionTreatment: "Acceso al tratamiento"
+homeSectionTreatmentDesc: "Tus derechos, acceso a medicamentos y opciones legales"
+homeSectionImaging: "Centros de diagnóstico por imagen"
+homeSectionImagingDesc: "PET-TC, resonancia magnética, TC: adónde ir y qué esperar"
+homeSectionTrials: "Ensayos clínicos"
+homeSectionTrialsDesc: "Cómo encontrar y acceder a estudios que podrían ayudarte"
+homeSectionAbout: "Acerca de"
+homeSectionAboutDesc: "Nuestra misión: escrito por pacientes, para pacientes"
+homeRecentArticles: "Mas articulos"
+
+# Articulo destacado
+homeFeaturedLabel: "Articulo destacado"
+homeFeaturedBadge: "Ultima guia"
+homeFeaturedRead: "Leer la guia completa"
+
+# Bloque mision
+homeMissionText: "Cuando me diagnosticaron, descubri que la informacion en oncologia cambia mas rapido de lo que cualquier persona puede seguir. Puse la IA a trabajar y transforme lo que encontre en este sitio."
+homeMissionLink: "Contactanos"
+
+# Footer
+footerTagline: "Creado por pacientes, para pacientes."
+footerDisclaimer: "Solo información educativa. No constituye asesoramiento médico. Consulta siempre a tu oncólogo."
+footerAbout: "Acerca de"
+footerContact: "Contacto"
+footerArchives: "Archivo"

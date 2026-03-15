@@ -1,0 +1,6 @@
+{{ $type := .Get "type" | default "important" }}
+{{ $titles := dict "important" (i18n "calloutImportant" | default "Important") "tip" (i18n "calloutTip" | default "Tip") "warning" (i18n "calloutWarning" | default "Warning") }}
+<div class="onco-callout onco-callout--{{ $type }}" role="note">
+  <div class="onco-callout-title">{{ index $titles $type }}</div>
+  {{ .Inner | markdownify }}
+</div>

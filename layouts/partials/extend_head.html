@@ -1,0 +1,74 @@
+{{- /* OncoGuide: Custom head extensions */ -}}
+
+{{- /* Typography: Playfair Display (headings) + Source Sans 3 (body) */ -}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+{{- /* Favicon */ -}}
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+{{- /* Schema.org JSON-LD */ -}}
+{{ if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "OncoGuide",
+  "url": "{{ .Site.BaseURL }}",
+  "description": "{{ .Site.Params.description | default "Practical, evidence-based cancer guidance for patients and families" }}",
+  "inLanguage": [{{ range $i, $lang := .Site.Languages }}{{ if $i }}, {{ end }}"{{ $lang.Lang }}"{{ end }}],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ .Site.BaseURL }}search/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{{ else if .IsPage }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "{{ .Title }}",
+  "description": "{{ .Description }}",
+  "url": "{{ .Permalink }}",
+  "inLanguage": "{{ .Lang }}",
+  "datePublished": "{{ .Date.Format "2006-01-02" }}",
+  "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
+  "author": {
+    "@type": "Organization",
+    "name": "OncoGuide"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OncoGuide",
+    "url": "{{ .Site.BaseURL }}"
+  },
+  "audience": {
+    "@type": "PeopleAudience",
+    "audienceType": "Cancer patients and their families"
+  },
+  "medicalAudience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patient"
+  }
+}
+</script>
+{{ end }}
+
+{{- /* Open Graph fallback image */ -}}
+{{ if not .Params.images }}
+<meta property="og:image" content="{{ .Site.BaseURL }}favicon.svg">
+{{ end }}
+
+{{- /* Additional meta for medical content */ -}}
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+
+{{- /* GoatCounter analytics — uncomment when ready
+<script data-goatcounter="https://oncoguide.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+*/ -}}
+
+{{- /* Google Search Console verification — replace YOUR_CODE when ready
+<meta name="google-site-verification" content="YOUR_CODE">
+*/ -}}

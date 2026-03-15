@@ -1,0 +1,386 @@
+# ============================================
+# OncoGuide — Hugo Configuration
+# ============================================
+
+baseURL: "https://oncoguide.github.io/"
+title: "OncoGuide"
+theme: "PaperMod"
+paginate: 10
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+enableEmoji: false
+enableGitInfo: false  # Enable after first commit
+
+# Multilingual
+defaultContentLanguage: "en"
+defaultContentLanguageInSubdir: true
+
+# ============================================
+# Languages
+# ============================================
+languages:
+  en:
+    languageName: "English"
+    languageCode: "en"
+    weight: 1
+    title: "OncoGuide"
+    contentDir: "content/en"
+    params:
+      description: "Practical, evidence-based cancer guidance for patients and families. Free. Always."
+      homeInfoParams:
+        Title: "Cancer is complex. Your information shouldn't be."
+        Content: >
+          Whether you were just diagnosed or navigating treatment decisions,
+          here you'll find clear, verified guides -- therapies, clinical trials,
+          modern protocols, and everything your oncologist may not have time to explain.
+    menu:
+      main:
+        - identifier: diagnosis
+          name: "Diagnosis"
+          url: /en/diagnosis/
+          weight: 10
+        - identifier: cancer-types
+          name: "Cancer Types"
+          url: /en/cancer-types/
+          weight: 20
+        - identifier: treatment-access
+          name: "Treatment Access"
+          url: /en/treatment-access/
+          weight: 30
+        - identifier: imaging
+          name: "Imaging Centers"
+          url: /en/imaging/
+          weight: 40
+        - identifier: clinical-trials
+          name: "Clinical Trials"
+          url: /en/clinical-trials/
+          weight: 50
+        - identifier: contact
+          name: "Contact"
+          url: /en/contact/
+          weight: 60
+        - identifier: search
+          name: "Search"
+          url: /en/search/
+          weight: 70
+
+  ro:
+    languageName: "Română"
+    languageCode: "ro"
+    weight: 2
+    title: "OncoGuide"
+    contentDir: "content/ro"
+    params:
+      description: "Ghid practic, bazat pe dovezi, pentru pacientii cu cancer si familiile lor. Gratuit. Intotdeauna."
+      homeInfoParams:
+        Title: "Cancerul e complex. Informatia ta nu trebuie sa fie."
+        Content: >
+          Fie ca tocmai ai primit un diagnostic, fie ca esti in tratament si vrei sa fii la curent,
+          aici gasesti ghiduri clare si verificate -- terapii, trialuri clinice, protocoale moderne
+          si tot ce oncologul tau poate nu are timp sa-ti explice.
+    menu:
+      main:
+        - identifier: diagnosis
+          name: "Diagnostic"
+          url: /ro/diagnosis/
+          weight: 10
+        - identifier: cancer-types
+          name: "Tipuri Cancer"
+          url: /ro/cancer-types/
+          weight: 20
+        - identifier: treatment-access
+          name: "Acces Tratament"
+          url: /ro/treatment-access/
+          weight: 30
+        - identifier: imaging
+          name: "Imagistică"
+          url: /ro/imaging/
+          weight: 40
+        - identifier: clinical-trials
+          name: "Trialuri Clinice"
+          url: /ro/clinical-trials/
+          weight: 50
+        - identifier: contact
+          name: "Contact"
+          url: /ro/contact/
+          weight: 60
+        - identifier: search
+          name: "Căutare"
+          url: /ro/search/
+          weight: 70
+
+  it:
+    languageName: "Italiano"
+    languageCode: "it"
+    weight: 3
+    title: "OncoGuide"
+    contentDir: "content/it"
+    params:
+      description: "Guida pratica e basata sulle evidenze per pazienti oncologici e famiglie. Gratuita. Sempre."
+      homeInfoParams:
+        Title: "Il cancro e' complesso. Le tue informazioni non devono esserlo."
+        Content: >
+          Che tu abbia appena ricevuto una diagnosi o stia affrontando decisioni terapeutiche,
+          qui trovi guide chiare e verificate -- terapie, studi clinici, protocolli moderni
+          e tutto cio' che il tuo oncologo potrebbe non avere tempo di spiegarti.
+    menu:
+      main:
+        - identifier: diagnosis
+          name: "Diagnosi"
+          url: /it/diagnosis/
+          weight: 10
+        - identifier: cancer-types
+          name: "Tipi di Cancro"
+          url: /it/cancer-types/
+          weight: 20
+        - identifier: treatment-access
+          name: "Accesso ai Trattamenti"
+          url: /it/treatment-access/
+          weight: 30
+        - identifier: imaging
+          name: "Imaging"
+          url: /it/imaging/
+          weight: 40
+        - identifier: clinical-trials
+          name: "Studi Clinici"
+          url: /it/clinical-trials/
+          weight: 50
+        - identifier: contact
+          name: "Contatto"
+          url: /it/contact/
+          weight: 60
+        - identifier: search
+          name: "Cerca"
+          url: /it/search/
+          weight: 70
+
+  fr:
+    languageName: "Français"
+    languageCode: "fr"
+    weight: 4
+    title: "OncoGuide"
+    contentDir: "content/fr"
+    params:
+      description: "Guide pratique et fonde sur les preuves pour les patients atteints de cancer et leurs familles. Gratuit. Toujours."
+      homeInfoParams:
+        Title: "Le cancer est complexe. Vos informations ne devraient pas l'etre."
+        Content: >
+          Que vous veniez de recevoir un diagnostic ou que vous naviguiez entre les options therapeutiques,
+          vous trouverez ici des guides clairs et verifies -- therapies, essais cliniques, protocoles modernes
+          et tout ce que votre oncologue n'a peut-etre pas le temps de vous expliquer.
+    menu:
+      main:
+        - identifier: diagnosis
+          name: "Diagnostic"
+          url: /fr/diagnosis/
+          weight: 10
+        - identifier: cancer-types
+          name: "Types de Cancer"
+          url: /fr/cancer-types/
+          weight: 20
+        - identifier: treatment-access
+          name: "Accès aux Traitements"
+          url: /fr/treatment-access/
+          weight: 30
+        - identifier: imaging
+          name: "Imagerie"
+          url: /fr/imaging/
+          weight: 40
+        - identifier: clinical-trials
+          name: "Essais Cliniques"
+          url: /fr/clinical-trials/
+          weight: 50
+        - identifier: contact
+          name: "Contact"
+          url: /fr/contact/
+          weight: 60
+        - identifier: search
+          name: "Recherche"
+          url: /fr/search/
+          weight: 70
+
+  de:
+    languageName: "Deutsch"
+    languageCode: "de"
+    weight: 5
+    title: "OncoGuide"
+    contentDir: "content/de"
+    params:
+      description: "Praktischer, evidenzbasierter Krebsratgeber fuer Patienten und Familien. Kostenlos. Immer."
+      homeInfoParams:
+        Title: "Krebs ist komplex. Deine Information muss es nicht sein."
+        Content: >
+          Ob du gerade eine Diagnose erhalten hast oder Behandlungsentscheidungen triffst --
+          hier findest du klare, verifizierte Leitfaeden zu Therapien, klinischen Studien, modernen Protokollen
+          und allem, wofuer dein Onkologe vielleicht keine Zeit hat.
+    menu:
+      main:
+        - identifier: diagnosis
+          name: "Diagnose"
+          url: /de/diagnosis/
+          weight: 10
+        - identifier: cancer-types
+          name: "Krebsarten"
+          url: /de/cancer-types/
+          weight: 20
+        - identifier: treatment-access
+          name: "Behandlungszugang"
+          url: /de/treatment-access/
+          weight: 30
+        - identifier: imaging
+          name: "Bildgebung"
+          url: /de/imaging/
+          weight: 40
+        - identifier: clinical-trials
+          name: "Klinische Studien"
+          url: /de/clinical-trials/
+          weight: 50
+        - identifier: contact
+          name: "Kontakt"
+          url: /de/contact/
+          weight: 60
+        - identifier: search
+          name: "Suche"
+          url: /de/search/
+          weight: 70
+
+  es:
+    languageName: "Español"
+    languageCode: "es"
+    weight: 6
+    title: "OncoGuide"
+    contentDir: "content/es"
+    params:
+      description: "Guia practica y basada en evidencia para pacientes con cancer y sus familias. Gratuita. Siempre."
+      homeInfoParams:
+        Title: "El cancer es complejo. Tu informacion no tiene por que serlo."
+        Content: >
+          Ya sea que acabes de recibir un diagnostico o estes tomando decisiones de tratamiento,
+          aqui encontraras guias claras y verificadas -- terapias, ensayos clinicos, protocolos modernos
+          y todo lo que tu oncologo quiza no tenga tiempo de explicarte.
+    menu:
+      main:
+        - identifier: diagnosis
+          name: "Diagnóstico"
+          url: /es/diagnosis/
+          weight: 10
+        - identifier: cancer-types
+          name: "Tipos de Cáncer"
+          url: /es/cancer-types/
+          weight: 20
+        - identifier: treatment-access
+          name: "Acceso a Tratamientos"
+          url: /es/treatment-access/
+          weight: 30
+        - identifier: imaging
+          name: "Imagenología"
+          url: /es/imaging/
+          weight: 40
+        - identifier: clinical-trials
+          name: "Ensayos Clínicos"
+          url: /es/clinical-trials/
+          weight: 50
+        - identifier: contact
+          name: "Contacto"
+          url: /es/contact/
+          weight: 60
+        - identifier: search
+          name: "Buscar"
+          url: /es/search/
+          weight: 70
+
+# ============================================
+# PaperMod Theme Parameters
+# ============================================
+params:
+  env: production
+  author: "OncoGuide"
+  displayFullLangName: true
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: false
+  ShowRssButtonInSectionTermList: true
+  ShowToc: true
+  TocOpen: false
+  comments: false
+  defaultTheme: auto
+  disableThemeToggle: false
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  hideSummary: false
+  showtoc: true
+
+  # Homepage info (fallback — per-language versions in languages section above)
+  homeInfoParams:
+    Title: "Cancer is complex. Your information shouldn't be."
+    Content: >
+      Whether you were just diagnosed or navigating treatment decisions,
+      here you'll find clear, verified guides -- therapies, clinical trials,
+      modern protocols, and everything your oncologist may not have time to explain.
+
+  # Social icons — disabled on homepage for clean design
+  # socialIcons:
+  #   - name: email
+  #     url: "mailto:nog.opt.3o@icloud.com"
+  #   - name: rss
+  #     url: "/index.xml"
+
+  # Search
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
+
+  # SEO & meta
+  label:
+    text: "OncoGuide"
+
+# ============================================
+# Outputs (JSON needed for search)
+# ============================================
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+# ============================================
+# Markup
+# ============================================
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+
+# ============================================
+# Minify
+# ============================================
+minify:
+  disableXML: true
+  minifyOutput: true
+
+# ============================================
+# Privacy (GDPR-friendly, no external services)
+# ============================================
+privacy:
+  disqus:
+    disable: true
+  googleAnalytics:
+    disable: true
+  instagram:
+    disable: true
+  x:
+    disable: true
+  vimeo:
+    disable: true
+  youtube:
+    privacyEnhanced: true

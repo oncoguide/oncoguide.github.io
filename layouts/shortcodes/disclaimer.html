@@ -1,0 +1,7 @@
+<div class="onco-disclaimer" role="note" aria-label="{{ i18n "disclaimerLabel" | default "Medical Disclaimer" }}">
+  {{ with .Inner }}
+    {{ . | markdownify }}
+  {{ else }}
+    {{ i18n "disclaimerText" | default "The content of this article is for informational purposes only and does not constitute medical advice. Discuss any medical decision with your oncologist. If you have urgent symptoms, contact a doctor immediately." }}
+  {{ end }}
+</div>

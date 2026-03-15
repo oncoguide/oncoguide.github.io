@@ -1,0 +1,45 @@
+# OncoGuide — Custom i18n strings (English)
+
+disclaimerLabel: "Medical Disclaimer"
+disclaimerText: "The content of this article is for informational purposes only and does not constitute medical advice. Discuss any medical decision with your oncologist. If you have urgent symptoms, contact a doctor immediately."
+
+actionBoxLabel: "What to do now"
+actionBoxTitle: "What to do now"
+
+calloutImportant: "Important"
+calloutTip: "Tip"
+calloutWarning: "Warning"
+
+newsletterCTA: "Stay informed — subscribe for new articles"
+
+# Homepage sections
+homeSectionsLabel: "Explore topics"
+homeSectionDiagnosis: "Diagnosis"
+homeSectionDiagnosisDesc: "Step-by-step guides from first suspicion to complete diagnosis"
+homeSectionCancerTypes: "Cancer Types"
+homeSectionCancerTypesDesc: "Patient guides per cancer type: what to know, what to ask"
+homeSectionTreatment: "Treatment Access"
+homeSectionTreatmentDesc: "Your rights, medication access, and legal options"
+homeSectionImaging: "Imaging Centers"
+homeSectionImagingDesc: "PET-CT, MRI, CT: where to go and what to expect"
+homeSectionTrials: "Clinical Trials"
+homeSectionTrialsDesc: "How to find and access studies that could help you"
+homeSectionAbout: "About"
+homeSectionAboutDesc: "Our mission: written by patients, for patients"
+homeRecentArticles: "More articles"
+
+# Featured article
+homeFeaturedLabel: "Featured article"
+homeFeaturedBadge: "Latest Guide"
+homeFeaturedRead: "Read the full guide"
+
+# Mission block
+homeMissionText: "When I was diagnosed, I discovered that information in oncology changes faster than any person can keep up with. I put AI to work and turned what I found into this site."
+homeMissionLink: "Get in touch"
+
+# Footer
+footerTagline: "Created by patients, for patients."
+footerDisclaimer: "Educational information only. Not medical advice. Always consult your oncologist."
+footerAbout: "About"
+footerContact: "Contact"
+footerArchives: "Archives"

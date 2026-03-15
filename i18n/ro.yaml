@@ -1,0 +1,45 @@
+# OncoGuide — Stringuri i18n custom (Română)
+
+disclaimerLabel: "Disclaimer Medical"
+disclaimerText: "Conținutul acestui articol are scop exclusiv informativ și nu constituie consultanță medicală. Discută orice decizie medicală cu oncologul tău. Dacă ai simptome urgente, contactează imediat un medic."
+
+actionBoxLabel: "Ce trebuie să faci acum"
+actionBoxTitle: "Ce trebuie să faci acum"
+
+calloutImportant: "Important"
+calloutTip: "Sfat"
+calloutWarning: "Atenție"
+
+newsletterCTA: "Rămâi informat — abonează-te pentru articole noi"
+
+# Secțiuni pagina principală
+homeSectionsLabel: "Explorează subiectele"
+homeSectionDiagnosis: "Diagnostic"
+homeSectionDiagnosisDesc: "Ghiduri pas cu pas, de la prima suspiciune până la diagnosticul complet"
+homeSectionCancerTypes: "Tipuri de cancer"
+homeSectionCancerTypesDesc: "Ghiduri pe tipuri de cancer: ce trebuie să știi, ce să întrebi"
+homeSectionTreatment: "Acces la tratament"
+homeSectionTreatmentDesc: "Drepturile tale, accesul la medicamente și opțiunile legale"
+homeSectionImaging: "Centre de imagistică"
+homeSectionImagingDesc: "PET-CT, RMN, CT: unde mergi și la ce să te aștepți"
+homeSectionTrials: "Studii clinice"
+homeSectionTrialsDesc: "Cum găsești și accesezi studiile care te-ar putea ajuta"
+homeSectionAbout: "Despre noi"
+homeSectionAboutDesc: "Misiunea noastră: scris de pacienți, pentru pacienți"
+homeRecentArticles: "Mai multe articole"
+
+# Articol principal
+homeFeaturedLabel: "Articol principal"
+homeFeaturedBadge: "Ultimul ghid"
+homeFeaturedRead: "Citeste ghidul complet"
+
+# Bloc misiune
+homeMissionText: "Cand am fost diagnosticat, am descoperit ca informatia in oncologie se schimba mai repede decat orice om poate urmari. Am pus AI-ul la lucru si am transformat ce am gasit in acest site."
+homeMissionLink: "Contacteaza-ne"
+
+# Footer
+footerTagline: "Creat de pacienți, pentru pacienți."
+footerDisclaimer: "Informații educaționale. Nu constituie sfat medical. Consultă întotdeauna oncologul tău."
+footerAbout: "Despre noi"
+footerContact: "Contact"
+footerArchives: "Arhivă"

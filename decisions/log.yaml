@@ -1,0 +1,309 @@
+# OncoGuide — Decision Log
+# Updated automatically by agent after significant interactions
+# Format: id, date, category, summary, context, alternatives_considered, outcome
+
+decisions:
+  - id: 1
+    date: "2026-03-14"
+    category: "technical"
+    summary: "Stack: Hugo + PaperMod + GitHub Pages"
+    context: "Need zero-cost, professional, multilingual blog platform"
+    alternatives_considered:
+      - "Jekyll + GitHub Pages — slower builds, weaker multilingual support"
+      - "Next.js + Vercel — overkill for static blog, more complex"
+      - "WordPress — hosting costs, security maintenance, overkill"
+    outcome: "Hugo chosen for speed, excellent i18n, PaperMod SEO, zero cost on GitHub Pages"
+
+  - id: 2
+    date: "2026-03-14"
+    category: "design"
+    summary: "URL: oncoguide.github.io via GitHub organization"
+    context: "Need professional, anonymous URL that doesn't reveal personal username"
+    alternatives_considered:
+      - "personal-username.github.io — reveals personal username"
+      - "Custom domain (~€10/year) — cost, DNS management"
+    outcome: "Created GitHub org 'oncoguide' with repo 'oncoguide.github.io' — professional, anonymous, free"
+
+  - id: 3
+    date: "2026-03-14"
+    category: "design"
+    summary: "Anonymous authorship with separate project email"
+    context: "Author wants to remain anonymous, personal email must never appear in code"
+    alternatives_considered:
+      - "GitHub noreply email — reveals personal username"
+      - "No email at all — limits contact ability"
+    outcome: "Will create ProtonMail for anonymous contact + Formspree form (email never in HTML)"
+
+  - id: 4
+    date: "2026-03-14"
+    category: "technical"
+    summary: "English as default language, Romanian as primary authoring language"
+    context: "Romanian is author's language, but English gives broadest reach"
+    alternatives_considered:
+      - "Romanian as default — limits discoverability for non-Romanian speakers"
+    outcome: "EN at root URL (/), RO at /ro/, other languages at their prefixes. Author writes in RO first, then translates."
+
+  - id: 5
+    date: "2026-03-14"
+    category: "technical"
+    summary: "Security-first .gitignore with comprehensive sensitive file patterns"
+    context: "Public repo must never contain secrets, keys, personal data"
+    alternatives_considered:
+      - "Minimal .gitignore — risk of accidental secret exposure"
+    outcome: "Comprehensive .gitignore covering .env, *.pem, *.key, credentials.*, secrets.*, API tokens, IDE files"
+
+  - id: 6
+    date: "2026-03-14"
+    category: "process"
+    summary: "Persistent PLAN.md with checkboxes for multi-session tracking"
+    context: "Implementation spans multiple sessions, need progress tracking"
+    alternatives_considered:
+      - "In-memory task tracking — lost between sessions"
+      - "GitHub Issues — overkill for solo project"
+    outcome: "PLAN.md in project root with checkbox subfases, read at start of each session"
+
+  - id: 7
+    date: "2026-03-14"
+    category: "technical"
+    summary: "GDPR-friendly privacy config — all external services disabled"
+    context: "Medical site for European patients, GDPR compliance important"
+    alternatives_considered:
+      - "Google Analytics — requires cookie consent banner"
+      - "No analytics — acceptable at launch"
+    outcome: "All privacy settings disabled in hugo.yaml, GoatCounter placeholder for later (free, no cookies)"
+
+  - id: 8
+    date: "2026-03-14"
+    category: "design"
+    summary: "Use iCloud Hide My Email for anonymous contact"
+    context: "Need anonymous email for site contact that forwards to personal email"
+    alternatives_considered:
+      - "ProtonMail — requires creating and managing separate account"
+      - "Formspree only — no outbound email capability"
+      - "GitHub noreply — reveals username"
+    outcome: "iCloud Hide My Email (nog.opt.3o@icloud.com) — already set up, auto-forwards, managed by Apple, no extra accounts needed"
+
+  - id: 9
+    date: "2026-03-14"
+    category: "design"
+    summary: "Medical professional color palette: teal + warm grays"
+    context: "Need trustworthy, calming visual identity for oncology site"
+    alternatives_considered:
+      - "Blue — too corporate/clinical"
+      - "Green — too wellness/alternative medicine"
+      - "PaperMod defaults — generic, not medical-feeling"
+    outcome: "Teal (#0d9488) primary with warm grays, 18px/1.75 typography, max-width 750px, WCAG AA contrast, dark mode compatible"
+
+  - id: 10
+    date: "2026-03-14"
+    category: "technical"
+    summary: "Custom shortcodes: disclaimer (i18n), action-box, callout"
+    context: "Every article needs standardized medical disclaimer and action steps"
+    alternatives_considered:
+      - "Hardcoded HTML in each article — error-prone, hard to update"
+      - "Hugo partials only — can't be used in markdown content"
+    outcome: "Three shortcodes with i18n support via i18n/ files. Disclaimer paired tags required (.Inner support)."
+
+  - id: 11
+    date: "2026-03-14"
+    category: "technical"
+    summary: "Schema.org JSON-LD: WebSite + MedicalWebPage"
+    context: "SEO for medical content, AI agent discoverability"
+    alternatives_considered:
+      - "No structured data — poor search engine understanding"
+      - "Microdata instead of JSON-LD — harder to maintain"
+    outcome: "JSON-LD in extend_head.html with WebSite and MedicalWebPage types, plus OG meta tags"
+
+  - id: 12
+    date: "2026-03-14"
+    category: "technical"
+    summary: "GitHub Actions deploy: push + daily cron + manual trigger"
+    context: "Need automatic deploy on push and scheduled publishing for future-dated articles"
+    alternatives_considered:
+      - "Manual deploy only — too slow"
+      - "Netlify — extra service, no advantage over GitHub Pages for this use case"
+    outcome: "deploy.yml with push trigger, daily 6:00 UTC cron (for scheduled articles), workflow_dispatch for manual builds"
+
+  - id: 13
+    date: "2026-03-14"
+    category: "design"
+    summary: "Minimal header: dropdown language switcher with short codes, search icon"
+    context: "6 languages create clutter in header with full language names"
+    alternatives_considered:
+      - "Full language names in header — too wide, especially on mobile"
+      - "Footer-only language switcher — poor discoverability"
+    outcome: "Dropdown with 2-letter codes (EN, RO, IT, FR, DE, ES), magnifying glass icon for search, clean minimal header"
+
+  - id: 14
+    date: "2026-03-14"
+    category: "design"
+    summary: "defaultContentLanguageInSubdir: true — all languages under /xx/ prefix"
+    context: "English at root vs under /en/ prefix"
+    alternatives_considered:
+      - "English at root (/) — simpler URLs but inconsistent with other languages"
+    outcome: "All languages under prefix (/en/, /ro/, etc.) for consistency. Root redirects to /en/."
+
+  - id: 15
+    date: "2026-03-14"
+    category: "content"
+    summary: "Contact pages: email-only for now, Formspree deferred"
+    context: "User hasn't created Formspree account yet (step 0.6)"
+    alternatives_considered:
+      - "Wait for Formspree before creating contact pages"
+      - "No contact page at all until form ready"
+    outcome: "Created contact pages with iCloud email only. Formspree form will be added when user creates account."
+
+  - id: 16
+    date: "2026-03-14"
+    category: "content"
+    summary: "Per-language homeInfoParams for translated homepage hero"
+    context: "PaperMod homepage shows Title + Content from homeInfoParams"
+    alternatives_considered:
+      - "English-only hero — non-English visitors see untranslated text"
+      - "Remove hero, use _index.md content only — loses PaperMod homepage design"
+    outcome: "homeInfoParams added under each language in hugo.yaml. Tagline: 'Cancer is hard. Information shouldn't be.' translated naturally per language."
+
+  - id: 17
+    date: "2026-03-14"
+    category: "process"
+    summary: "Formspree (0.6) and Buttondown (0.7) deferred to later"
+    context: "User wants to focus on site structure first, external service signups are manual tasks"
+    alternatives_considered:
+      - "Block on Formspree/Buttondown before continuing"
+    outcome: "Continue with site build. User will create accounts when ready. Contact pages work with email-only for now."
+
+  - id: 18
+    date: "2026-03-14"
+    category: "process"
+    summary: "Research saved locally in prompt/research/ (gitignored)"
+    context: "Need persistent research data accessible across sessions but not public"
+    alternatives_considered:
+      - "Push research to GitHub — exposes internal notes and strategy"
+      - "Keep only in agent memory — too fragile, not detailed enough"
+    outcome: "prompt/ folder gitignored. Research files: diagnostic-pathway.md, anadolu-experience.md, content-strategy.md. CLAUDE.md instructs agents to read these."
+
+  - id: 19
+    date: "2026-03-14"
+    category: "content"
+    summary: "First article: complete oncology diagnostic guide, published in 6 languages"
+    context: "Need flagship content about diagnosis protocol — PET-CT first, biopsy, molecular testing, tumor board"
+    alternatives_considered:
+      - "Start with a simpler topic — less impactful"
+      - "Single language first, translate later — user preferred all-at-once"
+    outcome: "Comprehensive ~2500-word article published: ghid-complet-diagnostic.md in all 6 languages with translationKey: complete-diagnosis-guide"
+
+  - id: 20
+    date: "2026-03-14"
+    category: "content"
+    summary: "Editorial pattern: every article has 'What NOT to do' section + red flags"
+    context: "Cancer treatment is about avoiding bad decisions as much as making good ones"
+    alternatives_considered:
+      - "Only positive guidance — misses critical patient safety info"
+    outcome: "Mandatory pattern for all guide articles. Uses bold text (not emojis) for warnings. Documented in content-strategy.md as D1."
+
+  - id: 21
+    date: "2026-03-14"
+    category: "content"
+    summary: "No special symbols in articles (no emojis, no em-dashes, no typographic quotes)"
+    context: "Emojis and special characters cause rendering issues and look unprofessional on medical site"
+    alternatives_considered:
+      - "Allow emojis for visual impact — inconsistent rendering, unprofessional for medical context"
+    outcome: "Use standard quotes, double hyphens, bold text instead. Rule added to CLAUDE.md and content-strategy.md (D4)."
+
+  - id: 22
+    date: "2026-03-14"
+    category: "design"
+    summary: "Homepage redesign: remove section cards, fix dropdown, eliminate info duplication"
+    context: "User flagged homepage looks unprofessional — section cards duplicate header menu, dropdown fonts oversized, footer duplicates header links"
+    alternatives_considered:
+      - "Keep section cards with different content — still duplicates navigation concept"
+      - "Move section cards below articles — still redundant with menu"
+    outcome: "IN PROGRESS. Plan: remove section cards entirely, fix dropdown CSS (exclude from touch target rules), simplify footer to tagline + disclaimer only (no nav links that duplicate header)."
+
+  - id: 23
+    date: "2026-03-14"
+    category: "design"
+    summary: "Homepage redesign v2: personal hero, featured article, no About page, IT+AI mission angle"
+    context: "User wants professional, personal, no-duplication homepage. Mobile and desktop responsive. Remove About page entirely -- user is not interested in giving info about themselves. Instead, mission block explains: as an IT engineer with AI access, had advantage of researching medical info efficiently, this site shares that with everyone."
+    alternatives_considered:
+      - "Keep About page and link -- user explicitly rejected, doesn't want 'about us' info"
+      - "Generic mission statement -- too impersonal, doesn't explain why site exists"
+      - "Show all section cards including empty ones -- gives 'coming soon' feel"
+    outcome: "Hero: personal voice ('You just got a diagnosis. Now what?'). Featured article card for latest guide. Section cards only for sections with published articles. Mission block: IT engineer + AI tools angle. Footer: only Contact link. About removed from header and footer menus. Must work on both mobile and desktop."
+
+  - id: 24
+    date: "2026-03-14"
+    category: "content"
+    summary: "Target audience: ALL cancer patients, not just newly diagnosed"
+    context: "Homepage messaging was too narrow -- addressed only newly diagnosed patients. Blog must serve: (1) newly diagnosed patients, (2) patients already in treatment wanting to stay current on available therapies, clinical trials, modern protocols, imaging, fresh research data specific to their diagnosis."
+    alternatives_considered:
+      - "Keep 'just diagnosed' framing -- excludes majority of potential readers"
+      - "Separate pages for new vs existing patients -- overcomplicates, unnecessary split"
+    outcome: "Hero rewritten: 'Cancer is complex. Your information shouldn't be.' Subtitle addresses both newly diagnosed AND those navigating treatment decisions. Mission block expanded to mention: therapies, clinical trials, modern protocols, diagnosis-specific data. All 6 languages updated."
+
+  - id: 25
+    date: "2026-03-14"
+    category: "process"
+    summary: "All MCP servers, skills, and configs must be project-scoped, never global"
+    context: "User explicitly requested this rule after Playwright MCP was accidentally added globally"
+    alternatives_considered:
+      - "Global scope for convenience -- rejected, user wants clean separation between projects"
+    outcome: "Rule: always use --scope project for MCP servers, project-level .claude/ for all config. Never modify global ~/.claude.json."
+
+  - id: 26
+    date: "2026-03-14"
+    category: "content"
+    summary: "Mission message: personal story + AI, no job title, no repetition with subtitle"
+    context: "Iterated through multiple versions of the homepage mission block. 'IT engineer' angle felt weak and unnecessary. The powerful insight is: oncology info changes faster than any human can track, AI bridges the gap. Message must not repeat what the subtitle already says (therapies, trials, protocols)."
+    alternatives_considered:
+      - "IT engineer + AI tools angle -- felt like a resume, not a mission"
+      - "Problem/solution contrast ('nobody can keep up, AI can') -- too declarative, lacked personal warmth"
+      - "Empathic + authority ('I've been through this, no person can...') -- risk of sounding arrogant toward doctors"
+    outcome: "Final message (variant 5): 'Cand am fost diagnosticat, am descoperit ca informatia in oncologie se schimba mai repede decat orice om poate urmari. Am pus AI-ul la lucru si am transformat ce am gasit in acest site.' One arc: personal experience -> universal insight -> action -> result. No job titles, no repetition."
+
+  - id: 27
+    date: "2026-03-14"
+    category: "design"
+    summary: "Footer: remove Contact link, keep only tagline + disclaimer"
+    context: "User wants minimal footer without encouraging contact at this stage. Contact page exists but no need to promote it."
+    alternatives_considered:
+      - "Keep Contact in footer only -- user explicitly asked to remove it"
+    outcome: "Footer contains only: tagline ('Created by patients, for patients') + medical disclaimer. No navigation links."
+
+  - id: 28
+    date: "2026-03-15"
+    category: "technical"
+    summary: "Arhitectura: research agent integrat in onco-blog, adaptat din cancer-news-agent"
+    context: "Blog-ul are nevoie de research fundamentat inainte de publicare si de actualizare lunara a continutului existent. cancer-news-agent are pattern-uri dovedite (Serper, PubMed, enrichment, SQLite). Proiectele raman independente."
+    alternatives_considered:
+      - "Shared package intre proiecte -- creeaza dependinte, complica mentenanta"
+      - "Workspace comun cu ambele proiecte -- confuzie de context ptr agenti"
+      - "Research manual fara agent -- nu scaleaza, inconsistent"
+    outcome: "Un singur agent Python in agents/research/ cu doua moduri: --topic X (research nou) si --update-all (scan lunar). Cod copiat si adaptat din cancer-news-agent. DB in data/research.db (gitignored). Output: master guide markdown per topic."
+
+  - id: 29
+    date: "2026-03-15"
+    category: "process"
+    summary: "Workspace: doar onco-blog, cancer-news-agent separat"
+    context: "Cele doua proiecte sunt independente. Mixarea lor intr-un workspace comun crea lipsa de context ptr agenti AI."
+    alternatives_considered:
+      - "Pastrare workspace comun onco-projects -- context diluat, fara CLAUDE.md comun eficient"
+    outcome: "Userul deschide doar onco-blog ca workspace in VSCode. cancer-news-agent se deschide separat cand e nevoie. Memory si skills la nivel de onco-blog."
+
+  - id: 30
+    date: "2026-03-15"
+    category: "process"
+    summary: "Claude skills specializate ptr onco-blog"
+    context: "Proiectul necesita expertize diferite la momente diferite: frontend, UX, oncologie, SEO, patient advocacy. Skills permit invocare rapida de context specializat."
+    alternatives_considered:
+      - "Fara skills, instructiuni manuale de fiecare data -- repetitiv, pierde context"
+    outcome: "9 skills planificate: /research, /update-blog, /new-topic, /publish (agenti lucru) + /frontend, /ux, /oncologist, /patient-advocate, /seo (expertiza). Se creeaza in .claude/skills/."
+
+  - id: 31
+    date: "2026-03-15"
+    category: "technical"
+    summary: "Fresh start git: stergere repo GitHub, recreare cu commit curat"
+    context: "6 commits contin numele real al autorului. Istoria nu e importanta, continutul da."
+    alternatives_considered:
+      - "git filter-repo ptr rewrite -- complicat inutil ptr 10 commits"
+    outcome: "Stergem repo de pe GitHub, recream cu un singur commit initial curat (oncoguide-admin). Simplu, curat, definitiv."

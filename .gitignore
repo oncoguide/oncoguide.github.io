@@ -1,0 +1,77 @@
+# ============================================
+# OncoGuide .gitignore — Security-first
+# ============================================
+
+# Claude Code agent memory (may contain personal data)
+.claude/
+
+# Planning prompts (internal only)
+prompt/
+
+# Hugo build output
+public/
+resources/
+.hugo_build.lock
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Secrets & sensitive data — NEVER commit these
+.env
+.env.*
+.env.local
+.env.production
+*.pem
+*.key
+*.p12
+*.pfx
+*.cert
+*.crt
+credentials.*
+secrets.*
+*secret*
+*password*
+*.credentials
+config.local.*
+config.private.*
+*.secret.yaml
+*.secret.yml
+*.secret.json
+
+# API keys & tokens
+*.token
+api_key*
+apikey*
+
+# IDE & editor files
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.orig
+
+# Node.js (if tooling is added later)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backup files
+*.backup
+*.bkp
