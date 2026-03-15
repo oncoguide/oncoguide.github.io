@@ -328,4 +328,23 @@ decisions:
       - "Import direct din cancer-news-agent -- rejectat, proiecte independente"
       - "Doar Serper + PubMed -- insuficient, adaugate ClinicalTrials, openFDA, CIViC ptr acoperire completa"
       - "Batch enrichment (multi-finding per Claude call) -- simplificat la single-finding, cost mic pe Haiku"
-    outcome: "11 module Python, 32 unit tests (all pass). CLI cu --topic, --update-all, --dry-run, --list-topics, --init. Topic registry in topics/registry.yaml. Necesita config.json cu API keys reale ptr test complet."
+    outcome: "11 module Python, 32 unit tests (all pass). CLI cu --topic, --update-all, --dry-run, --list-topics, --init. Topic registry in topics/registry.yaml. Test complet reusit: 217 findings, 202 relevante, guide 17KB generat."
+
+  - id: 34
+    date: "2026-03-15"
+    category: "process"
+    summary: "Research agent testat cu succes cu API keys reale"
+    context: "Primul test end-to-end al research agent pe topic-ul complete-diagnosis-guide"
+    alternatives_considered: []
+    outcome: "Pipeline complet functional: query expansion (3->25), 5 backends (Serper, PubMed, ClinicalTrials; CIViC 0 results pt acest topic), enrichment 217 findings (202 relevante), guide generat 17KB. Timp: ~10min. Cost estimat: ~$0.20."
+
+  - id: 35
+    date: "2026-03-15"
+    category: "content"
+    summary: "Strategie data-driven: prioritizare articole pe baza cautarilor Google, SEO agresiv, analytics"
+    context: "User vrea ca site-ul sa ajunga la cat mai multi oameni. Articolele trebuie prioritizate pe baza volumului real de cautari (Google Trends, keyword research), nu pe intuitie. Necesita: (1) keyword research saptamanal ptr a prioritiza topicuri, (2) SEO maximizat per articol, (3) analytics ptr a masura reach si engagement."
+    alternatives_considered:
+      - "Publicare pe intuitie fara date -- nu maximizeaza impactul"
+      - "Doar SEO fara analytics -- nu stim daca functioneaza"
+      - "Analytics fara keyword research -- scriem ce vrem, nu ce cauta oamenii"
+    outcome: "Strategie tripla: (A) Keyword research saptamanal cu Google Trends / Serper trends ptr a prioritiza topicuri din registry, (B) SEO agresiv per articol (meta, schema, internal linking, multilingual), (C) Analytics (Google Search Console obligatoriu, GoatCounter optional) ptr feedback loop. Topic registry va fi ordonat dupa search volume. Aceasta devine principiul director al content strategy."

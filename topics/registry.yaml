@@ -2,15 +2,21 @@
 # Status: planned -> researching -> guide_ready -> drafting -> review -> published
 
 topics:
-  - id: complete-diagnosis-guide
-    title: "Ghidul complet de diagnostic oncologic"
-    section: diagnosis
-    status: published
-    search_queries:
-      - "oncology diagnostic pathway PET-CT biopsy molecular testing"
-      - "cancer diagnosis protocol ESMO guidelines 2024 2025"
-      - "tumor board multidisciplinary cancer diagnosis"
-    languages: [en, ro, it, fr, de, es]
-    content_file: "diagnosis/ghid-complet-diagnostic.md"
-    created: "2026-03-14"
-    last_researched: null
+- id: complete-diagnosis-guide
+  title: Ghidul complet de diagnostic oncologic
+  section: diagnosis
+  status: guide_ready
+  search_queries:
+  - oncology diagnostic pathway PET-CT biopsy molecular testing
+  - cancer diagnosis protocol ESMO guidelines 2024 2025
+  - tumor board multidisciplinary cancer diagnosis
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: diagnosis/ghid-complet-diagnostic.md
+  created: '2026-03-14'
+  last_researched: '2026-03-15'

@@ -11,6 +11,10 @@ prompt/
 # Internal docs (specs, plans)
 docs/
 
+# Python
+__pycache__/
+*.pyc
+
 # Hugo build output
 public/
 resources/
