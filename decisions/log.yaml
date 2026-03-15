@@ -307,3 +307,14 @@ decisions:
     alternatives_considered:
       - "git filter-repo ptr rewrite -- complicat inutil ptr 10 commits"
     outcome: "Stergem repo de pe GitHub, recream cu un singur commit initial curat (oncoguide-admin). Simplu, curat, definitiv."
+
+  - id: 32
+    date: "2026-03-15"
+    category: "technical"
+    summary: "9 Claude Skills implementate: 4 work + 5 expertise, persona + action checklist"
+    context: "Proiectul necesita expertize diferite (oncologie, UX, SEO, etc.) si workflow-uri automatizate (research, publish). Skills permit invocare rapida de context specializat."
+    alternatives_considered:
+      - "Doar skills functionale acum (5 expertise + publish) -- user a preferat toate 9 inclusiv cele dependente de Faza 11-12"
+      - "Skills doar cu persona fara actiuni -- prea vag, nu produce output concret"
+      - "Skills doar cu actiuni fara persona -- pierde expertiza contextuala"
+    outcome: "Toate 9 skills create cu format: persona + input + actions + dependency check. Skills dependente de research agent (Faza 11) au guard clar. Calibration tasks adaugate in PLAN.md 10.4. Renamed /update-blog to /monthly-review ptr claritate."

@@ -174,22 +174,22 @@ topics/
 - Cod partajat prin copiere, NU prin import/dependinta
 - cancer-news-agent NU se modifica niciodata din onco-blog
 
-## Claude Skills (planificate)
+## Claude Skills
 
 Skills specializate in `.claude/skills/`:
 
 ### Agenti de lucru
-- `/research` — ruleaza research agent ptr un topic
-- `/update-blog` — ruleaza monthly updater
-- `/new-topic` — adauga topic in registry, pregateste structura
-- `/publish` — pregateste articol (SEO checklist, disclaimer, traduceri)
+- `/research` — Run research agent for a specific topic, generating a master guide from Serper + PubMed data
+- `/monthly-review` — Run monthly content review to identify published articles needing updates based on new medical data
+- `/new-topic` — Add a new topic to the registry and prepare directory structure for research and content
+- `/publish` — Run pre-publication checklist for an article -- SEO, disclaimers, translations, shortcodes, internal links
 
-### Expertiza
-- `/frontend` — expert frontend, UX/UI, design, accesibilitate
-- `/ux` — user experience, navigare, user flows
-- `/oncologist` — oncolog experimentat, valideaza acuratete medicala
-- `/patient-advocate` — perspectiva pacient, limbaj accesibil, empatie
-- `/seo` — SEO specialist medical, schema.org, keywords
+### Expertiza (persona + action checklist)
+- `/frontend` — Review frontend code for responsive design, accessibility (WCAG AA), performance, and dark mode compatibility
+- `/ux` — Review user experience -- navigation clarity, information architecture, mobile usability, content scanability
+- `/oncologist` — Review medical accuracy, terminology, protocols, and source quality of oncology articles
+- `/patient-advocate` — Review articles from a patient perspective -- accessible language, empathy, actionable steps, no condescension
+- `/seo` — Review SEO -- keywords, meta descriptions, structured data, internal linking, multilingual SEO consistency
 
 ## Session Start Checklist
 

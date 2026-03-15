@@ -8,6 +8,9 @@
 # Planning prompts (internal only)
 prompt/
 
+# Internal docs (specs, plans)
+docs/
+
 # Hugo build output
 public/
 resources/
