@@ -4,8 +4,10 @@
 topics:
 - id: complete-diagnosis-guide
   title: Ghidul complet de diagnostic oncologic
+  type: guide
   section: diagnosis
   status: guide_ready
+  priority: 0
   search_queries:
   - oncology diagnostic pathway PET-CT biopsy molecular testing
   - cancer diagnosis protocol ESMO guidelines 2024 2025
@@ -20,3 +22,438 @@ topics:
   content_file: diagnosis/ghid-complet-diagnostic.md
   created: '2026-03-14'
   last_researched: '2026-03-15'
+- id: lung-cancer-master
+  title: Cancer pulmonar -- ghid complet
+  type: master-guide
+  section: cancer-types
+  status: planned
+  priority: 1
+  search_queries:
+  - lung cancer diagnosis treatment NSCLC SCLC guide
+  - non-small cell lung cancer staging treatment options 2024 2025
+  - lung cancer molecular testing targeted therapy immunotherapy
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/cancer-pulmonar.md
+  created: '2026-03-15'
+  last_researched: null
+  subtypes:
+  - lung-ret-fusion
+  - lung-egfr
+  - lung-alk
+  - lung-ros1
+  - lung-kras-g12c
+  - lung-pdl1
+- id: lung-ret-fusion
+  title: Cancer pulmonar RET Fusion-Positive
+  type: subtype
+  section: cancer-types
+  status: guide_ready
+  priority: 2
+  parent: lung-cancer-master
+  search_queries:
+  - RET fusion positive lung cancer treatment selpercatinib pralsetinib
+  - RET rearrangement NSCLC targeted therapy clinical trials 2024 2025
+  - RET fusion cancer prognosis survival rate molecular testing
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/pulmonar-ret-fusion.md
+  created: '2026-03-15'
+  last_researched: '2026-03-15'
+- id: lung-egfr
+  title: Cancer pulmonar EGFR-mutant
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 5
+  parent: lung-cancer-master
+  search_queries:
+  - EGFR mutation lung cancer treatment osimertinib targeted therapy
+  - EGFR positive NSCLC first line treatment options 2024 2025
+  - EGFR exon 19 21 lung cancer prognosis resistance mechanisms
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/pulmonar-egfr.md
+  created: '2026-03-15'
+  last_researched: null
+- id: lung-alk
+  title: Cancer pulmonar ALK-pozitiv
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 6
+  parent: lung-cancer-master
+  search_queries:
+  - ALK positive lung cancer treatment alectinib lorlatinib
+  - ALK rearrangement NSCLC targeted therapy clinical trials 2024 2025
+  - ALK fusion lung cancer prognosis young patients non-smokers
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/pulmonar-alk.md
+  created: '2026-03-15'
+  last_researched: null
+- id: lung-ros1
+  title: Cancer pulmonar ROS1-pozitiv
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 7
+  parent: lung-cancer-master
+  search_queries:
+  - ROS1 positive lung cancer treatment crizotinib entrectinib
+  - ROS1 rearrangement NSCLC targeted therapy options 2024 2025
+  - ROS1 fusion lung cancer prognosis molecular testing
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/pulmonar-ros1.md
+  created: '2026-03-15'
+  last_researched: null
+- id: lung-kras-g12c
+  title: Cancer pulmonar KRAS G12C
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 8
+  parent: lung-cancer-master
+  search_queries:
+  - KRAS G12C lung cancer treatment sotorasib adagrasib
+  - KRAS G12C mutation NSCLC targeted therapy 2024 2025
+  - KRAS G12C inhibitor clinical trials resistance mechanisms
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/pulmonar-kras-g12c.md
+  created: '2026-03-15'
+  last_researched: null
+- id: lung-pdl1
+  title: Cancer pulmonar si imunoterapia (PD-L1)
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 9
+  parent: lung-cancer-master
+  search_queries:
+  - PD-L1 expression lung cancer immunotherapy pembrolizumab nivolumab
+  - lung cancer immunotherapy checkpoint inhibitors 2024 2025
+  - PD-L1 testing lung cancer treatment decision first line
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/pulmonar-pdl1-imunoterapie.md
+  created: '2026-03-15'
+  last_researched: null
+- id: breast-cancer-master
+  title: Cancer de san -- ghid complet
+  type: master-guide
+  section: cancer-types
+  status: planned
+  priority: 3
+  search_queries:
+  - breast cancer diagnosis treatment guide comprehensive
+  - breast cancer types HER2 hormone receptor triple negative 2024 2025
+  - breast cancer staging molecular subtypes treatment options
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/cancer-san.md
+  created: '2026-03-15'
+  last_researched: null
+  subtypes:
+  - breast-her2
+  - breast-hr-positive
+  - breast-brca
+  - breast-triple-negative
+- id: breast-her2
+  title: Cancer de san HER2-pozitiv
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 4
+  parent: breast-cancer-master
+  search_queries:
+  - HER2 positive breast cancer treatment trastuzumab TDXd
+  - HER2+ breast cancer targeted therapy antibody drug conjugates 2024 2025
+  - HER2 amplification breast cancer prognosis new treatments
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/san-her2.md
+  created: '2026-03-15'
+  last_researched: null
+- id: breast-hr-positive
+  title: Cancer de san HR+/HER2- (hormonal)
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 10
+  parent: breast-cancer-master
+  search_queries:
+  - hormone receptor positive breast cancer treatment CDK4/6 inhibitors
+  - ER positive breast cancer endocrine therapy palbociclib ribociclib 2024 2025
+  - HR+ HER2- breast cancer prognosis treatment options
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/san-hr-pozitiv.md
+  created: '2026-03-15'
+  last_researched: null
+- id: breast-brca
+  title: Cancer de san BRCA1/BRCA2
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 11
+  parent: breast-cancer-master
+  search_queries:
+  - BRCA1 BRCA2 breast cancer treatment PARP inhibitors olaparib
+  - BRCA mutation breast cancer genetic testing hereditary 2024 2025
+  - BRCA positive breast cancer prevention treatment options
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/san-brca.md
+  created: '2026-03-15'
+  last_researched: null
+- id: breast-triple-negative
+  title: Cancer de san triple-negativ (TNBC)
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 12
+  parent: breast-cancer-master
+  search_queries:
+  - triple negative breast cancer treatment immunotherapy TNBC
+  - TNBC treatment options pembrolizumab sacituzumab 2024 2025
+  - triple negative breast cancer prognosis new therapies clinical trials
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/san-triple-negativ.md
+  created: '2026-03-15'
+  last_researched: null
+- id: colorectal-cancer-master
+  title: Cancer colorectal -- ghid complet
+  type: master-guide
+  section: cancer-types
+  status: planned
+  priority: 13
+  search_queries:
+  - colorectal cancer diagnosis treatment guide comprehensive
+  - colon cancer rectal cancer staging treatment options 2024 2025
+  - colorectal cancer molecular testing biomarkers targeted therapy
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/cancer-colorectal.md
+  created: '2026-03-15'
+  last_researched: null
+  subtypes:
+  - colorectal-msi-h
+  - colorectal-kras-braf
+- id: colorectal-msi-h
+  title: Cancer colorectal MSI-H/dMMR (instabilitate microsatelitara)
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 14
+  parent: colorectal-cancer-master
+  search_queries:
+  - MSI-H dMMR colorectal cancer immunotherapy pembrolizumab
+  - microsatellite instability colon cancer treatment 2024 2025
+  - MSI-H colorectal cancer prognosis Lynch syndrome screening
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/colorectal-msi-h.md
+  created: '2026-03-15'
+  last_researched: null
+- id: colorectal-kras-braf
+  title: Cancer colorectal KRAS/BRAF -- mutatii si tratament
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 15
+  parent: colorectal-cancer-master
+  search_queries:
+  - KRAS NRAS BRAF V600E colorectal cancer treatment anti-EGFR
+  - BRAF V600E colon cancer targeted therapy encorafenib 2024 2025
+  - RAS wild type colorectal cancer cetuximab panitumumab treatment
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/colorectal-kras-braf.md
+  created: '2026-03-15'
+  last_researched: null
+- id: prostate-cancer-master
+  title: Cancer de prostata -- ghid complet
+  type: master-guide
+  section: cancer-types
+  status: planned
+  priority: 16
+  search_queries:
+  - prostate cancer diagnosis treatment guide Gleason ISUP
+  - prostate cancer staging treatment options active surveillance 2024 2025
+  - prostate cancer PSMA PET-CT molecular testing hormonal therapy
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/cancer-prostata.md
+  created: '2026-03-15'
+  last_researched: null
+  subtypes:
+  - prostate-brca-hrd
+- id: prostate-brca-hrd
+  title: Cancer de prostata BRCA/HRD
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 17
+  parent: prostate-cancer-master
+  search_queries:
+  - BRCA prostate cancer PARP inhibitors olaparib treatment
+  - homologous recombination deficiency prostate cancer 2024 2025
+  - BRCA2 prostate cancer genetic testing prognosis treatment options
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/prostata-brca-hrd.md
+  created: '2026-03-15'
+  last_researched: null
+- id: melanoma-master
+  title: Melanom -- ghid complet
+  type: master-guide
+  section: cancer-types
+  status: planned
+  priority: 18
+  search_queries:
+  - melanoma diagnosis treatment guide comprehensive staging
+  - melanoma immunotherapy targeted therapy BRAF 2024 2025
+  - melanoma molecular testing treatment options prognosis
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/melanom.md
+  created: '2026-03-15'
+  last_researched: null
+  subtypes:
+  - melanoma-braf
+  - melanoma-immunotherapy
+- id: melanoma-braf
+  title: Melanom BRAF V600-mutant
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 19
+  parent: melanoma-master
+  search_queries:
+  - BRAF V600E melanoma treatment dabrafenib trametinib
+  - BRAF mutation melanoma targeted therapy 2024 2025
+  - BRAF positive melanoma prognosis combination therapy adjuvant
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/melanom-braf.md
+  created: '2026-03-15'
+  last_researched: null
+- id: melanoma-immunotherapy
+  title: Melanom si imunoterapia
+  type: subtype
+  section: cancer-types
+  status: planned
+  priority: 20
+  parent: melanoma-master
+  search_queries:
+  - melanoma immunotherapy nivolumab ipilimumab pembrolizumab
+  - melanoma checkpoint inhibitors combination therapy 2024 2025
+  - melanoma immunotherapy response PD-L1 TMB biomarkers
+  languages:
+  - en
+  - ro
+  - it
+  - fr
+  - de
+  - es
+  content_file: cancer-types/melanom-imunoterapie.md
+  created: '2026-03-15'
+  last_researched: null

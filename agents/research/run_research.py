@@ -287,7 +287,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         print(f"  Relevant: {stats['after_enrichment']}, Discarded: {stats['discarded']}")
 
     # Step 5: Generate guide
-    findings = db.get_findings_by_topic(topic_id, limit=100)
+    findings = db.get_findings_by_topic(topic_id, limit=500)
     if findings:
         guides_dir = cfg.get("guides_dir", "data/guides")
         output_path = os.path.join(guides_dir, f"{topic_id}.md")
