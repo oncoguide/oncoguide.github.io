@@ -1,0 +1,18 @@
+{
+  "serper_api_key": "",
+  "anthropic_api_key": "",
+  "pubmed_email": "",
+  "openfda_api_key": "",
+  "enrichment_model": "claude-haiku-4-5-20251001",
+  "guide_model": "claude-haiku-4-5-20251001",
+  "query_expansion_model": "claude-haiku-4-5-20251001",
+  "database_path": "data/research.db",
+  "guides_dir": "data/guides",
+  "backup_dir": "data/backups",
+  "max_backups": 10,
+  "max_results_per_query": 10,
+  "delay_between_searches": 3,
+  "delay_between_enrichments": 0.3,
+  "log_file": "logs/research.log",
+  "log_level": "INFO"
+}
