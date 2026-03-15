@@ -55,11 +55,59 @@ SEARCHERS = {
 
 
 def load_config(path: str = "config.json") -> dict:
-    if not os.path.exists(path):
-        print(f"ERROR: {path} not found. Copy config.example.json and fill in your API keys.")
+    """Load config from file, then override with env variables.
+    Config file is optional -- env variables are sufficient."""
+    cfg = {}
+    if os.path.exists(path):
+        with open(path) as f:
+            cfg = json.load(f)
+
+    # Env variables override config file values
+    env_map = {
+        "ANTHROPIC_API_KEY": "anthropic_api_key",
+        "SERPER_API_KEY": "serper_api_key",
+        "PUBMED_EMAIL": "pubmed_email",
+        "OPENFDA_API_KEY": "openfda_api_key",
+    }
+    for env_var, cfg_key in env_map.items():
+        val = os.environ.get(env_var)
+        if val:
+            cfg[cfg_key] = val
+
+    # Defaults for non-secret settings
+    defaults = {
+        "enrichment_model": "claude-haiku-4-5-20251001",
+        "guide_model": "claude-haiku-4-5-20251001",
+        "query_expansion_model": "claude-haiku-4-5-20251001",
+        "database_path": "data/research.db",
+        "guides_dir": "data/guides",
+        "backup_dir": "data/backups",
+        "max_backups": 10,
+        "max_results_per_query": 10,
+        "delay_between_searches": 3,
+        "delay_between_enrichments": 0.3,
+        "log_file": "logs/research.log",
+        "log_level": "INFO",
+    }
+    for key, default in defaults.items():
+        cfg.setdefault(key, default)
+
+    # Validate required keys
+    missing = []
+    if not cfg.get("anthropic_api_key"):
+        missing.append("ANTHROPIC_API_KEY")
+    if not cfg.get("serper_api_key"):
+        missing.append("SERPER_API_KEY")
+    if not cfg.get("pubmed_email"):
+        missing.append("PUBMED_EMAIL")
+    if missing:
+        print(f"ERROR: Missing required config. Set env variables: {', '.join(missing)}")
+        print("  export ANTHROPIC_API_KEY='sk-ant-...'")
+        print("  export SERPER_API_KEY='...'")
+        print("  export PUBMED_EMAIL='your@email.com'")
         sys.exit(1)
-    with open(path) as f:
-        return json.load(f)
+
+    return cfg
 
 
 def load_registry(path: str = "../../topics/registry.yaml") -> list[dict]:
