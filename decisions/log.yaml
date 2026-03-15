@@ -318,3 +318,14 @@ decisions:
       - "Skills doar cu persona fara actiuni -- prea vag, nu produce output concret"
       - "Skills doar cu actiuni fara persona -- pierde expertiza contextuala"
     outcome: "Toate 9 skills create cu format: persona + input + actions + dependency check. Skills dependente de research agent (Faza 11) au guard clar. Calibration tasks adaugate in PLAN.md 10.4. Renamed /update-blog to /monthly-review ptr claritate."
+
+  - id: 33
+    date: "2026-03-15"
+    category: "technical"
+    summary: "Research Agent implementat complet (Faza 11): 5 backends, Claude enrichment, master guide output"
+    context: "Proiectul necesita research automatizat ptr articole. Cod adaptat din cancer-news-agent cu simplificari: fara sections/rings/IVM, doar topic_id + relevance_score 1-10. Adaugat query expander (nou) si guide generator (nou)."
+    alternatives_considered:
+      - "Import direct din cancer-news-agent -- rejectat, proiecte independente"
+      - "Doar Serper + PubMed -- insuficient, adaugate ClinicalTrials, openFDA, CIViC ptr acoperire completa"
+      - "Batch enrichment (multi-finding per Claude call) -- simplificat la single-finding, cost mic pe Haiku"
+    outcome: "11 module Python, 32 unit tests (all pass). CLI cu --topic, --update-all, --dry-run, --list-topics, --init. Topic registry in topics/registry.yaml. Necesita config.json cu API keys reale ptr test complet."

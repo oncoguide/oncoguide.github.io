@@ -129,50 +129,73 @@ Categories: `technical`, `design`, `content`, `learning`, `process`
 - Check `.gitignore` covers sensitive patterns before first push
 - The `.claude/` folder is gitignored — agent memory may contain personal data
 
-## Research Agent (planificat)
+## Research Agent
 
-Onco-blog va avea un research agent integrat, similar ca pattern cu proiectul separat `cancer-news-agent`.
+Python research agent in `agents/research/`, adapted from cancer-news-agent.
+Searches 5 backends, enriches with Claude, generates master guide markdown per topic.
 
-### Arhitectura
+### CLI Commands
 
-- **Research agent** — cauta informatii ptr un topic specific, genereaza master guide per topic
-  - Comanda: `python3 agents/research/run_research.py --topic "topic-id"`
-  - Output: master guide markdown in `data/guides/{topic-id}.md`
-- **Update agent** — acelasi agent cu flag diferit, scan lunar ptr topicuri publicate
-  - Comanda: `python3 agents/research/run_research.py --update-all --since 30d`
-  - Semnaleaza ce articole trebuie actualizate
+```bash
+cd agents/research
+source .venv/bin/activate  # Python venv with all deps
 
-### Structura planificata
+python run_research.py --init                              # Initialize database
+python run_research.py --topic "topic-id"                  # Full research pipeline
+python run_research.py --topic "topic-id" --dry-run        # Show queries without API calls
+python run_research.py --update-all --since 30d            # Update all published topics
+python run_research.py --list-topics                       # List topics from registry
+```
+
+### Structure
 
 ```
-agents/
-  research/
-    run_research.py        — CLI entry point (--topic X | --update-all)
-    modules/               — Serper, PubMed, enrichment, DB (adaptate din cancer-news-agent)
-    config.json            — API keys (gitignored)
+agents/research/
+  run_research.py              — CLI entry point + orchestrator
+  modules/
+    __init__.py
+    utils.py                   — Hashing, logging, text helpers
+    database.py                — SQLite wrapper (WAL mode, simplified schema)
+    query_expander.py          — Claude: expand base queries into 15-25 total
+    enrichment.py              — Claude: classify relevant/irrelevant + score 1-10
+    guide_generator.py         — Claude: generate master guide markdown
+    searcher_serper.py         — Serper.dev Google search
+    searcher_pubmed.py         — PubMed/NCBI Entrez
+    searcher_clinicaltrials.py — ClinicalTrials.gov API v2
+    searcher_openfda.py        — FDA adverse events, labels, enforcement
+    searcher_civic.py          — CIViC genomics GraphQL
+  config.example.json          — Template (copy to config.json, fill API keys)
+  config.json                  — Actual config (gitignored)
+  requirements.txt             — Python dependencies
+  tests/                       — 32 unit tests
 data/
-  research.db              — SQLite (gitignored)
-  guides/                  — Master guide markdown per topic (gitignored)
-  backups/                 — DB backups
+  research.db                  — SQLite database (gitignored)
+  guides/                      — Master guide markdown per topic (gitignored)
+  backups/                     — DB backups (gitignored)
 topics/
-  registry.yaml            — Lista topicuri: id, status, search queries, content_file
+  registry.yaml                — Topic definitions with search queries (committed to git)
 ```
 
-### Reguli
+### Data Flow
 
-- Codul este copiat si adaptat din cancer-news-agent — fara dependinte intre proiecte
+1. Topics defined in `topics/registry.yaml` with 3-5 base queries each
+2. Query expander (Claude) generates 15-25 total queries across all backends
+3. 5 searchers execute queries sequentially
+4. Deduplication via SHA-256 content hash (topic_id + title + url)
+5. Enrichment (Claude) classifies each finding: relevant/irrelevant + score 1-10
+6. Relevant findings stored in SQLite DB
+7. Guide generator (Claude) produces master guide from top findings
+8. Output: `data/guides/{topic-id}.md`
+
+### Rules
+
+- Code copied and adapted from cancer-news-agent -- no shared dependencies
 - Research DB in `data/research.db`, gitignored
 - Master guides in `data/guides/`, gitignored
-- Topic registry in `topics/registry.yaml`, comis in git
-- Workflow: decidem topic → research agent → master guide → scriem articol → publish
-- Update agent ruleaza lunar, compara cu ce e publicat
-
-### Relatie cu cancer-news-agent
-
-- cancer-news-agent = monitorizare medicala personala (proiect separat, independent)
-- onco-blog research agent = research ptr articole educative publice
-- Cod partajat prin copiere, NU prin import/dependinta
-- cancer-news-agent NU se modifica niciodata din onco-blog
+- Topic registry in `topics/registry.yaml`, committed to git
+- Workflow: decide topic -> research agent -> master guide -> write article -> publish
+- Update agent runs monthly, compares with published content
+- cancer-news-agent is NEVER modified from onco-blog
 
 ## Claude Skills
 
