@@ -245,8 +245,19 @@ def _generate_section(
     section_num: int,
     findings_text: str,
     model: str,
+    cross_verify_report: str = "",
 ) -> str:
     """Generate one section of the guide."""
+    cross_verify_block = ""
+    if cross_verify_report:
+        cross_verify_block = (
+            f"\n\n=== CROSS-VERIFICATION REPORT ===\n"
+            f"The following report compares the AI oncologist's initial claims against real findings.\n"
+            f"When a claim is CONTRADICTED, use the finding's number instead.\n"
+            f"When a claim is UNVERIFIED, note it as unconfirmed.\n\n"
+            f"{cross_verify_report}\n"
+        )
+
     message = client.messages.create(
         model=model,
         max_tokens=4000,
@@ -260,6 +271,7 @@ def _generate_section(
                     f"Section scope: {section['description']}\n"
                     f"Key finding IDs to use: {section.get('finding_ids', 'all relevant')}\n\n"
                     f"ALL findings (reference by number):\n{findings_text}"
+                    f"{cross_verify_block}"
                 ),
             }
         ],
@@ -273,11 +285,17 @@ def generate_guide(
     output_path: str,
     api_key: str,
     model: str = "claude-haiku-4-5-20251001",
+    cross_verify_report: str = "",
 ):
     """Generate a comprehensive master guide from findings using multi-pass generation.
 
     Pass 1: Plan sections based on all findings
     Pass 2: Generate each section individually with full context
+
+    Args:
+        cross_verify_report: Formatted cross-verification report (VERIFIED/CONTRADICTED/UNVERIFIED).
+            When provided, each section generation receives this as context to prefer real findings
+            over discovery claims where they differ.
     """
     if not findings:
         logger.warning(f"No findings for '{topic_title}', skipping guide generation")
@@ -302,7 +320,8 @@ def generate_guide(
         print(f"  Section {i}/{len(sections)}: {section['title']}")
         try:
             content = _generate_section(
-                client, topic_title, section, i, findings_text, model
+                client, topic_title, section, i, findings_text, model,
+                cross_verify_report=cross_verify_report,
             )
             guide_parts.append(f"## {i}. {section['title']}\n\n{content}")
         except Exception as e:

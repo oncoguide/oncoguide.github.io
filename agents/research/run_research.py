@@ -29,6 +29,7 @@ from modules.database import Database
 from modules.discovery import run_discovery
 from modules.enrichment import enrich_batch, get_token_usage, reset_token_usage
 from modules.pre_search import pre_search
+from modules.cross_verify import cross_verify, format_report
 from modules.gap_analyzer import analyze_gaps
 from modules.guide_generator import generate_guide, GUIDE_SECTIONS
 from modules.keyword_extractor import extract_queries
@@ -363,15 +364,37 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
                 date_from=date_from, date_to=date_to, label="Round 2 -- ",
             )
 
-    # Phase 5: Guide generation (Haiku)
+    # Phase 5: Cross-verification (Haiku)
     findings = db.get_findings_by_topic(topic_id, limit=500)
+    cv_report_text = ""
+    if findings and discovery.get("knowledge_map"):
+        print(f"\nPhase 5: Cross-verification ({len(findings)} findings vs discovery claims)...")
+        try:
+            cv_report = cross_verify(
+                knowledge_map=discovery["knowledge_map"],
+                findings=findings,
+                diagnosis=diagnosis,
+                api_key=cfg["anthropic_api_key"],
+                cost=cost,
+            )
+            cv_report_text = format_report(cv_report)
+            v = len(cv_report.get("verified", []))
+            c = len(cv_report.get("contradicted", []))
+            u = len(cv_report.get("unverified", []))
+            print(f"  {v} verified, {c} contradicted, {u} unverified")
+        except Exception as e:
+            logger.error(f"Cross-verification failed: {e}")
+            print(f"  Cross-verification failed ({e}), continuing without")
+
+    # Phase 6: Guide generation (Haiku)
     guides_dir = cfg.get("guides_dir", "data/guides")
     output_path = os.path.join(guides_dir, f"{topic_id}.md")
     if findings:
-        print(f"\nPhase 5: Generating guide ({len(findings)} findings)...")
+        print(f"\nPhase 6: Generating guide ({len(findings)} findings)...")
         generate_guide(
             diagnosis, findings, output_path,
             cfg["anthropic_api_key"], cfg.get("guide_model", "claude-haiku-4-5-20251001"),
+            cross_verify_report=cv_report_text,
         )
         print(f"  Guide saved: {output_path}")
 
@@ -380,7 +403,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         os.makedirs(guide_backup_dir, exist_ok=True)
         shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
 
-    # Phase 6: Validation (Sonnet)
+    # Phase 7: Validation (Sonnet)
     validation_model = cfg.get("validation_model", "claude-sonnet-4-6")
     max_val_rounds = cfg.get("max_validation_rounds", 2)
     val_result = {"passed": False, "learnings": []}
@@ -388,7 +411,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         guide_text = open(output_path).read()
 
         for val_round in range(1, max_val_rounds + 1):
-            print(f"\nPhase 6: Validation round {val_round}...")
+            print(f"\nPhase 7: Validation round {val_round}...")
             val_result = validate_guide(
                 guide_text=guide_text,
                 diagnosis=diagnosis,
@@ -426,10 +449,10 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
                 guide_text = open(output_path).read()
                 shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
 
-    # Phase 7: Skill self-improvement
+    # Phase 8: Skill self-improvement
     learnings = val_result.get("learnings", [])
     if learnings:
-        print(f"\nPhase 7: Updating skills with {len(learnings)} learnings...")
+        print(f"\nPhase 8: Updating skills with {len(learnings)} learnings...")
         skills_dir = os.path.join(os.path.dirname(__file__), "..", "..", ".claude", "skills")
         skills_dir = os.path.abspath(skills_dir)
         append_learnings(os.path.join(skills_dir, "oncologist.md"), learnings)

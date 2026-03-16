@@ -185,6 +185,7 @@ agents/research/
     enrichment.py              — Claude: classify relevant/irrelevant + score 1-10 + authority 1-5 (Haiku)
     gap_analyzer.py            — Identify weak sections, generate round 2 queries (Haiku)
     pre_search.py              — Phase 0: template + Haiku queries, search, enrich, format context for discovery
+    cross_verify.py            — Compare discovery claims vs real findings (Haiku)
     guide_generator.py         — Claude: generate master guide markdown (Haiku)
     searcher_serper.py         — Serper.dev Google search
     searcher_pubmed.py         — PubMed/NCBI Entrez
@@ -196,7 +197,7 @@ agents/research/
   config.example.json          — Template (copy to config.json, fill API keys)
   config.json                  — Actual config (gitignored)
   requirements.txt             — Python dependencies
-  tests/                       — 58 unit tests
+  tests/                       — 87 unit tests
 data/
   research.db                  — SQLite database (gitignored)
   guides/                      — Master guide markdown per topic (gitignored)
@@ -213,10 +214,11 @@ topics/
 3. Keyword extraction (Sonnet): methodologist extracts precision queries from conversation
 4. Search round 1: 5 backends execute queries + enrichment (Haiku)
 5. Gap analysis + search round 2 (Haiku): fill weak sections
-6. Guide generation (Haiku): multi-pass, 15 sections
-7. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found
-8. Skill self-improvement: learnings written back to skill files
-9. Output: `data/guides/{topic-id}.md`
+6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
+7. Guide generation (Haiku): multi-pass, 15 sections, informed by cross-verification report
+8. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found
+9. Skill self-improvement: learnings written back to skill files
+10. Output: `data/guides/{topic-id}.md`
 
 ### Topic Workflow
 
@@ -298,6 +300,7 @@ When modifying files in the left column, you MUST also update the files in the r
 | `discovery.py` (prompts, params, rounds) | `.claude/skills/oncologist.md` (Learnings section) |
 | `validation.py` (prompts, output format) | `.claude/skills/oncologist.md` + `.claude/skills/patient-advocate.md` |
 | `guide_generator.py` (sections, models) | This file ("Content Architecture") + `archetypes/master-guide-template.md` |
+| `cross_verify.py` (prompts, thresholds) | This file ("Data Flow") + `guide_generator.py` (if report format changes) |
 | `enrichment.py` (output fields) | This file ("Data Flow") + `database.py` (schema if new column) |
 | `topics/registry.yaml` (fields, statuses) | This file ("Topic Workflow") |
 | Any skill in `.claude/skills/` | This file ("Claude Skills" section) |
