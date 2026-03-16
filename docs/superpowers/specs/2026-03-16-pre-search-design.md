@@ -20,12 +20,12 @@ def pre_search(
     diagnosis: str,
     cfg: dict,
     cost: CostTracker,
-    max_findings: int = 100,
+    max_findings: int = 50,
 ) -> str:
     """Run broad pre-search to ground discovery loop with real data.
 
     Returns formatted text with top findings, ready to inject into
-    the oncologist's system prompt.
+    the oncologist's system prompt. Returns empty string on failure.
     """
 ```
 
@@ -44,7 +44,7 @@ LIBRETTO-431 phase III" (2025-03)
 [Serper] "EMA approves selpercatinib for first-line RET fusion NSCLC" (2025-01)
   Extended indication covers treatment-naive patients.
 
-(... up to 100 findings ...)
+(... up to 50 findings, max 15,000 chars ...)
 ```
 
 ### What pre_search does NOT do
@@ -82,23 +82,23 @@ Becomes:
 
 ### Phase A: Mechanical Templates (~20 queries, zero Claude, zero cost)
 
-Templates use `{diagnosis}` substitution only. No AI involvement -- this is the anchor that catches what Claude does not know.
+Templates use `{diagnosis}` and `{year}` (current year, computed at runtime via `datetime.now().year`) substitution only. No AI involvement -- this is the anchor that catches what Claude does not know.
 
 | # | Template | Backend | Purpose |
 |---|----------|---------|---------|
-| 1 | `{diagnosis} treatment guidelines 2025 2026` | serper | Current protocols |
+| 1 | `{diagnosis} treatment guidelines {year-1} {year}` | serper | Current protocols |
 | 2 | `{diagnosis} approved drugs` | serper | All approved drugs |
-| 3 | `{diagnosis} new drugs approved 2025 2026` | serper | Recently approved |
+| 3 | `{diagnosis} new drugs approved {year-1} {year}` | serper | Recently approved |
 | 4 | `{diagnosis} new drugs pipeline development` | serper | Pipeline drugs |
 | 5 | `{diagnosis} clinical trials recruiting` | clinicaltrials | Active trials |
 | 6 | `{diagnosis} clinical trials phase III` | clinicaltrials | Late-stage trials |
-| 7 | `{diagnosis} phase III results 2025 2026` | pubmed | Recent trial results |
+| 7 | `{diagnosis} phase III results {year-1} {year}` | pubmed | Recent trial results |
 | 8 | `{diagnosis} targeted therapy efficacy` | pubmed | Efficacy data |
 | 9 | `{diagnosis} resistance mechanisms` | pubmed | Resistance |
 | 10 | `{diagnosis} side effects toxicity incidence` | pubmed | Adverse events |
 | 11 | `{diagnosis} survival outcomes PFS OS` | pubmed | Survival data |
 | 12 | `{diagnosis} brain metastases intracranial` | pubmed | CNS disease |
-| 13 | `{diagnosis} ESMO NCCN guidelines 2025 2026` | serper | Guidelines |
+| 13 | `{diagnosis} ESMO NCCN guidelines {year-1} {year}` | serper | Guidelines |
 | 14 | `{diagnosis} biomarker testing molecular` | pubmed | Testing |
 | 15 | `{diagnosis} immunotherapy combination` | pubmed | Combinations |
 | 16 | `{diagnosis} drug withdrawal market exit` | serper | Withdrawals |
@@ -106,6 +106,8 @@ Templates use `{diagnosis}` substitution only. No AI involvement -- this is the 
 | 18 | `{diagnosis} European access reimbursement` | serper | EU access |
 | 19 | `{diagnosis}` | civic | Genomic variants |
 | 20 | `{diagnosis}` | openfda | FDA safety data |
+
+`{year}` = `datetime.now().year`, `{year-1}` = `datetime.now().year - 1`. Never hardcoded.
 
 ### Phase B: Claude Haiku Complement (~20 queries, ~$0.01)
 
@@ -122,16 +124,19 @@ Haiku adds precision where templates are generic: "selpercatinib LIBRETTO-431 PF
 
 ## Search + Enrichment
 
-Reuses existing infrastructure -- no new search code:
+`pre_search.py` calls individual searcher functions and `enrich_batch` directly -- it does NOT use `_search_and_enrich` from `run_research.py` (which requires a DB). Instead:
 
-1. Execute all ~40 queries using existing `SEARCHERS` dispatch map from `run_research.py`
-2. Deduplicate results by content hash (same logic as `_search_and_enrich`)
-3. Enrich with Haiku: relevant/irrelevant + score 1-10 (same `enrich_batch`)
-4. Sort by relevance score descending
-5. Take top `max_findings` (default 100)
-6. Format as human-readable text string
+1. Import searcher functions directly: `search_serper`, `search_pubmed`, `search_clinicaltrials`, `search_openfda`, `search_civic`
+2. Execute all ~40 queries, skipping backends whose API keys are missing in `cfg` (graceful degradation -- e.g., skip OpenFDA if `openfda_api_key` is empty)
+3. Deduplicate results in-memory by content hash (using `compute_content_hash` from utils)
+4. Enrich with Haiku via `enrich_batch` from `enrichment.py`: relevant/irrelevant + score 1-10
+5. Sort by relevance score descending
+6. Take top `max_findings` (default 50 -- see Context Size section)
+7. Format as human-readable text string
 
-**Key difference from main search:** Results are NOT stored in DB. They exist only as context text for the discovery loop.
+**Key difference from main search:** Results are NOT stored in DB. Deduplication is in-memory only. They exist only as context text for the discovery loop.
+
+**Note on enrichment cost tracking:** The existing `enrichment.py` tracks tokens via its own internal counter (`get_token_usage`), not via `CostTracker`. Pre-search enrichment cost is therefore not covered by the $5 budget cap. After pre-search completes, `run_research.py` should estimate enrichment cost from `get_token_usage()` and log it. This is an existing pipeline limitation (enrichment has always been outside CostTracker) -- a future improvement could pass `CostTracker` into `enrich_batch`.
 
 ---
 
@@ -152,7 +157,10 @@ def run_discovery(
 ) -> dict:
 ```
 
-The `pre_search_context` string is injected into the oncologist's system prompt in `_oncologist_system()`:
+The `pre_search_context` string is injected into BOTH oncologist prompts:
+
+1. `_oncologist_system()` -- initial knowledge map generation
+2. `_oncologist_respond_system()` -- follow-up rounds (so the oncologist retains access to grounding data when answering advocate's questions)
 
 ```
 {skill_context}
@@ -173,13 +181,26 @@ Your role: provide COMPLETE clinical knowledge for a patient education guide.
 
 The advocate's prompt is NOT modified -- the advocate evaluates completeness against the guide sections, regardless of data source.
 
+### Context Size Limit
+
+With `max_findings=50` (default), the context string is typically 8,000-15,000 characters. This is injected into the system prompt for every oncologist call (initial + follow-up rounds). To keep costs manageable:
+
+- Default `max_findings` is **50** (not 100)
+- Each finding is formatted as 2-3 lines max (title + key data point)
+- If context exceeds 15,000 chars, truncate with a note: "... ({N} more findings omitted, see full pre-search output in logs)"
+
 ### Modified: `run_research.py`
 
 ```python
 # Phase 0: Pre-search (NEW)
 print("Phase 0: Pre-search (grounding discovery with real data)...")
-pre_context = pre_search(diagnosis, cfg, cost)
-print(f"  Pre-search: {len(pre_context)} chars of context from external sources")
+try:
+    pre_context = pre_search(diagnosis, cfg, cost)
+    print(f"  Pre-search: {len(pre_context)} chars of context from external sources")
+except Exception as e:
+    logger.error(f"Pre-search failed: {e}")
+    print(f"  Pre-search failed ({e}), continuing without grounding data")
+    pre_context = ""
 
 # Phase 1: Discovery loop (existing, modified call)
 discovery = run_discovery(
@@ -192,30 +213,36 @@ discovery = run_discovery(
 )
 ```
 
+**Graceful degradation:** If pre-search fails entirely (network error, all backends down, Haiku API error), the pipeline continues with `pre_context=""`. Discovery falls back to parametric knowledge only -- same as current v4 behavior. No data is lost.
+
 ---
 
 ## Dry-Run Behavior
 
-When `--dry-run` is used, pre-search executes fully (it needs real API calls to search), but the pipeline stops after keyword extraction. The dry-run output shows:
+`--dry-run` means "no external search API calls" (consistent with existing CLI semantics). Pre-search generates and displays queries but does NOT execute them:
 
 ```
-Phase 0: Pre-search...
-  20 template queries + 18 Haiku queries = 38 total
-  142 raw results -> 87 relevant findings
-  Top finding: [PubMed] "Selpercatinib vs chemo..." (score: 9.8)
+Phase 0: Pre-search (dry-run)...
+  20 template queries:
+    [serper] "RET fusion NSCLC treatment guidelines 2025 2026"
+    [pubmed] "RET fusion NSCLC phase III results 2025 2026"
+    ...
+  + 18 Haiku complement queries:
+    [pubmed] "selpercatinib LIBRETTO-431 progression-free survival"
+    [serper] "LOXO-260 RET inhibitor phase I Lilly"
+    ...
+  (searches skipped in dry-run mode)
 
-Phase 1: Discovery loop...
-  (uses pre-search context)
-
+Phase 1: Discovery loop (no pre-search context in dry-run)...
 Phase 2: Keyword extraction...
   72 precision queries extracted
 
 --- DRY RUN ---
 (queries listed)
-Cost so far: $0.52
+Cost so far: $0.25
 ```
 
-**Note:** If the user wants zero API calls, they can use `--list-topics` instead. Dry-run means "show what the full pipeline would do" which requires discovery + extraction to run.
+Pre-search Haiku query generation still runs (costs ~$0.01) so the user can see the full query plan. Discovery runs without pre-search context in dry-run mode.
 
 ---
 
@@ -261,6 +288,10 @@ No changes to: keyword_extractor, gap_analyzer, guide_generator, validation, ski
 | `test_pre_search_no_api_key` | Returns empty string gracefully |
 | `test_discovery_with_pre_search_context` | Oncologist prompt includes findings |
 | `test_discovery_without_pre_search_context` | Backward compatible (empty string default) |
+| `test_template_years_dynamic` | Years use current year, not hardcoded |
+| `test_skips_backend_without_api_key` | Skips OpenFDA queries when key missing |
+| `test_context_truncated_at_limit` | Output truncated at 15,000 chars with note |
+| `test_pre_search_failure_returns_empty` | Returns "" on exception, does not crash |
 
 ---
 
