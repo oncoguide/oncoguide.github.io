@@ -14,6 +14,7 @@ import json
 import logging
 import os
 import re
+import shutil
 import sys
 import time
 from datetime import datetime, timedelta
@@ -23,16 +24,21 @@ import yaml
 # Add parent to path for module imports
 sys.path.insert(0, os.path.dirname(__file__))
 
+from modules.cost_tracker import CostTracker
 from modules.database import Database
+from modules.discovery import run_discovery
 from modules.enrichment import enrich_batch, get_token_usage, reset_token_usage
-from modules.guide_generator import generate_guide
-from modules.query_expander import expand_queries
+from modules.gap_analyzer import analyze_gaps
+from modules.guide_generator import generate_guide, GUIDE_SECTIONS
+from modules.keyword_extractor import extract_queries
 from modules.searcher_serper import search_serper
 from modules.searcher_pubmed import search_pubmed
 from modules.searcher_clinicaltrials import search_clinicaltrials
 from modules.searcher_openfda import search_openfda
 from modules.searcher_civic import search_civic
+from modules.skill_improver import append_learnings
 from modules.utils import compute_content_hash, extract_domain, now_iso, setup_logging
+from modules.validation import validate_guide
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +85,11 @@ def load_config(path: str = "config.json") -> dict:
         "enrichment_model": "claude-haiku-4-5-20251001",
         "guide_model": "claude-haiku-4-5-20251001",
         "query_expansion_model": "claude-haiku-4-5-20251001",
+        "discovery_model": "claude-sonnet-4-6",
+        "validation_model": "claude-sonnet-4-6",
+        "max_discovery_rounds": 5,
+        "max_validation_rounds": 2,
+        "max_cost_usd": 5.0,
         "database_path": "data/research.db",
         "guides_dir": "data/guides",
         "backup_dir": "data/backups",
@@ -165,53 +176,12 @@ def cmd_list_topics(registry_path: str):
         print(f"{t['id']:<35} {t['status']:<15} {t.get('last_researched', 'never')}")
 
 
-def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = False,
-              date_from: str = None, date_to: str = None, update_status: bool = True):
-    """Research a specific topic -- full pipeline.
-    If update_status=False (used by --update-all), don't change topic status."""
-    topics = load_registry(registry_path)
-    topic = find_topic(topics, topic_id)
-    if not topic:
-        print(f"ERROR: Topic '{topic_id}' not found in registry.")
-        sys.exit(1)
-
-    start_time = time.time()
-    reset_token_usage()
-
-    print(f"\n=== Researching: {topic['title']} ===\n")
-
-    # Step 1: Expand queries
-    print("Step 1: Expanding queries...")
-    queries = expand_queries(
-        topic["title"], topic["search_queries"],
-        cfg["anthropic_api_key"], cfg.get("query_expansion_model", "claude-haiku-4-5-20251001"),
-    )
-    print(f"  {len(topic['search_queries'])} base -> {len(queries)} total queries")
-
-    if dry_run:
-        print("\n--- DRY RUN ---")
-        for q in queries:
-            print(f"  [{q['search_engine']}] [{q.get('language', 'en')}] {q['query_text']}")
-        print(f"\nEstimated API calls: {len(queries)} searches + enrichment")
-        return
-
-    # Step 2: Initialize DB and start run
-    db = Database(cfg["database_path"])
-    db.create_tables()
-    db.backup(cfg.get("backup_dir", "data/backups"), cfg.get("max_backups", 10))
-    run_id = db.start_run("topic", topic_id)
-
-    # Update status (only for direct --topic calls, not --update-all)
-    if update_status:
-        topic["status"] = "researching"
-        save_registry(topics, registry_path)
-
-    # Step 3: Search
-    print("Step 2: Searching...")
-    all_results = []
+def _search_and_enrich(queries, topic_id, topic_title, cfg, db, run_id,
+                       date_from=None, date_to=None, label=""):
+    """Execute search + enrichment for a batch of queries. Returns stats dict."""
     stats = {"queries_total": 0, "raw_results": 0, "after_dedup": 0,
              "after_enrichment": 0, "discarded": 0}
-
+    all_results = []
     delay = cfg.get("delay_between_searches", 3)
 
     for i, q in enumerate(queries):
@@ -248,13 +218,13 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
             time.sleep(delay)
 
     stats["after_dedup"] = len(all_results)
-    print(f"\n  Total: {stats['raw_results']} raw -> {stats['after_dedup']} after dedup")
+    print(f"\n  {label}Total: {stats['raw_results']} raw -> {stats['after_dedup']} after dedup")
 
-    # Step 4: Enrich
+    # Enrich
     if all_results:
-        print(f"\nStep 3: Enriching {len(all_results)} findings...")
+        print(f"\n  Enriching {len(all_results)} findings...")
         enrichments = enrich_batch(
-            all_results, topic["title"], cfg["anthropic_api_key"],
+            all_results, topic_title, cfg["anthropic_api_key"],
             cfg.get("enrichment_model", "claude-haiku-4-5-20251001"),
             cfg.get("delay_between_enrichments", 0.3),
             progress_callback=lambda cur, tot: print(f"  {cur}/{tot}", end="\r"),
@@ -286,20 +256,174 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
 
         print(f"  Relevant: {stats['after_enrichment']}, Discarded: {stats['discarded']}")
 
-    # Step 5: Generate guide
+    return stats
+
+
+def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = False,
+              date_from: str = None, date_to: str = None, update_status: bool = True):
+    """Research a specific topic -- full v4 pipeline."""
+    topics = load_registry(registry_path)
+    topic = find_topic(topics, topic_id)
+    if not topic:
+        print(f"ERROR: Topic '{topic_id}' not found in registry.")
+        sys.exit(1)
+
+    start_time = time.time()
+    cost = CostTracker(max_cost_usd=cfg.get("max_cost_usd", 5.0))
+
+    diagnosis = topic["title"]
+    reset_token_usage()  # Reset enrichment module's internal token counter
+    print(f"\n=== Researching: {diagnosis} ===\n")
+
+    # Phase 1: Discovery loop (Sonnet)
+    discovery_model = cfg.get("discovery_model", "claude-sonnet-4-6")
+    print(f"Phase 1: Discovery loop (max {cfg.get('max_discovery_rounds', 5)} rounds)...")
+    discovery = run_discovery(
+        diagnosis=diagnosis,
+        model=discovery_model,
+        cost=cost,
+        api_key=cfg["anthropic_api_key"],
+        max_rounds=cfg.get("max_discovery_rounds", 5),
+    )
+    print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']}")
+    if discovery.get("section_scores"):
+        low = [f"{k}: {v.get('score', '?')}" for k, v in discovery["section_scores"].items()
+               if isinstance(v, dict) and v.get("score", 10) < 8.5]
+        if low:
+            print(f"  Low sections: {', '.join(low)}")
+
+    # Phase 2: Keyword extraction (Sonnet)
+    print("Phase 2: Extracting search queries from discovery...")
+    queries = extract_queries(
+        diagnosis=diagnosis,
+        conversation=discovery["conversation"],
+        knowledge_map=discovery["knowledge_map"],
+        api_key=cfg["anthropic_api_key"],
+        model=discovery_model,
+        cost=cost,
+    )
+    print(f"  Extracted {len(queries)} precision queries")
+
+    if dry_run:
+        print("\n--- DRY RUN ---")
+        for q in queries:
+            sec = q.get("target_section", "general")
+            print(f"  [{q['search_engine']}] [{q.get('language', 'en')}] ({sec}) {q['query_text']}")
+        print(f"\nDiscovery rounds: {discovery['rounds']}")
+        print(f"Cost so far:\n  {cost.report()}")
+        return
+
+    # Phase 3: Initialize DB, search round 1
+    db = Database(cfg["database_path"])
+    db.create_tables()
+    db.backup(cfg.get("backup_dir", "data/backups"), cfg.get("max_backups", 10))
+    run_id = db.start_run("topic", topic_id)
+
+    if update_status:
+        topic["status"] = "researching"
+        save_registry(topics, registry_path)
+
+    print("Phase 3: Search round 1...")
+    stats_r1 = _search_and_enrich(
+        queries, topic_id, diagnosis, cfg, db, run_id,
+        date_from=date_from, date_to=date_to, label="Round 1 -- ",
+    )
+
+    # Phase 4: Gap analysis + search round 2
+    findings_so_far = db.get_findings_by_topic(topic_id, limit=500)
+    stats_r2 = {"queries_total": 0, "raw_results": 0, "after_dedup": 0,
+                "after_enrichment": 0, "discarded": 0}
+    if findings_so_far and len(findings_so_far) >= 10:
+        print(f"\nPhase 4: Gap analysis ({len(findings_so_far)} findings)...")
+        gap_queries = analyze_gaps(
+            diagnosis, findings_so_far, GUIDE_SECTIONS,
+            cfg["anthropic_api_key"],
+            cfg.get("query_expansion_model", "claude-haiku-4-5-20251001"),
+        )
+        if gap_queries:
+            print(f"  {len(gap_queries)} gap-filling queries for round 2")
+            stats_r2 = _search_and_enrich(
+                gap_queries, topic_id, diagnosis, cfg, db, run_id,
+                date_from=date_from, date_to=date_to, label="Round 2 -- ",
+            )
+
+    # Phase 5: Guide generation (Haiku)
     findings = db.get_findings_by_topic(topic_id, limit=500)
+    guides_dir = cfg.get("guides_dir", "data/guides")
+    output_path = os.path.join(guides_dir, f"{topic_id}.md")
     if findings:
-        guides_dir = cfg.get("guides_dir", "data/guides")
-        output_path = os.path.join(guides_dir, f"{topic_id}.md")
-        print(f"\nStep 4: Generating master guide...")
+        print(f"\nPhase 5: Generating guide ({len(findings)} findings)...")
         generate_guide(
-            topic["title"], findings, output_path,
+            diagnosis, findings, output_path,
             cfg["anthropic_api_key"], cfg.get("guide_model", "claude-haiku-4-5-20251001"),
         )
         print(f"  Guide saved: {output_path}")
 
+        # Backup
+        guide_backup_dir = os.path.join(cfg.get("backup_dir", "data/backups"), "guides")
+        os.makedirs(guide_backup_dir, exist_ok=True)
+        shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
+
+    # Phase 6: Validation (Sonnet)
+    validation_model = cfg.get("validation_model", "claude-sonnet-4-6")
+    max_val_rounds = cfg.get("max_validation_rounds", 2)
+    val_result = {"passed": False, "learnings": []}
+    if os.path.exists(output_path) and cost.has_budget(reserve_usd=0.50):
+        guide_text = open(output_path).read()
+
+        for val_round in range(1, max_val_rounds + 1):
+            print(f"\nPhase 6: Validation round {val_round}...")
+            val_result = validate_guide(
+                guide_text=guide_text,
+                diagnosis=diagnosis,
+                knowledge_map=discovery["knowledge_map"],
+                api_key=cfg["anthropic_api_key"],
+                model=validation_model,
+                cost=cost,
+            )
+            print(f"  Score: {val_result.get('overall_score', '?')}/10, Passed: {val_result['passed']}")
+
+            if val_result["passed"]:
+                break
+
+            # Targeted search for missing keywords
+            missing = val_result.get("missing_keywords", [])
+            if missing and cost.has_budget(reserve_usd=0.30):
+                print(f"  Targeted search: {len(missing)} keywords...")
+                targeted_queries = [
+                    {"query_text": kw, "search_engine": "serper", "language": "en",
+                     "target_section": "general"}
+                    for kw in missing[:20]  # cap at 20 queries
+                ]
+                _search_and_enrich(
+                    targeted_queries, topic_id, diagnosis, cfg, db, run_id,
+                    date_from=date_from, date_to=date_to, label=f"Validation R{val_round} -- ",
+                )
+
+                # Regenerate guide with new findings
+                findings = db.get_findings_by_topic(topic_id, limit=500)
+                print(f"  Regenerating guide ({len(findings)} findings)...")
+                generate_guide(
+                    diagnosis, findings, output_path,
+                    cfg["anthropic_api_key"], cfg.get("guide_model", "claude-haiku-4-5-20251001"),
+                )
+                guide_text = open(output_path).read()
+                shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
+
+    # Phase 7: Skill self-improvement
+    learnings = val_result.get("learnings", [])
+    if learnings:
+        print(f"\nPhase 7: Updating skills with {len(learnings)} learnings...")
+        skills_dir = os.path.join(os.path.dirname(__file__), "..", "..", ".claude", "skills")
+        skills_dir = os.path.abspath(skills_dir)
+        append_learnings(os.path.join(skills_dir, "oncologist.md"), learnings)
+        append_learnings(os.path.join(skills_dir, "patient-advocate.md"), learnings)
+
     # Finish
     duration = time.time() - start_time
+    stats = {}
+    for key in stats_r1:
+        stats[key] = stats_r1[key] + stats_r2.get(key, 0)
     stats["duration_seconds"] = round(duration, 1)
     db.finish_run(run_id, stats)
     db.close()
@@ -310,12 +434,15 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     topic["last_researched"] = datetime.now().strftime("%Y-%m-%d")
     save_registry(topics, registry_path)
 
-    # Report
-    tokens = get_token_usage()
+    # Report (CostTracker covers discovery/extraction/validation;
+    # enrichment tokens tracked separately via get_token_usage())
+    enrich_tokens = get_token_usage()
     print(f"\n=== Done in {duration:.0f}s ===")
-    print(f"  Queries: {stats['queries_total']}")
-    print(f"  Results: {stats['raw_results']} raw -> {stats['after_dedup']} dedup -> {stats['after_enrichment']} relevant")
-    print(f"  Tokens: {tokens['input']} in, {tokens['output']} out")
+    print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']}")
+    print(f"  Queries: {stats.get('queries_total', 0)}")
+    print(f"  Findings: {stats.get('raw_results', 0)} raw -> {stats.get('after_enrichment', 0)} relevant")
+    print(f"  Cost (Sonnet+Haiku discovery/validation):\n  {cost.report()}")
+    print(f"  Enrichment tokens: {enrich_tokens['input']} in, {enrich_tokens['output']} out")
 
 
 def cmd_update_all(cfg: dict, since: str, registry_path: str):

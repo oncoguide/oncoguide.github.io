@@ -49,7 +49,7 @@ def test_load_registry(tmp_path):
     import yaml
     reg_path = str(tmp_path / "registry.yaml")
     with open(reg_path, "w") as f:
-        yaml.dump({"topics": [{"id": "test", "title": "Test", "status": "planned", "search_queries": ["q1"]}]}, f)
+        yaml.dump({"topics": [{"id": "test", "title": "Test", "status": "planned"}]}, f)
 
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
