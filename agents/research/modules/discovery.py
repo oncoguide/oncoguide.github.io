@@ -40,9 +40,22 @@ def _sections_summary() -> str:
 # --- System prompts (built from skill files + task-specific instructions) ---
 
 
-def _oncologist_system(skill_context: str) -> str:
-    return f"""{skill_context}
+def _oncologist_system(skill_context: str, pre_search_context: str = "") -> str:
+    pre_search_block = ""
+    if pre_search_context:
+        pre_search_block = f"""
 
+=== REAL-WORLD RESEARCH DATA ===
+The following findings come from PubMed, ClinicalTrials.gov, FDA, and other
+authoritative sources. Use this data as your foundation. It may contain drugs,
+trials, or data you were not previously aware of -- incorporate ALL of it.
+
+{pre_search_context}
+
+"""
+
+    return f"""{skill_context}
+{pre_search_block}
 You are participating in a DISCOVERY CONVERSATION about a specific cancer diagnosis.
 Your role: provide COMPLETE clinical knowledge for a patient education guide.
 
@@ -106,9 +119,18 @@ Set all_satisfied to true ONLY when ALL 15 sections score >= {SECTION_SCORE_THRE
 Return ONLY valid JSON."""
 
 
-def _oncologist_respond_system(skill_context: str) -> str:
-    return f"""{skill_context}
+def _oncologist_respond_system(skill_context: str, pre_search_context: str = "") -> str:
+    pre_search_block = ""
+    if pre_search_context:
+        pre_search_block = f"""
 
+=== REAL-WORLD RESEARCH DATA (reference) ===
+{pre_search_context}
+
+"""
+
+    return f"""{skill_context}
+{pre_search_block}
 You are responding to specific questions from a patient advocate about a cancer diagnosis.
 The advocate has identified gaps in your clinical knowledge.
 
@@ -146,14 +168,15 @@ def _parse_json(raw: str, label: str) -> dict | list:
 
 
 def _oncologist_initial(
-    client: anthropic.Anthropic, diagnosis: str, model: str, cost: CostTracker
+    client: anthropic.Anthropic, diagnosis: str, model: str, cost: CostTracker,
+    pre_search_context: str = "",
 ) -> dict:
     """Round 1: Oncologist generates initial Clinical Knowledge Map."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
     message = client.messages.create(
         model=model,
         max_tokens=12000,
-        system=_oncologist_system(skill_context),
+        system=_oncologist_system(skill_context, pre_search_context=pre_search_context),
         messages=[{"role": "user", "content": f"Diagnosis: {diagnosis}\n\nGenerate the complete Clinical Knowledge Map."}],
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
@@ -193,6 +216,7 @@ def _oncologist_respond(
     knowledge_text: str,
     model: str,
     cost: CostTracker,
+    pre_search_context: str = "",
 ) -> dict:
     """Oncologist responds to advocate's specific questions."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
@@ -201,7 +225,7 @@ def _oncologist_respond(
     message = client.messages.create(
         model=model,
         max_tokens=8000,
-        system=_oncologist_respond_system(skill_context),
+        system=_oncologist_respond_system(skill_context, pre_search_context=pre_search_context),
         messages=[{
             "role": "user",
             "content": (
@@ -245,6 +269,7 @@ def run_discovery(
     cost: CostTracker,
     api_key: str = "",
     max_rounds: int = DEFAULT_MAX_ROUNDS,
+    pre_search_context: str = "",
 ) -> dict:
     """Run iterative oncologist <-> advocate discovery loop.
 
@@ -254,6 +279,7 @@ def run_discovery(
         cost: CostTracker instance
         api_key: Anthropic API key
         max_rounds: Maximum discovery rounds (default 5)
+        pre_search_context: Formatted findings from pre-search phase (injected into oncologist prompts)
 
     Returns:
         {
@@ -277,7 +303,8 @@ def run_discovery(
 
     # Step 1: Oncologist initial knowledge dump
     logger.info("Discovery Round 1: Oncologist initial knowledge map...")
-    knowledge_map = _oncologist_initial(client, diagnosis, model, cost)
+    knowledge_map = _oncologist_initial(client, diagnosis, model, cost,
+                                        pre_search_context=pre_search_context)
     if not knowledge_map:
         logger.error("Oncologist returned empty knowledge map")
         return {"converged": False, "rounds": 0, "knowledge_map": {},
@@ -331,7 +358,8 @@ def run_discovery(
             break
 
         logger.info(f"Discovery Round {round_num}: Oncologist responding to {len(questions)} questions...")
-        response = _oncologist_respond(client, diagnosis, questions, knowledge_text, model, cost)
+        response = _oncologist_respond(client, diagnosis, questions, knowledge_text, model, cost,
+                                       pre_search_context=pre_search_context)
 
         # Merge new knowledge
         additional = response.get("additional_knowledge", {})

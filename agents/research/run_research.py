@@ -28,6 +28,7 @@ from modules.cost_tracker import CostTracker
 from modules.database import Database
 from modules.discovery import run_discovery
 from modules.enrichment import enrich_batch, get_token_usage, reset_token_usage
+from modules.pre_search import pre_search
 from modules.gap_analyzer import analyze_gaps
 from modules.guide_generator import generate_guide, GUIDE_SECTIONS
 from modules.keyword_extractor import extract_queries
@@ -275,6 +276,19 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     reset_token_usage()  # Reset enrichment module's internal token counter
     print(f"\n=== Researching: {diagnosis} ===\n")
 
+    # Phase 0: Pre-search (ground discovery with real data)
+    print("Phase 0: Pre-search (grounding discovery with real data)...")
+    try:
+        pre_context = pre_search(diagnosis, cfg, cost, dry_run=dry_run)
+        if pre_context:
+            print(f"  Pre-search: {len(pre_context)} chars of context from external sources")
+        elif not dry_run:
+            print("  Pre-search: no relevant findings (discovery will use parametric knowledge only)")
+    except Exception as e:
+        logger.error(f"Pre-search failed: {e}")
+        print(f"  Pre-search failed ({e}), continuing without grounding data")
+        pre_context = ""
+
     # Phase 1: Discovery loop (Sonnet)
     discovery_model = cfg.get("discovery_model", "claude-sonnet-4-6")
     print(f"Phase 1: Discovery loop (max {cfg.get('max_discovery_rounds', 5)} rounds)...")
@@ -284,6 +298,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         cost=cost,
         api_key=cfg["anthropic_api_key"],
         max_rounds=cfg.get("max_discovery_rounds", 5),
+        pre_search_context=pre_context,
     )
     print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']}")
     if discovery.get("section_scores"):
@@ -498,3 +513,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+# test
+# test

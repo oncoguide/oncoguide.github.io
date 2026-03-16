@@ -144,3 +144,26 @@ def test_discovery_no_api_key():
     result = run_discovery("RET fusion NSCLC", "claude-sonnet-4-6", ct, api_key="")
     assert result["converged"] is False
     assert result["conversation"] == []
+
+
+# --- Pre-search context injection ---
+
+
+def test_discovery_with_pre_search_context():
+    """Test that pre-search context is injected into oncologist prompt."""
+    from modules.discovery import _oncologist_system
+
+    context = '[PubMed] "LOXO-260 Phase I" (2025)\n  Next-gen RET inhibitor'
+    prompt = _oncologist_system("Test oncologist persona", pre_search_context=context)
+    assert "LOXO-260" in prompt
+    assert "REAL-WORLD RESEARCH DATA" in prompt
+
+
+def test_discovery_without_pre_search_context():
+    """Test backward compatibility -- empty context does not break prompt."""
+    from modules.discovery import _oncologist_system
+
+    prompt = _oncologist_system("Test persona", pre_search_context="")
+    assert "REAL-WORLD RESEARCH DATA" not in prompt
+    # Core prompt still present
+    assert "DISCOVERY CONVERSATION" in prompt

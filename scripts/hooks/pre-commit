@@ -1,0 +1,89 @@
+#!/bin/bash
+# OncoGuide Dependency Map — Pre-commit hook
+#
+# When pipeline code changes, this hook verifies that dependent docs/skills
+# are also included in the commit. Blocks if missing.
+#
+# Lives in scripts/hooks/ (version-controlled). Activated via:
+#   git config core.hooksPath scripts/hooks
+#
+# NO escape hatch by design. Medical project -- docs must stay in sync.
+# If the code change is trivial (typo, comment), update the "Last verified"
+# date in the dependent file to acknowledge you checked it.
+
+STAGED=$(git diff --cached --name-only 2>/dev/null)
+if [ -z "$STAGED" ]; then
+    exit 0
+fi
+
+WARNINGS=""
+
+check_dep() {
+    local trigger="$1"
+    local required="$2"
+    local reason="$3"
+
+    if echo "$STAGED" | grep -q "$trigger"; then
+        # Skip check if the required file is gitignored (e.g., .claude/skills/)
+        # These files are local-only and managed outside git
+        if git check-ignore -q "$required" 2>/dev/null; then
+            return
+        fi
+        if ! echo "$STAGED" | grep -q "$required"; then
+            WARNINGS="${WARNINGS}  ${trigger}\n    -> also update: ${required}\n    Why: ${reason}\n\n"
+        fi
+    fi
+}
+
+# --- Dependency rules ---
+
+# Pipeline orchestrator
+check_dep "agents/research/run_research.py" "CLAUDE.md" \
+    "Data Flow + CLI Commands sections must reflect pipeline changes"
+check_dep "agents/research/run_research.py" ".claude/skills/research.md" \
+    "Research skill must describe current pipeline phases and usage"
+
+# Discovery prompts
+check_dep "agents/research/modules/discovery.py" ".claude/skills/oncologist.md" \
+    "Oncologist skill must be aware of discovery prompt structure"
+
+# Validation prompts
+check_dep "agents/research/modules/validation.py" ".claude/skills/oncologist.md" \
+    "Oncologist skill must reflect validation criteria"
+check_dep "agents/research/modules/validation.py" ".claude/skills/patient-advocate.md" \
+    "Patient-advocate skill must reflect validation criteria"
+
+# Guide generator
+check_dep "agents/research/modules/guide_generator.py" "CLAUDE.md" \
+    "Content Architecture section must reflect section/model changes"
+
+# Enrichment
+check_dep "agents/research/modules/enrichment.py" "CLAUDE.md" \
+    "Data Flow section must reflect output field changes"
+
+# Registry
+check_dep "topics/registry.yaml" "CLAUDE.md" \
+    "Topic Workflow section must reflect field/status changes"
+
+# Hugo config
+check_dep "hugo.yaml" "CLAUDE.md" \
+    "File Structure section must reflect language/menu changes"
+
+# --- Block if missing ---
+
+if [ -n "$WARNINGS" ]; then
+    echo ""
+    echo "================================================"
+    echo "  DEPENDENCY MAP: commit blocked (missing files)"
+    echo "================================================"
+    echo ""
+    echo -e "$WARNINGS"
+    echo "Add the missing files to this commit. If the code change"
+    echo "is trivial and does not affect documented behavior, make"
+    echo "a minimal update in the dependent file to confirm you"
+    echo "checked it (e.g., update a date or add a verification note)."
+    echo ""
+    echo "See CLAUDE.md 'Dependency Map' for the full rules."
+    echo "================================================"
+    exit 1
+fi

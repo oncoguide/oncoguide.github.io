@@ -184,6 +184,7 @@ agents/research/
     skill_improver.py          — Write learnings back to skill files
     enrichment.py              — Claude: classify relevant/irrelevant + score 1-10 (Haiku)
     gap_analyzer.py            — Identify weak sections, generate round 2 queries (Haiku)
+    pre_search.py              — Phase 0: template + Haiku queries, search, enrich, format context for discovery
     guide_generator.py         — Claude: generate master guide markdown (Haiku)
     searcher_serper.py         — Serper.dev Google search
     searcher_pubmed.py         — PubMed/NCBI Entrez
@@ -204,10 +205,11 @@ topics/
   registry.yaml                — Topic definitions (diagnosis only, committed to git)
 ```
 
-### Data Flow (v4)
+### Data Flow (v4+)
 
+0. Pre-search: 20 template queries (zero AI) + ~20 Haiku complement queries, search all 5 backends, enrich with Haiku, top 50 findings formatted as context for discovery
 1. Diagnosis from `topics/registry.yaml` (no hardcoded search queries)
-2. Discovery loop (Sonnet): oncologist <-> advocate iterate until all 15 sections score >= 8.5/10
+2. Discovery loop (Sonnet): oncologist (grounded with pre-search findings) <-> advocate iterate until all 15 sections score >= 8.5/10
 3. Keyword extraction (Sonnet): methodologist extracts precision queries from conversation
 4. Search round 1: 5 backends execute queries + enrichment (Haiku)
 5. Gap analysis + search round 2 (Haiku): fill weak sections
@@ -286,10 +288,31 @@ Skills specializate in `.claude/skills/`:
 - `/patient-advocate` — Review articles from a patient perspective -- accessible language, empathy, actionable steps, no condescension
 - `/seo` — Review SEO -- keywords, meta descriptions, structured data, internal linking, multilingual SEO consistency
 
+## Dependency Map (keep in sync)
+
+When modifying files in the left column, you MUST also update the files in the right column in the SAME commit. A commit that changes pipeline code without updating dependent docs/skills is INCOMPLETE.
+
+| When you modify... | Also update... |
+|---|---|
+| `run_research.py` (phases, flow, CLI args) | This file ("Data Flow" + "CLI Commands") + `.claude/skills/research.md` |
+| `discovery.py` (prompts, params, rounds) | `.claude/skills/oncologist.md` (Learnings section) |
+| `validation.py` (prompts, output format) | `.claude/skills/oncologist.md` + `.claude/skills/patient-advocate.md` |
+| `guide_generator.py` (sections, models) | This file ("Content Architecture") + `archetypes/master-guide-template.md` |
+| `enrichment.py` (output fields) | This file ("Data Flow") + `database.py` (schema if new column) |
+| `topics/registry.yaml` (fields, statuses) | This file ("Topic Workflow") |
+| Any skill in `.claude/skills/` | This file ("Claude Skills" section) |
+| `hugo.yaml` (languages, menus) | This file ("File Structure") |
+| Any NEW module in `agents/research/modules/` | This file ("Structure") + `.claude/skills/research.md` |
+
+**Enforcement:** Automated via git pre-commit hook (`scripts/hooks/pre-commit`). The hook BLOCKS commits that modify pipeline files without including dependent docs/skills. No escape hatch -- medical project, docs must stay in sync. If a code change is trivial (typo, comment), make a minimal update in the dependent file to confirm you checked it.
+
+**Setup (one-time, already configured):** `git config core.hooksPath scripts/hooks`
+
 ## Session Start Checklist
 
 1. Read `prompt/PLAN.md` — find the first unchecked `[ ]` subfase
 2. Read `decisions/log.yaml` — understand prior context
 3. Read this file (`CLAUDE.md`) — refresh conventions
-4. If writing content: read relevant files from `prompt/research/`
-5. Continue implementation from where the last session left off
+4. If modifying pipeline code: check **Dependency Map** above for what else needs updating
+5. If writing content: read relevant files from `prompt/research/`
+6. Continue implementation from where the last session left off
