@@ -197,7 +197,7 @@ agents/research/
   config.example.json          — Template (copy to config.json, fill API keys)
   config.json                  — Actual config (gitignored)
   requirements.txt             — Python dependencies
-  tests/                       — 90 unit tests
+  tests/                       — 92 unit tests
 data/
   research.db                  — SQLite database (gitignored)
   guides/                      — Master guide markdown per topic (gitignored)
@@ -217,8 +217,9 @@ topics/
 6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
 7. Guide generation (Haiku + Sonnet): multi-pass, 15 sections; 4 critical sections (treatment-efficacy, side-effects, emergency-signs, resistance) use Sonnet, 11 non-critical use Haiku; informed by cross-verification report
 8. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found
-9. Skill self-improvement: learnings written back to skill files
-10. Output: `data/guides/{topic-id}.md`
+9. Human review checklist: generates `data/guides/{topic-id}-review.md` with safety concerns, accuracy issues, cross-verification discrepancies, section scores, and reviewer questions
+10. Skill self-improvement: learnings written back to skill files
+11. Output: `data/guides/{topic-id}.md` + `data/guides/{topic-id}-review.md`
 
 ### Topic Workflow
 
@@ -228,7 +229,7 @@ Each topic in `topics/registry.yaml` follows this pipeline:
 |--------|---------|-----|--------|
 | `planned` | Topic defined (diagnosis only) | Agent/User | `/new-topic` to add |
 | `researching` | Research agent running | Agent | `python run_research.py --topic "id"` |
-| `guide_ready` | Master guide generated in `data/guides/` | Agent | Review guide quality |
+| `guide_ready` | Master guide + review checklist generated | User | Read guide + checklist, verify critical numbers, check all items |
 | `drafting` | Article being written from guide | Agent/User | Write RO first, then translate 5 langs |
 | `review` | Article ready for review | Agent/User | `/oncologist`, `/patient-advocate`, `/seo` |
 | `published` | Live on site | Agent | `/publish` checklist, git push |
@@ -236,7 +237,7 @@ Each topic in `topics/registry.yaml` follows this pipeline:
 **Transitions:**
 - `planned -> researching`: Run `/research` skill or CLI directly
 - `researching -> guide_ready`: Automatic after successful guide generation
-- `guide_ready -> drafting`: Manual -- user decides when to write article
+- `guide_ready -> drafting`: Manual -- user reads guide + review checklist (`{topic-id}-review.md`), verifies all items, then changes status
 - `drafting -> review`: All 6 language versions complete
 - `review -> published`: `/publish` checklist passes, pushed to GitHub
 - `published -> researching`: Monthly update via `/monthly-review` or `--update-all --since 30d`

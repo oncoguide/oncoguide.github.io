@@ -135,7 +135,7 @@ def load_registry(path: str = "../../topics/registry.yaml") -> list[dict]:
 def save_registry(topics: list[dict], path: str = "../../topics/registry.yaml"):
     with open(path, "w") as f:
         f.write("# OncoGuide Topic Registry\n")
-        f.write("# Status: planned -> researching -> guide_ready -> drafting -> review -> published\n\n")
+        f.write("# Status: planned -> researching -> guide_ready (human review) -> drafting -> review -> published\n\n")
         yaml.dump({"topics": topics}, f, default_flow_style=False, allow_unicode=True,
                    sort_keys=False)
 
@@ -260,6 +260,123 @@ def _search_and_enrich(queries, topic_id, topic_title, cfg, db, run_id,
         print(f"  Relevant: {stats['after_enrichment']}, Discarded: {stats['discarded']}")
 
     return stats
+
+
+def _generate_review_checklist(
+    review_path: str,
+    topic_id: str,
+    diagnosis: str,
+    val_result: dict,
+    cv_report_text: str,
+    findings_count: int = 0,
+    cost_report: str = "",
+):
+    """Generate human review checklist markdown after pipeline completes."""
+    os.makedirs(os.path.dirname(review_path) or ".", exist_ok=True)
+
+    lines = [
+        f"# Human Review Checklist -- {diagnosis}",
+        f"",
+        f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+        f"**Topic:** {topic_id}",
+        f"**Findings analyzed:** {findings_count}",
+        f"**Validation score:** {val_result.get('overall_score', '?')}/10",
+        f"**Validation passed:** {val_result.get('passed', False)}",
+        f"",
+        f"---",
+        f"",
+        f"## 1. Safety Concerns",
+        f"",
+    ]
+
+    safety = val_result.get("safety_concerns", [])
+    if safety:
+        for concern in safety:
+            lines.append(f"- [ ] **SAFETY:** {concern}")
+    else:
+        lines.append("No safety concerns flagged by validation.")
+    lines.append("")
+
+    lines.append("## 2. Accuracy Issues")
+    lines.append("")
+    accuracy = val_result.get("accuracy_issues", [])
+    if accuracy:
+        for issue in accuracy:
+            lines.append(f"- [ ] {issue}")
+    else:
+        lines.append("No accuracy issues flagged by validation.")
+    lines.append("")
+
+    lines.append("## 3. Cross-Verification Discrepancies")
+    lines.append("")
+    if cv_report_text:
+        # Extract CONTRADICTED lines
+        contradictions = [
+            line for line in cv_report_text.split("\n")
+            if "CONTRADICTED" in line
+        ]
+        if contradictions:
+            lines.append("The following discovery claims were contradicted by real findings:")
+            lines.append("")
+            for c in contradictions:
+                lines.append(f"- [ ] {c.strip()}")
+        else:
+            lines.append("No contradictions found -- all verified claims match real findings.")
+        # Also show unverified
+        unverified = [
+            line for line in cv_report_text.split("\n")
+            if "UNVERIFIED" in line
+        ]
+        if unverified:
+            lines.append("")
+            lines.append("Unverified claims (no supporting finding found):")
+            lines.append("")
+            for u in unverified:
+                lines.append(f"- [ ] {u.strip()}")
+    else:
+        lines.append("Cross-verification was not run or produced no report.")
+    lines.append("")
+
+    lines.append("## 4. Section Scores")
+    lines.append("")
+    section_scores = val_result.get("section_scores", {})
+    if section_scores:
+        lines.append("| Section | Score | Notes |")
+        lines.append("|---------|-------|-------|")
+        for sec_id, info in section_scores.items():
+            if isinstance(info, dict):
+                score = info.get("score", "?")
+                notes = info.get("notes", "")
+            else:
+                score = info
+                notes = ""
+            lines.append(f"| {sec_id} | {score}/10 | {notes} |")
+    else:
+        lines.append("No per-section scores available.")
+    lines.append("")
+
+    lines.append("## 5. Human Review Questions")
+    lines.append("")
+    lines.append("- [ ] Are there recently approved drugs for this diagnosis that are missing from the guide?")
+    lines.append("- [ ] Do the side effects listed match what patients actually experience (including grade 1-2 daily effects)?")
+    lines.append("- [ ] Are the emergency signs complete -- would a patient know when to go to the ER?")
+    lines.append("- [ ] Is the European access information current (EMA approvals, reimbursement)?")
+    lines.append("- [ ] Would a newly diagnosed patient find this guide helpful and not overwhelming?")
+    lines.append("")
+
+    lines.append("## 6. Pipeline Summary")
+    lines.append("")
+    if cost_report:
+        lines.append(f"**Cost:** {cost_report}")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+    lines.append("**Next step:** If all items above are checked/resolved, change topic status to `drafting` in `topics/registry.yaml`.")
+
+    with open(review_path, "w") as f:
+        f.write("\n".join(lines) + "\n")
+
+    logger.info(f"Review checklist generated: {review_path}")
 
 
 def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = False,
@@ -451,10 +568,19 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
                 guide_text = open(output_path).read()
                 shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
 
-    # Phase 8: Skill self-improvement
+    # Phase 8: Generate human review checklist
+    review_path = os.path.join(guides_dir, f"{topic_id}-review.md")
+    _generate_review_checklist(
+        review_path, topic_id, diagnosis, val_result, cv_report_text,
+        findings_count=len(findings) if findings else 0,
+        cost_report=cost.report(),
+    )
+    print(f"  Review checklist: {review_path}")
+
+    # Phase 9: Skill self-improvement
     learnings = val_result.get("learnings", [])
     if learnings:
-        print(f"\nPhase 8: Updating skills with {len(learnings)} learnings...")
+        print(f"\nPhase 9: Updating skills with {len(learnings)} learnings...")
         skills_dir = os.path.join(os.path.dirname(__file__), "..", "..", ".claude", "skills")
         skills_dir = os.path.abspath(skills_dir)
         append_learnings(os.path.join(skills_dir, "oncologist.md"), learnings)
