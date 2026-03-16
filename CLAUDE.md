@@ -186,7 +186,7 @@ agents/research/
     gap_analyzer.py            — Identify weak sections, generate round 2 queries (Haiku)
     pre_search.py              — Phase 0: template + Haiku queries, search, enrich, format context for discovery
     cross_verify.py            — Compare discovery claims vs real findings (Haiku)
-    guide_generator.py         — Claude: generate master guide markdown (Haiku)
+    guide_generator.py         — Claude: generate master guide markdown (Haiku for 11 sections, Sonnet for 4 critical)
     searcher_serper.py         — Serper.dev Google search
     searcher_pubmed.py         — PubMed/NCBI Entrez
     searcher_clinicaltrials.py — ClinicalTrials.gov API v2
@@ -197,7 +197,7 @@ agents/research/
   config.example.json          — Template (copy to config.json, fill API keys)
   config.json                  — Actual config (gitignored)
   requirements.txt             — Python dependencies
-  tests/                       — 87 unit tests
+  tests/                       — 90 unit tests
 data/
   research.db                  — SQLite database (gitignored)
   guides/                      — Master guide markdown per topic (gitignored)
@@ -215,7 +215,7 @@ topics/
 4. Search round 1: 5 backends execute queries + enrichment (Haiku)
 5. Gap analysis + search round 2 (Haiku): fill weak sections
 6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
-7. Guide generation (Haiku): multi-pass, 15 sections, informed by cross-verification report
+7. Guide generation (Haiku + Sonnet): multi-pass, 15 sections; 4 critical sections (treatment-efficacy, side-effects, emergency-signs, resistance) use Sonnet, 11 non-critical use Haiku; informed by cross-verification report
 8. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found
 9. Skill self-improvement: learnings written back to skill files
 10. Output: `data/guides/{topic-id}.md`

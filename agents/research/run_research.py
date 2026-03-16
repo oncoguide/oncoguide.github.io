@@ -386,14 +386,16 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
             logger.error(f"Cross-verification failed: {e}")
             print(f"  Cross-verification failed ({e}), continuing without")
 
-    # Phase 6: Guide generation (Haiku)
+    # Phase 6: Guide generation (Haiku + Sonnet for critical sections)
     guides_dir = cfg.get("guides_dir", "data/guides")
     output_path = os.path.join(guides_dir, f"{topic_id}.md")
+    critical_model = cfg.get("critical_guide_model", cfg.get("discovery_model", "claude-sonnet-4-6"))
     if findings:
-        print(f"\nPhase 6: Generating guide ({len(findings)} findings)...")
+        print(f"\nPhase 6: Generating guide ({len(findings)} findings, critical sections with Sonnet)...")
         generate_guide(
             diagnosis, findings, output_path,
             cfg["anthropic_api_key"], cfg.get("guide_model", "claude-haiku-4-5-20251001"),
+            critical_model=critical_model,
             cross_verify_report=cv_report_text,
         )
         print(f"  Guide saved: {output_path}")

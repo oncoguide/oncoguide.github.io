@@ -17,6 +17,14 @@ logger = logging.getLogger(__name__)
 
 # --- Prompts ---
 
+# Critical sections use Sonnet (safety-critical for patients)
+CRITICAL_SECTIONS = {
+    "treatment-efficacy",  # wrong number = wrong treatment decision
+    "side-effects",        # missing effect = patient unprepared
+    "emergency-signs",     # wrong alarm sign = direct danger
+    "resistance",          # missing Plan B = patient left without options
+}
+
 GUIDE_SECTIONS = [
     {
         "id": "big-picture",
@@ -285,6 +293,7 @@ def generate_guide(
     output_path: str,
     api_key: str,
     model: str = "claude-haiku-4-5-20251001",
+    critical_model: str = "",
     cross_verify_report: str = "",
 ):
     """Generate a comprehensive master guide from findings using multi-pass generation.
@@ -293,6 +302,9 @@ def generate_guide(
     Pass 2: Generate each section individually with full context
 
     Args:
+        model: Model for non-critical sections and planning (default Haiku).
+        critical_model: Model for safety-critical sections (treatment-efficacy, side-effects,
+            emergency-signs, resistance). If empty, uses `model` for all sections.
         cross_verify_report: Formatted cross-verification report (VERIFIED/CONTRADICTED/UNVERIFIED).
             When provided, each section generation receives this as context to prefer real findings
             over discovery claims where they differ.
@@ -314,13 +326,17 @@ def generate_guide(
             {**s, "finding_ids": all_ids} for s in GUIDE_SECTIONS
         ]
 
-    # Pass 2: Generate each section
+    # Pass 2: Generate each section (critical sections use Sonnet if available)
     guide_parts = []
     for i, section in enumerate(sections, 1):
-        print(f"  Section {i}/{len(sections)}: {section['title']}")
+        section_id = section.get("id", "")
+        is_critical = section_id in CRITICAL_SECTIONS
+        section_model = critical_model if (is_critical and critical_model) else model
+        model_label = "Sonnet" if section_model == critical_model and critical_model else "Haiku"
+        print(f"  Section {i}/{len(sections)}: {section['title']} [{model_label}]")
         try:
             content = _generate_section(
-                client, topic_title, section, i, findings_text, model,
+                client, topic_title, section, i, findings_text, section_model,
                 cross_verify_report=cross_verify_report,
             )
             guide_parts.append(f"## {i}. {section['title']}\n\n{content}")

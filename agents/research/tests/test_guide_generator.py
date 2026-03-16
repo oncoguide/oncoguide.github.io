@@ -1,8 +1,9 @@
+import json
 import os
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, call
 
-from modules.guide_generator import generate_guide
+from modules.guide_generator import generate_guide, CRITICAL_SECTIONS
 
 
 @patch("modules.guide_generator.anthropic.Anthropic")
@@ -54,3 +55,99 @@ def test_findings_text_includes_authority_score():
     text = _build_findings_text(findings)
     assert "Authority: 5/5" in text
     assert "Authority: 1/5" in text
+
+
+def test_critical_sections_defined():
+    """Critical sections list should contain exactly the 4 safety-critical section IDs."""
+    assert "treatment-efficacy" in CRITICAL_SECTIONS
+    assert "side-effects" in CRITICAL_SECTIONS
+    assert "emergency-signs" in CRITICAL_SECTIONS
+    assert "resistance" in CRITICAL_SECTIONS
+    assert len(CRITICAL_SECTIONS) == 4
+
+
+@patch("modules.guide_generator.anthropic.Anthropic")
+def test_critical_sections_use_sonnet(mock_anthropic_cls, tmp_path):
+    """Critical sections should be generated with the critical_model (Sonnet), others with Haiku."""
+    mock_client = MagicMock()
+    mock_anthropic_cls.return_value = mock_client
+
+    # Track which model is used for each call
+    models_used = []
+    call_count = [0]
+
+    # Planner returns 2 sections: one non-critical, one critical
+    planner_response = json.dumps([
+        {"id": "big-picture", "title": "Big Picture", "description": "D", "finding_ids": [1]},
+        {"id": "treatment-efficacy", "title": "Treatment Efficacy", "description": "D", "finding_ids": [1]},
+    ])
+
+    def track_model(**kwargs):
+        models_used.append(kwargs.get("model", "unknown"))
+        call_count[0] += 1
+        # First call is planner, rest are section generators
+        if call_count[0] == 1:
+            text = planner_response
+        else:
+            text = "Section content here"
+        return MagicMock(
+            content=[MagicMock(text=text)],
+            usage=MagicMock(input_tokens=100, output_tokens=50),
+        )
+
+    mock_client.messages.create.side_effect = track_model
+
+    findings = [
+        {"title_english": "F1", "summary_english": "S1",
+         "source_url": "https://example.com/1", "relevance_score": 9, "authority_score": 5},
+    ]
+    output_path = str(tmp_path / "split-guide.md")
+    generate_guide(
+        topic_title="Test Cancer",
+        findings=findings,
+        output_path=output_path,
+        api_key="fake-key",
+        model="claude-haiku-4-5-20251001",
+        critical_model="claude-sonnet-4-6",
+    )
+
+    # First call is the planner (uses base model), then 15 section calls
+    # Check that Sonnet was used at least once (for critical sections)
+    assert "claude-sonnet-4-6" in models_used, f"Sonnet not used. Models: {models_used}"
+    # Check that Haiku was used for non-critical sections
+    assert "claude-haiku-4-5-20251001" in models_used, f"Haiku not used. Models: {models_used}"
+
+
+@patch("modules.guide_generator.anthropic.Anthropic")
+def test_cross_verify_report_passed_to_sections(mock_anthropic_cls, tmp_path):
+    """Cross-verification report should be included in section generation prompts."""
+    mock_client = MagicMock()
+    mock_anthropic_cls.return_value = mock_client
+    mock_client.messages.create.return_value = MagicMock(
+        content=[MagicMock(text='[{"id":"big-picture","title":"T","description":"D","finding_ids":[1]}]')],
+        usage=MagicMock(input_tokens=100, output_tokens=50),
+    )
+
+    findings = [
+        {"title_english": "F1", "summary_english": "S1",
+         "source_url": "https://example.com/1", "relevance_score": 9},
+    ]
+    output_path = str(tmp_path / "cv-guide.md")
+    report = "CONTRADICTED: PFS 24.8mo -> USE Finding 7: PFS 22.0mo"
+    generate_guide(
+        topic_title="Test",
+        findings=findings,
+        output_path=output_path,
+        api_key="fake-key",
+        cross_verify_report=report,
+    )
+
+    # Check that the report text appears in at least one of the section generation calls
+    all_contents = [
+        c.kwargs.get("messages", [{}])[0].get("content", "")
+        if c.kwargs else ""
+        for c in mock_client.messages.create.call_args_list
+    ]
+    # The cross-verify report should be in the user message of section calls (not the planner)
+    found = any("CONTRADICTED" in str(c) for c in mock_client.messages.create.call_args_list)
+    assert found, "Cross-verification report not found in any API call"

@@ -451,3 +451,25 @@ decisions:
       - "Queries doar din Claude (fara templates mecanice) -- are aceeasi limita ca discovery-ul: nu stie ce nu stie"
       - "Cross-topic learning (salvare findings intre topicuri) -- overkill, fiecare topic isi face propriul search"
     outcome: "Design aprobat: 20 template queries mecanice (zero AI -- ancora contra blind spots) + 20 Haiku complement (termeni specifici). Search pe toate 5 backend-urile, enrichment Haiku, top 50 findings formatate ca context text injectat in system prompt-ul oncologului. Spec + plan scrise, review trecut. NU implementat inca -- user vrea sa inteleaga flow-ul end-to-end intai."
+
+  - id: 46
+    date: "2026-03-16"
+    category: "process"
+    summary: "Pipeline v5 plan complet: 4 imbunatatiri tehnice + skill upgrades + dependency map + benchmark"
+    context: "Walkthrough complet al pipeline-ului v4 a identificat nota 6/10 pentru informatii vitale pacient oncologic. Probleme fundamentale: Claude verifica Claude (numere halucinate trec), blind spot post-training, Haiku scrie sectiuni critice, surse neponderate, zero human oversight. User a cerut plan ptr 9/10."
+    alternatives_considered:
+      - "Implementare directa v5 fara benchmark -- nu stii daca e real mai bun"
+      - "Skills upgrade dupa pipeline -- skills descriu pipeline inexistent"
+      - "Fara dependency map -- docs raman in urma dupa fiecare schimbare"
+    outcome: "Plan complet in PLAN.md Faza 14 (10 steps): (1) rescrie /research skill, (2) pre-search Phase 0, (3) authority score enrichment, (4-5) upgrade oncologist + advocate skills, (6) cross-verification numere, (7) Sonnet ptr 4 sectiuni critice, (8) human review gate, (9) test integrare end-to-end, (10) benchmark pe lung-ret-fusion cu evaluare umana. Dependency map implementat: pre-commit hook blocheaza commituri incomplete. Pagina donatii adaugata in Faza 8.4. Cost suplimentar v5: ~$0.60/ghid."
+
+  - id: 47
+    date: "2026-03-16"
+    category: "technical"
+    summary: "Dependency map: pre-commit hook blocheaza commituri care modifica pipeline fara a actualiza docs/skills"
+    context: "User a observat ca skills raman desincronizate cu pipeline-ul (ex: /research inca descrie v1-v2). Conventii manuale nu functioneaza -- trebuie mecanism automat."
+    alternatives_considered:
+      - "Conventie manuala in CLAUDE.md -- user a spus explicit ca nu o va respecta"
+      - "Claude Code hook -- mai complex, mai fragil"
+      - "Hook cu escape hatch [dep-ok] -- pentru proiect medical, nu trebuie escape hatch"
+    outcome: "Pre-commit hook in scripts/hooks/pre-commit, activat cu git config core.hooksPath. 9 reguli de dependenta (run_research->CLAUDE.md+research.md, discovery->oncologist.md, etc). Blocheaza fara escape hatch. Testat: functioneaza corect. Sectiune Dependency Map adaugata in CLAUDE.md cu tabel + enforcement rules."
