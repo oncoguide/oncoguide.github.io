@@ -59,7 +59,6 @@ class Database:
             CREATE INDEX IF NOT EXISTS idx_findings_score ON findings(relevance_score);
             CREATE INDEX IF NOT EXISTS idx_findings_platform ON findings(source_platform);
             CREATE INDEX IF NOT EXISTS idx_findings_date ON findings(date_found);
-            CREATE INDEX IF NOT EXISTS idx_findings_authority ON findings(authority_score);
 
             CREATE TABLE IF NOT EXISTS search_log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,6 +77,10 @@ class Database:
 
         # Migrations for existing databases
         self._migrate()
+
+        # Create indexes that depend on migrated columns (after migrations run)
+        self.conn.execute("CREATE INDEX IF NOT EXISTS idx_findings_authority ON findings(authority_score)")
+        self.conn.commit()
 
     def _migrate(self):
         """Apply schema migrations for existing databases."""

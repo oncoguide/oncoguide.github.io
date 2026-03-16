@@ -473,3 +473,71 @@ decisions:
       - "Claude Code hook -- mai complex, mai fragil"
       - "Hook cu escape hatch [dep-ok] -- pentru proiect medical, nu trebuie escape hatch"
     outcome: "Pre-commit hook in scripts/hooks/pre-commit, activat cu git config core.hooksPath. 9 reguli de dependenta (run_research->CLAUDE.md+research.md, discovery->oncologist.md, etc). Blocheaza fara escape hatch. Testat: functioneaza corect. Sectiune Dependency Map adaugata in CLAUDE.md cu tabel + enforcement rules."
+
+  - id: 48
+    date: "2026-03-16"
+    category: "learning"
+    summary: "Sonnet 4.6 (claude-sonnet-4-6) NU suporta assistant message prefill"
+    context: "La benchmark 14.7, incercarea de a folosi prefill '{' in mesajul assistant a returnat 400 Bad Request. Doua runde de debug + cost API irosit."
+    alternatives_considered:
+      - "Prefill cu '{' ptr a forta JSON output -- 400 error, model nu suporta"
+      - "System prompt cu 'respond only JSON' -- insuficient, Sonnet raspunde narativ"
+    outcome: "Solutia: instructiuni PUTERNICE in user message: 'CRITICAL: Your ENTIRE response must be a single JSON object. No text before or after. No markdown fences. Just the JSON.' + fallback parser care extrage primul {...} din text mixt. NU folosi prefill cu Sonnet 4.6."
+
+  - id: 49
+    date: "2026-03-16"
+    category: "learning"
+    summary: "JSON parsing din LLM necesita fallback robust -- Sonnet returneaza frecvent proza in jurul JSON-ului"
+    context: "Discovery loop: oncologist_respond returna text narativ cu JSON imbricat, advocate returna markdown cu JSON. 100% failure rate pe parse naiv in primele runde."
+    alternatives_considered:
+      - "json.loads direct -- esueaza pe 80%+ din raspunsuri"
+      - "Strip markdown fences only -- nu prinde cazurile cu text inainte/dupa JSON"
+    outcome: "Implementat _parse_json() cu 3 niveluri: (1) strip markdown fences, (2) json.loads direct, (3) fallback: gaseste primul { si ultimul } si parseaza. Functia e in discovery.py si trebuie reutilizata in orice modul care parseaza JSON din LLM."
+
+  - id: 50
+    date: "2026-03-16"
+    category: "learning"
+    summary: "SQLite CREATE INDEX trebuie sa ruleze DUPA ALTER TABLE migrations, nu inainte"
+    context: "La benchmark, CREATE INDEX pe authority_score esua cu 'no such column' fiindca indexul era in executescript() dar coloana se adauga in _migrate() care rula dupa."
+    alternatives_considered:
+      - "Index in executescript cu coloana in CREATE TABLE -- functioneaza ptr DB noi dar nu ptr migrari"
+    outcome: "Mutat CREATE INDEX dupa _migrate() in database.py. Regula: orice index pe coloane migrated trebuie creat DUPA apelul _migrate(), nu in executescript()."
+
+  - id: 51
+    date: "2026-03-16"
+    category: "learning"
+    summary: "Pre-search template queries cu titlu romanesc returneaza 0 rezultate pe PubMed"
+    context: "Template queries din pre_search.py foloseau titlul din registry (romaneste: 'Cancer pulmonar RET Fusion-Positive'). PubMed nu intelege romana, returnand 0 results. Queries Haiku complement (in engleza) functionau bine."
+    alternatives_considered:
+      - "Traducere automata a titlului -- adauga complexitate"
+      - "Camp english_title in registry -- duplicare"
+    outcome: "BUG NEREPARAT INCA. Solutie propusa: template queries sa foloseasca diagnosis din registry (care e in engleza in practica ptr subtipuri) sau sa extraga din titlu doar termenii medicali (care sunt identici in en/ro). De investigat la urmatorul run."
+
+  - id: 52
+    date: "2026-03-16"
+    category: "learning"
+    summary: "Pipeline benchmark costa $1-3 per run -- nu rula fara motiv, salveaza TOATE learnings-urile"
+    context: "3 incercari de benchmark 14.7 au consumat ~$3-5 din cauza erorilor (prefill, JSON parse, DB schema). Fiecare run = 5+ API calls Sonnet + sute de Haiku calls."
+    alternatives_considered:
+      - "Dry-run cu mock -- nu testeaza integrarea reala"
+      - "Run complet fara salvare learnings -- risca sa repete aceleasi greseli"
+    outcome: "Regula: (1) INTOTDEAUNA salveaza learnings in decisions/log.yaml INAINTE de re-run, (2) ruleaza unit tests INAINTE de benchmark, (3) daca pipeline esueaza, investigheaza si fixeaza INAINTE de re-run, nu rerula orbeste."
+
+  - id: 53
+    date: "2026-03-16"
+    category: "technical"
+    summary: "Pipeline v5 implementari completate: 14.1-14.6 (pre-search, cross-verify, guide split, review gate, integration tests)"
+    context: "Sesiunile 14.x au implementat: Phase 0 pre-search, authority_score enrichment, cross-verification module, guide generation split (Sonnet ptr 4 sectiuni critice), human review gate, 7 integration tests."
+    alternatives_considered: []
+    outcome: "Commits facute ptr 14.1-14.6. Uncommitted: discovery.py (JSON parse fix), database.py (migration ordering fix). 14.7 benchmark NU a fost completat cu succes -- pipeline a ramas in executie cand contextul s-a terminat. Trebuie: (1) commit fixurile discovery+database, (2) ruleaza tests, (3) benchmark din nou."
+
+  - id: 54
+    date: "2026-03-16"
+    category: "learning"
+    summary: "oncologist_respond returneaza text narativ pur -- _parse_json fallback cu find('{') NU e suficient"
+    context: "Benchmark 14.7 log: oncologist_respond JSON parse failed 5/5 runde. Sonnet raspunde la intrebarile advocate-ului cu text narativ lung, NU cu JSON structurat. Nici instructiunea 'CRITICAL: respond only JSON' nu a functionat. Fallback-ul care gaseste primul { nu ajuta daca textul nu contine deloc structura JSON valida, sau contine {} in contexte non-JSON."
+    alternatives_considered:
+      - "Instructiuni mai puternice in system prompt -- deja maxim, tot nu functioneaza"
+      - "Retry cu mesaj diferit -- costa dublu, nu garanteaza succes"
+      - "Renuntare la JSON ptr oncologist_respond, parse text liber -- pierde structura"
+    outcome: "BUG CRITIC NEREPARAT. Propuneri de fix: (1) Forteaza raspunsul structurat prin furnizarea unui JSON template in user message cu campuri goale de completat, (2) Daca Sonnet returneaza narativ, extrage raspunsurile cu un Haiku call rapid care structureaza textul in JSON (cost: ~$0.002), (3) Schimba abordarea: oncologist_respond sa nu ceara JSON ci sa ceara text structurat cu delimitatori clari (### Question 1: ...) si parseaza manual. Optiunea 2 (Haiku structurator) e cea mai robusta -- Haiku urmeaza instructiuni JSON mult mai bine decat Sonnet."

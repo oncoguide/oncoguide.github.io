@@ -155,16 +155,31 @@ Return ONLY valid JSON."""
 
 
 def _parse_json(raw: str, label: str) -> dict | list:
-    """Parse JSON, stripping markdown fences if present."""
+    """Parse JSON, stripping markdown fences and surrounding text if present."""
     text = raw.strip()
+    # Strip markdown code fences
     if text.startswith("```"):
         text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
     try:
         return json.loads(text)
-    except json.JSONDecodeError as e:
-        logger.error(f"{label}: JSON parse failed: {e}")
-        logger.debug(f"{label} raw output: {text[:500]}")
-        return {}
+    except json.JSONDecodeError:
+        pass
+
+    # Fallback: find the first { or [ and extract the JSON object/array
+    for start_char, end_char in [("{", "}"), ("[", "]")]:
+        start = text.find(start_char)
+        if start == -1:
+            continue
+        end = text.rfind(end_char)
+        if end > start:
+            try:
+                return json.loads(text[start:end + 1])
+            except json.JSONDecodeError:
+                continue
+
+    logger.error(f"{label}: JSON parse failed, no valid JSON found in response")
+    logger.debug(f"{label} raw output: {text[:500]}")
+    return {}
 
 
 def _oncologist_initial(
@@ -177,7 +192,12 @@ def _oncologist_initial(
         model=model,
         max_tokens=12000,
         system=_oncologist_system(skill_context, pre_search_context=pre_search_context),
-        messages=[{"role": "user", "content": f"Diagnosis: {diagnosis}\n\nGenerate the complete Clinical Knowledge Map."}],
+        messages=[{"role": "user", "content": (
+            f"Diagnosis: {diagnosis}\n\n"
+            f"Generate the complete Clinical Knowledge Map.\n\n"
+            f"CRITICAL: Your ENTIRE response must be a single JSON object. "
+            f"No text before or after. No markdown fences. Just the JSON."
+        )}],
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
     return _parse_json(message.content[0].text, "oncologist_initial")
@@ -209,6 +229,48 @@ def _advocate_evaluate(
     return _parse_json(message.content[0].text, "advocate_evaluate")
 
 
+def _haiku_structurer(
+    client: anthropic.Anthropic,
+    raw_text: str,
+    questions: list[str],
+    cost: CostTracker,
+) -> dict:
+    """Use Haiku to extract structured JSON from Sonnet's narrative response.
+
+    Sonnet often responds to medical Q&A with prose instead of JSON.
+    Haiku follows JSON formatting instructions much more reliably (~$0.002/call).
+    """
+    haiku_model = "claude-haiku-4-5-20251001"
+    questions_json = json.dumps(questions)
+
+    message = client.messages.create(
+        model=haiku_model,
+        max_tokens=4000,
+        messages=[{
+            "role": "user",
+            "content": (
+                f"Extract the answers from the following medical text into JSON.\n\n"
+                f"The text is a response to these questions:\n{questions_json}\n\n"
+                f"---TEXT START---\n{raw_text}\n---TEXT END---\n\n"
+                f"Return ONLY this JSON structure (no other text):\n"
+                f'{{"answers": [{{"question": "the question", "answer": "the answer from the text"}}], '
+                f'"additional_knowledge": {{"approved_drugs": [], "pipeline_drugs": [], '
+                f'"landmark_trials": [], "side_effects": [], "resistance": [], '
+                f'"guidelines": [], "testing": []}}}}\n\n'
+                f"Fill additional_knowledge with any structured data found in the text. "
+                f"Use empty arrays for categories with no data. Return ONLY valid JSON."
+            ),
+        }],
+    )
+    cost.track(haiku_model, message.usage.input_tokens, message.usage.output_tokens)
+    result = _parse_json(message.content[0].text, "haiku_structurer")
+    if result:
+        logger.info("Haiku structurer successfully extracted JSON from narrative text")
+    else:
+        logger.error("Haiku structurer also failed to produce valid JSON")
+    return result
+
+
 def _oncologist_respond(
     client: anthropic.Anthropic,
     diagnosis: str,
@@ -218,7 +280,10 @@ def _oncologist_respond(
     cost: CostTracker,
     pre_search_context: str = "",
 ) -> dict:
-    """Oncologist responds to advocate's specific questions."""
+    """Oncologist responds to advocate's specific questions.
+
+    Uses Haiku structurer fallback if Sonnet returns narrative instead of JSON.
+    """
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
     questions_text = "\n".join(f"{i+1}. {q}" for i, q in enumerate(questions))
 
@@ -231,12 +296,22 @@ def _oncologist_respond(
             "content": (
                 f"Diagnosis: {diagnosis}\n\n"
                 f"Your previous knowledge:\n{knowledge_text}\n\n"
-                f"Patient advocate's questions:\n{questions_text}"
+                f"Patient advocate's questions:\n{questions_text}\n\n"
+                f"CRITICAL: Your ENTIRE response must be a single JSON object. "
+                f"No text before or after. No markdown fences. Just the JSON."
             ),
         }],
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
-    return _parse_json(message.content[0].text, "oncologist_respond")
+    raw_text = message.content[0].text
+    result = _parse_json(raw_text, "oncologist_respond")
+
+    # Fallback: if Sonnet returned narrative prose instead of JSON, use Haiku to structure it
+    if not result:
+        logger.warning("oncologist_respond returned non-JSON, falling back to Haiku structurer")
+        result = _haiku_structurer(client, raw_text, questions, cost)
+
+    return result
 
 
 def _merge_knowledge(base: dict, additional: dict) -> dict:

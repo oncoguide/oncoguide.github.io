@@ -6,7 +6,10 @@ from modules.discovery import (
     run_discovery,
     _oncologist_initial,
     _advocate_evaluate,
+    _oncologist_respond,
+    _haiku_structurer,
     _merge_knowledge,
+    _parse_json,
     SECTION_SCORE_THRESHOLD,
 )
 
@@ -167,3 +170,93 @@ def test_discovery_without_pre_search_context():
     assert "REAL-WORLD RESEARCH DATA" not in prompt
     # Core prompt still present
     assert "DISCOVERY CONVERSATION" in prompt
+
+
+# --- Haiku structurer fallback ---
+
+
+def test_haiku_structurer_extracts_json_from_narrative():
+    """Test that Haiku structurer converts narrative text to JSON."""
+    mock_client = MagicMock()
+    structured = {
+        "answers": [{"question": "What about brain mets?", "answer": "Selpercatinib shows 82% intracranial ORR"}],
+        "additional_knowledge": {"approved_drugs": [], "pipeline_drugs": [], "landmark_trials": [],
+                                  "side_effects": [], "resistance": [], "guidelines": [], "testing": []},
+    }
+    mock_client.messages.create.return_value = _mock_message(json.dumps(structured))
+
+    from modules.cost_tracker import CostTracker
+    ct = CostTracker()
+    result = _haiku_structurer(
+        mock_client,
+        "Selpercatinib shows 82% intracranial ORR in brain metastases...",
+        ["What about brain mets?"],
+        ct,
+    )
+    assert result["answers"][0]["answer"] == "Selpercatinib shows 82% intracranial ORR"
+
+
+def test_oncologist_respond_falls_back_to_haiku():
+    """Test that _oncologist_respond uses Haiku fallback when Sonnet returns narrative."""
+    mock_client = MagicMock()
+
+    # First call (Sonnet): returns narrative prose, not JSON
+    narrative_response = _mock_message(
+        "Selpercatinib (Retevmo) is a first-line treatment for RET fusion NSCLC. "
+        "The LIBRETTO-001 trial showed 64% ORR in previously treated patients."
+    )
+    # Second call (Haiku structurer): returns proper JSON
+    structured = {
+        "answers": [{"question": "What about treatment?", "answer": "Selpercatinib 64% ORR"}],
+        "additional_knowledge": {"approved_drugs": [{"name": "selpercatinib"}], "pipeline_drugs": [],
+                                  "landmark_trials": [], "side_effects": [], "resistance": [],
+                                  "guidelines": [], "testing": []},
+    }
+    haiku_response = _mock_message(json.dumps(structured))
+
+    mock_client.messages.create.side_effect = [narrative_response, haiku_response]
+
+    from modules.cost_tracker import CostTracker
+    ct = CostTracker()
+    result = _oncologist_respond(
+        mock_client, "RET fusion NSCLC", ["What about treatment?"],
+        '{"approved_drugs": []}', "claude-sonnet-4-6", ct,
+    )
+    assert "answers" in result
+    assert result["additional_knowledge"]["approved_drugs"][0]["name"] == "selpercatinib"
+    # Verify both Sonnet and Haiku were called
+    assert mock_client.messages.create.call_count == 2
+
+
+def test_oncologist_respond_no_fallback_when_json_valid():
+    """Test that Haiku fallback is NOT called when Sonnet returns valid JSON."""
+    mock_client = MagicMock()
+    valid_json = {
+        "answers": [{"question": "Q1", "answer": "A1"}],
+        "additional_knowledge": {},
+    }
+    mock_client.messages.create.return_value = _mock_message(json.dumps(valid_json))
+
+    from modules.cost_tracker import CostTracker
+    ct = CostTracker()
+    result = _oncologist_respond(
+        mock_client, "RET fusion NSCLC", ["Q1"],
+        '{"approved_drugs": []}', "claude-sonnet-4-6", ct,
+    )
+    assert result["answers"][0]["answer"] == "A1"
+    # Only Sonnet called, no Haiku fallback
+    assert mock_client.messages.create.call_count == 1
+
+
+def test_parse_json_handles_mixed_text_and_json():
+    """Test _parse_json extracts JSON from text with surrounding narrative."""
+    raw = 'Here is the data you requested:\n\n{"answers": [{"q": "test"}]}\n\nLet me know if you need more.'
+    result = _parse_json(raw, "test")
+    assert result["answers"][0]["q"] == "test"
+
+
+def test_parse_json_returns_empty_on_pure_narrative():
+    """Test _parse_json returns {} when no valid JSON exists."""
+    raw = "Selpercatinib is a kinase inhibitor approved for RET fusion NSCLC. It shows good efficacy."
+    result = _parse_json(raw, "test")
+    assert result == {}
