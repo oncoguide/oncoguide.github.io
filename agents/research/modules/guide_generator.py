@@ -17,50 +17,160 @@ logger = logging.getLogger(__name__)
 
 # --- Prompts ---
 
-PLANNER_SYSTEM = """You are a medical content strategist planning a comprehensive patient guide.
-Given research findings about a cancer topic, plan the guide sections.
+GUIDE_SECTIONS = [
+    {
+        "id": "big-picture",
+        "title": "CE AI DE FAPT -- THE BIG PICTURE",
+        "description": "What this condition is concretely. Real numbers: incidence, honest prognosis. 'Not the end -- but you need to know exactly what you're fighting.'",
+    },
+    {
+        "id": "demographics",
+        "title": "CINE FACE ACEASTA BOALA",
+        "description": "Demographics, risk factors (or absence thereof), 'it's not your fault'. Typical age, smokers vs non-smokers, sex if relevant.",
+    },
+    {
+        "id": "treatment-efficacy",
+        "title": "CAT DE BINE FUNCTIONEAZA TRATAMENTUL",
+        "description": "ORR, median PFS, median OS -- real numbers from published trials. Table: treatment | line | ORR | PFS | OS | source. Compare options. NO marketing ('durable response') -- concrete numbers.",
+    },
+    {
+        "id": "how-to-take",
+        "title": "CUM SE IA MEDICAMENTUL CORECT",
+        "description": "Dose, timing, with/without food. pH-dependent absorption? Interactions with dairy? PPI? Practical rules that DIRECTLY affect efficacy. Table: situation | what to do | why it matters.",
+    },
+    {
+        "id": "side-effects",
+        "title": "EFECTE SECUNDARE -- PROBABILITATI REALE",
+        "description": "Table: effect | frequency % | grade | what to do. Not 'possible/rare' -- real percentages. Include effects doctors frequently omit. Hyperglycemia, QTc, hepatotoxicity if relevant.",
+    },
+    {
+        "id": "emergency-signs",
+        "title": "CAND MERGI LA URGENTE -- ACUM",
+        "description": "Printable checklist. Alarm signs requiring emergency. Format: symptom -> immediate action. Bold, clear, no ambiguity. Can save lives.",
+    },
+    {
+        "id": "interactions",
+        "title": "INTERACTIUNI MEDICAMENTE SI ALIMENTE",
+        "description": "Table: drug/food | effect | action. 'NEVER with X', 'take 2h before Y'. Include supplements, natural remedies, common OTC.",
+    },
+    {
+        "id": "monitoring",
+        "title": "CE TREBUIE MONITORIZAT DE MEDIC",
+        "description": "Table: test | frequency | why | what to watch. What to request if doctor doesn't propose it. ECG, liver function, blood sugar, thyroid if relevant.",
+    },
+    {
+        "id": "resistance",
+        "title": "CAND TRATAMENTUL NU MAI FUNCTIONEAZA",
+        "description": "Resistance: why it happens, how fast, signs. Concrete Plan B/C: re-biopsy, trials, other lines. 'You need a plan BEFORE you need it.'",
+    },
+    {
+        "id": "pipeline",
+        "title": "CE URMEAZA -- PIPELINE CERCETARE",
+        "description": "New drugs in trials, phase, when they could be available. Table: drug | phase | mechanism | estimated timeline. Realistic hope, not hype.",
+    },
+    {
+        "id": "timeline",
+        "title": "TIMELINE-UL TAU REALIST",
+        "description": "What to expect chronologically: Week 1-2, Month 1-3, Month 3-12, Year 1-2, Year 2+. Set expectations, reduce anxiety.",
+    },
+    {
+        "id": "daily-life",
+        "title": "VIATA DE ZI CU ZI",
+        "description": "Exercise (specific, not generic), evidence-based nutrition. Work, travel (restrictions?), relationships, psychological support. Patient communities with links.",
+    },
+    {
+        "id": "red-flags",
+        "title": "CE SA NU FACI -- GRESELI SI RED FLAGS",
+        "description": "List of frequent mistakes with explanation of why they're dangerous. Format: MISTAKE -> WHY IT'S DANGEROUS -> WHAT TO DO INSTEAD. Dangerous 'natural' treatments, stopping treatment, ignoring side effects.",
+    },
+    {
+        "id": "questions-for-doctor",
+        "title": "CE SA INTREBI MEDICUL",
+        "description": "Concrete questions per stage: At diagnosis, At treatment start, At progression. Context for each question (why it's important).",
+    },
+    {
+        "id": "european-access",
+        "title": "ACCES EUROPEAN SI GHIDURI INTERNATIONALE",
+        "description": "ESMO vs NCCN -- relevant differences. EMA approval, availability per country. Access disparities, what to do if not approved in your country. Patient rights, cross-border healthcare directive.",
+    },
+]
+
+PLANNER_SYSTEM = """You are a medical content strategist mapping research findings to a fixed guide structure.
+
+You will receive a list of 15 predefined sections and research findings.
+Your job is to assign finding numbers to each section based on relevance.
 
 Return a JSON array of section objects. Each section must have:
-- "id": short kebab-case id (e.g., "big-picture", "treatment-efficacy")
-- "title": section title in CAPS (e.g., "THE BIG PICTURE -- WHAT YOU'RE DEALING WITH")
-- "description": 2-3 sentence description of what this section must cover
+- "id": the section ID (given to you)
+- "title": the section title (given to you)
+- "description": the section description (given to you)
 - "finding_ids": array of finding numbers [1, 5, 23, ...] most relevant to this section
 
-Plan 8-14 sections. MUST include these types (adapt titles to the specific topic):
-1. Big picture / overview (what this condition is, who gets it, what it means)
-2. Diagnosis and testing (how it's detected, what tests are needed)
-3. Treatment options and efficacy (honest numbers, response rates, survival data)
-4. Side effects and safety (real probabilities, not vague warnings)
-5. When treatment stops working / resistance (what happens next)
-6. Clinical trials and research pipeline (what's coming)
-7. Practical daily life (how to live with this condition/treatment)
-8. What NOT to do / Red flags (common mistakes patients make)
-9. What to ask your doctor (concrete questions)
-10. European/international context (access, guidelines differences)
+Rules:
+- Use ALL 15 sections, in the order given
+- A finding can appear in multiple sections if relevant
+- If no findings are relevant to a section, set finding_ids to empty array []
+- Prioritize findings with higher relevance scores
+- Be thorough: scan ALL findings, not just the first few
 
 Return ONLY valid JSON, no markdown, no explanation."""
 
 SECTION_SYSTEM = """You are a medical writer creating ONE section of a comprehensive patient guide
 for an oncology education blog (OncoGuide).
 
+LANGUAGE: Write ENTIRELY in English. Every word, every heading, every table header.
+Do NOT switch to Romanian, Spanish, French, German, Italian, or any other language.
+
 VOICE AND TONE:
-- Write as a knowledgeable patient advocate, NOT a textbook
+- Write as a knowledgeable patient advocate who has been through it, NOT a textbook
 - Address the reader directly ("you", "your")
 - Be honest and direct -- patients deserve real numbers, not vague reassurance
-- Explain medical terms immediately when first used
-- Short paragraphs (max 4 lines)
+- Explain medical terms immediately when first used (in parentheses)
+- Short paragraphs (max 4 lines). Dense with information, not padded with filler.
 - Use tables for comparative data (response rates, survival, side effects)
 - Bold key facts and warnings
+- Be actionable: "Print this", "Ask your doctor this", "Do NOT take X with Y"
+
+FORMATTING:
+- Use ### for sub-headings within your section (NEVER ## which is reserved for section titles)
+- Use bullet lists and tables, not long paragraphs
+- For emergency/checklist sections, use checkbox format: - [ ] Symptom -> Action
+- End each section with 1-2 bold KEY TAKEAWAYS
 
 RULES:
 - Every claim MUST cite a finding by number: [[Finding N](URL)]
-- Include ALL relevant data from the assigned findings -- do not summarize away important details
 - Include specific numbers (percentages, months, dosages) whenever available
 - Do NOT invent or extrapolate data beyond what findings provide
 - If findings contain contradictory data, present both with context
+- For critical claims (survival, response rates, safety), PREFER findings with Authority 4-5 (top journals, guidelines, agencies). Flag claims based only on Authority 1-2 sources.
 - Use standard quotes (""), double hyphens (--), NO emojis, NO typographic quotes, NO em-dashes
+- Prefer tables over prose for any comparative or list-like data
 
-LENGTH: Write 800-2000 words per section. Be comprehensive. Do not cut corners."""
+LENGTH: 400-1200 words per section. Be dense and precise, not verbose. Every sentence must
+earn its place. If a table says it better than a paragraph, use the table.
+
+QUALITY EXAMPLE -- this is the level of density and actionability you must match:
+
+### How to take the drug correctly
+
+| Detail | What to do |
+|---|---|
+| **Dose** | 120 mg twice daily if <50 kg; 160 mg twice daily if >=50 kg |
+| **Food** | Can be taken with or without food -- EXCEPT if you take a PPI, then MUST take with food |
+| **Dairy products** | **Avoid milk, yogurt, cheese 2 hours before and 2 hours after taking the pill.** Dairy buffers stomach acid -> drug cannot dissolve. |
+| **Vomited after a dose?** | Do NOT re-take it. Next dose at normal time. |
+| **Missed a dose?** | Do NOT double up. Resume normal schedule. |
+
+| Factor | How much it hurts | What to do |
+|---|---|---|
+| **PPI taken fasting** | **-69% drug in blood, -88% peak level** | NEVER take fasting if on a PPI. Always with food. |
+| **Antacids (Tums, Rennie)** | Significant | Take drug 2h before OR 2h after antacids |
+
+**KEY TAKEAWAY: Your stomach must be acidic for this drug to dissolve. Anything that raises pH = less drug in your blood = less effective treatment.**
+
+--- END EXAMPLE ---
+
+Notice: tables with real numbers, bold actionable rules, direct language, no filler. Match this."""
 
 GUIDE_HEADER = """# {title} -- Master Guide
 
@@ -77,8 +187,9 @@ def _build_findings_text(findings: list[dict]) -> str:
     """Build formatted findings text for Claude context."""
     parts = []
     for i, f in enumerate(findings, 1):
+        authority = f.get('authority_score', 0)
         parts.append(
-            f"[{i}] Score: {f.get('relevance_score', '?')}/10\n"
+            f"[{i}] Score: {f.get('relevance_score', '?')}/10 | Authority: {authority}/5\n"
             f"Title: {f.get('title_english', 'N/A')}\n"
             f"Summary: {f.get('summary_english', 'N/A')}\n"
             f"URL: {f.get('source_url', 'N/A')}"
@@ -93,7 +204,13 @@ def _plan_sections(
     findings_count: int,
     model: str,
 ) -> list[dict]:
-    """Ask Claude to plan the guide sections based on findings."""
+    """Ask Claude to map findings to the 15 predefined guide sections."""
+    sections_json = json.dumps(
+        [{"id": s["id"], "title": s["title"], "description": s["description"]}
+         for s in GUIDE_SECTIONS],
+        indent=2,
+    )
+
     message = client.messages.create(
         model=model,
         max_tokens=4000,
@@ -104,6 +221,7 @@ def _plan_sections(
                 "content": (
                     f"Topic: {topic_title}\n"
                     f"Total findings: {findings_count}\n\n"
+                    f"Predefined sections:\n{sections_json}\n\n"
                     f"Findings:\n{findings_text}"
                 ),
             }
@@ -116,7 +234,7 @@ def _plan_sections(
         raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
 
     sections = json.loads(raw)
-    logger.info(f"Planned {len(sections)} sections for guide")
+    logger.info(f"Mapped findings to {len(sections)} sections for guide")
     return sections
 
 
@@ -131,7 +249,7 @@ def _generate_section(
     """Generate one section of the guide."""
     message = client.messages.create(
         model=model,
-        max_tokens=8000,
+        max_tokens=4000,
         system=SECTION_SYSTEM,
         messages=[
             {
@@ -172,14 +290,10 @@ def generate_guide(
     try:
         sections = _plan_sections(client, topic_title, findings_text, len(findings), model)
     except (json.JSONDecodeError, Exception) as e:
-        logger.error(f"Section planning failed: {e}. Falling back to single-pass.")
+        logger.error(f"Finding mapping failed: {e}. Using all findings for each section.")
+        all_ids = list(range(1, len(findings) + 1))
         sections = [
-            {
-                "id": "full-guide",
-                "title": "COMPLETE GUIDE",
-                "description": "Full comprehensive guide covering all aspects of the topic.",
-                "finding_ids": list(range(1, len(findings) + 1)),
-            }
+            {**s, "finding_ids": all_ids} for s in GUIDE_SECTIONS
         ]
 
     # Pass 2: Generate each section

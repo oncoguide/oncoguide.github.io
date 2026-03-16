@@ -40,3 +40,17 @@ def test_no_findings_no_guide(tmp_path):
         api_key="fake-key",
     )
     assert not os.path.exists(output_path)
+
+
+def test_findings_text_includes_authority_score():
+    """Guide generator should include authority_score in the findings text passed to Claude."""
+    from modules.guide_generator import _build_findings_text
+    findings = [
+        {"title_english": "LIBRETTO-431 Phase III", "summary_english": "Phase III",
+         "source_url": "https://nejm.org/1", "relevance_score": 9, "authority_score": 5},
+        {"title_english": "Blog post", "summary_english": "Some info",
+         "source_url": "https://blog.com/1", "relevance_score": 6, "authority_score": 1},
+    ]
+    text = _build_findings_text(findings)
+    assert "Authority: 5/5" in text
+    assert "Authority: 1/5" in text

@@ -182,7 +182,7 @@ agents/research/
     keyword_extractor.py       — Methodologist: extract queries from discovery (Sonnet)
     validation.py              — Post-generation oncologist + advocate review (Sonnet)
     skill_improver.py          — Write learnings back to skill files
-    enrichment.py              — Claude: classify relevant/irrelevant + score 1-10 (Haiku)
+    enrichment.py              — Claude: classify relevant/irrelevant + score 1-10 + authority 1-5 (Haiku)
     gap_analyzer.py            — Identify weak sections, generate round 2 queries (Haiku)
     pre_search.py              — Phase 0: template + Haiku queries, search, enrich, format context for discovery
     guide_generator.py         — Claude: generate master guide markdown (Haiku)

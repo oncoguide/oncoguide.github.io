@@ -46,6 +46,7 @@ class Database:
                 title_english TEXT,
                 summary_english TEXT,
                 relevance_score INTEGER,
+                authority_score INTEGER DEFAULT 0,
                 source_url TEXT,
                 source_domain TEXT,
                 source_platform TEXT,
@@ -58,6 +59,7 @@ class Database:
             CREATE INDEX IF NOT EXISTS idx_findings_score ON findings(relevance_score);
             CREATE INDEX IF NOT EXISTS idx_findings_platform ON findings(source_platform);
             CREATE INDEX IF NOT EXISTS idx_findings_date ON findings(date_found);
+            CREATE INDEX IF NOT EXISTS idx_findings_authority ON findings(authority_score);
 
             CREATE TABLE IF NOT EXISTS search_log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,6 +75,17 @@ class Database:
             );
         """)
         self.conn.commit()
+
+        # Migrations for existing databases
+        self._migrate()
+
+    def _migrate(self):
+        """Apply schema migrations for existing databases."""
+        # Add authority_score column if missing (v4 -> v5 migration)
+        cols = [row[1] for row in self.conn.execute("PRAGMA table_info(findings)").fetchall()]
+        if "authority_score" not in cols:
+            self.conn.execute("ALTER TABLE findings ADD COLUMN authority_score INTEGER DEFAULT 0")
+            self.conn.commit()
 
     def start_run(self, run_type: str, topic_id: str = None) -> int:
         cur = self.execute(
@@ -99,14 +112,15 @@ class Database:
                 """INSERT INTO findings
                 (content_hash, topic_id, title_original, snippet_original,
                  source_language, title_english, summary_english, relevance_score,
-                 source_url, source_domain, source_platform, date_published,
-                 date_found, run_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                 authority_score, source_url, source_domain, source_platform,
+                 date_published, date_found, run_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     finding["content_hash"], finding["topic_id"],
                     finding["title_original"], finding["snippet_original"],
                     finding["source_language"], finding["title_english"],
                     finding["summary_english"], finding["relevance_score"],
+                    finding.get("authority_score", 0),
                     finding["source_url"], finding["source_domain"],
                     finding["source_platform"], finding["date_published"],
                     finding["date_found"], finding["run_id"],

@@ -111,3 +111,31 @@ def test_backup(db, tmp_path):
     backups = os.listdir(backup_dir)
     assert len(backups) == 1
     assert backups[0].startswith("research_")
+
+
+def test_authority_score_column_exists(db):
+    """DB schema should include authority_score column in findings."""
+    run_id = db.start_run("topic", "test-topic")
+    finding = {
+        "content_hash": "auth-test-1",
+        "topic_id": "test-topic",
+        "title_original": "NEJM Study",
+        "snippet_original": "",
+        "source_language": "en",
+        "title_english": "NEJM Study",
+        "summary_english": "Phase III results",
+        "relevance_score": 9,
+        "authority_score": 5,
+        "source_url": "https://nejm.org/1",
+        "source_domain": "nejm.org",
+        "source_platform": "pubmed",
+        "date_published": "2025-03",
+        "date_found": "2026-03-16",
+        "run_id": run_id,
+    }
+    fid = db.insert_finding(finding)
+    assert fid is not None
+
+    # Retrieve and verify authority_score is stored
+    row = db.execute("SELECT authority_score FROM findings WHERE id = ?", (fid,)).fetchone()
+    assert row["authority_score"] == 5

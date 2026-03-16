@@ -12,11 +12,17 @@ SYSTEM_PROMPT = """You are a medical research classifier for an oncology educati
 Given a search finding and a research topic, determine:
 1. Is this finding relevant to the topic? (true/false)
 2. Relevance score (1-10, where 10 = directly addresses the topic with authoritative data)
-3. Title in English (translate if needed)
-4. Summary in English (2-3 sentences capturing the key information)
+3. Authority score (1-5) based on source quality:
+   5 = Trial published in top journal (NEJM, Lancet, JCO), ESMO/NCCN guideline
+   4 = Agency decision (FDA approval, EMA), systematic review
+   3 = Peer-reviewed review/meta-analysis, clinical registry (ClinicalTrials.gov)
+   2 = Press release, medical news, general database
+   1 = Blog, forum, unknown source
+4. Title in English (translate if needed)
+5. Summary in English (2-3 sentences capturing the key information)
 
 Return ONLY a JSON object:
-{"relevant": true/false, "relevance_score": N, "title_english": "...", "summary_english": "..."}"""
+{"relevant": true/false, "relevance_score": N, "authority_score": N, "title_english": "...", "summary_english": "..."}"""
 
 USER_TEMPLATE = """TOPIC: {topic}
 
