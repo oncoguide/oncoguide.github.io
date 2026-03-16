@@ -348,3 +348,106 @@ decisions:
       - "Doar SEO fara analytics -- nu stim daca functioneaza"
       - "Analytics fara keyword research -- scriem ce vrem, nu ce cauta oamenii"
     outcome: "Strategie tripla: (A) Keyword research saptamanal cu Google Trends / Serper trends ptr a prioritiza topicuri din registry, (B) SEO agresiv per articol (meta, schema, internal linking, multilingual), (C) Analytics (Google Search Console obligatoriu, GoatCounter optional) ptr feedback loop. Topic registry va fi ordonat dupa search volume. Aceasta devine principiul director al content strategy."
+
+  - id: 36
+    date: "2026-03-15"
+    category: "content"
+    summary: "Content structurat pe cancer type -> subtip molecular (gene/biomarker)"
+    context: "User a propus organizarea pe tipuri de cancer (pulmonar, san, colorectal, prostata, melanom) cu sub-articole per mutatie moleculara (RET, EGFR, HER2, BRCA, etc). Fiecare subtip molecular are tratament complet diferit."
+    alternatives_considered:
+      - "Articole generice pe teme (diagnostic, tratament, etc) -- prea vag, nu raspunde la cautari specifice"
+      - "Doar cancer types fara subtipuri -- pierde specificitatea moleculara critica"
+    outcome: "21 topicuri in registry: 5 master guides (lung, breast, colorectal, prostate, melanoma) + 16 subtipuri moleculare. Prioritate: lung RET (experienta personala user) -> breast -> restul. User decide ordinea."
+
+  - id: 37
+    date: "2026-03-15"
+    category: "technical"
+    summary: "Guide generator rescris: multi-pass, 15 sectiuni, patient-focused, 241KB output"
+    context: "Primul generator producea 7KB (un singur API call, max_tokens=4000, ton academic). Referinta din cancer-news-agent are 71KB, 14 sectiuni, ton patient-facing."
+    alternatives_considered:
+      - "Marire max_tokens la 16K -- tot insuficient ptr ghid complet"
+      - "Model mai mare (Sonnet/Opus) -- cost ridicat, single-pass tot nu produce suficient"
+    outcome: "Multi-pass: (1) planner genereaza 8-15 sectiuni cu finding IDs, (2) fiecare sectiune generata separat cu max_tokens=8000. Prompt patient-focused: adreseaza direct, numere reale, tabele, red flags. Findings limit 500. Output RET: 241KB, 15 sectiuni, 2515 linii. Cost similar (~$0.15)."
+
+  - id: 38
+    date: "2026-03-15"
+    category: "process"
+    summary: "Faza 12 completa: workflow documentat (6 stages) + backup strategy implementata"
+    context: "Faza 12.1 avea 21 topicuri in registry. Lipseau documentatia workflow-ului si strategia de backup."
+    alternatives_considered:
+      - "Repo GitHub separat ptr backups -- overkill, datele se pot regenera"
+      - "Cloud sync (iCloud/Dropbox) -- complicat, Time Machine e suficient"
+    outcome: "Workflow 6 stages (planned->researching->guide_ready->drafting->review->published) documentat in CLAUDE.md cu tabel si tranzitii. Backup: DB automat (exista in database.py, rotatie 10), guide backup adaugat in run_research.py (copiere automata in data/backups/guides/), Time Machine ca safety net. Totul documentat in CLAUDE.md."
+
+  - id: 39
+    date: "2026-03-15"
+    category: "content"
+    summary: "Renuntat la cancer type guides generice; un singur template Patient Master Guide (15 sectiuni) per subtip molecular"
+    context: "Dupa generarea lung-cancer-master (293KB, 14 sectiuni) si compararea cu referinta RET (73KB), am constatat: (1) ghidurile generice per cancer type nu au use case real ptr pacienti -- sunt prea largi, (2) pacientii cauta diagnosticul lor specific (RET fusion, EGFR, HER2), (3) fiecare subtip molecular are tratament/prognostic complet diferit. Master-guides raman ca research-source ptr subtipuri."
+    alternatives_considered:
+      - "Doua template-uri (cancer type guide + patient guide) -- complexitate inutila, cancer type guide nu se publica"
+      - "Un singur template generic -- nu acopera specificul molecular"
+      - "Fara template (free-form) -- pierde consistenta intre ghiduri"
+    outcome: "Un singur template: archetypes/master-guide-template.md cu 15 sectiuni patient-focused (de la 'Ce ai de fapt' la 'Acces european'). Cancer type master-guides devin type: research-source in registry (nu se publica). Archetype vechi cancer-type-guide.md inlocuit. Guide generator va fi calibrat sa produca cele 15 sectiuni din template."
+
+  - id: 40
+    date: "2026-03-15"
+    category: "technical"
+    summary: "Research pipeline v2: section-aware search, gap analysis, quality-guided generation"
+    context: "Comparatie ghid generat (245KB, limbi amestecate, verbos) vs referinta (73KB, dens, actionabil) a aratat ca pipeline-ul initial e insuficient: 3 queries generice -> ~100 findings -> sectiuni cu date insuficiente. Referinta avea 1684 findings. Problema: cautarea prea superficiala, generatorul fara ghid de calitate."
+    alternatives_considered:
+      - "Doar cresterea numarului de queries fara structura -- nu rezolva acoperirea per sectiune"
+      - "Model mai mare (Sonnet/Opus) ptr generare -- cost ridicat, nu rezolva lipsa datelor"
+      - "Curare manuala a findings-urilor -- nu scaleaza la 21 topicuri"
+    outcome: "3 layer-uri implementate: (1) Section-aware query expansion -- expander-ul primeste 15 sectiuni si genereaza 60-80 queries tintite (vs 24 generice), (2) Gap analyzer -- dupa round 1, Claude analizeaza acoperirea per sectiune si genereaza queries ptr gaps, urmate de search round 2, (3) Quality-guided generation -- prompt cu limba fortata EN, heading ### nu ##, max_tokens 4000, exemplu concret de calitate din referinta. Fisiere: query_expander.py, gap_analyzer.py (nou), guide_generator.py, run_research.py. Teste: 32/32 pass. NOTA: query expansion partiala inlocuita de v3 query debate (decizia #41)."
+
+  - id: 41
+    date: "2026-03-15"
+    category: "technical"
+    summary: "Research pipeline v3: multi-agent query debate (oncologist + patient-advocate + researcher) inlocuieste single-pass query expansion"
+    context: "Evaluarea ghidului RET v2 (scor 8.6/10) a aratat gaps critice: LOXO-260 lipsa din pipeline, hyperglycemia 53% lipsa, brain ORR gresit (63-70% vs 82-91%), pralsetinib EU withdrawal lipsa. Cauza root: single-perspective query expansion are puncte moarte -- un singur punct de vedere nu acopera toate aspectele (clinic, pacient, metodologic). User a propus: 3 agenti care se provoaca reciproc pana ajung la consens pe queries perfecte."
+    alternatives_considered:
+      - "DIM (Diagnosis Intelligence Map) -- un singur Claude call genereaza o harta statica de cunostinte. Problema: un singur punct de vedere are blind spots."
+      - "Mai multe queries fara structura -- cantitate != calitate, nu rezolva lipsa termenilor specifici"
+      - "Curare manuala a query-urilor per diagnostic -- nu scaleaza"
+    outcome: "Design aprobat: 3 agenti in serie cu peer review iterativ. (1) ONCOLOGIST -- genereaza Clinical Knowledge Map: toate drugurile (aprobate + pipeline PE NUME), trialuri landmark, frecvente side effects, mecanisme rezistenta, ghiduri ESMO/NCCN. (2) PATIENT-ADVOCATE -- challenge din perspectiva pacientului: ce lipseste ptr viata de zi cu zi, acces, intrebari doctor, red flags, timeline emotional. (3) RESEARCH METHODOLOGIST -- converteste tot in queries optimale per search engine (MeSH ptr PubMed, drug names ptr Serper, condition+intervention ptr ClinicalTrials.gov). Queries AUTOMATE plecand de la diagnostic, urmarind flow-ul natural al pacientului: diagnostic -> tratament -> cum se ia -> side effects -> cand nu mai merge -> pipeline -> acces -> viata de zi cu zi. Modul nou: query_debate.py inlocuieste query_expander.py. Cost suplimentar: ~$0.02-0.04/run (neglijabil). Principiu director: calitatea query-urilor > cantitatea; viata pacientului depinde de informatii complete."
+
+  - id: 42
+    date: "2026-03-15"
+    category: "content"
+    summary: "Continutul trebuie sa completeze si sustina oncologii, nu sa le ia locul -- oncologii sunt parteneri"
+    context: "User a cerut explicit ca tonul sa nu ofuscheze doctorii oncologi ci sa ii complementeze. Skills /oncologist si /patient-advocate trebuie folosite ptr review inainte de publicare. Pipeline section critica per diagnostic."
+    alternatives_considered:
+      - "Content pur educational fara referinta la doctor -- risc de a submina relatia pacient-medic"
+      - "Content prea deficient catre medic -- pierde autonomia pacientului"
+    outcome: "Principiu: continutul sustine si complementeaza oncologul. Ton: 'intreaba oncologul despre X' nu 'medicul tau ar trebui sa faca X'. Skills /oncologist si /patient-advocate obligatorii ptr review pre-publicare. Pipeline section trebuie sa contina FIECARE drug in dezvoltare, pe nume, cu faza si timeline."
+
+  - id: 43
+    date: "2026-03-15"
+    category: "technical"
+    summary: "Research pipeline v4: iterative discovery loop, diagnosis-only input, post-generation validation, skill self-improvement"
+    context: "V3 (fixed 3-round debate) era un pas inainte dar inca avea queries hardcodate in registry.yaml si o singura runda per perspectiva. User a cerut: (1) input DOAR diagnosticul, zero queries statice, (2) loop iterativ oncolog<->advocate cu conditie de stop (scor >= 8.5/10 per sectiune), (3) validare post-generare cu targeted search, (4) skills bidirectionale -- agentul invata si imbunatateste skill-ul."
+    alternatives_considered:
+      - "V3 cu mai multe runde fixe -- nu converge pe completitudine, nu are feedback loop"
+      - "Queries manuale per topic -- nu scaleaza la 21 topicuri, user nu e oncolog"
+      - "Un singur model ptr tot -- Haiku prea superficial ptr discovery loop, Sonnet prea scump ptr enrichment"
+    outcome: "Pipeline v4 aprobat. 6 faze: (1) Discovery Loop Sonnet -- oncolog<->advocate iterativ pana la 8.5/10 per sectiune, max 5 runde, (2) Keyword Extraction Sonnet -- methodologist extrage queries din conversatie, (3) Research Haiku -- 5 backends + enrichment, (4) Guide Generation Haiku -- multi-pass 15 sectiuni, (5) Validation Sonnet -- oncolog + advocate review ghid, targeted search ptr gaps, max 2 runde, (6) Skill Self-Improvement -- agentul scrie learnings inapoi in skill file. Cost estimat: $1.10-$2.50/ghid, cap $5. registry.yaml simplificat (fara search_queries). Completitudine = 4 niveluri: protocol oficial, realitate clinica, pipeline/trials, viata de zi cu zi."
+
+  - id: 44
+    date: "2026-03-16"
+    category: "technical"
+    summary: "Pipeline v4 implementat complet: validation, skill improver, orchestrare, registry simplificat"
+    context: "Sesiunea anterioara implementase Chunk 1-2 (cost tracker, skill loader, discovery, keyword extractor). Aceasta sesiune a completat Chunk 3-4: validation module, skill improver, registry cleanup, run_research.py rescris cu noul flow v4."
+    alternatives_considered: []
+    outcome: "5 commits: validation.py (2 teste), skill_improver.py (4 teste), registry simplificat (-92 linii search_queries), run_research.py rescris (7 faze), CLAUDE.md actualizat. Total: 58 teste, 56 pass, 2 fail pre-existente (env var). Pipeline v4 complet functional."
+
+  - id: 45
+    date: "2026-03-16"
+    category: "technical"
+    summary: "Pre-search design: oncologul din discovery primeste date reale externe inainte de a genera knowledge map"
+    context: "Problema identificata: oncologul din discovery loop se baza 100% pe cunostintele parametrice ale lui Claude. Druguri/trialuri post-training-cutoff erau invizibile. User a cerut varianta exhaustiva (calitate > cost). Cost suplimentar: ~$0.06-0.11/ghid (<5% din total)."
+    alternatives_considered:
+      - "Pre-search rapid (10-15 queries generice) -- $0.05, acopera cele mai mari blind spots dar nu e exhaustiv"
+      - "Queries doar din Claude (fara templates mecanice) -- are aceeasi limita ca discovery-ul: nu stie ce nu stie"
+      - "Cross-topic learning (salvare findings intre topicuri) -- overkill, fiecare topic isi face propriul search"
+    outcome: "Design aprobat: 20 template queries mecanice (zero AI -- ancora contra blind spots) + 20 Haiku complement (termeni specifici). Search pe toate 5 backend-urile, enrichment Haiku, top 50 findings formatate ca context text injectat in system prompt-ul oncologului. Spec + plan scrise, review trecut. NU implementat inca -- user vrea sa inteleaga flow-ul end-to-end intai."
