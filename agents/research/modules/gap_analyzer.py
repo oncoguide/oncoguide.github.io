@@ -7,6 +7,46 @@ import anthropic
 
 logger = logging.getLogger(__name__)
 
+SECTION_MAP_TOOL = {
+    "name": "submit_section_map",
+    "description": "Map guide section IDs to relevant finding indices",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "section_map": {
+                "type": "object",
+                "description": "Keys are section IDs, values are arrays of finding indices",
+                "additionalProperties": {"type": "array", "items": {"type": "integer"}},
+            }
+        },
+        "required": ["section_map"],
+    },
+}
+
+GAP_QUERIES_TOOL = {
+    "name": "submit_gap_queries",
+    "description": "Submit targeted queries to fill weak guide sections",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "queries": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "query_text": {"type": "string"},
+                        "search_engine": {"type": "string"},
+                        "section_id": {"type": "string"},
+                        "language": {"type": "string"},
+                    },
+                    "required": ["query_text", "search_engine", "section_id"],
+                },
+            }
+        },
+        "required": ["queries"],
+    },
+}
+
 SYSTEM_PROMPT = """You are a medical research gap analyzer for an oncology patient education blog.
 
 You will receive:
@@ -31,17 +71,14 @@ Query rules:
 
 DO NOT generate queries for sections that are already well-covered (10+ good findings).
 
-Return a JSON array of query objects:
-{"query_text": "...", "search_engine": "serper|pubmed|clinicaltrials", "language": "en", "target_section": "section-id", "gap_reason": "short explanation of what's missing"}
-
-If ALL sections are well-covered, return an empty array: []
-Return ONLY valid JSON, no other text."""
+Use the submit_gap_queries tool. If ALL sections are well-covered, submit an empty queries array."""
 
 
-def _map_findings_to_sections(findings: list[dict], sections: list[dict],
-                               client: anthropic.Anthropic, model: str) -> dict:
+def _map_findings_to_sections(
+    findings: list[dict], sections: list[dict],
+    client: anthropic.Anthropic, model: str,
+) -> dict:
     """Quick mapping of existing findings to sections for gap analysis."""
-    # Build a compact summary of findings (just titles + scores, not full text)
     finding_summaries = []
     for i, f in enumerate(findings[:500], 1):
         finding_summaries.append(
@@ -58,10 +95,9 @@ def _map_findings_to_sections(findings: list[dict], sections: list[dict],
     message = client.messages.create(
         model=model,
         max_tokens=4000,
-        system="""Map findings to guide sections. Return JSON object where keys are section IDs
-and values are arrays of finding numbers most relevant to that section.
-Be thorough but fast -- use titles and scores to judge relevance.
-Return ONLY valid JSON, no markdown, no explanation.""",
+        system="Map findings to guide sections. Use the submit_section_map tool. "
+               "Keys are section IDs, values are arrays of finding numbers most relevant "
+               "to that section. Be thorough but fast -- use titles and scores to judge relevance.",
         messages=[{
             "role": "user",
             "content": (
@@ -69,17 +105,11 @@ Return ONLY valid JSON, no markdown, no explanation.""",
                 f"Findings:\n{findings_text}"
             ),
         }],
+        tools=[SECTION_MAP_TOOL],
+        tool_choice={"type": "tool", "name": "submit_section_map"},
     )
 
-    raw = message.content[0].text.strip()
-    if raw.startswith("```"):
-        raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-
-    try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        logger.error("Failed to parse section mapping, returning empty")
-        return {}
+    return message.content[0].input["section_map"]
 
 
 def analyze_gaps(
@@ -115,7 +145,6 @@ def analyze_gaps(
         mapped_ids = section_map.get(s["id"], [])
         count = len(mapped_ids)
         if count > 0 and mapped_ids:
-            # Get titles of mapped findings
             sample_titles = []
             for fid in mapped_ids[:5]:
                 if 1 <= fid <= len(findings):
@@ -152,20 +181,24 @@ def analyze_gaps(
                     f"Coverage per section:\n{coverage_text}"
                 ),
             }],
+            tools=[GAP_QUERIES_TOOL],
+            tool_choice={"type": "tool", "name": "submit_gap_queries"},
         )
 
-        raw = message.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+        gap_queries_raw = message.content[0].input["queries"]
 
-        gap_queries = json.loads(raw)
+        # Normalize field names (section_id -> target_section for downstream compatibility)
+        gap_queries = []
+        for q in gap_queries_raw:
+            normalized = dict(q)
+            if "section_id" in normalized and "target_section" not in normalized:
+                normalized["target_section"] = normalized.pop("section_id")
+            normalized.setdefault("language", "en")
+            gap_queries.append(normalized)
 
-        # Log what was found
         if gap_queries:
             gap_sections = set(q.get("target_section", "?") for q in gap_queries)
             logger.info(f"Gap analysis: {len(gap_queries)} queries for sections: {gap_sections}")
-            for q in gap_queries:
-                logger.info(f"  Gap [{q.get('target_section')}]: {q.get('gap_reason', '')} -> {q['query_text'][:60]}")
         else:
             logger.info("Gap analysis: all sections well-covered")
 
