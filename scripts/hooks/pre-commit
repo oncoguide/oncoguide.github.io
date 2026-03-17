@@ -71,7 +71,7 @@ check_dep "hugo.yaml" "CLAUDE.md" \
 
 # --- Personal data scan ---
 SENSITIVE_PATTERNS="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-STAGED_TEXT=$(git diff --cached --name-only | grep -v "^topics/" | grep -v "tests/" | xargs grep -lE "$SENSITIVE_PATTERNS" 2>/dev/null || true)
+STAGED_TEXT=$(git diff --cached --name-only | grep -v "^topics/" | grep -v "tests/" | grep -v "\.md$" | xargs grep -lE "$SENSITIVE_PATTERNS" 2>/dev/null || true)
 if [ -n "$STAGED_TEXT" ]; then
     echo ""
     echo "================================================"

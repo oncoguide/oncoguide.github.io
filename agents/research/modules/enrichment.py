@@ -1,12 +1,27 @@
 """Enrich search findings using Claude -- classify relevance and score."""
 
-import json
 import logging
 import time
 
 import anthropic
 
 logger = logging.getLogger(__name__)
+
+ENRICHMENT_TOOL = {
+    "name": "submit_enrichment",
+    "description": "Submit relevance and authority assessment for a medical finding",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "relevant": {"type": "boolean"},
+            "relevance_score": {"type": "integer", "minimum": 0, "maximum": 10},
+            "authority_score": {"type": "integer", "minimum": 1, "maximum": 5},
+            "title_english": {"type": "string"},
+            "summary_english": {"type": "string"},
+        },
+        "required": ["relevant", "relevance_score", "authority_score", "title_english", "summary_english"],
+    },
+}
 
 SYSTEM_PROMPT = """You are a medical research classifier for an oncology education blog.
 Given a search finding and a research topic, determine:
@@ -21,8 +36,7 @@ Given a search finding and a research topic, determine:
 4. Title in English (translate if needed)
 5. Summary in English (2-3 sentences capturing the key information)
 
-Return ONLY a JSON object:
-{"relevant": true/false, "relevance_score": N, "authority_score": N, "title_english": "...", "summary_english": "..."}"""
+Use the submit_enrichment tool to submit your assessment."""
 
 USER_TEMPLATE = """TOPIC: {topic}
 
@@ -33,7 +47,7 @@ SNIPPET: {snippet}
 SOURCE LANGUAGE: {language}
 DATE: {date}"""
 
-# Token tracking
+# Token tracking (module-level, replaced by CostTracker in Task 11)
 _token_usage = {"input": 0, "output": 0}
 
 
@@ -72,18 +86,17 @@ def enrich_finding(
                     ),
                 }
             ],
+            tools=[ENRICHMENT_TOOL],
+            tool_choice={"type": "tool", "name": "submit_enrichment"},
         )
         _token_usage["input"] += message.usage.input_tokens
         _token_usage["output"] += message.usage.output_tokens
-
-        text = message.content[0].text.strip()
-        if text.startswith("```"):
-            text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-        return json.loads(text)
+        return message.content[0].input
 
     except Exception as e:
         logger.error(f"Enrichment failed for '{finding.get('title', '?')}': {e}")
-        return {"relevant": False, "relevance_score": 0, "title_english": "", "summary_english": ""}
+        return {"relevant": False, "relevance_score": 0, "authority_score": 0,
+                "title_english": "", "summary_english": ""}
 
 
 def enrich_batch(
