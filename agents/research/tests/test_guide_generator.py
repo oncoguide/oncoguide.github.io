@@ -1,19 +1,46 @@
 import json
 import os
 import pytest
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock, Mock, call
 
 from modules.guide_generator import generate_guide, CRITICAL_SECTIONS
+
+
+def _mock_tool_use(input_dict):
+    """Helper: create a mock message with tool_use content (planner responses)."""
+    mock_tool = Mock()
+    mock_tool.type = "tool_use"
+    mock_tool.input = input_dict
+    mock_msg = Mock()
+    mock_msg.content = [mock_tool]
+    mock_msg.usage = Mock(input_tokens=100, output_tokens=50)
+    return mock_msg
+
+
+def _mock_text(text="Section content here"):
+    """Helper: create a mock message with text content (section generation responses)."""
+    return MagicMock(
+        content=[MagicMock(text=text)],
+        usage=MagicMock(input_tokens=100, output_tokens=50),
+    )
+
+
+_SINGLE_SECTION_PLAN = {
+    "sections": [
+        {"id": "big-picture", "title": "Big Picture", "description": "Overview section.", "finding_ids": [1]},
+    ]
+}
 
 
 @patch("modules.guide_generator.anthropic.Anthropic")
 def test_generates_markdown_file(mock_anthropic_cls, tmp_path):
     mock_client = MagicMock()
     mock_anthropic_cls.return_value = mock_client
-    mock_client.messages.create.return_value = MagicMock(
-        content=[MagicMock(text="# Test Guide\n\n## Summary\nTest content")],
-        usage=MagicMock(input_tokens=500, output_tokens=200),
-    )
+    # First call = planner (tool use), subsequent calls = section generators (text)
+    mock_client.messages.create.side_effect = [
+        _mock_tool_use(_SINGLE_SECTION_PLAN),
+        _mock_text("# Test Guide\n\n## Summary\nTest content"),
+    ]
     findings = [
         {"title_english": "Finding 1", "summary_english": "Summary 1",
          "source_url": "https://example.com/1", "relevance_score": 9},
@@ -67,6 +94,30 @@ def test_critical_sections_defined():
 
 
 @patch("modules.guide_generator.anthropic.Anthropic")
+def test_section_planner_uses_tool_call(mock_anthropic_cls, tmp_path):
+    """Section planner must use tool_choice to guarantee structured output."""
+    mock_client = MagicMock()
+    mock_anthropic_cls.return_value = mock_client
+    mock_client.messages.create.side_effect = [
+        _mock_tool_use(_SINGLE_SECTION_PLAN),
+        _mock_text(),
+    ]
+    findings = [
+        {"title_english": "F1", "summary_english": "S1",
+         "source_url": "https://example.com/1", "relevance_score": 9},
+    ]
+    generate_guide(
+        topic_title="Test",
+        findings=findings,
+        output_path=str(tmp_path / "out.md"),
+        api_key="fake-key",
+    )
+    # First call is the planner
+    planner_kwargs = mock_client.messages.create.call_args_list[0][1]
+    assert planner_kwargs["tool_choice"] == {"type": "tool", "name": "submit_section_plan"}
+
+
+@patch("modules.guide_generator.anthropic.Anthropic")
 def test_critical_sections_use_sonnet(mock_anthropic_cls, tmp_path):
     """Critical sections should be generated with the critical_model (Sonnet), others with Haiku."""
     mock_client = MagicMock()
@@ -77,23 +128,20 @@ def test_critical_sections_use_sonnet(mock_anthropic_cls, tmp_path):
     call_count = [0]
 
     # Planner returns 2 sections: one non-critical, one critical
-    planner_response = json.dumps([
-        {"id": "big-picture", "title": "Big Picture", "description": "D", "finding_ids": [1]},
-        {"id": "treatment-efficacy", "title": "Treatment Efficacy", "description": "D", "finding_ids": [1]},
-    ])
+    planner_sections = {
+        "sections": [
+            {"id": "big-picture", "title": "Big Picture", "description": "Overview.", "finding_ids": [1]},
+            {"id": "treatment-efficacy", "title": "Treatment Efficacy", "description": "Efficacy data.", "finding_ids": [1]},
+        ]
+    }
 
     def track_model(**kwargs):
         models_used.append(kwargs.get("model", "unknown"))
         call_count[0] += 1
-        # First call is planner, rest are section generators
+        # First call is planner (tool use), rest are section generators (text)
         if call_count[0] == 1:
-            text = planner_response
-        else:
-            text = "Section content here"
-        return MagicMock(
-            content=[MagicMock(text=text)],
-            usage=MagicMock(input_tokens=100, output_tokens=50),
-        )
+            return _mock_tool_use(planner_sections)
+        return _mock_text("Section content here")
 
     mock_client.messages.create.side_effect = track_model
 
@@ -111,7 +159,7 @@ def test_critical_sections_use_sonnet(mock_anthropic_cls, tmp_path):
         critical_model="claude-sonnet-4-6",
     )
 
-    # First call is the planner (uses base model), then 15 section calls
+    # First call is the planner (uses base model), then 2 section calls
     # Check that Sonnet was used at least once (for critical sections)
     assert "claude-sonnet-4-6" in models_used, f"Sonnet not used. Models: {models_used}"
     # Check that Haiku was used for non-critical sections
@@ -123,10 +171,12 @@ def test_cross_verify_report_passed_to_sections(mock_anthropic_cls, tmp_path):
     """Cross-verification report should be included in section generation prompts."""
     mock_client = MagicMock()
     mock_anthropic_cls.return_value = mock_client
-    mock_client.messages.create.return_value = MagicMock(
-        content=[MagicMock(text='[{"id":"big-picture","title":"T","description":"D","finding_ids":[1]}]')],
-        usage=MagicMock(input_tokens=100, output_tokens=50),
-    )
+
+    # First call = planner (tool use), second call = section generator (text)
+    mock_client.messages.create.side_effect = [
+        _mock_tool_use(_SINGLE_SECTION_PLAN),
+        _mock_text("Section content here"),
+    ]
 
     findings = [
         {"title_english": "F1", "summary_english": "S1",
@@ -143,11 +193,5 @@ def test_cross_verify_report_passed_to_sections(mock_anthropic_cls, tmp_path):
     )
 
     # Check that the report text appears in at least one of the section generation calls
-    all_contents = [
-        c.kwargs.get("messages", [{}])[0].get("content", "")
-        if c.kwargs else ""
-        for c in mock_client.messages.create.call_args_list
-    ]
-    # The cross-verify report should be in the user message of section calls (not the planner)
     found = any("CONTRADICTED" in str(c) for c in mock_client.messages.create.call_args_list)
     assert found, "Cross-verification report not found in any API call"
