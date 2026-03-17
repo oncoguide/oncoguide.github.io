@@ -14,6 +14,54 @@ from .cost_tracker import CostTracker
 
 logger = logging.getLogger(__name__)
 
+CROSS_VERIFY_TOOL = {
+    "name": "submit_verification",
+    "description": "Submit cross-verification results comparing discovery claims against real findings",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "verified": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "claim": {"type": "string"},
+                        "finding_id": {"type": "integer"},
+                        "finding_value": {"type": "string"},
+                    },
+                    "required": ["claim", "finding_id", "finding_value"],
+                },
+            },
+            "contradicted": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "claim": {"type": "string"},
+                        "discovery_value": {"type": "string"},
+                        "finding_id": {"type": "integer"},
+                        "finding_value": {"type": "string"},
+                        "authority_score": {"type": "integer"},
+                    },
+                    "required": ["claim", "discovery_value", "finding_id", "finding_value", "authority_score"],
+                },
+            },
+            "unverified": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "claim": {"type": "string"},
+                        "reason": {"type": "string"},
+                    },
+                    "required": ["claim", "reason"],
+                },
+            },
+        },
+        "required": ["verified", "contradicted", "unverified"],
+    },
+}
+
 SYSTEM_PROMPT = """You are a medical data verification specialist.
 
 You will receive:
@@ -29,19 +77,13 @@ For each claim, classify as:
   Set "use_finding": true if the finding has higher authority.
 - UNVERIFIED: No finding addresses this claim. Note the reason.
 
-Return JSON:
-{
-  "verified": [{"claim": "ORR 84%", "finding_id": N, "finding_value": "ORR 84%", "status": "VERIFIED"}],
-  "contradicted": [{"claim": "PFS 24.8mo", "finding_id": N, "finding_value": "PFS 22.0mo", "status": "CONTRADICTED", "use_finding": true}],
-  "unverified": [{"claim": "Brain ORR 91%", "status": "UNVERIFIED", "reason": "No findings with authority >= 3"}]
-}
-
 Rules:
 - Focus on NUMBERS: ORR, PFS, OS, frequency percentages, doses, trial sizes
 - Ignore qualitative claims (e.g., "well-tolerated") unless they have a number
 - When contradicted, ALWAYS prefer the finding with higher authority score
 - Be thorough: check ALL drugs, ALL trials, ALL side effect frequencies
-- Return ONLY valid JSON"""
+
+Use the submit_verification tool to submit your results."""
 
 
 def cross_verify(
@@ -110,17 +152,12 @@ def cross_verify(
                     f"=== REAL FINDINGS (authority >= {min_authority}) ===\n{findings_text}"
                 ),
             }],
+            tools=[CROSS_VERIFY_TOOL],
+            tool_choice={"type": "tool", "name": "submit_verification"},
         )
         cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
 
-        raw = message.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-
-        result = json.loads(raw)
-        result.setdefault("verified", [])
-        result.setdefault("contradicted", [])
-        result.setdefault("unverified", [])
+        result = message.content[0].input
 
         logger.info(
             f"Cross-verify: {len(result['verified'])} verified, "
