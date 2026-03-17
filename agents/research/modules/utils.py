@@ -69,6 +69,17 @@ def now_iso() -> str:
     return datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
 
+def api_call(client, **kwargs):
+    """Make an API call using streaming to keep the TCP connection alive.
+
+    Long Sonnet calls with large prompts can take > 60 seconds before the first
+    token arrives. ISP/router idle-TCP timeouts kill the connection at 60s.
+    Streaming sends a response header immediately, keeping the connection live.
+    """
+    with client.messages.stream(**kwargs) as stream:
+        return stream.get_final_message()
+
+
 def load_skill_context(skill_path: str) -> str:
     """Load a skill file and extract persona, key principles, and learnings.
 

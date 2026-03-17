@@ -542,6 +542,26 @@ decisions:
       - "Renuntare la JSON ptr oncologist_respond, parse text liber -- pierde structura"
     outcome: "BUG CRITIC NEREPARAT. Propuneri de fix: (1) Forteaza raspunsul structurat prin furnizarea unui JSON template in user message cu campuri goale de completat, (2) Daca Sonnet returneaza narativ, extrage raspunsurile cu un Haiku call rapid care structureaza textul in JSON (cost: ~$0.002), (3) Schimba abordarea: oncologist_respond sa nu ceara JSON ci sa ceara text structurat cu delimitatori clari (### Question 1: ...) si parseaza manual. Optiunea 2 (Haiku structurator) e cea mai robusta -- Haiku urmeaza instructiuni JSON mult mai bine decat Sonnet. REZOLVAT in Plan 1 (2026-03-17): toate cele 8 module AI folosesc acum tool_choice=forced -- JSON parsing eliminat complet."
 
+  - id: 56
+    date: "2026-03-17"
+    category: "learning"
+    summary: "APIConnectionError la 60s = ISP/router idle TCP timeout, nu SDK timeout -- fix: streaming"
+    context: "Benchmark dry-run esua dupa exact 60s cu 'Server disconnected without sending a response'. SDK-ul retria de 2 ori (2x60s = 3 minute pierdute). Cauza: Sonnet cu prompt mare (pre-search context + skill file) ia >60s pana la primul token. Router/ISP taie conexiunile TCP idle la 60s."
+    alternatives_considered:
+      - "httpx timeout mai mare -- nu ajuta, problema e la nivel TCP la ISP, nu la SDK"
+      - "Retry in cod -- SDK deja retry de 2 ori, tot esueaza"
+    outcome: "Fix: inlocuit client.messages.create() cu client.messages.stream() via get_final_message() in utils.api_call(). Streaming trimite un HTTP 200 + header imediat, pastrand conexiunea vie chiar daca tokenurile vin mai tarziu. Aplicat in discovery.py (3 calls), keyword_extractor.py (1), validation.py (2), guide_generator.py (2). 116 teste trec."
+
+  - id: 57
+    date: "2026-03-17"
+    category: "learning"
+    summary: "_oncologist_respond returna answers:[] la fiecare runda -- cauza: max_tokens=8000 insuficient"
+    context: "Dry-run 1 (post streaming fix): WARNING 'oncologist response empty' in toate 5 rundele. Discovery nu converge. Diagnosticare: 7 intrebari medicale complexe, fiecare raspuns ~500-1000 tokens = 3500-7000 tokens + additional_knowledge. Sonnet genereaza ~8000 tokens si se taie exact la limita. JSON truncat = answers:[]. Confirmat: round 1 respond call dureaza 3 minute (8000 tokens la ~50 tok/s). HTTP 200 OK vine imediat dar WARNING apare 3 minute mai tarziu."
+    alternatives_considered:
+      - "max_tokens=8000 -- truncheaza JSON, answers empty"
+      - "Reduce numarul de intrebari -- limiteaza calitatea discovery"
+    outcome: "Fix: max_tokens 8000 -> 16000 in _oncologist_respond (discovery.py). Adaugat log INFO cu stop_reason si output_tokens. Dry-run 2 (post fix): 0 warnings, discovery CONVERGE dupa 3 runde (vs. 5 runde non-converged), 122 queries extrase, cost $1.09 pt. faze 0-2. Benchmark real gata de rulat."
+
   - id: 55
     date: "2026-03-17"
     category: "technical"
@@ -551,3 +571,33 @@ decisions:
       - "Retry loop cu instructiuni mai puternice -- nu rezolva fundamental, costa dublu"
       - "Haiku structurator ca fallback -- adauga latenta, complica codul"
     outcome: "Toate 8 module folosesc tool_choice={type:tool,name:...}. Result via message.content[0].input (dict garantat valid). 116 teste trec. Abort conditions adaugate dupa discovery (<3 keys), keyword extraction (<10 queries), search round 1 (<20 findings), guide generation (<10KB). CostTracker adaugat in gap_analyzer + enrichment. Phase timing adaugat. Benchmark dry-run blocheaza cu APIConnectionError (server disconnect la 60s) -- problema de retea, nu cod. Benchmark real trebuie rulat cand conexiunea permite."
+
+  - id: 58
+    date: "2026-03-17"
+    category: "learning"
+    summary: "Benchmark lung-ret-fusion: ghid 169KB generat, 5 safety concerns reale gasite de validare"
+    context: "Benchmark real rulat pentru prima data. Pipeline: Phase 0 (pre-search, 106 findings relevante din 125), Phase 1 (discovery converge 4 runde), Phase 2 (117 queries), Phase 3-4 (500 findings), Phase 5 (cross-verify: 33 verified, 1 contradicted, 27 unverified), Phase 6 (ghid 169KB, 15 sectiuni), Phase 7 (validare: 7.2/10, 5 safety concerns). Cost estimat total: ~$2.35. Validarea a prins 5 erori medicale reale inainte de publicare: pralsetinib retras din UE oct 2024 (ghidul il lista ca aprobat), interactiune alimentara gresita pralsetinib, interactiune PPI gresita, sfat durere inversat (ibuprofen vs acetaminophen), framing ambiguu urgente cerebrale."
+    alternatives_considered:
+      - "Publicare fara validare -- ar fi publicat erori medicale periculoase"
+      - "Validare manuala de un medic -- corect, dar ghidul de 169KB necesita ~3-4h revizuire"
+    outcome: "Ghidul NU poate fi publicat pana cand cele 5 safety concerns nu sunt corectate. Validarea automata functioneaza: a prins erori reale post-cutoff (pralsetinib EU withdrawal) si erori de continut (sfat inversat, interactiuni gresite). Benchmark a aratat si 2 bug-uri in pipeline: guide_generator KeyError 'description' (sectional planner nu returna description field), si _oncologist_respond overflow max_tokens din cauza pre_search_context in system prompt. Ambele fixate."
+
+  - id: 59
+    date: "2026-03-17"
+    category: "learning"
+    summary: "guide_generator.py: KeyError 'description' -- section planner nu returna description field"
+    context: "Phase 6 esua cu 'Generation failed: description' pentru toate 15 sectiunile. Ghidul generat era 1.3KB. Cauza: SECTION_PLAN_TOOL schema nu include 'description' in output (doar id, title, finding_ids, priority_claims). Dar _generate_section() accesa section['description'] direct. La runtime: planner returna dict fara 'description' -> KeyError -> toate sectiunile esuau."
+    alternatives_considered:
+      - "Adauga description in SECTION_PLAN_TOOL schema -- forteaza modelul sa regenereze informatia deja definita in GUIDE_SECTIONS"
+      - "Fallback section.get('description', '') -- sectiunea ar fi generata fara scope, calitate slaba"
+    outcome: "Fix: in _generate_section(), lookup description din GUIDE_SECTIONS by section id daca lipseste din planner output. 116 teste trec. Ghid generat: 169KB."
+
+  - id: 60
+    date: "2026-03-17"
+    category: "learning"
+    summary: "_oncologist_respond overflow max_tokens: pre_search_context in system prompt era de vina"
+    context: "Benchmark real: rounds 1+2 hitting stop_reason=max_tokens exact la 16000 tokens. Cauza: system prompt includea pre_search_context (106 findings formatate, ~10000 tokens) + skill file + instructiuni. Ramas putin spatiu pentru 6 raspunsuri detaliate + additional_knowledge JSON. Dry-run anterior nu manifesta problema: probabil pre_search_context mai mic. Oncologul nu are nevoie de raw pre_search data in respond call -- deja are knowledge_text care integreaza informatia."
+    alternatives_considered:
+      - "max_tokens 16000 -> 32000+ -- ar depasi costul si latenta, cauza ramane"
+      - "Reduce numarul de intrebari la 3 -- limiteaza calitatea discovery"
+    outcome: "Fix: eliminat pre_search_context din _oncologist_respond_system() si din semnatura. max_tokens 16000 -> 24000 pentru headroom. Run real: rounds 1+2 tot au hit max_tokens (dar raspunsurile partiale au ajutat advocacy), round 3 a converge cu 3011 tokens, round 4 satisfacut toate sectiunile."

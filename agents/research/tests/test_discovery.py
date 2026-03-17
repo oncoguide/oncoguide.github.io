@@ -41,23 +41,25 @@ def test_section_score_threshold():
 # --- Tool use assertion tests ---
 
 
-def test_oncologist_initial_uses_tool_call(mock_client, cost_tracker):
+@patch("modules.discovery.api_call")
+def test_oncologist_initial_uses_tool_call(mock_api_call, mock_client, cost_tracker):
     """_oncologist_initial uses tool_choice, guaranteeing structured output."""
     knowledge = {
         "approved_drugs": [{"name": "selpercatinib", "brand": "Retevmo"}],
         "pipeline_drugs": [], "landmark_trials": [], "institutional_protocols": [],
         "side_effects": [], "resistance": [], "guidelines": [], "testing": [],
     }
-    mock_client.messages.create.return_value = _mock_tool_use(knowledge)
+    mock_api_call.return_value = _mock_tool_use(knowledge)
 
     result = _oncologist_initial(mock_client, "RET fusion NSCLC", "claude-sonnet-4-6", cost_tracker)
 
-    call_kwargs = mock_client.messages.create.call_args[1]
+    call_kwargs = mock_api_call.call_args[1]
     assert call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_knowledge_map"}
     assert result["approved_drugs"][0]["name"] == "selpercatinib"
 
 
-def test_advocate_evaluate_uses_tool_call(mock_client, cost_tracker):
+@patch("modules.discovery.api_call")
+def test_advocate_evaluate_uses_tool_call(mock_api_call, mock_client, cost_tracker):
     """_advocate_evaluate uses tool_choice, guaranteeing structured output."""
     evaluation = {
         "section_scores": {
@@ -67,40 +69,42 @@ def test_advocate_evaluate_uses_tool_call(mock_client, cost_tracker):
         "questions": ["What about brain metastases ORR?"],
         "all_satisfied": False,
     }
-    mock_client.messages.create.return_value = _mock_tool_use(evaluation)
+    mock_api_call.return_value = _mock_tool_use(evaluation)
 
     result = _advocate_evaluate(
         mock_client, "RET fusion NSCLC", "knowledge text", [], "claude-sonnet-4-6", cost_tracker
     )
 
-    call_kwargs = mock_client.messages.create.call_args[1]
+    call_kwargs = mock_api_call.call_args[1]
     assert call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_evaluation"}
     assert result["all_satisfied"] is False
     assert "section_scores" in result
 
 
-def test_oncologist_respond_uses_tool_call(mock_client, cost_tracker):
+@patch("modules.discovery.api_call")
+def test_oncologist_respond_uses_tool_call(mock_api_call, mock_client, cost_tracker):
     """_oncologist_respond uses tool_choice, never needs JSON parsing."""
     response = {
         "answers": [{"question": "What is the ORR?", "answer": "84% in LIBRETTO-001"}],
         "additional_knowledge": {"approved_drugs": [], "pipeline_drugs": []},
     }
-    mock_client.messages.create.return_value = _mock_tool_use(response)
+    mock_api_call.return_value = _mock_tool_use(response)
 
     result = _oncologist_respond(
         mock_client, "RET NSCLC", ["What is the ORR?"],
         '{"approved_drugs": []}', "claude-sonnet-4-6", cost_tracker,
     )
 
-    call_kwargs = mock_client.messages.create.call_args[1]
+    call_kwargs = mock_api_call.call_args[1]
     assert call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_oncologist_response"}
     assert result["answers"][0]["answer"] == "84% in LIBRETTO-001"
 
 
-def test_oncologist_respond_returns_dict(mock_client, cost_tracker):
+@patch("modules.discovery.api_call")
+def test_oncologist_respond_returns_dict(mock_api_call, mock_client, cost_tracker):
     """_oncologist_respond always returns a dict with answers."""
     response = {"answers": [], "additional_knowledge": {}}
-    mock_client.messages.create.return_value = _mock_tool_use(response)
+    mock_api_call.return_value = _mock_tool_use(response)
 
     result = _oncologist_respond(
         mock_client, "dx", [], "{}", "claude-sonnet-4-6", cost_tracker,
@@ -112,12 +116,9 @@ def test_oncologist_respond_returns_dict(mock_client, cost_tracker):
 # --- Discovery loop tests ---
 
 
-@patch("modules.discovery.anthropic.Anthropic")
-def test_discovery_loop_converges(mock_cls):
+@patch("modules.discovery.api_call")
+def test_discovery_loop_converges(mock_api_call):
     """Test that loop exits when advocate is satisfied."""
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-
     knowledge = {
         "approved_drugs": [{"name": "selpercatinib"}], "pipeline_drugs": [],
         "landmark_trials": [], "institutional_protocols": [], "side_effects": [],
@@ -136,7 +137,7 @@ def test_discovery_loop_converges(mock_cls):
         "questions": [], "all_satisfied": True,
     }
 
-    mock_client.messages.create.side_effect = [
+    mock_api_call.side_effect = [
         _mock_tool_use(knowledge),
         _mock_tool_use(eval_round1),
         _mock_tool_use(response),
@@ -152,12 +153,9 @@ def test_discovery_loop_converges(mock_cls):
     assert "knowledge_map" in result
 
 
-@patch("modules.discovery.anthropic.Anthropic")
-def test_discovery_loop_respects_max_rounds(mock_cls):
+@patch("modules.discovery.api_call")
+def test_discovery_loop_respects_max_rounds(mock_api_call):
     """Test that loop exits after max rounds even if not satisfied."""
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-
     knowledge = {
         "approved_drugs": [], "pipeline_drugs": [], "landmark_trials": [],
         "institutional_protocols": [], "side_effects": [], "resistance": [],
@@ -173,7 +171,7 @@ def test_discovery_loop_respects_max_rounds(mock_cls):
     for _ in range(5):
         responses.append(_mock_tool_use(never_satisfied))
         responses.append(_mock_tool_use(response))
-    mock_client.messages.create.side_effect = responses
+    mock_api_call.side_effect = responses
 
     ct = CostTracker()
     result = run_discovery("RET fusion NSCLC", "claude-sonnet-4-6", ct, api_key="fake-key", max_rounds=5)
@@ -232,20 +230,21 @@ def test_discovery_without_pre_search_context():
 # --- Conversation history pruning ---
 
 
-def test_advocate_receives_pruned_history(mock_client, cost_tracker):
+@patch("modules.discovery.api_call")
+def test_advocate_receives_pruned_history(mock_api_call, mock_client, cost_tracker):
     """Advocate receives at most last 2 conversation exchanges, not full history."""
     evaluation = {
         "section_scores": {"big-picture": {"score": 9.0, "assessment": "OK"}},
         "questions": [], "all_satisfied": True,
     }
-    mock_client.messages.create.return_value = _mock_tool_use(evaluation)
+    mock_api_call.return_value = _mock_tool_use(evaluation)
 
     long_conversation = [f"exchange {i}" for i in range(5)]
     _advocate_evaluate(
         mock_client, "RET NSCLC", "knowledge text", long_conversation, "claude-sonnet-4-6", cost_tracker
     )
 
-    call_kwargs = mock_client.messages.create.call_args[1]
+    call_kwargs = mock_api_call.call_args[1]
     user_content = call_kwargs["messages"][0]["content"]
     # 3 exchanges omitted, only last 2 included
     assert "3 earlier exchanges omitted" in user_content

@@ -15,7 +15,7 @@ import anthropic
 
 from .cost_tracker import CostTracker
 from .guide_generator import GUIDE_SECTIONS
-from .utils import load_skill_context
+from .utils import api_call, load_skill_context
 
 logger = logging.getLogger(__name__)
 
@@ -195,23 +195,15 @@ Use the submit_evaluation tool to submit your evaluation.
 Set all_satisfied to true ONLY when ALL 15 sections score >= {SECTION_SCORE_THRESHOLD}."""
 
 
-def _oncologist_respond_system(skill_context: str, pre_search_context: str = "") -> str:
-    pre_search_block = ""
-    if pre_search_context:
-        pre_search_block = f"""
-
-=== REAL-WORLD RESEARCH DATA (reference) ===
-{pre_search_context}
-
-"""
-
+def _oncologist_respond_system(skill_context: str) -> str:
     return f"""{skill_context}
-{pre_search_block}
+
 You are responding to specific questions from a patient advocate about a cancer diagnosis.
 The advocate has identified gaps in your clinical knowledge.
 
 Answer EACH question with SPECIFIC data: drug names, percentages, trial names, dates.
 Do NOT give vague answers. If you don't know, say so explicitly.
+Keep each answer concise -- key facts only, no lengthy explanations.
 
 Use the submit_oncologist_response tool to submit your answers.
 The additional_knowledge object should contain any NEW structured data (same format as
@@ -227,7 +219,8 @@ def _oncologist_initial(
 ) -> dict:
     """Round 1: Oncologist generates initial Clinical Knowledge Map using tool use."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
-    message = client.messages.create(
+    message = api_call(
+        client,
         model=model,
         max_tokens=12000,
         system=_oncologist_system(skill_context, pre_search_context=pre_search_context),
@@ -262,7 +255,8 @@ def _advocate_evaluate(
     if history_text:
         content += f"\n\nConversation so far:\n{history_text}"
 
-    message = client.messages.create(
+    message = api_call(
+        client,
         model=model,
         max_tokens=6000,
         system=_advocate_system(skill_context),
@@ -281,16 +275,16 @@ def _oncologist_respond(
     knowledge_text: str,
     model: str,
     cost: CostTracker,
-    pre_search_context: str = "",
 ) -> dict:
     """Oncologist responds to advocate's specific questions using tool use."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
     questions_text = "\n".join(f"{i+1}. {q}" for i, q in enumerate(questions))
 
-    message = client.messages.create(
+    message = api_call(
+        client,
         model=model,
-        max_tokens=8000,
-        system=_oncologist_respond_system(skill_context, pre_search_context=pre_search_context),
+        max_tokens=24000,
+        system=_oncologist_respond_system(skill_context),
         messages=[{
             "role": "user",
             "content": (
@@ -303,6 +297,7 @@ def _oncologist_respond(
         tool_choice={"type": "tool", "name": "submit_oncologist_response"},
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
+    logger.info(f"oncologist_respond: stop_reason={message.stop_reason}, output_tokens={message.usage.output_tokens}")
     return message.content[0].input
 
 
@@ -425,8 +420,7 @@ def run_discovery(
             break
 
         logger.info(f"Discovery Round {round_num}: Oncologist responding to {len(questions)} questions...")
-        response = _oncologist_respond(client, diagnosis, questions, knowledge_text, model, cost,
-                                       pre_search_context=pre_search_context)
+        response = _oncologist_respond(client, diagnosis, questions, knowledge_text, model, cost)
 
         # Merge new knowledge
         additional = response.get("additional_knowledge", {})

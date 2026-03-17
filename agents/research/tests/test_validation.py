@@ -33,12 +33,10 @@ GOOD_ADVOCATE_REVIEW = {
 }
 
 
-@patch("modules.validation.anthropic.Anthropic")
-def test_oncologist_review_uses_tool_call(mock_cls):
+@patch("modules.validation.api_call")
+def test_oncologist_review_uses_tool_call(mock_api_call):
     """validate_guide oncologist call uses tool_choice."""
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-    mock_client.messages.create.side_effect = [
+    mock_api_call.side_effect = [
         _mock_tool_use(GOOD_ONCO_REVIEW),
         _mock_tool_use(GOOD_ADVOCATE_REVIEW),
     ]
@@ -49,16 +47,14 @@ def test_oncologist_review_uses_tool_call(mock_cls):
         knowledge_map={}, api_key="fake-key", model="claude-sonnet-4-6", cost=ct,
     )
 
-    first_call_kwargs = mock_client.messages.create.call_args_list[0][1]
+    first_call_kwargs = mock_api_call.call_args_list[0][1]
     assert first_call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_oncologist_review"}
 
 
-@patch("modules.validation.anthropic.Anthropic")
-def test_advocate_review_uses_tool_call(mock_cls):
+@patch("modules.validation.api_call")
+def test_advocate_review_uses_tool_call(mock_api_call):
     """validate_guide advocate call uses tool_choice."""
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-    mock_client.messages.create.side_effect = [
+    mock_api_call.side_effect = [
         _mock_tool_use(GOOD_ONCO_REVIEW),
         _mock_tool_use(GOOD_ADVOCATE_REVIEW),
     ]
@@ -69,15 +65,13 @@ def test_advocate_review_uses_tool_call(mock_cls):
         knowledge_map={}, api_key="fake-key", model="claude-sonnet-4-6", cost=ct,
     )
 
-    second_call_kwargs = mock_client.messages.create.call_args_list[1][1]
+    second_call_kwargs = mock_api_call.call_args_list[1][1]
     assert second_call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_advocate_review"}
 
 
-@patch("modules.validation.anthropic.Anthropic")
-def test_validation_passes(mock_cls):
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-    mock_client.messages.create.side_effect = [
+@patch("modules.validation.api_call")
+def test_validation_passes(mock_api_call):
+    mock_api_call.side_effect = [
         _mock_tool_use(GOOD_ONCO_REVIEW),
         _mock_tool_use(GOOD_ADVOCATE_REVIEW),
     ]
@@ -95,11 +89,8 @@ def test_validation_passes(mock_cls):
     assert result["missing_keywords"] == []
 
 
-@patch("modules.validation.anthropic.Anthropic")
-def test_validation_finds_gaps(mock_cls):
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-
+@patch("modules.validation.api_call")
+def test_validation_finds_gaps(mock_api_call):
     bad_onco_review = {
         "overall": "NEEDS CORRECTION",
         "accuracy_issues": [{"section": "side-effects", "issue": "Missing hyperglycemia 53%", "severity": "MAJOR"}],
@@ -114,7 +105,7 @@ def test_validation_finds_gaps(mock_cls):
         "passed": False,
         "learnings": [],
     }
-    mock_client.messages.create.side_effect = [
+    mock_api_call.side_effect = [
         _mock_tool_use(bad_onco_review),
         _mock_tool_use(bad_advocate_review),
     ]
@@ -133,12 +124,9 @@ def test_validation_finds_gaps(mock_cls):
     assert len(result["accuracy_issues"]) > 0
 
 
-@patch("modules.validation.anthropic.Anthropic")
-def test_safety_concerns_block_pass(mock_cls):
+@patch("modules.validation.api_call")
+def test_safety_concerns_block_pass(mock_api_call):
     """POTENTIALLY HARMFUL oncologist result forces passed=False."""
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-
     harmful_onco_review = {
         "overall": "POTENTIALLY HARMFUL",
         "accuracy_issues": [],
@@ -146,7 +134,7 @@ def test_safety_concerns_block_pass(mock_cls):
         "safety_concerns": [{"section": "treatment-efficacy", "concern": "Dangerous dosing error"}],
     }
     # Advocate passes, but oncologist found harm
-    mock_client.messages.create.side_effect = [
+    mock_api_call.side_effect = [
         _mock_tool_use(harmful_onco_review),
         _mock_tool_use(GOOD_ADVOCATE_REVIEW),
     ]

@@ -16,12 +16,9 @@ def _mock_tool_use(input_dict):
     return mock_msg
 
 
-@patch("modules.keyword_extractor.anthropic.Anthropic")
-def test_extract_queries_uses_tool_call(mock_cls):
+@patch("modules.keyword_extractor.api_call")
+def test_extract_queries_uses_tool_call(mock_api_call):
     """extract_queries uses tool_choice, guaranteeing structured output."""
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-
     queries_data = {
         "queries": [
             {
@@ -33,7 +30,7 @@ def test_extract_queries_uses_tool_call(mock_cls):
             }
         ]
     }
-    mock_client.messages.create.return_value = _mock_tool_use(queries_data)
+    mock_api_call.return_value = _mock_tool_use(queries_data)
 
     ct = CostTracker()
     result = extract_queries(
@@ -45,17 +42,14 @@ def test_extract_queries_uses_tool_call(mock_cls):
         cost=ct,
     )
 
-    call_kwargs = mock_client.messages.create.call_args[1]
+    call_kwargs = mock_api_call.call_args[1]
     assert call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_queries"}
     assert len(result) == 1
     assert result[0]["query_text"] == "selpercatinib LIBRETTO-001 ORR"
 
 
-@patch("modules.keyword_extractor.anthropic.Anthropic")
-def test_extracts_queries_from_conversation(mock_cls):
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-
+@patch("modules.keyword_extractor.api_call")
+def test_extracts_queries_from_conversation(mock_api_call):
     queries_data = {
         "queries": [
             {"query_text": "selpercatinib ORR phase III", "search_engine": "pubmed",
@@ -64,7 +58,7 @@ def test_extracts_queries_from_conversation(mock_cls):
              "target_section": "pipeline", "language": "en"},
         ]
     }
-    mock_client.messages.create.return_value = _mock_tool_use(queries_data)
+    mock_api_call.return_value = _mock_tool_use(queries_data)
 
     ct = CostTracker()
     result = extract_queries(

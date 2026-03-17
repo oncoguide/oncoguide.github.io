@@ -32,12 +32,10 @@ _SINGLE_SECTION_PLAN = {
 }
 
 
-@patch("modules.guide_generator.anthropic.Anthropic")
-def test_generates_markdown_file(mock_anthropic_cls, tmp_path):
-    mock_client = MagicMock()
-    mock_anthropic_cls.return_value = mock_client
+@patch("modules.guide_generator.api_call")
+def test_generates_markdown_file(mock_api_call, tmp_path):
     # First call = planner (tool use), subsequent calls = section generators (text)
-    mock_client.messages.create.side_effect = [
+    mock_api_call.side_effect = [
         _mock_tool_use(_SINGLE_SECTION_PLAN),
         _mock_text("# Test Guide\n\n## Summary\nTest content"),
     ]
@@ -93,12 +91,10 @@ def test_critical_sections_defined():
     assert len(CRITICAL_SECTIONS) == 4
 
 
-@patch("modules.guide_generator.anthropic.Anthropic")
-def test_section_planner_uses_tool_call(mock_anthropic_cls, tmp_path):
+@patch("modules.guide_generator.api_call")
+def test_section_planner_uses_tool_call(mock_api_call, tmp_path):
     """Section planner must use tool_choice to guarantee structured output."""
-    mock_client = MagicMock()
-    mock_anthropic_cls.return_value = mock_client
-    mock_client.messages.create.side_effect = [
+    mock_api_call.side_effect = [
         _mock_tool_use(_SINGLE_SECTION_PLAN),
         _mock_text(),
     ]
@@ -113,16 +109,13 @@ def test_section_planner_uses_tool_call(mock_anthropic_cls, tmp_path):
         api_key="fake-key",
     )
     # First call is the planner
-    planner_kwargs = mock_client.messages.create.call_args_list[0][1]
+    planner_kwargs = mock_api_call.call_args_list[0][1]
     assert planner_kwargs["tool_choice"] == {"type": "tool", "name": "submit_section_plan"}
 
 
-@patch("modules.guide_generator.anthropic.Anthropic")
-def test_critical_sections_use_sonnet(mock_anthropic_cls, tmp_path):
+@patch("modules.guide_generator.api_call")
+def test_critical_sections_use_sonnet(mock_api_call, tmp_path):
     """Critical sections should be generated with the critical_model (Sonnet), others with Haiku."""
-    mock_client = MagicMock()
-    mock_anthropic_cls.return_value = mock_client
-
     # Track which model is used for each call
     models_used = []
     call_count = [0]
@@ -135,7 +128,7 @@ def test_critical_sections_use_sonnet(mock_anthropic_cls, tmp_path):
         ]
     }
 
-    def track_model(**kwargs):
+    def track_model(client, **kwargs):
         models_used.append(kwargs.get("model", "unknown"))
         call_count[0] += 1
         # First call is planner (tool use), rest are section generators (text)
@@ -143,7 +136,7 @@ def test_critical_sections_use_sonnet(mock_anthropic_cls, tmp_path):
             return _mock_tool_use(planner_sections)
         return _mock_text("Section content here")
 
-    mock_client.messages.create.side_effect = track_model
+    mock_api_call.side_effect = track_model
 
     findings = [
         {"title_english": "F1", "summary_english": "S1",
@@ -166,14 +159,11 @@ def test_critical_sections_use_sonnet(mock_anthropic_cls, tmp_path):
     assert "claude-haiku-4-5-20251001" in models_used, f"Haiku not used. Models: {models_used}"
 
 
-@patch("modules.guide_generator.anthropic.Anthropic")
-def test_cross_verify_report_passed_to_sections(mock_anthropic_cls, tmp_path):
+@patch("modules.guide_generator.api_call")
+def test_cross_verify_report_passed_to_sections(mock_api_call, tmp_path):
     """Cross-verification report should be included in section generation prompts."""
-    mock_client = MagicMock()
-    mock_anthropic_cls.return_value = mock_client
-
     # First call = planner (tool use), second call = section generator (text)
-    mock_client.messages.create.side_effect = [
+    mock_api_call.side_effect = [
         _mock_tool_use(_SINGLE_SECTION_PLAN),
         _mock_text("Section content here"),
     ]
@@ -193,5 +183,5 @@ def test_cross_verify_report_passed_to_sections(mock_anthropic_cls, tmp_path):
     )
 
     # Check that the report text appears in at least one of the section generation calls
-    found = any("CONTRADICTED" in str(c) for c in mock_client.messages.create.call_args_list)
+    found = any("CONTRADICTED" in str(c) for c in mock_api_call.call_args_list)
     assert found, "Cross-verification report not found in any API call"

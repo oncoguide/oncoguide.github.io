@@ -12,7 +12,7 @@ import anthropic
 
 from .cost_tracker import CostTracker
 from .guide_generator import GUIDE_SECTIONS
-from .utils import load_skill_context
+from .utils import api_call, load_skill_context
 
 logger = logging.getLogger(__name__)
 
@@ -168,7 +168,8 @@ def validate_guide(
     logger.info("Validation: Oncologist reviewing accuracy...")
     onco_skill = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
     try:
-        onco_msg = client.messages.create(
+        onco_msg = api_call(
+            client,
             model=model,
             max_tokens=4000,
             system=f"{onco_skill}\n\n{ONCOLOGIST_REVIEW_SYSTEM}",
@@ -198,7 +199,8 @@ def validate_guide(
     logger.info("Validation: Advocate reviewing completeness...")
     adv_skill = load_skill_context(os.path.join(SKILLS_DIR, "patient-advocate.md"))
     try:
-        adv_msg = client.messages.create(
+        adv_msg = api_call(
+            client,
             model=model,
             max_tokens=6000,
             system=f"{adv_skill}\n\n{ADVOCATE_REVIEW_SYSTEM}",

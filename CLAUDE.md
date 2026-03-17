@@ -236,7 +236,7 @@ Each topic in `topics/registry.yaml` follows this pipeline:
 
 **Transitions:**
 - `planned -> researching`: Run `/research` skill or CLI directly
-- `researching -> guide_ready`: Automatic after successful guide generation (lung-ret-fusion: guide_ready as of 2026-03-16)
+- `researching -> guide_ready`: Automatic after successful guide generation (lung-ret-fusion: guide_ready as of 2026-03-17, v5 benchmark run -- see review checklist for 5 safety concerns requiring human correction before drafting)
 - `guide_ready -> drafting`: Manual -- user reads guide + review checklist (`{topic-id}-review.md`), verifies all items, then changes status
 - `drafting -> review`: All 6 language versions complete
 - `review -> published`: `/publish` checklist passes, pushed to GitHub

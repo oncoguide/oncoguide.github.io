@@ -11,6 +11,7 @@ import anthropic
 
 from .cost_tracker import CostTracker
 from .guide_generator import GUIDE_SECTIONS
+from .utils import api_call
 
 logger = logging.getLogger(__name__)
 
@@ -131,7 +132,8 @@ def extract_queries(
     client = anthropic.Anthropic(api_key=api_key)
 
     try:
-        message = client.messages.create(
+        message = api_call(
+            client,
             model=model,
             max_tokens=12000,
             system=SYSTEM_PROMPT,

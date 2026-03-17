@@ -11,7 +11,7 @@ from datetime import datetime
 
 import anthropic
 
-from .utils import extract_domain
+from .utils import api_call, extract_domain
 
 logger = logging.getLogger(__name__)
 
@@ -103,16 +103,34 @@ GUIDE_SECTIONS = [
     },
 ]
 
+SECTION_PLAN_TOOL = {
+    "name": "submit_section_plan",
+    "description": "Submit section-to-findings mapping plan for guide generation",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "sections": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "title": {"type": "string"},
+                        "finding_ids": {"type": "array", "items": {"type": "integer"}},
+                        "priority_claims": {"type": "array", "items": {"type": "string"}},
+                    },
+                    "required": ["id", "title", "finding_ids"],
+                },
+            }
+        },
+        "required": ["sections"],
+    },
+}
+
 PLANNER_SYSTEM = """You are a medical content strategist mapping research findings to a fixed guide structure.
 
 You will receive a list of 15 predefined sections and research findings.
 Your job is to assign finding numbers to each section based on relevance.
-
-Return a JSON array of section objects. Each section must have:
-- "id": the section ID (given to you)
-- "title": the section title (given to you)
-- "description": the section description (given to you)
-- "finding_ids": array of finding numbers [1, 5, 23, ...] most relevant to this section
 
 Rules:
 - Use ALL 15 sections, in the order given
@@ -121,7 +139,7 @@ Rules:
 - Prioritize findings with higher relevance scores
 - Be thorough: scan ALL findings, not just the first few
 
-Return ONLY valid JSON, no markdown, no explanation."""
+Use the submit_section_plan tool to submit your mapping."""
 
 SECTION_SYSTEM = """You are a medical writer creating ONE section of a comprehensive patient guide
 for an oncology education blog (OncoGuide).
@@ -219,7 +237,8 @@ def _plan_sections(
         indent=2,
     )
 
-    message = client.messages.create(
+    message = api_call(
+        client,
         model=model,
         max_tokens=4000,
         system=PLANNER_SYSTEM,
@@ -234,14 +253,11 @@ def _plan_sections(
                 ),
             }
         ],
+        tools=[SECTION_PLAN_TOOL],
+        tool_choice={"type": "tool", "name": "submit_section_plan"},
     )
 
-    raw = message.content[0].text.strip()
-    # Handle markdown code blocks
-    if raw.startswith("```"):
-        raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-
-    sections = json.loads(raw)
+    sections = message.content[0].input["sections"]
     logger.info(f"Mapped findings to {len(sections)} sections for guide")
     return sections
 
@@ -266,7 +282,13 @@ def _generate_section(
             f"{cross_verify_report}\n"
         )
 
-    message = client.messages.create(
+    # Look up description from GUIDE_SECTIONS if not in planner output
+    section_id = section.get("id", "")
+    section_def = next((s for s in GUIDE_SECTIONS if s["id"] == section_id), None)
+    description = section.get("description") or (section_def["description"] if section_def else "")
+
+    message = api_call(
+        client,
         model=model,
         max_tokens=4000,
         system=SECTION_SYSTEM,
@@ -276,7 +298,7 @@ def _generate_section(
                 "content": (
                     f"Topic: {topic_title}\n"
                     f"Section {section_num}: {section['title']}\n"
-                    f"Section scope: {section['description']}\n"
+                    f"Section scope: {description}\n"
                     f"Key finding IDs to use: {section.get('finding_ids', 'all relevant')}\n\n"
                     f"ALL findings (reference by number):\n{findings_text}"
                     f"{cross_verify_block}"
@@ -319,12 +341,9 @@ def generate_guide(
     # Pass 1: Plan sections
     try:
         sections = _plan_sections(client, topic_title, findings_text, len(findings), model)
-    except (json.JSONDecodeError, Exception) as e:
-        logger.error(f"Finding mapping failed: {e}. Using all findings for each section.")
-        all_ids = list(range(1, len(findings) + 1))
-        sections = [
-            {**s, "finding_ids": all_ids} for s in GUIDE_SECTIONS
-        ]
+    except Exception as e:
+        logger.error(f"Finding mapping failed: {e}")
+        raise
 
     # Pass 2: Generate each section (critical sections use Sonnet if available)
     guide_parts = []
