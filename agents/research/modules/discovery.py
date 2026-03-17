@@ -311,6 +311,11 @@ def _oncologist_respond(
         logger.warning("oncologist_respond returned non-JSON, falling back to Haiku structurer")
         result = _haiku_structurer(client, raw_text, questions, cost)
 
+    # Ensure we always return a dict (parse might return a list)
+    if isinstance(result, list):
+        logger.warning("oncologist_respond returned list instead of dict, wrapping")
+        result = {"answers": result, "additional_knowledge": {}}
+
     return result
 
 

@@ -1,5 +1,5 @@
 # OncoGuide Topic Registry
-# Status: planned -> researching -> guide_ready -> drafting -> review -> published
+# Status: planned -> researching -> guide_ready (human review) -> drafting -> review -> published
 
 topics:
 - id: complete-diagnosis-guide
@@ -45,7 +45,7 @@ topics:
   title: Cancer pulmonar RET Fusion-Positive
   type: subtype
   section: cancer-types
-  status: researching
+  status: guide_ready
   priority: 2
   parent: lung-cancer-master
   languages:
@@ -57,7 +57,7 @@ topics:
   - es
   content_file: cancer-types/pulmonar-ret-fusion.md
   created: '2026-03-15'
-  last_researched: '2026-03-15'
+  last_researched: '2026-03-16'
 - id: lung-egfr
   title: Cancer pulmonar EGFR-mutant
   type: subtype
