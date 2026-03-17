@@ -20,6 +20,81 @@ _MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_ROOT = os.path.abspath(os.path.join(_MODULE_DIR, "..", "..", ".."))
 SKILLS_DIR = os.path.join(_PROJECT_ROOT, ".claude", "skills")
 
+ONCOLOGIST_REVIEW_TOOL = {
+    "name": "submit_oncologist_review",
+    "description": "Submit medical accuracy review of the patient guide",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "overall": {
+                "type": "string",
+                "enum": ["ACCURATE", "NEEDS CORRECTION", "POTENTIALLY HARMFUL"],
+            },
+            "accuracy_issues": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "section": {"type": "string"},
+                        "issue": {"type": "string"},
+                        "severity": {"type": "string", "enum": ["CRITICAL", "MAJOR", "MINOR"]},
+                    },
+                    "required": ["section", "issue", "severity"],
+                },
+            },
+            "missing_data": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "section": {"type": "string"},
+                        "what_missing": {"type": "string"},
+                    },
+                    "required": ["section", "what_missing"],
+                },
+            },
+            "safety_concerns": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "section": {"type": "string"},
+                        "concern": {"type": "string"},
+                    },
+                    "required": ["section", "concern"],
+                },
+            },
+        },
+        "required": ["overall", "accuracy_issues", "missing_data", "safety_concerns"],
+    },
+}
+
+ADVOCATE_REVIEW_TOOL = {
+    "name": "submit_advocate_review",
+    "description": "Submit patient-perspective review with section scores",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "passed": {"type": "boolean"},
+            "overall_score": {"type": "number", "minimum": 0, "maximum": 10},
+            "section_scores": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                        "score": {"type": "number"},
+                        "assessment": {"type": "string"},
+                    },
+                    "required": ["score", "assessment"],
+                },
+            },
+            "missing_keywords": {"type": "array", "items": {"type": "string"}},
+            "learnings": {"type": "array", "items": {"type": "string"}},
+        },
+        "required": ["passed", "overall_score", "section_scores", "missing_keywords", "learnings"],
+    },
+}
+
 ONCOLOGIST_REVIEW_SYSTEM = """You are an experienced oncologist reviewing a patient education guide for medical accuracy.
 
 You will receive:
@@ -32,20 +107,8 @@ Review EVERY section for:
 - Safety: Could any statement lead to harmful patient decisions?
 - Currency: Are there outdated claims?
 
-Return JSON:
-{
-  "accuracy_issues": [
-    {"section": "section-id", "issue": "description", "severity": "critical|major|minor"}
-  ],
-  "missing_data": [
-    {"section": "section-id", "what_missing": "description"}
-  ],
-  "safety_concerns": ["any safety issue"],
-  "overall": "ACCURATE|NEEDS CORRECTION|POTENTIALLY HARMFUL"
-}
-
-Be thorough. A patient will make treatment decisions based on this guide.
-Return ONLY valid JSON."""
+Use the submit_oncologist_review tool to submit your review.
+Be thorough. A patient will make treatment decisions based on this guide."""
 
 
 ADVOCATE_REVIEW_SYSTEM = """You are a patient advocate reviewing a completed guide for YOUR diagnosis.
@@ -60,30 +123,8 @@ Score EACH of the 15 sections 1-10:
 For any section scoring below 8.5, identify SPECIFIC missing information as search keywords
 that could fill the gaps.
 
-Return JSON:
-{
-  "section_scores": {
-    "section-id": {"score": N, "assessment": "brief reason", "gaps": ["specific gap"]}
-  },
-  "missing_keywords": ["search query 1 to find missing data", "search query 2"],
-  "overall_score": N,
-  "passed": true/false,
-  "learnings": ["anything learned about this diagnosis that should inform future runs"]
-}
-
-Set passed=true ONLY if ALL sections score >= 8.5.
-Return ONLY valid JSON."""
-
-
-def _parse_json(raw: str, label: str) -> dict:
-    text = raw.strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError as e:
-        logger.error(f"{label}: JSON parse failed: {e}")
-        return {}
+Use the submit_advocate_review tool to submit your review.
+Set passed=true ONLY if ALL sections score >= 8.5."""
 
 
 def validate_guide(
@@ -109,6 +150,7 @@ def validate_guide(
             "passed": bool,
             "overall_score": float,
             "accuracy_issues": list,
+            "safety_concerns": list,
             "missing_keywords": list[str],
             "section_scores": dict,
             "learnings": list[str],
@@ -117,7 +159,7 @@ def validate_guide(
     if not api_key:
         logger.warning("No API key for validation")
         return {"passed": False, "overall_score": 0, "accuracy_issues": [],
-                "missing_keywords": [], "section_scores": {}, "learnings": []}
+                "safety_concerns": [], "missing_keywords": [], "section_scores": {}, "learnings": []}
 
     client = anthropic.Anthropic(api_key=api_key)
     knowledge_text = json.dumps(knowledge_map, indent=2)
@@ -138,9 +180,16 @@ def validate_guide(
                     f"=== GUIDE TO REVIEW ===\n{guide_text}"
                 ),
             }],
+            tools=[ONCOLOGIST_REVIEW_TOOL],
+            tool_choice={"type": "tool", "name": "submit_oncologist_review"},
         )
         cost.track(model, onco_msg.usage.input_tokens, onco_msg.usage.output_tokens)
-        onco_review = _parse_json(onco_msg.content[0].text, "oncologist_review")
+        onco_review = onco_msg.content[0].input
+
+        if onco_review.get("safety_concerns"):
+            logger.warning(f"SAFETY CONCERNS in validation: {onco_review['safety_concerns']}")
+            print(f"  [SAFETY] {len(onco_review['safety_concerns'])} safety concern(s) found -- see review checklist")
+
     except Exception as e:
         logger.error(f"Oncologist review failed: {e}")
         onco_review = {}
@@ -160,9 +209,11 @@ def validate_guide(
                     f"=== GUIDE TO REVIEW ===\n{guide_text}"
                 ),
             }],
+            tools=[ADVOCATE_REVIEW_TOOL],
+            tool_choice={"type": "tool", "name": "submit_advocate_review"},
         )
         cost.track(model, adv_msg.usage.input_tokens, adv_msg.usage.output_tokens)
-        adv_review = _parse_json(adv_msg.content[0].text, "advocate_review")
+        adv_review = adv_msg.content[0].input
     except Exception as e:
         logger.error(f"Advocate review failed: {e}")
         adv_review = {}
