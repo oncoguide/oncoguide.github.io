@@ -245,7 +245,7 @@ def _haiku_structurer(
 
     message = client.messages.create(
         model=haiku_model,
-        max_tokens=4000,
+        max_tokens=8000,
         messages=[{
             "role": "user",
             "content": (
@@ -447,10 +447,13 @@ def run_discovery(
             knowledge_map = _merge_knowledge(knowledge_map, additional)
             knowledge_text = json.dumps(knowledge_map, indent=2)
 
-        conversation.append(
-            f"ONCOLOGIST (round {round_num} response):\n"
-            f"{json.dumps(response.get('answers', []), indent=2)}"
-        )
+        if response:
+            conversation.append(
+                f"ONCOLOGIST (round {round_num} response):\n"
+                f"{json.dumps(response.get('answers', []), indent=2)}"
+            )
+        else:
+            logger.warning(f"Discovery Round {round_num}: oncologist response empty, skipping conversation update")
 
     logger.warning(f"Discovery did not converge after {max_rounds} rounds")
     return {
