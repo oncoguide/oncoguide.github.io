@@ -27,6 +27,91 @@ _MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_ROOT = os.path.abspath(os.path.join(_MODULE_DIR, "..", "..", ".."))
 SKILLS_DIR = os.path.join(_PROJECT_ROOT, ".claude", "skills")
 
+# --- Tool schemas (API-enforced structured output) ---
+
+ONCOLOGIST_INITIAL_TOOL = {
+    "name": "submit_knowledge_map",
+    "description": "Submit the complete Clinical Knowledge Map for this cancer diagnosis",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "approved_drugs": {"type": "array", "items": {"type": "object"}},
+            "pipeline_drugs": {"type": "array", "items": {"type": "object"}},
+            "landmark_trials": {"type": "array", "items": {"type": "object"}},
+            "institutional_protocols": {"type": "array", "items": {"type": "object"}},
+            "side_effects": {"type": "array", "items": {"type": "object"}},
+            "resistance": {"type": "array", "items": {"type": "object"}},
+            "guidelines": {"type": "array", "items": {"type": "object"}},
+            "testing": {"type": "array", "items": {"type": "object"}},
+        },
+        "required": [
+            "approved_drugs", "pipeline_drugs", "landmark_trials",
+            "institutional_protocols", "side_effects", "resistance",
+            "guidelines", "testing",
+        ],
+    },
+}
+
+ONCOLOGIST_RESPOND_TOOL = {
+    "name": "submit_oncologist_response",
+    "description": "Submit answers to the patient advocate's questions with updated clinical knowledge",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "answers": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "question": {"type": "string"},
+                        "answer": {"type": "string"},
+                    },
+                    "required": ["question", "answer"],
+                },
+            },
+            "additional_knowledge": {
+                "type": "object",
+                "properties": {
+                    "approved_drugs": {"type": "array", "items": {"type": "object"}},
+                    "pipeline_drugs": {"type": "array", "items": {"type": "object"}},
+                    "landmark_trials": {"type": "array", "items": {"type": "object"}},
+                    "institutional_protocols": {"type": "array", "items": {"type": "object"}},
+                    "side_effects": {"type": "array", "items": {"type": "object"}},
+                    "resistance": {"type": "array", "items": {"type": "object"}},
+                    "guidelines": {"type": "array", "items": {"type": "object"}},
+                    "testing": {"type": "array", "items": {"type": "object"}},
+                },
+            },
+        },
+        "required": ["answers", "additional_knowledge"],
+    },
+}
+
+ADVOCATE_EVAL_TOOL = {
+    "name": "submit_evaluation",
+    "description": "Submit evaluation of the oncologist's knowledge with section scores and questions",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "section_scores": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                        "score": {"type": "number"},
+                        "assessment": {"type": "string"},
+                    },
+                    "required": ["score", "assessment"],
+                },
+            },
+            "questions": {"type": "array", "items": {"type": "string"}},
+            "all_satisfied": {"type": "boolean"},
+        },
+        "required": ["section_scores", "questions", "all_satisfied"],
+    },
+}
+
+
 # --- Sections summary for prompts ---
 
 
@@ -70,9 +155,9 @@ Think like you are preparing a tumor board presentation. You need EVERYTHING:
 7. GUIDELINES: Current ESMO and NCCN recommendations AND differences.
 8. TESTING: Required molecular tests, methods, turnaround times.
 
-Return as structured JSON with keys: approved_drugs, pipeline_drugs, landmark_trials, institutional_protocols, side_effects, resistance, guidelines, testing.
-
-Be EXHAUSTIVE. Missing a drug or trial means a patient might not learn about their best option. Keep values short -- abbreviations, no long sentences. Return ONLY valid JSON."""
+Use the submit_knowledge_map tool to submit your complete findings.
+Be EXHAUSTIVE. Missing a drug or trial means a patient might not learn about their best option.
+Keep values short -- abbreviations, no long sentences."""
 
 
 def _advocate_system(skill_context: str) -> str:
@@ -106,17 +191,8 @@ YOUR JOB:
 
 5. Challenge the pipeline section HARD: is EVERY drug listed by name?
 
-Return JSON:
-{{
-  "section_scores": {{
-    "section-id": {{"score": N, "assessment": "brief reason"}}
-  }},
-  "questions": ["specific question 1", "specific question 2"],
-  "all_satisfied": true/false
-}}
-
-Set all_satisfied to true ONLY when ALL 15 sections score >= {SECTION_SCORE_THRESHOLD}.
-Return ONLY valid JSON."""
+Use the submit_evaluation tool to submit your evaluation.
+Set all_satisfied to true ONLY when ALL 15 sections score >= {SECTION_SCORE_THRESHOLD}."""
 
 
 def _oncologist_respond_system(skill_context: str, pre_search_context: str = "") -> str:
@@ -137,56 +213,19 @@ The advocate has identified gaps in your clinical knowledge.
 Answer EACH question with SPECIFIC data: drug names, percentages, trial names, dates.
 Do NOT give vague answers. If you don't know, say so explicitly.
 
-Return JSON:
-{{
-  "answers": [
-    {{"question": "the question", "answer": "detailed answer with specific data"}}
-  ],
-  "additional_knowledge": {{}}
-}}
-
+Use the submit_oncologist_response tool to submit your answers.
 The additional_knowledge object should contain any NEW structured data (same format as
-the original knowledge map: approved_drugs, pipeline_drugs, etc.) that was missing before.
-
-Return ONLY valid JSON."""
+the original knowledge map: approved_drugs, pipeline_drugs, etc.) that was missing before."""
 
 
 # --- Round functions ---
-
-
-def _parse_json(raw: str, label: str) -> dict | list:
-    """Parse JSON, stripping markdown fences and surrounding text if present."""
-    text = raw.strip()
-    # Strip markdown code fences
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        pass
-
-    # Fallback: find the first { or [ and extract the JSON object/array
-    for start_char, end_char in [("{", "}"), ("[", "]")]:
-        start = text.find(start_char)
-        if start == -1:
-            continue
-        end = text.rfind(end_char)
-        if end > start:
-            try:
-                return json.loads(text[start:end + 1])
-            except json.JSONDecodeError:
-                continue
-
-    logger.error(f"{label}: JSON parse failed, no valid JSON found in response")
-    logger.debug(f"{label} raw output: {text[:500]}")
-    return {}
 
 
 def _oncologist_initial(
     client: anthropic.Anthropic, diagnosis: str, model: str, cost: CostTracker,
     pre_search_context: str = "",
 ) -> dict:
-    """Round 1: Oncologist generates initial Clinical Knowledge Map."""
+    """Round 1: Oncologist generates initial Clinical Knowledge Map using tool use."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
     message = client.messages.create(
         model=model,
@@ -194,13 +233,13 @@ def _oncologist_initial(
         system=_oncologist_system(skill_context, pre_search_context=pre_search_context),
         messages=[{"role": "user", "content": (
             f"Diagnosis: {diagnosis}\n\n"
-            f"Generate the complete Clinical Knowledge Map.\n\n"
-            f"CRITICAL: Your ENTIRE response must be a single JSON object. "
-            f"No text before or after. No markdown fences. Just the JSON."
+            f"Generate the complete Clinical Knowledge Map."
         )}],
+        tools=[ONCOLOGIST_INITIAL_TOOL],
+        tool_choice={"type": "tool", "name": "submit_knowledge_map"},
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
-    return _parse_json(message.content[0].text, "oncologist_initial")
+    return message.content[0].input
 
 
 def _advocate_evaluate(
@@ -213,7 +252,11 @@ def _advocate_evaluate(
 ) -> dict:
     """Advocate evaluates current knowledge, scores sections, asks questions."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "patient-advocate.md"))
-    history_text = "\n\n---\n\n".join(conversation_history) if conversation_history else ""
+    # Keep only last 2 exchanges to prevent O(n^2) token growth
+    recent_history = conversation_history[-2:] if len(conversation_history) > 2 else conversation_history
+    history_text = "\n\n---\n\n".join(recent_history) if recent_history else ""
+    if len(conversation_history) > 2:
+        history_text = f"[{len(conversation_history)-2} earlier exchanges omitted]\n\n" + history_text
 
     content = f"Diagnosis: {diagnosis}\n\nClinical Knowledge:\n{knowledge_text}"
     if history_text:
@@ -224,51 +267,11 @@ def _advocate_evaluate(
         max_tokens=6000,
         system=_advocate_system(skill_context),
         messages=[{"role": "user", "content": content}],
+        tools=[ADVOCATE_EVAL_TOOL],
+        tool_choice={"type": "tool", "name": "submit_evaluation"},
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
-    return _parse_json(message.content[0].text, "advocate_evaluate")
-
-
-def _haiku_structurer(
-    client: anthropic.Anthropic,
-    raw_text: str,
-    questions: list[str],
-    cost: CostTracker,
-) -> dict:
-    """Use Haiku to extract structured JSON from Sonnet's narrative response.
-
-    Sonnet often responds to medical Q&A with prose instead of JSON.
-    Haiku follows JSON formatting instructions much more reliably (~$0.002/call).
-    """
-    haiku_model = "claude-haiku-4-5-20251001"
-    questions_json = json.dumps(questions)
-
-    message = client.messages.create(
-        model=haiku_model,
-        max_tokens=8000,
-        messages=[{
-            "role": "user",
-            "content": (
-                f"Extract the answers from the following medical text into JSON.\n\n"
-                f"The text is a response to these questions:\n{questions_json}\n\n"
-                f"---TEXT START---\n{raw_text}\n---TEXT END---\n\n"
-                f"Return ONLY this JSON structure (no other text):\n"
-                f'{{"answers": [{{"question": "the question", "answer": "the answer from the text"}}], '
-                f'"additional_knowledge": {{"approved_drugs": [], "pipeline_drugs": [], '
-                f'"landmark_trials": [], "side_effects": [], "resistance": [], '
-                f'"guidelines": [], "testing": []}}}}\n\n'
-                f"Fill additional_knowledge with any structured data found in the text. "
-                f"Use empty arrays for categories with no data. Return ONLY valid JSON."
-            ),
-        }],
-    )
-    cost.track(haiku_model, message.usage.input_tokens, message.usage.output_tokens)
-    result = _parse_json(message.content[0].text, "haiku_structurer")
-    if result:
-        logger.info("Haiku structurer successfully extracted JSON from narrative text")
-    else:
-        logger.error("Haiku structurer also failed to produce valid JSON")
-    return result
+    return message.content[0].input
 
 
 def _oncologist_respond(
@@ -280,10 +283,7 @@ def _oncologist_respond(
     cost: CostTracker,
     pre_search_context: str = "",
 ) -> dict:
-    """Oncologist responds to advocate's specific questions.
-
-    Uses Haiku structurer fallback if Sonnet returns narrative instead of JSON.
-    """
+    """Oncologist responds to advocate's specific questions using tool use."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
     questions_text = "\n".join(f"{i+1}. {q}" for i, q in enumerate(questions))
 
@@ -296,27 +296,14 @@ def _oncologist_respond(
             "content": (
                 f"Diagnosis: {diagnosis}\n\n"
                 f"Your previous knowledge:\n{knowledge_text}\n\n"
-                f"Patient advocate's questions:\n{questions_text}\n\n"
-                f"CRITICAL: Your ENTIRE response must be a single JSON object. "
-                f"No text before or after. No markdown fences. Just the JSON."
+                f"Patient advocate's questions:\n{questions_text}"
             ),
         }],
+        tools=[ONCOLOGIST_RESPOND_TOOL],
+        tool_choice={"type": "tool", "name": "submit_oncologist_response"},
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
-    raw_text = message.content[0].text
-    result = _parse_json(raw_text, "oncologist_respond")
-
-    # Fallback: if Sonnet returned narrative prose instead of JSON, use Haiku to structure it
-    if not result:
-        logger.warning("oncologist_respond returned non-JSON, falling back to Haiku structurer")
-        result = _haiku_structurer(client, raw_text, questions, cost)
-
-    # Ensure we always return a dict (parse might return a list)
-    if isinstance(result, list):
-        logger.warning("oncologist_respond returned list instead of dict, wrapping")
-        result = {"answers": result, "additional_knowledge": {}}
-
-    return result
+    return message.content[0].input
 
 
 def _merge_knowledge(base: dict, additional: dict) -> dict:
