@@ -33,4 +33,4 @@ TocOpen: false
 
 ---
 
-{{</* disclaimer /*/>}}
+{{</* disclaimer */>}}{{</* /disclaimer */>}}

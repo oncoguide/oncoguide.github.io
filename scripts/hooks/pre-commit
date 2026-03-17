@@ -69,6 +69,21 @@ check_dep "topics/registry.yaml" "CLAUDE.md" \
 check_dep "hugo.yaml" "CLAUDE.md" \
     "File Structure section must reflect language/menu changes"
 
+# --- Personal data scan ---
+SENSITIVE_PATTERNS="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+STAGED_TEXT=$(git diff --cached --name-only | grep -v "^topics/" | grep -v "tests/" | xargs grep -lE "$SENSITIVE_PATTERNS" 2>/dev/null || true)
+if [ -n "$STAGED_TEXT" ]; then
+    echo ""
+    echo "================================================"
+    echo "  SECURITY: possible email address in staged files"
+    echo "================================================"
+    echo "$STAGED_TEXT"
+    echo "Review these files before committing."
+    echo "If intentional (e.g., iCloud relay), add # nosec inline comment."
+    echo "================================================"
+    exit 1
+fi
+
 # --- Block if missing ---
 
 if [ -n "$WARNINGS" ]; then

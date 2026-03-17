@@ -2,11 +2,15 @@ import os
 import pytest
 
 
-def test_load_config_from_file(tmp_path):
+def test_load_config_from_file(tmp_path, monkeypatch):
     import json
     cfg_path = str(tmp_path / "config.json")
     with open(cfg_path, "w") as f:
         json.dump({"serper_api_key": "test", "anthropic_api_key": "test", "pubmed_email": "test@test.com"}, f)
+    # Unset all env vars that would override file values
+    monkeypatch.delenv("SERPER_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("PUBMED_EMAIL", raising=False)
 
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -36,6 +40,7 @@ def test_load_config_env_overrides_file(tmp_path, monkeypatch):
     with open(cfg_path, "w") as f:
         json.dump({"serper_api_key": "from-file", "anthropic_api_key": "from-file", "pubmed_email": "file@test.com"}, f)
     monkeypatch.setenv("SERPER_API_KEY", "from-env")
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)  # ensure file value used when env not set
 
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
