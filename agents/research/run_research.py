@@ -179,7 +179,7 @@ def cmd_list_topics(registry_path: str):
 
 
 def _search_and_enrich(queries, topic_id, topic_title, cfg, db, run_id,
-                       date_from=None, date_to=None, label=""):
+                       date_from=None, date_to=None, label="", cost=None):
     """Execute search + enrichment for a batch of queries. Returns stats dict."""
     stats = {"queries_total": 0, "raw_results": 0, "after_dedup": 0,
              "after_enrichment": 0, "discarded": 0}
@@ -213,6 +213,7 @@ def _search_and_enrich(queries, topic_id, topic_title, cfg, db, run_id,
 
         except Exception as e:
             logger.error(f"Search failed: {engine} '{q['query_text']}': {e}")
+            print(f"  [ERROR] Search failed [{engine}] '{q['query_text'][:50]}': {e}")
             db.log_search(run_id, q["query_text"], engine, q.get("language", "en"),
                          0, 0, "error", str(e))
 
@@ -230,6 +231,7 @@ def _search_and_enrich(queries, topic_id, topic_title, cfg, db, run_id,
             cfg.get("enrichment_model", "claude-haiku-4-5-20251001"),
             cfg.get("delay_between_enrichments", 0.3),
             progress_callback=lambda cur, tot: print(f"  {cur}/{tot}", end="\r"),
+            cost=cost,
         )
         print()
 
@@ -418,6 +420,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     # Phase 1: Discovery loop (Sonnet)
     discovery_model = cfg.get("discovery_model", "claude-sonnet-4-6")
     print(f"Phase 1: Discovery loop (max {cfg.get('max_discovery_rounds', 5)} rounds)...")
+    t0 = time.time()
     discovery = run_discovery(
         diagnosis=diagnosis,
         model=discovery_model,
@@ -426,7 +429,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         max_rounds=cfg.get("max_discovery_rounds", 5),
         pre_search_context=pre_context,
     )
-    print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']}")
+    print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']} ({time.time()-t0:.0f}s)")
     if not discovery.get("knowledge_map") or len(discovery["knowledge_map"]) < 3:
         _abort("discovery", f"knowledge_map empty or too small: {list(discovery.get('knowledge_map', {}).keys())}")
     if discovery.get("section_scores"):
@@ -437,6 +440,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
 
     # Phase 2: Keyword extraction (Sonnet)
     print("Phase 2: Extracting search queries from discovery...")
+    t0 = time.time()
     queries = extract_queries(
         diagnosis=diagnosis,
         conversation=discovery["conversation"],
@@ -445,7 +449,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         model=discovery_model,
         cost=cost,
     )
-    print(f"  Extracted {len(queries)} precision queries")
+    print(f"  Extracted {len(queries)} precision queries ({time.time()-t0:.0f}s)")
     if len(queries) < 10:
         _abort("keyword_extraction", f"only {len(queries)} queries extracted, expected >= 10")
 
@@ -469,10 +473,12 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         save_registry(topics, registry_path)
 
     print("Phase 3: Search round 1...")
+    t0 = time.time()
     stats_r1 = _search_and_enrich(
         queries, topic_id, diagnosis, cfg, db, run_id,
-        date_from=date_from, date_to=date_to, label="Round 1 -- ",
+        date_from=date_from, date_to=date_to, label="Round 1 -- ", cost=cost,
     )
+    print(f"  Round 1 done ({time.time()-t0:.0f}s)")
     total_findings = db.count_findings(topic_id)
     if total_findings < 20:
         _abort("search_round_1", f"only {total_findings} findings in DB, expected >= 20. Check API keys and search backends.")
@@ -487,12 +493,13 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
             diagnosis, findings_so_far, GUIDE_SECTIONS,
             cfg["anthropic_api_key"],
             cfg.get("query_expansion_model", "claude-haiku-4-5-20251001"),
+            cost=cost,
         )
         if gap_queries:
             print(f"  {len(gap_queries)} gap-filling queries for round 2")
             stats_r2 = _search_and_enrich(
                 gap_queries, topic_id, diagnosis, cfg, db, run_id,
-                date_from=date_from, date_to=date_to, label="Round 2 -- ",
+                date_from=date_from, date_to=date_to, label="Round 2 -- ", cost=cost,
             )
 
     # Phase 5: Cross-verification (Haiku)
@@ -575,6 +582,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
                 _search_and_enrich(
                     targeted_queries, topic_id, diagnosis, cfg, db, run_id,
                     date_from=date_from, date_to=date_to, label=f"Validation R{val_round} -- ",
+                    cost=cost,
                 )
 
                 # Regenerate guide with new findings

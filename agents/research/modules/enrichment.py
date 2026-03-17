@@ -2,8 +2,11 @@
 
 import logging
 import time
+from typing import Optional
 
 import anthropic
+
+from .cost_tracker import CostTracker
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +68,7 @@ def enrich_finding(
     topic_title: str,
     api_key: str,
     model: str = "claude-haiku-4-5-20251001",
+    cost: Optional[CostTracker] = None,
 ) -> dict:
     """Classify a single finding. Returns dict with relevant, relevance_score, etc."""
     try:
@@ -91,6 +95,8 @@ def enrich_finding(
         )
         _token_usage["input"] += message.usage.input_tokens
         _token_usage["output"] += message.usage.output_tokens
+        if cost:
+            cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
         return message.content[0].input
 
     except Exception as e:
@@ -106,11 +112,12 @@ def enrich_batch(
     model: str = "claude-haiku-4-5-20251001",
     delay: float = 0.3,
     progress_callback=None,
+    cost: Optional[CostTracker] = None,
 ) -> list[dict]:
     """Enrich a batch of findings. Returns list of enrichment results."""
     results = []
     for i, finding in enumerate(findings):
-        result = enrich_finding(finding, topic_title, api_key, model)
+        result = enrich_finding(finding, topic_title, api_key, model, cost=cost)
         results.append(result)
         if progress_callback:
             progress_callback(i + 1, len(findings))

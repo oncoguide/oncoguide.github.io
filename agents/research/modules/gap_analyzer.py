@@ -2,8 +2,11 @@
 
 import json
 import logging
+from typing import Optional
 
 import anthropic
+
+from .cost_tracker import CostTracker
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +80,7 @@ Use the submit_gap_queries tool. If ALL sections are well-covered, submit an emp
 def _map_findings_to_sections(
     findings: list[dict], sections: list[dict],
     client: anthropic.Anthropic, model: str,
+    cost: Optional[CostTracker] = None,
 ) -> dict:
     """Quick mapping of existing findings to sections for gap analysis."""
     finding_summaries = []
@@ -109,6 +113,8 @@ def _map_findings_to_sections(
         tool_choice={"type": "tool", "name": "submit_section_map"},
     )
 
+    if cost:
+        cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
     return message.content[0].input["section_map"]
 
 
@@ -118,6 +124,7 @@ def analyze_gaps(
     sections: list[dict],
     api_key: str,
     model: str = "claude-haiku-4-5-20251001",
+    cost: Optional[CostTracker] = None,
 ) -> list[dict]:
     """Analyze coverage gaps and return targeted queries to fill them.
 
@@ -137,7 +144,7 @@ def analyze_gaps(
     client = anthropic.Anthropic(api_key=api_key)
 
     # Step 1: Map findings to sections
-    section_map = _map_findings_to_sections(findings, sections, client, model)
+    section_map = _map_findings_to_sections(findings, sections, client, model, cost=cost)
 
     # Step 2: Build coverage summary for gap analyzer
     coverage_lines = []
@@ -185,6 +192,8 @@ def analyze_gaps(
             tool_choice={"type": "tool", "name": "submit_gap_queries"},
         )
 
+        if cost:
+            cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
         gap_queries_raw = message.content[0].input["queries"]
 
         # Normalize field names (section_id -> target_section for downstream compatibility)
