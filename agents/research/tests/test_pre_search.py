@@ -53,19 +53,46 @@ def test_template_different_diagnosis():
 # --- Haiku complement queries ---
 
 
+def _mock_tool_use(input_dict):
+    from unittest.mock import Mock
+    mock_tool = Mock()
+    mock_tool.type = "tool_use"
+    mock_tool.input = input_dict
+    mock_msg = Mock()
+    mock_msg.content = [mock_tool]
+    mock_msg.usage = Mock(input_tokens=1000, output_tokens=500)
+    return mock_msg
+
+
+@patch("modules.pre_search.anthropic.Anthropic")
+def test_haiku_queries_uses_tool_call(mock_cls):
+    """generate_haiku_queries uses tool_choice, guaranteeing structured output."""
+    mock_client = MagicMock()
+    mock_cls.return_value = mock_client
+    mock_client.messages.create.return_value = _mock_tool_use({
+        "queries": [
+            {"query_text": "selpercatinib LIBRETTO-431 PFS", "search_engine": "pubmed"},
+        ]
+    })
+
+    ct = CostTracker()
+    templates = generate_template_queries("RET fusion NSCLC")
+    generate_haiku_queries("RET fusion NSCLC", templates, "fake-key", ct)
+
+    call_kwargs = mock_client.messages.create.call_args[1]
+    assert call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_haiku_queries"}
+
+
 @patch("modules.pre_search.anthropic.Anthropic")
 def test_haiku_queries_complement(mock_cls):
     mock_client = MagicMock()
     mock_cls.return_value = mock_client
-
-    haiku_queries = [
-        {"query_text": "selpercatinib LIBRETTO-431 PFS", "search_engine": "pubmed"},
-        {"query_text": "LOXO-260 RET phase I Lilly", "search_engine": "serper"},
-    ]
-    mock_client.messages.create.return_value = MagicMock(
-        content=[MagicMock(text=json.dumps(haiku_queries))],
-        usage=MagicMock(input_tokens=1000, output_tokens=500),
-    )
+    mock_client.messages.create.return_value = _mock_tool_use({
+        "queries": [
+            {"query_text": "selpercatinib LIBRETTO-431 PFS", "search_engine": "pubmed"},
+            {"query_text": "LOXO-260 RET phase I Lilly", "search_engine": "serper"},
+        ]
+    })
 
     ct = CostTracker()
     templates = generate_template_queries("RET fusion NSCLC")
@@ -80,23 +107,6 @@ def test_haiku_queries_no_api_key():
     templates = generate_template_queries("RET fusion NSCLC")
     result = generate_haiku_queries("RET fusion NSCLC", templates, "", ct)
     assert result == []
-
-
-@patch("modules.pre_search.anthropic.Anthropic")
-def test_haiku_queries_strips_markdown_fences(mock_cls):
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-
-    haiku_queries = [{"query_text": "test query", "search_engine": "pubmed"}]
-    mock_client.messages.create.return_value = MagicMock(
-        content=[MagicMock(text=f"```json\n{json.dumps(haiku_queries)}\n```")],
-        usage=MagicMock(input_tokens=500, output_tokens=300),
-    )
-
-    ct = CostTracker()
-    templates = generate_template_queries("RET fusion NSCLC")
-    result = generate_haiku_queries("RET fusion NSCLC", templates, "fake-key", ct)
-    assert len(result) == 1
 
 
 # --- Format findings ---

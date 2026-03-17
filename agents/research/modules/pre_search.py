@@ -70,6 +70,32 @@ def generate_template_queries(diagnosis: str) -> list[dict]:
     return queries
 
 
+HAIKU_QUERIES_TOOL = {
+    "name": "submit_haiku_queries",
+    "description": "Submit AI-generated complement search queries for pre-search phase",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "queries": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "query_text": {"type": "string"},
+                        "search_engine": {
+                            "type": "string",
+                            "enum": ["pubmed", "serper", "clinicaltrials", "openfda", "civic"],
+                        },
+                        "language": {"type": "string"},
+                    },
+                    "required": ["query_text", "search_engine"],
+                },
+            }
+        },
+        "required": ["queries"],
+    },
+}
+
 HAIKU_SYSTEM = """You are a medical research query specialist.
 
 Given a cancer diagnosis and a list of existing template queries, generate 20 COMPLEMENTARY
@@ -88,10 +114,7 @@ For each query, specify the best search backend:
 - "serper" for news, approvals, access, patient resources
 - "clinicaltrials" for recruiting trials (use condition + drug name)
 
-Return JSON array:
-[{"query_text": "...", "search_engine": "pubmed|serper|clinicaltrials"}]
-
-Return ONLY the JSON array. No duplicates with existing templates."""
+Use the submit_haiku_queries tool. No duplicates with existing templates."""
 
 
 def generate_haiku_queries(
@@ -118,14 +141,12 @@ def generate_haiku_queries(
                 "role": "user",
                 "content": f"Diagnosis: {diagnosis}\n\nExisting template queries:\n{templates_text}",
             }],
+            tools=[HAIKU_QUERIES_TOOL],
+            tool_choice={"type": "tool", "name": "submit_haiku_queries"},
         )
         cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
 
-        raw = message.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-
-        queries = json.loads(raw)
+        queries = message.content[0].input["queries"]
         for q in queries:
             q.setdefault("language", "en")
         logger.info(f"Haiku generated {len(queries)} complement queries")
