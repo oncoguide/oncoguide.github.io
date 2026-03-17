@@ -540,4 +540,14 @@ decisions:
       - "Instructiuni mai puternice in system prompt -- deja maxim, tot nu functioneaza"
       - "Retry cu mesaj diferit -- costa dublu, nu garanteaza succes"
       - "Renuntare la JSON ptr oncologist_respond, parse text liber -- pierde structura"
-    outcome: "BUG CRITIC NEREPARAT. Propuneri de fix: (1) Forteaza raspunsul structurat prin furnizarea unui JSON template in user message cu campuri goale de completat, (2) Daca Sonnet returneaza narativ, extrage raspunsurile cu un Haiku call rapid care structureaza textul in JSON (cost: ~$0.002), (3) Schimba abordarea: oncologist_respond sa nu ceara JSON ci sa ceara text structurat cu delimitatori clari (### Question 1: ...) si parseaza manual. Optiunea 2 (Haiku structurator) e cea mai robusta -- Haiku urmeaza instructiuni JSON mult mai bine decat Sonnet."
+    outcome: "BUG CRITIC NEREPARAT. Propuneri de fix: (1) Forteaza raspunsul structurat prin furnizarea unui JSON template in user message cu campuri goale de completat, (2) Daca Sonnet returneaza narativ, extrage raspunsurile cu un Haiku call rapid care structureaza textul in JSON (cost: ~$0.002), (3) Schimba abordarea: oncologist_respond sa nu ceara JSON ci sa ceara text structurat cu delimitatori clari (### Question 1: ...) si parseaza manual. Optiunea 2 (Haiku structurator) e cea mai robusta -- Haiku urmeaza instructiuni JSON mult mai bine decat Sonnet. REZOLVAT in Plan 1 (2026-03-17): toate cele 8 module AI folosesc acum tool_choice=forced -- JSON parsing eliminat complet."
+
+  - id: 55
+    date: "2026-03-17"
+    category: "technical"
+    summary: "Plan 1 pipeline-stabilization completat: tool_choice fortat in toate 8 module AI"
+    context: "Problema critica: JSON parsing fragil in 8 module (discovery, keyword_extractor, enrichment, gap_analyzer, cross_verify, validation, pre_search, guide_generator). Sonnet returna narativ in loc de JSON. Pipeline se bloca frecvent."
+    alternatives_considered:
+      - "Retry loop cu instructiuni mai puternice -- nu rezolva fundamental, costa dublu"
+      - "Haiku structurator ca fallback -- adauga latenta, complica codul"
+    outcome: "Toate 8 module folosesc tool_choice={type:tool,name:...}. Result via message.content[0].input (dict garantat valid). 116 teste trec. Abort conditions adaugate dupa discovery (<3 keys), keyword extraction (<10 queries), search round 1 (<20 findings), guide generation (<10KB). CostTracker adaugat in gap_analyzer + enrichment. Phase timing adaugat. Benchmark dry-run blocheaza cu APIConnectionError (server disconnect la 60s) -- problema de retea, nu cod. Benchmark real trebuie rulat cand conexiunea permite."

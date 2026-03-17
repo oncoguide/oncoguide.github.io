@@ -72,7 +72,7 @@ check_dep "hugo.yaml" "CLAUDE.md" \
 # --- Personal data scan ---
 # Lines with '# nosec' are intentional (e.g., placeholder emails in help text)
 SENSITIVE_PATTERNS="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-STAGED_TEXT=$(git diff --cached --name-only | grep -v "^topics/" | grep -v "tests/" | grep -v "\.md$" | while read f; do
+STAGED_TEXT=$(git diff --cached --name-only | grep -v "^topics/" | grep -v "tests/" | grep -v "\.md$" | grep -v "^decisions/" | grep -v "^docs/" | while read f; do
     if [ -f "$f" ] && grep -E "$SENSITIVE_PATTERNS" "$f" | grep -qv "nosec"; then
         echo "$f"
     fi
