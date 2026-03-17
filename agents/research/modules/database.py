@@ -143,6 +143,12 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
+    def count_findings(self, topic_id: str) -> int:
+        """Count findings for a topic."""
+        return self.conn.execute(
+            "SELECT COUNT(*) FROM findings WHERE topic_id = ?", (topic_id,)
+        ).fetchone()[0]
+
     def has_finding(self, topic_id: str, content_hash: str = None, url: str = None) -> bool:
         """Check if finding already exists by content_hash OR URL."""
         if content_hash:

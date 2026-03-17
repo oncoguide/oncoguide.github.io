@@ -117,7 +117,7 @@ def load_config(path: str = "config.json") -> dict:
         print(f"ERROR: Missing required config. Set env variables: {', '.join(missing)}")
         print("  export ANTHROPIC_API_KEY='sk-ant-...'")
         print("  export SERPER_API_KEY='...'")
-        print("  export PUBMED_EMAIL='your@email.com'")
+        print("  export PUBMED_EMAIL='your@email.com'")  # nosec
         sys.exit(1)
 
     return cfg
@@ -379,6 +379,13 @@ def _generate_review_checklist(
     logger.info(f"Review checklist generated: {review_path}")
 
 
+def _abort(phase: str, reason: str) -> None:
+    """Print clear error and exit pipeline."""
+    print(f"\n  [ABORT] Phase '{phase}' failed: {reason}")
+    print(f"  Fix the issue and re-run. No money wasted on downstream phases.")
+    raise RuntimeError(f"Pipeline aborted at phase '{phase}': {reason}")
+
+
 def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = False,
               date_from: str = None, date_to: str = None, update_status: bool = True):
     """Research a specific topic -- full v4 pipeline."""
@@ -420,6 +427,8 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         pre_search_context=pre_context,
     )
     print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']}")
+    if not discovery.get("knowledge_map") or len(discovery["knowledge_map"]) < 3:
+        _abort("discovery", f"knowledge_map empty or too small: {list(discovery.get('knowledge_map', {}).keys())}")
     if discovery.get("section_scores"):
         low = [f"{k}: {v.get('score', '?')}" for k, v in discovery["section_scores"].items()
                if isinstance(v, dict) and v.get("score", 10) < 8.5]
@@ -437,6 +446,8 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         cost=cost,
     )
     print(f"  Extracted {len(queries)} precision queries")
+    if len(queries) < 10:
+        _abort("keyword_extraction", f"only {len(queries)} queries extracted, expected >= 10")
 
     if dry_run:
         print("\n--- DRY RUN ---")
@@ -462,6 +473,9 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         queries, topic_id, diagnosis, cfg, db, run_id,
         date_from=date_from, date_to=date_to, label="Round 1 -- ",
     )
+    total_findings = db.count_findings(topic_id)
+    if total_findings < 20:
+        _abort("search_round_1", f"only {total_findings} findings in DB, expected >= 20. Check API keys and search backends.")
 
     # Phase 4: Gap analysis + search round 2
     findings_so_far = db.get_findings_by_topic(topic_id, limit=500)
@@ -515,6 +529,11 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
             critical_model=critical_model,
             cross_verify_report=cv_report_text,
         )
+        if not os.path.exists(output_path):
+            _abort("guide_generation", "guide file not created")
+        guide_size_kb = os.path.getsize(output_path) / 1024
+        if guide_size_kb < 10:
+            _abort("guide_generation", f"guide too small: {guide_size_kb:.1f}KB (expected >= 10KB)")
         print(f"  Guide saved: {output_path}")
 
         # Backup

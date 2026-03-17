@@ -284,3 +284,67 @@ def test_full_pipeline_data_contract():
     assert "safety_concerns" in val
     assert "accuracy_issues" in val
     assert "section_scores" in val
+
+
+# --- Abort condition tests ---
+
+
+def test_count_findings_returns_correct_count(tmp_path):
+    """Database.count_findings() returns correct finding count for a topic."""
+    from modules.database import Database
+    db = Database(str(tmp_path / "test.db"))
+    db.create_tables()
+    run_id = db.start_run("topic", "test-topic")
+
+    assert db.count_findings("test-topic") == 0
+
+    _finding_base = {
+        "run_id": run_id, "topic_id": "test-topic",
+        "title_original": "T", "snippet_original": "S",
+        "source_language": "en", "summary_english": "Summary",
+        "authority_score": 4, "source_url": "http://a.com",
+        "source_domain": "a.com", "source_platform": "pubmed",
+        "date_published": None, "date_found": "2026-01-01",
+    }
+    # Insert 2 findings
+    db.insert_finding({**_finding_base, "content_hash": "h1", "title_english": "T1",
+                       "relevance_score": 9.0, "source_url": "http://a.com"})
+    db.insert_finding({**_finding_base, "content_hash": "h2", "title_english": "T2",
+                       "relevance_score": 8.0, "source_url": "http://b.com"})
+    assert db.count_findings("test-topic") == 2
+
+    # Other topic is isolated
+    assert db.count_findings("other-topic") == 0
+    db.close()
+
+
+@patch("run_research.pre_search")
+@patch("run_research.run_discovery")
+@patch("run_research.load_registry")
+@patch("run_research.find_topic")
+def test_pipeline_aborts_on_empty_knowledge_map(
+    mock_find_topic, mock_load_registry, mock_run_discovery, mock_pre_search
+):
+    """cmd_topic raises RuntimeError if discovery returns empty knowledge_map."""
+    import run_research
+
+    mock_load_registry.return_value = [{"id": "test-topic", "title": "Test Diagnosis", "status": "planned"}]
+    mock_find_topic.return_value = {"id": "test-topic", "title": "Test Diagnosis", "status": "planned"}
+    mock_pre_search.return_value = ""
+    mock_run_discovery.return_value = {
+        "converged": False,
+        "rounds": 1,
+        "knowledge_map": {},  # empty -- should trigger abort
+        "section_scores": {},
+        "conversation": [],
+        "final_questions": [],
+    }
+
+    with pytest.raises(RuntimeError, match="discovery"):
+        run_research.cmd_topic(
+            cfg={"anthropic_api_key": "fake", "database_path": ":memory:"},
+            topic_id="test-topic",
+            registry_path="fake_registry.yaml",
+            dry_run=False,
+            update_status=False,
+        )

@@ -70,8 +70,13 @@ check_dep "hugo.yaml" "CLAUDE.md" \
     "File Structure section must reflect language/menu changes"
 
 # --- Personal data scan ---
+# Lines with '# nosec' are intentional (e.g., placeholder emails in help text)
 SENSITIVE_PATTERNS="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-STAGED_TEXT=$(git diff --cached --name-only | grep -v "^topics/" | grep -v "tests/" | grep -v "\.md$" | xargs grep -lE "$SENSITIVE_PATTERNS" 2>/dev/null || true)
+STAGED_TEXT=$(git diff --cached --name-only | grep -v "^topics/" | grep -v "tests/" | grep -v "\.md$" | while read f; do
+    if [ -f "$f" ] && grep -E "$SENSITIVE_PATTERNS" "$f" | grep -qv "nosec"; then
+        echo "$f"
+    fi
+done || true)
 if [ -n "$STAGED_TEXT" ]; then
     echo ""
     echo "================================================"

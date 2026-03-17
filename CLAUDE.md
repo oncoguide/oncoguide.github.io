@@ -210,9 +210,9 @@ topics/
 
 0. Pre-search: 20 template queries (zero AI) + ~20 Haiku complement queries, search all 5 backends, enrich with Haiku, top 50 findings formatted as context for discovery
 1. Diagnosis from `topics/registry.yaml` (no hardcoded search queries)
-2. Discovery loop (Sonnet): oncologist (grounded with pre-search findings) <-> advocate iterate until all 15 sections score >= 8.5/10
-3. Keyword extraction (Sonnet): methodologist extracts precision queries from conversation
-4. Search round 1: 5 backends execute queries + enrichment (Haiku)
+2. Discovery loop (Sonnet): oncologist (grounded with pre-search findings) <-> advocate iterate until all 15 sections score >= 8.5/10. Abort if knowledge_map < 3 keys.
+3. Keyword extraction (Sonnet): methodologist extracts precision queries from conversation. Abort if < 10 queries.
+4. Search round 1: 5 backends execute queries + enrichment (Haiku). Abort if < 20 findings.
 5. Gap analysis + search round 2 (Haiku): fill weak sections
 6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
 7. Guide generation (Haiku + Sonnet): multi-pass, 15 sections; 4 critical sections (treatment-efficacy, side-effects, emergency-signs, resistance) use Sonnet, 11 non-critical use Haiku; informed by cross-verification report
