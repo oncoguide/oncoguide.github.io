@@ -14,6 +14,37 @@ from .guide_generator import GUIDE_SECTIONS
 
 logger = logging.getLogger(__name__)
 
+KEYWORD_TOOL = {
+    "name": "submit_queries",
+    "description": "Submit precision search queries extracted from discovery conversation",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "queries": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "query_text": {"type": "string"},
+                        "search_engine": {
+                            "type": "string",
+                            "enum": ["pubmed", "serper", "clinicaltrials", "openfda", "civic"],
+                        },
+                        "target_section": {"type": "string"},
+                        "priority": {
+                            "type": "string",
+                            "enum": ["high", "medium", "low"],
+                        },
+                        "language": {"type": "string"},
+                    },
+                    "required": ["query_text", "search_engine", "target_section"],
+                },
+            },
+        },
+        "required": ["queries"],
+    },
+}
+
 SYSTEM_PROMPT = """You are a medical research methodologist expert in information retrieval.
 
 You will receive:
@@ -61,10 +92,7 @@ MANDATORY COVERAGE:
 
 Target: 60-100 queries. Quality over quantity. Precision over breadth.
 
-Return JSON array:
-[{"query_text": "", "search_engine": "serper|pubmed|clinicaltrials|openfda|civic", "language": "en|de|fr|it|es", "target_section": "section-id", "rationale": "what this verifies/discovers"}]
-
-Return ONLY the JSON array."""
+Use the submit_queries tool to submit your query list."""
 
 
 def extract_queries(
@@ -86,7 +114,7 @@ def extract_queries(
         cost: CostTracker instance
 
     Returns:
-        List of query dicts with query_text, search_engine, language, target_section, rationale
+        List of query dicts with query_text, search_engine, language, target_section
     """
     if not api_key:
         logger.warning("No API key for keyword extraction")
@@ -116,16 +144,14 @@ def extract_queries(
                     f"=== GUIDE SECTIONS ===\n{sections_text}"
                 ),
             }],
+            tools=[KEYWORD_TOOL],
+            tool_choice={"type": "tool", "name": "submit_queries"},
         )
         cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
 
-        raw = message.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+        queries = message.content[0].input["queries"]
 
-        queries = json.loads(raw)
-
-        # Normalize
+        # Normalize defaults
         for q in queries:
             q.setdefault("target_section", "general")
             q.setdefault("language", "en")

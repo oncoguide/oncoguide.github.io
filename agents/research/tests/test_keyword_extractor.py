@@ -1,15 +1,54 @@
 import json
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, Mock
 
 from modules.keyword_extractor import extract_queries
+from modules.cost_tracker import CostTracker
 
 
-def _mock_message(text):
-    return MagicMock(
-        content=[MagicMock(text=text)],
-        usage=MagicMock(input_tokens=5000, output_tokens=3000),
+def _mock_tool_use(input_dict):
+    mock_tool = Mock()
+    mock_tool.type = "tool_use"
+    mock_tool.input = input_dict
+    mock_msg = Mock()
+    mock_msg.content = [mock_tool]
+    mock_msg.usage = Mock(input_tokens=5000, output_tokens=3000)
+    return mock_msg
+
+
+@patch("modules.keyword_extractor.anthropic.Anthropic")
+def test_extract_queries_uses_tool_call(mock_cls):
+    """extract_queries uses tool_choice, guaranteeing structured output."""
+    mock_client = MagicMock()
+    mock_cls.return_value = mock_client
+
+    queries_data = {
+        "queries": [
+            {
+                "query_text": "selpercatinib LIBRETTO-001 ORR",
+                "search_engine": "pubmed",
+                "target_section": "treatment-efficacy",
+                "priority": "high",
+                "language": "en",
+            }
+        ]
+    }
+    mock_client.messages.create.return_value = _mock_tool_use(queries_data)
+
+    ct = CostTracker()
+    result = extract_queries(
+        diagnosis="RET fusion NSCLC",
+        conversation=["ONCOLOGIST: ...", "ADVOCATE: ..."],
+        knowledge_map={"approved_drugs": [{"name": "selpercatinib"}]},
+        api_key="fake-key",
+        model="claude-sonnet-4-6",
+        cost=ct,
     )
+
+    call_kwargs = mock_client.messages.create.call_args[1]
+    assert call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_queries"}
+    assert len(result) == 1
+    assert result[0]["query_text"] == "selpercatinib LIBRETTO-001 ORR"
 
 
 @patch("modules.keyword_extractor.anthropic.Anthropic")
@@ -17,15 +56,16 @@ def test_extracts_queries_from_conversation(mock_cls):
     mock_client = MagicMock()
     mock_cls.return_value = mock_client
 
-    queries = [
-        {"query_text": "selpercatinib ORR phase III", "search_engine": "pubmed",
-         "language": "en", "target_section": "treatment-efficacy", "rationale": "confirm ORR"},
-        {"query_text": "LOXO-260 RET inhibitor phase I", "search_engine": "serper",
-         "language": "en", "target_section": "pipeline", "rationale": "pipeline drug"},
-    ]
-    mock_client.messages.create.return_value = _mock_message(json.dumps(queries))
+    queries_data = {
+        "queries": [
+            {"query_text": "selpercatinib ORR phase III", "search_engine": "pubmed",
+             "target_section": "treatment-efficacy", "language": "en"},
+            {"query_text": "LOXO-260 RET inhibitor phase I", "search_engine": "serper",
+             "target_section": "pipeline", "language": "en"},
+        ]
+    }
+    mock_client.messages.create.return_value = _mock_tool_use(queries_data)
 
-    from modules.cost_tracker import CostTracker
     ct = CostTracker()
     result = extract_queries(
         diagnosis="RET fusion NSCLC",
@@ -41,7 +81,6 @@ def test_extracts_queries_from_conversation(mock_cls):
 
 
 def test_no_api_key_returns_empty():
-    from modules.cost_tracker import CostTracker
     ct = CostTracker()
     result = extract_queries(
         diagnosis="test", conversation=[], knowledge_map={},
