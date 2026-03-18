@@ -1,4 +1,4 @@
-"""Analyze findings coverage per guide section and generate targeted queries to fill gaps."""
+"""Analyze findings coverage per lifecycle stage and generate targeted queries to fill gaps."""
 
 import json
 import logging
@@ -9,6 +9,12 @@ import anthropic
 from .cost_tracker import CostTracker
 
 logger = logging.getLogger(__name__)
+
+# v6: Thresholds per lifecycle stage (SPEC Faza 4)
+LIFECYCLE_THRESHOLDS = {
+    "Q1": 5, "Q2": 15, "Q3": 20, "Q4": 5,
+    "Q5": 10, "Q6": 8, "Q7": 5, "Q8": 3,
+}
 
 SECTION_MAP_TOOL = {
     "name": "submit_section_map",
@@ -28,7 +34,7 @@ SECTION_MAP_TOOL = {
 
 GAP_QUERIES_TOOL = {
     "name": "submit_gap_queries",
-    "description": "Submit targeted queries to fill weak guide sections",
+    "description": "Submit targeted queries to fill weak lifecycle stages",
     "input_schema": {
         "type": "object",
         "properties": {
@@ -39,10 +45,10 @@ GAP_QUERIES_TOOL = {
                     "properties": {
                         "query_text": {"type": "string"},
                         "search_engine": {"type": "string"},
-                        "section_id": {"type": "string"},
+                        "lifecycle_stage": {"type": "string"},
                         "language": {"type": "string"},
                     },
-                    "required": ["query_text", "search_engine", "section_id"],
+                    "required": ["query_text", "search_engine", "lifecycle_stage"],
                 },
             }
         },
@@ -52,29 +58,27 @@ GAP_QUERIES_TOOL = {
 
 SYSTEM_PROMPT = """You are a medical research gap analyzer for an oncology patient education blog.
 
-You will receive:
-1. A topic title
-2. A list of 15 guide sections with descriptions
-3. For each section, the findings currently assigned to it (title + score)
+You will receive a topic and coverage per LIFECYCLE STAGE (Q1-Q8).
 
-Your job: identify sections with INSUFFICIENT data and generate targeted search queries to fill the gaps.
+Lifecycle stages and minimum thresholds (findings with relevance >= 7):
+  Q1 Diagnostic: 5
+  Q2 Treatment: 15
+  Q3 Living with treatment: 20 (largest -- affects daily life)
+  Q4 Metastases: 5 per common site
+  Q5 Resistance: 10
+  Q6 Pipeline: 8
+  Q7 Mistakes: 5
+  Q8 Community: 3
 
-A section is WEAK if:
-- It has fewer than 5 findings
-- Its findings are low-scored (mostly below 7/10)
-- Its findings don't cover the specific data described in the section description
-  (e.g., "side effects" section needs percentage frequencies, not just general articles)
-
-For each weak section, generate 2-4 highly specific queries designed to find the MISSING data.
+For each stage BELOW threshold, generate 2-4 highly specific queries.
 
 Query rules:
-- "serper": Google queries in English, very specific (drug names, exact data types, trial names)
+- "serper": natural language, specific drug/trial names
 - "pubmed": MeSH terms for clinical data
 - "clinicaltrials": condition + intervention for active trials
 
-DO NOT generate queries for sections that are already well-covered (10+ good findings).
-
-Use the submit_gap_queries tool. If ALL sections are well-covered, submit an empty queries array."""
+DO NOT generate queries for stages that are well-covered.
+Use the submit_gap_queries tool. If all stages are covered, submit empty queries array."""
 
 
 def _map_findings_to_sections(
@@ -126,14 +130,10 @@ def analyze_gaps(
     model: str = "claude-haiku-4-5-20251001",
     cost: Optional[CostTracker] = None,
 ) -> list[dict]:
-    """Analyze coverage gaps and return targeted queries to fill them.
+    """Analyze coverage gaps per lifecycle stage and return targeted queries.
 
-    Args:
-        topic_title: The topic being researched
-        findings: All findings collected so far
-        sections: Guide sections (from GUIDE_SECTIONS)
-        api_key: Anthropic API key
-        model: Claude model for analysis
+    v6: Uses lifecycle_stage field from findings (populated by enrichment)
+    instead of calling Haiku to map findings to sections.
 
     Returns:
         List of query dicts to execute in round 2, or empty list if no gaps.
@@ -143,38 +143,41 @@ def analyze_gaps(
 
     client = anthropic.Anthropic(api_key=api_key)
 
-    # Step 1: Map findings to sections
-    section_map = _map_findings_to_sections(findings, sections, client, model, cost=cost)
+    # Step 1: Count findings per lifecycle stage (using lifecycle_stage field)
+    stage_counts = {}
+    stage_samples = {}
+    for i, f in enumerate(findings):
+        ls = f.get("lifecycle_stage")
+        if not ls:
+            continue
+        rel = f.get("relevance_score", 0)
+        if rel < 7:
+            continue  # only count high-quality findings
+        stage_counts[ls] = stage_counts.get(ls, 0) + 1
+        if ls not in stage_samples:
+            stage_samples[ls] = []
+        if len(stage_samples[ls]) < 3:
+            stage_samples[ls].append(f.get("title_english", "N/A")[:80])
 
-    # Step 2: Build coverage summary for gap analyzer
+    # Step 2: Build coverage summary
     coverage_lines = []
-    for s in sections:
-        mapped_ids = section_map.get(s["id"], [])
-        count = len(mapped_ids)
-        if count > 0 and mapped_ids:
-            sample_titles = []
-            for fid in mapped_ids[:5]:
-                if 1 <= fid <= len(findings):
-                    f = findings[fid - 1]
-                    score = f.get("relevance_score", "?")
-                    title = f.get("title_english", "N/A")[:80]
-                    sample_titles.append(f"    [{fid}] (Score {score}) {title}")
-            titles_text = "\n".join(sample_titles)
-            coverage_lines.append(
-                f"Section '{s['id']}' ({s['title']}): {count} findings\n"
-                f"  Description: {s['description']}\n"
-                f"  Sample findings:\n{titles_text}"
-            )
-        else:
-            coverage_lines.append(
-                f"Section '{s['id']}' ({s['title']}): 0 findings\n"
-                f"  Description: {s['description']}\n"
-                f"  ** NO DATA -- CRITICAL GAP **"
-            )
+    weak_stages = []
+    for stage, threshold in LIFECYCLE_THRESHOLDS.items():
+        count = stage_counts.get(stage, 0)
+        samples = stage_samples.get(stage, [])
+        status = "OK" if count >= threshold else f"WEAK ({count}/{threshold})"
+        samples_text = "\n".join(f"    - {s}" for s in samples) if samples else "    (no samples)"
+        coverage_lines.append(f"{stage}: {count} findings (threshold: {threshold}) -- {status}\n{samples_text}")
+        if count < threshold:
+            weak_stages.append(stage)
+
+    if not weak_stages:
+        logger.info("Gap analysis: all lifecycle stages well-covered")
+        return []
 
     coverage_text = "\n\n".join(coverage_lines)
 
-    # Step 3: Ask Claude to identify gaps and generate queries
+    # Step 3: Ask Claude to generate queries for weak stages
     try:
         message = client.messages.create(
             model=model,
@@ -184,8 +187,9 @@ def analyze_gaps(
                 "role": "user",
                 "content": (
                     f"Topic: {topic_title}\n"
-                    f"Total findings: {len(findings)}\n\n"
-                    f"Coverage per section:\n{coverage_text}"
+                    f"Total findings: {len(findings)}\n"
+                    f"Weak stages: {', '.join(weak_stages)}\n\n"
+                    f"Coverage per lifecycle stage:\n{coverage_text}"
                 ),
             }],
             tools=[GAP_QUERIES_TOOL],
@@ -196,20 +200,22 @@ def analyze_gaps(
             cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
         gap_queries_raw = message.content[0].input["queries"]
 
-        # Normalize field names (section_id -> target_section for downstream compatibility)
+        # Normalize field names
         gap_queries = []
         for q in gap_queries_raw:
             normalized = dict(q)
-            if "section_id" in normalized and "target_section" not in normalized:
-                normalized["target_section"] = normalized.pop("section_id")
+            # lifecycle_stage -> also set target_section for backward compat
+            if "lifecycle_stage" in normalized and "target_section" not in normalized:
+                normalized["target_section"] = normalized["lifecycle_stage"]
             normalized.setdefault("language", "en")
+            normalized.setdefault("lifecycle_stage", "Q3")
             gap_queries.append(normalized)
 
         if gap_queries:
-            gap_sections = set(q.get("target_section", "?") for q in gap_queries)
-            logger.info(f"Gap analysis: {len(gap_queries)} queries for sections: {gap_sections}")
+            gap_stages = set(q.get("lifecycle_stage", "?") for q in gap_queries)
+            logger.info(f"Gap analysis: {len(gap_queries)} queries for stages: {gap_stages}")
         else:
-            logger.info("Gap analysis: all sections well-covered")
+            logger.info("Gap analysis: Claude found no gaps to fill")
 
         return gap_queries
 

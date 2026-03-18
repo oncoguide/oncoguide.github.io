@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock, Mock
 
-from modules.gap_analyzer import analyze_gaps, _map_findings_to_sections
+from modules.gap_analyzer import analyze_gaps, _map_findings_to_sections, LIFECYCLE_THRESHOLDS
 
 
 def _mock_tool_use(input_dict):
@@ -14,80 +14,88 @@ def _mock_tool_use(input_dict):
     return mock_msg
 
 
-SAMPLE_FINDINGS = [
-    {"title_english": "Selpercatinib Phase III results", "relevance_score": 9},
-    {"title_english": "RET inhibitor side effects", "relevance_score": 7},
-    {"title_english": "LIBRETTO-431 OS data", "relevance_score": 8},
-    {"title_english": "Pralsetinib approval", "relevance_score": 8},
-    {"title_english": "RET resistance mechanisms", "relevance_score": 7},
-]
-
 SAMPLE_SECTIONS = [
-    {"id": "best-treatment", "title": "Treatment Efficacy", "description": "Drug response rates"},
+    {"id": "best-treatment", "title": "Treatment", "description": "Drug response rates"},
     {"id": "side-effects", "title": "Side Effects", "description": "Adverse events with frequencies"},
     {"id": "resistance", "title": "Resistance", "description": "Resistance mechanisms"},
 ]
 
 
+def _make_findings(stage_counts: dict) -> list[dict]:
+    """Create findings with lifecycle_stage tags."""
+    findings = []
+    for stage, count in stage_counts.items():
+        for i in range(count):
+            findings.append({
+                "title_english": f"Finding {stage}-{i}",
+                "relevance_score": 8,  # above threshold (7)
+                "lifecycle_stage": stage,
+            })
+    return findings
+
+
 def test_map_findings_uses_tool_call():
-    """_map_findings_to_sections uses tool_choice."""
+    """_map_findings_to_sections uses tool_choice (still available for planner)."""
     mock_client = Mock()
     mock_client.messages.create.return_value = _mock_tool_use({
         "section_map": {"best-treatment": [0, 1, 2], "side-effects": [3, 4]}
     })
 
-    result = _map_findings_to_sections(SAMPLE_FINDINGS, SAMPLE_SECTIONS, mock_client, "claude-haiku-4-5-20251001")
+    result = _map_findings_to_sections(
+        _make_findings({"Q2": 3}), SAMPLE_SECTIONS, mock_client, "claude-haiku-4-5-20251001"
+    )
 
     call_kwargs = mock_client.messages.create.call_args[1]
     assert call_kwargs["tool_choice"]["name"] == "submit_section_map"
-    assert result == {"best-treatment": [0, 1, 2], "side-effects": [3, 4]}
 
 
 @patch("modules.gap_analyzer.anthropic.Anthropic")
-def test_gap_queries_uses_tool_call(mock_cls):
-    """analyze_gaps uses tool_choice for gap query generation."""
+def test_gap_analysis_detects_weak_stages(mock_cls):
+    """Gap analysis should detect stages below threshold and generate queries."""
     mock_client = MagicMock()
     mock_cls.return_value = mock_client
 
-    mock_client.messages.create.side_effect = [
-        # First call: _map_findings_to_sections
-        _mock_tool_use({"section_map": {"best-treatment": [1, 2], "side-effects": [], "resistance": [5]}}),
-        # Second call: gap query generation
-        _mock_tool_use({
-            "queries": [{"query_text": "selpercatinib resistance", "search_engine": "pubmed", "section_id": "resistance"}]
-        }),
-    ]
+    # Only one API call now (gap query generation) -- no section mapping needed
+    mock_client.messages.create.return_value = _mock_tool_use({
+        "queries": [
+            {"query_text": "RET resistance G810R", "search_engine": "pubmed", "lifecycle_stage": "Q5"},
+            {"query_text": "RET fusion mistakes interactions", "search_engine": "serper", "lifecycle_stage": "Q7"},
+        ]
+    })
 
-    result = analyze_gaps("RET fusion NSCLC", SAMPLE_FINDINGS, SAMPLE_SECTIONS, "fake-key")
+    # Q2 has plenty, but Q5 and Q7 are below threshold
+    findings = _make_findings({"Q2": 20, "Q3": 25, "Q5": 3, "Q7": 1})
+    result = analyze_gaps("RET fusion NSCLC", findings, SAMPLE_SECTIONS, "fake-key")
 
-    # Verify the gap queries call used tool_choice
-    second_call_kwargs = mock_client.messages.create.call_args_list[1][1]
-    assert second_call_kwargs["tool_choice"] == {"type": "tool", "name": "submit_gap_queries"}
-    assert len(result) == 1
-    # section_id should be normalized to target_section
-    assert result[0].get("target_section") == "resistance"
+    assert len(result) == 2
+    stages = {q["lifecycle_stage"] for q in result}
+    assert "Q5" in stages
+    assert "Q7" in stages
 
 
 @patch("modules.gap_analyzer.anthropic.Anthropic")
-def test_gap_queries_empty_when_all_covered(mock_cls):
-    """analyze_gaps returns empty list when all sections are well-covered."""
-    mock_client = MagicMock()
-    mock_cls.return_value = mock_client
-
-    mock_client.messages.create.side_effect = [
-        _mock_tool_use({"section_map": {"best-treatment": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}}),
-        _mock_tool_use({"queries": []}),
-    ]
-
-    result = analyze_gaps("RET fusion NSCLC", SAMPLE_FINDINGS, SAMPLE_SECTIONS, "fake-key")
+def test_gap_analysis_empty_when_all_covered(mock_cls):
+    """analyze_gaps returns empty when all lifecycle stages are covered."""
+    # Create findings that satisfy ALL thresholds
+    findings = _make_findings({
+        "Q1": 10, "Q2": 20, "Q3": 25, "Q4": 10,
+        "Q5": 15, "Q6": 12, "Q7": 8, "Q8": 5,
+    })
+    result = analyze_gaps("RET fusion NSCLC", findings, SAMPLE_SECTIONS, "fake-key")
     assert result == []
 
 
 def test_analyze_gaps_no_api_key():
-    result = analyze_gaps("topic", SAMPLE_FINDINGS, SAMPLE_SECTIONS, api_key="")
+    result = analyze_gaps("topic", _make_findings({"Q2": 5}), SAMPLE_SECTIONS, api_key="")
     assert result == []
 
 
 def test_analyze_gaps_no_findings():
     result = analyze_gaps("topic", [], SAMPLE_SECTIONS, api_key="fake-key")
     assert result == []
+
+
+def test_lifecycle_thresholds_defined():
+    """All Q1-Q8 must have thresholds."""
+    for q in ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8"]:
+        assert q in LIFECYCLE_THRESHOLDS

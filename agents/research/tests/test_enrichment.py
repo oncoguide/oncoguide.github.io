@@ -21,6 +21,7 @@ def test_enrich_uses_tool_call(mock_anthropic_cls):
     mock_anthropic_cls.return_value = mock_client
     mock_client.messages.create.return_value = _mock_tool_use({
         "relevant": True, "relevance_score": 8, "authority_score": 4,
+        "lifecycle_stage": "Q2",
         "title_english": "Test Title EN", "summary_english": "Summary text",
     })
 
@@ -36,6 +37,7 @@ def test_enrich_uses_tool_call(mock_anthropic_cls):
     assert result["relevant"] is True
     assert result["relevance_score"] == 8
     assert result["authority_score"] == 4
+    assert result["lifecycle_stage"] == "Q2"
 
 
 @patch("modules.enrichment.anthropic.Anthropic")
@@ -44,6 +46,7 @@ def test_enrich_relevant_finding(mock_anthropic_cls):
     mock_anthropic_cls.return_value = mock_client
     mock_client.messages.create.return_value = _mock_tool_use({
         "relevant": True, "relevance_score": 8, "authority_score": 3,
+        "lifecycle_stage": "Q3",
         "title_english": "Test Title EN", "summary_english": "Summary text",
     })
 
@@ -55,6 +58,7 @@ def test_enrich_relevant_finding(mock_anthropic_cls):
     )
     assert result["relevant"] is True
     assert result["relevance_score"] == 8
+    assert result["lifecycle_stage"] == "Q3"
 
 
 @patch("modules.enrichment.anthropic.Anthropic")
@@ -63,6 +67,7 @@ def test_enrich_irrelevant_finding(mock_anthropic_cls):
     mock_anthropic_cls.return_value = mock_client
     mock_client.messages.create.return_value = _mock_tool_use({
         "relevant": False, "relevance_score": 2, "authority_score": 1,
+        "lifecycle_stage": "Q3",
         "title_english": "", "summary_english": "",
     })
 
@@ -82,6 +87,7 @@ def test_enrich_returns_authority_score(mock_anthropic_cls):
     mock_anthropic_cls.return_value = mock_client
     mock_client.messages.create.return_value = _mock_tool_use({
         "relevant": True, "relevance_score": 9, "authority_score": 5,
+        "lifecycle_stage": "Q2",
         "title_english": "LIBRETTO-431", "summary_english": "Phase III results",
     })
 

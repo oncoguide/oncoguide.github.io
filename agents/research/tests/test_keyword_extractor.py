@@ -24,7 +24,7 @@ def test_extract_queries_uses_tool_call(mock_api_call):
             {
                 "query_text": "selpercatinib LIBRETTO-001 ORR",
                 "search_engine": "pubmed",
-                "target_section": "best-treatment",
+                "lifecycle_stage": "Q2",
                 "priority": "high",
                 "language": "en",
             }
@@ -53,9 +53,9 @@ def test_extracts_queries_from_conversation(mock_api_call):
     queries_data = {
         "queries": [
             {"query_text": "selpercatinib ORR phase III", "search_engine": "pubmed",
-             "target_section": "best-treatment", "language": "en"},
+             "lifecycle_stage": "Q2", "language": "en"},
             {"query_text": "LOXO-260 RET inhibitor phase I", "search_engine": "serper",
-             "target_section": "pipeline", "language": "en"},
+             "lifecycle_stage": "Q6", "language": "en"},
         ]
     }
     mock_api_call.return_value = _mock_tool_use(queries_data)
@@ -64,14 +64,15 @@ def test_extracts_queries_from_conversation(mock_api_call):
     result = extract_queries(
         diagnosis="RET fusion NSCLC",
         conversation=["ONCOLOGIST: ...", "ADVOCATE: ..."],
-        knowledge_map={"approved_drugs": [{"name": "selpercatinib"}]},
+        knowledge_map={"Q2_treatment": {"approved_drugs": [{"name": "selpercatinib"}]}},
         api_key="fake-key",
         model="claude-sonnet-4-6",
         cost=ct,
     )
     assert len(result) == 2
     assert result[0]["search_engine"] == "pubmed"
-    assert result[1]["target_section"] == "pipeline"
+    assert result[0]["lifecycle_stage"] == "Q2"
+    assert result[1]["lifecycle_stage"] == "Q6"
 
 
 def test_no_api_key_returns_empty():

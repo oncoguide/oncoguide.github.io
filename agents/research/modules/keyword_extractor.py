@@ -31,14 +31,18 @@ KEYWORD_TOOL = {
                             "type": "string",
                             "enum": ["pubmed", "serper", "clinicaltrials", "openfda", "civic"],
                         },
-                        "target_section": {"type": "string"},
+                        "lifecycle_stage": {
+                            "type": "string",
+                            "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9"],
+                            "description": "Which patient lifecycle question this query serves",
+                        },
                         "priority": {
                             "type": "string",
                             "enum": ["high", "medium", "low"],
                         },
                         "language": {"type": "string"},
                     },
-                    "required": ["query_text", "search_engine", "target_section"],
+                    "required": ["query_text", "search_engine", "lifecycle_stage"],
                 },
             },
         },
@@ -46,54 +50,57 @@ KEYWORD_TOOL = {
     },
 }
 
+# v6: Minimum queries per lifecycle stage (SPEC Faza 2)
+LIFECYCLE_MINIMUMS = {
+    "Q1": 5, "Q2": 10, "Q3": 20, "Q4": 8, "Q5": 10,
+    "Q6": 12, "Q7": 5, "Q8": 4, "Q9": 5,
+}
+
 SYSTEM_PROMPT = """You are a medical research methodologist expert in information retrieval.
 
 You will receive:
 1. A cancer diagnosis
 2. A complete discovery conversation between an oncologist and patient advocate
-3. A clinical knowledge map with all known drugs, trials, side effects, etc.
-4. The 15 guide sections that need data
+3. A Q1-Q8 lifecycle knowledge map
+4. The 16 guide sections that need data
 
-Your job: extract OPTIMAL search queries to VERIFY and EXPAND on the knowledge discussed.
+Your job: extract OPTIMAL search queries organized by LIFECYCLE STAGE (Q1-Q9).
+Each query MUST have a lifecycle_stage tag.
 
-CRITICAL: The conversation contains CLAIMS (drug names, percentages, trial results).
-Your queries must VERIFY these claims against real sources AND find data NOT discussed.
+LIFECYCLE STAGES AND MINIMUM QUERIES:
+  Q1 Diagnostic (min 5): molecular tests, staging, subtypes
+  Q2 Treatment (min 10): per approved drug x per endpoint (efficacy, safety, comparison)
+  Q3 Living with treatment (min 20): per drug CYP, side effects, interactions, monitoring + nutrition, exercise, emergencies, access
+  Q4 Metastases (min 8): per common metastasis site
+  Q5 Resistance (min 10): per mechanism + per next-line drug
+  Q6 Pipeline (min 12): per named pipeline drug + per modality (ADC, PROTAC, etc.)
+  Q7 Mistakes (min 5): dangerous interactions, myths, common errors
+  Q8 Community (min 4): forums, patient stories, caregiver, organizations
+  Q9 Geographic access (min 5): per country/region, legal access mechanisms
 
 QUERY RULES PER BACKEND:
 
 PubMed (search_engine: "pubmed"):
-- Specific drug names + outcomes: "selpercatinib adverse events incidence phase III"
-- Trial names: "LIBRETTO-431 progression-free survival"
-- Pipeline drugs by code: "LOXO-260 phase I RET"
-- Keep under 100 chars
+- Specific drug names + outcomes. Keep under 100 chars.
 
-Serper/Google (search_engine: "serper"):
-- Natural language, SPECIFIC: drug names, percentages, trial names
-- Pipeline: each drug BY NAME
-- Access: country-specific: "selpercatinib EMA reimbursement Germany"
-- Include some queries in DE, FR, IT, ES for European access
-- Patient communities: by name
+Serper (search_engine: "serper"):
+- Natural language, SPECIFIC. Include queries in DE, FR, IT, ES, RO for European access (Q9).
+- Key Q2, Q3, Q5 queries should be translated to 6+ languages.
 
 ClinicalTrials.gov (search_engine: "clinicaltrials"):
-- condition + intervention: "RET fusion lung cancer" + drug name
-- Focus on RECRUITING trials
+- condition + intervention for each approved and pipeline drug.
 
 OpenFDA (search_engine: "openfda"):
-- Generic drug names only
+- Per approved drug: adverse_events, label.
 
 CIViC (search_engine: "civic"):
-- Gene names: "RET"
+- Per gene: RESISTANCE + PREDICTIVE evidence.
 
-MANDATORY COVERAGE:
-- Every drug mentioned (approved + pipeline) MUST have >= 1 query BY NAME
-- Every side effect with % MUST have a verification query
-- Every landmark trial MUST have a results query
-- Pipeline: individual drug queries, NOT generic "RET pipeline"
-- Drug withdrawal/market exit status queries
+MANDATORY: Every NAMED ENTITY from discovery (drug, trial, mutation) must have >= 1 dedicated query.
 
-Target: 60-100 queries. Quality over quantity. Precision over breadth.
+Target: 100-170 queries. Every lifecycle stage must meet its minimum.
 
-Use the submit_queries tool to submit your query list."""
+Use the submit_queries tool."""
 
 
 def extract_queries(
@@ -155,10 +162,25 @@ def extract_queries(
 
         # Normalize defaults
         for q in queries:
-            q.setdefault("target_section", "general")
+            q.setdefault("lifecycle_stage", "Q3")  # default to largest stage
             q.setdefault("language", "en")
+            # backward compat: set target_section from lifecycle_stage
+            if "target_section" not in q:
+                q["target_section"] = q["lifecycle_stage"]
 
-        logger.info(f"Keyword extraction: {len(queries)} queries from discovery conversation")
+        # Log per-stage distribution
+        stage_counts = {}
+        for q in queries:
+            ls = q.get("lifecycle_stage", "?")
+            stage_counts[ls] = stage_counts.get(ls, 0) + 1
+        logger.info(f"Keyword extraction: {len(queries)} queries. Distribution: {stage_counts}")
+
+        # Warn if any stage is below minimum
+        for stage, minimum in LIFECYCLE_MINIMUMS.items():
+            actual = stage_counts.get(stage, 0)
+            if actual < minimum:
+                logger.warning(f"  GATE 2: {stage} has {actual} queries (min {minimum})")
+
         return queries
 
     except Exception as e:

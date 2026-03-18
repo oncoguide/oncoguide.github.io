@@ -255,6 +255,7 @@ def _search_and_enrich(queries, topic_id, topic_title, cfg, db, run_id,
                     "date_published": finding.get("date"),
                     "date_found": now_iso(),
                     "run_id": run_id,
+                    "lifecycle_stage": enrichment.get("lifecycle_stage"),
                 })
                 stats["after_enrichment"] += 1
             else:
@@ -387,6 +388,75 @@ def _abort(phase: str, reason: str) -> None:
     print(f"\n  [ABORT] Phase '{phase}' failed: {reason}")
     print(f"  Fix the issue and re-run. No money wasted on downstream phases.")
     raise RuntimeError(f"Pipeline aborted at phase '{phase}': {reason}")
+
+
+# ── v6: Pipeline gates ──────────────────────────────────────────────
+
+def _gate_0(pre_search_findings_count: int) -> tuple[bool, str]:
+    """GATE 0: Min 20 findings from pre-search."""
+    if pre_search_findings_count < 20:
+        return False, f"Only {pre_search_findings_count} pre-search findings (min 20)"
+    return True, ""
+
+
+def _gate_1(knowledge_map: dict) -> tuple[bool, str]:
+    """GATE 1: Discovery has minimum entities."""
+    drugs = knowledge_map.get("Q2_treatment", {}).get("approved_drugs", [])
+    resistance = knowledge_map.get("Q5_resistance", {}).get("mechanisms", [])
+    pipeline = knowledge_map.get("Q6_pipeline", {}).get("drugs", [])
+    issues = []
+    if not drugs:
+        issues.append("No approved drugs in Q2")
+    if not resistance:
+        issues.append("No resistance mechanisms in Q5")
+    if not pipeline:
+        issues.append("No pipeline drugs in Q6")
+    if issues:
+        return False, "; ".join(issues)
+    return True, ""
+
+
+def _gate_2(queries: list, lifecycle_mins: dict = None) -> tuple[bool, str]:
+    """GATE 2: Total >= 80 queries, per-stage minimums."""
+    if len(queries) < 80:
+        return False, f"Only {len(queries)} queries (min 80)"
+    if lifecycle_mins:
+        stage_counts = {}
+        for q in queries:
+            ls = q.get("lifecycle_stage", "?")
+            stage_counts[ls] = stage_counts.get(ls, 0) + 1
+        below = [f"{s}:{stage_counts.get(s,0)}/{m}" for s, m in lifecycle_mins.items()
+                 if stage_counts.get(s, 0) < m]
+        if below:
+            return False, f"Stages below minimum: {', '.join(below)}"
+    return True, ""
+
+
+def _gate_3(findings_count: int) -> tuple[bool, str]:
+    """GATE 3: Min 100 findings (hard stop at < 20)."""
+    if findings_count < 20:
+        return False, f"Only {findings_count} findings -- too few, pipeline cannot continue"
+    if findings_count < 100:
+        return False, f"Only {findings_count} findings (min 100) -- continuing with warning"
+    return True, ""
+
+
+def _gate_6(guide_path: str) -> tuple[bool, str]:
+    """GATE 6: Guide >= 10KB, 16 sections present."""
+    import os
+    if not os.path.exists(guide_path):
+        return False, "Guide file not generated"
+    size = os.path.getsize(guide_path)
+    if size < 10240:
+        return False, f"Guide too small: {size} bytes (min 10KB)"
+    with open(guide_path) as f:
+        content = f.read()
+    section_count = content.count("\n## ")
+    if section_count < 16:
+        return False, f"Only {section_count} sections found (need 16)"
+    if "BEFORE ANYTHING ELSE" not in content and "INAINTE DE TOATE" not in content:
+        return False, "Executive summary (BEFORE ANYTHING ELSE) not found"
+    return True, ""
 
 
 def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = False,

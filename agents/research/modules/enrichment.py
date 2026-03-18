@@ -12,17 +12,22 @@ logger = logging.getLogger(__name__)
 
 ENRICHMENT_TOOL = {
     "name": "submit_enrichment",
-    "description": "Submit relevance and authority assessment for a medical finding",
+    "description": "Submit relevance, authority, and lifecycle stage assessment for a medical finding",
     "input_schema": {
         "type": "object",
         "properties": {
             "relevant": {"type": "boolean"},
             "relevance_score": {"type": "integer", "minimum": 0, "maximum": 10},
             "authority_score": {"type": "integer", "minimum": 1, "maximum": 5},
+            "lifecycle_stage": {
+                "type": "string",
+                "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9"],
+                "description": "Patient lifecycle stage: Q1=diagnosis, Q2=treatment, Q3=living, Q4=metastases, Q5=resistance, Q6=pipeline, Q7=mistakes, Q8=community, Q9=access",
+            },
             "title_english": {"type": "string"},
             "summary_english": {"type": "string"},
         },
-        "required": ["relevant", "relevance_score", "authority_score", "title_english", "summary_english"],
+        "required": ["relevant", "relevance_score", "authority_score", "lifecycle_stage", "title_english", "summary_english"],
     },
 }
 
@@ -36,8 +41,18 @@ Given a search finding and a research topic, determine:
    3 = Peer-reviewed review/meta-analysis, clinical registry (ClinicalTrials.gov)
    2 = Press release, medical news, general database
    1 = Blog, forum, unknown source
-4. Title in English (translate if needed)
-5. Summary in English (2-3 sentences capturing the key information)
+4. Lifecycle stage -- which patient question does this finding answer?
+   Q1 = Diagnosis (molecular tests, staging, subtypes)
+   Q2 = Treatment (approved drugs, guidelines, efficacy)
+   Q3 = Living with treatment (dosing, side effects, interactions, monitoring, emergency, daily life, access)
+   Q4 = Metastases (common sites, detection, local treatment)
+   Q5 = Resistance (mechanisms, next-line options, rebiopsy)
+   Q6 = Pipeline (drugs in development, clinical trials, novel modalities)
+   Q7 = Mistakes (dangerous interactions, contraindicated supplements, myths)
+   Q8 = Community (patient groups, caregiver support)
+   Q9 = Geographic access (country-specific access, reimbursement)
+5. Title in English (translate if needed)
+6. Summary in English (2-3 sentences capturing the key information)
 
 Use the submit_enrichment tool to submit your assessment."""
 

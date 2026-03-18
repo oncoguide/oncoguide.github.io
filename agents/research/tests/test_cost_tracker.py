@@ -48,3 +48,20 @@ def test_report():
     report = ct.report()
     assert "sonnet" in report.lower() and "haiku" in report.lower()
     assert "$" in report
+
+
+def test_get_recommended_model_full_budget():
+    """With full budget, always return default model."""
+    ct = CostTracker(max_cost_usd=5.0)
+    assert ct.get_recommended_model("discovery", "claude-sonnet-4-6", "claude-haiku-4-5-20251001") == "claude-sonnet-4-6"
+    assert ct.get_recommended_model("validation", "claude-sonnet-4-6", "claude-haiku-4-5-20251001") == "claude-sonnet-4-6"
+
+
+def test_get_recommended_model_low_budget():
+    """With <$1 remaining, discovery should degrade but validation should not."""
+    ct = CostTracker(max_cost_usd=5.0)
+    ct.total_cost_usd = 4.2  # only $0.80 remaining
+    # Discovery (priority 3) degrades when < $1.0
+    assert ct.get_recommended_model("discovery", "claude-sonnet-4-6", "claude-haiku-4-5-20251001") == "claude-haiku-4-5-20251001"
+    # Validation (priority 1) stays on Sonnet
+    assert ct.get_recommended_model("validation", "claude-sonnet-4-6", "claude-haiku-4-5-20251001") == "claude-sonnet-4-6"

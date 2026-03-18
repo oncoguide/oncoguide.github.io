@@ -44,6 +44,22 @@ class CostTracker:
         """Check if there's budget remaining (optionally with a reserve)."""
         return self.total_cost_usd + reserve_usd < self.max_cost_usd
 
+    def get_recommended_model(self, purpose: str, default: str, fallback: str) -> str:
+        """Return default model if budget allows, fallback (Haiku) if tight.
+
+        Priority: 1=validation, 2=critical_section, 3=discovery. Others degrade first.
+        """
+        PRIORITY = {"validation": 1, "critical_section": 2, "discovery": 3}
+        priority = PRIORITY.get(purpose, 99)
+        remaining = self.max_cost_usd - self.total_cost_usd
+        if remaining < 0.5 and priority > 1:
+            logger.info(f"Budget tight (${remaining:.2f} remaining) -- degrading {purpose} to {fallback}")
+            return fallback
+        if remaining < 1.0 and priority > 2:
+            logger.info(f"Budget low (${remaining:.2f} remaining) -- degrading {purpose} to {fallback}")
+            return fallback
+        return default
+
     def report(self) -> str:
         """Human-readable cost summary."""
         lines = [f"Total: ${self.total_cost_usd:.4f} / ${self.max_cost_usd:.2f}"]
