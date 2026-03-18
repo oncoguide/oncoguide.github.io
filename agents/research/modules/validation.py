@@ -1,17 +1,18 @@
 # modules/validation.py
-"""Post-generation validation: oncologist + advocate review the guide.
+"""Post-generation validation: 6-layer quality assurance pipeline.
 
-Returns pass/fail, accuracy issues, and missing keywords for targeted search.
+Layers: structural QA -> brief adherence -> language -> consistency -> medical -> advocate.
 """
 
 import json
 import logging
 import os
+import re
 
 import anthropic
 
 from .cost_tracker import CostTracker
-from .guide_generator import GUIDE_SECTIONS
+from .guide_generator import GUIDE_SECTIONS, SECTION_BRIEFS, CRITICAL_SECTIONS
 from .utils import api_call, load_skill_context
 
 logger = logging.getLogger(__name__)
@@ -190,7 +191,7 @@ Be thorough. A patient will make treatment decisions based on this guide."""
 ADVOCATE_REVIEW_SYSTEM = """You are a patient advocate reviewing a completed guide for YOUR diagnosis.
 YOUR LIFE depends on this guide being complete.
 
-Score EACH of the 15 sections 1-10:
+Score EACH of the 16 sections 1-10:
 - 10 = comprehensive, actionable, specific numbers, nothing missing
 - 7 = decent but has gaps a patient would notice
 - 5 = surface-level, missing critical information
@@ -201,6 +202,106 @@ that could fill the gaps.
 
 Use the submit_advocate_review tool to submit your review.
 Set passed=true ONLY if ALL sections score >= 8.5."""
+
+
+# ── v6: Layer 1 -- Structural QA (zero AI cost) ─────────────────────
+
+# Emoji pattern
+_EMOJI_RE = re.compile(
+    "[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF"
+    "\U0001F1E0-\U0001F1FF\U00002702-\U000027B0\U000024C2-\U0001F251"
+    "\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF]+",
+    flags=re.UNICODE,
+)
+
+
+def structural_qa(guide_text: str) -> dict:
+    """Layer 1: Structural QA -- zero AI cost, pure Python checks.
+
+    Returns: {"blocks": [...], "warnings": [...]}
+    BLOCK = must fix before proceeding. WARN = noted in review.
+    """
+    blocks = []
+    warnings = []
+
+    # Parse sections
+    sections_found = re.findall(r'^## .+', guide_text, re.MULTILINE)
+    section_ids_found = set()
+    for heading in sections_found:
+        # Extract section id from heading like "## 1. WHAT YOU HAVE..."
+        for gs in GUIDE_SECTIONS:
+            if gs["title"].split("--")[0].strip().upper()[:20] in heading.upper():
+                section_ids_found.add(gs["id"])
+
+    # Check: all 16 sections + executive summary present
+    has_exec = "BEFORE ANYTHING ELSE" in guide_text or "INAINTE DE TOATE" in guide_text
+    if not has_exec:
+        blocks.append("Missing executive summary (BEFORE ANYTHING ELSE)")
+
+    # Count ## headings (rough section count)
+    section_count = len(sections_found)
+    if section_count < 16:
+        blocks.append(f"Only {section_count} sections found (need 16 + executive summary)")
+
+    # Check section word counts
+    parts = re.split(r'^## ', guide_text, flags=re.MULTILINE)
+    for part in parts[1:]:  # skip header
+        lines = part.split("\n")
+        title = lines[0].strip() if lines else ""
+        body = "\n".join(lines[1:])
+        word_count = len(body.split())
+
+        # Executive summary has different limits (100-250 words per SPEC 10.4)
+        is_exec = "BEFORE ANYTHING" in title.upper() or "INAINTE DE TOATE" in title.upper()
+        if is_exec:
+            if word_count > 250:
+                warnings.append(f"Executive summary too long: {word_count} words (max 250)")
+            continue  # no minimum check for exec summary
+
+        # Check if this is a critical section
+        is_critical = any(cs in title.lower() for cs in ["mistake", "side effect", "emergency", "er --", "resistance", "stops working"])
+        min_words = 500 if is_critical else 200
+
+        if word_count < min_words:
+            blocks.append(f"Section '{title[:50]}' too short: {word_count} words (min {min_words})")
+
+    # Required tables (sections 2, 5, 6, 7, 11)
+    table_sections = ["BEST TREATMENT", "SIDE EFFECT", "INTERACTION", "MONITORING", "PIPELINE"]
+    for ts in table_sections:
+        # Find the section and check for table markers
+        pattern = re.compile(rf'^## .*{ts}.*?(?=^## |\Z)', re.MULTILINE | re.DOTALL | re.IGNORECASE)
+        match = pattern.search(guide_text)
+        if match and "|" not in match.group():
+            warnings.append(f"Section matching '{ts}' has no table (| delimiter)")
+
+    # Section 8 (emergency) needs checkboxes
+    emergency_pattern = re.compile(r'^## .*(?:EMERGENCY|URGENTE|ER --).*?(?=^## |\Z)', re.MULTILINE | re.DOTALL | re.IGNORECASE)
+    em_match = emergency_pattern.search(guide_text)
+    if em_match:
+        checkbox_count = em_match.group().count("- [ ]")
+        if checkbox_count < 5:
+            blocks.append(f"Emergency section has {checkbox_count} checkboxes (need >= 5)")
+
+    # No emojis
+    if _EMOJI_RE.search(guide_text):
+        blocks.append("Guide contains emojis (forbidden)")
+
+    # No curly quotes
+    if "\u201c" in guide_text or "\u201d" in guide_text or "\u2018" in guide_text or "\u2019" in guide_text:
+        blocks.append("Guide contains typographic/curly quotes (use straight quotes)")
+
+    # No em-dashes
+    if "\u2014" in guide_text:
+        blocks.append("Guide contains em-dashes (use double hyphens --)")
+
+    # Paragraph check (warn if any > 5 lines)
+    for para in guide_text.split("\n\n"):
+        lines = [l for l in para.split("\n") if l.strip() and not l.startswith("|") and not l.startswith("#")]
+        if len(lines) > 5:
+            warnings.append(f"Long paragraph ({len(lines)} lines): {lines[0][:60]}...")
+            break  # only report first
+
+    return {"blocks": blocks, "warnings": warnings}
 
 
 def validate_guide(
@@ -440,11 +541,24 @@ def refine_guide(
     all_patches_applied = []
     language_issues_found = 0
     medical_corrections_applied = 0
+    sq = {"blocks": [], "warnings": []}
 
     for round_num in range(1, max_rounds + 1):
         logger.info(f"refine_guide: round {round_num}/{max_rounds}")
 
-        # Language check (Haiku, cheap)
+        # Layer 1: Structural QA (zero cost)
+        sq = structural_qa(guide_text)
+        if sq["blocks"]:
+            logger.warning(f"  Layer 1 BLOCKS: {sq['blocks']}")
+            # Auto-fix: emojis, curly quotes, em-dashes
+            guide_text = _EMOJI_RE.sub("", guide_text)
+            guide_text = guide_text.replace("\u201c", '"').replace("\u201d", '"')
+            guide_text = guide_text.replace("\u2018", "'").replace("\u2019", "'")
+            guide_text = guide_text.replace("\u2014", "--")
+        if sq["warnings"]:
+            logger.info(f"  Layer 1 warnings: {sq['warnings']}")
+
+        # Layer 2: Language check (Haiku, cheap)
         lang_patches = _check_language(guide_text, api_key, haiku_model, cost)
         if lang_patches:
             language_issues_found += len(lang_patches)
@@ -452,7 +566,7 @@ def refine_guide(
             all_patches_applied.extend(applied)
             logger.info(f"  Applied {len(applied)} language patch(es)")
 
-        # Validate
+        # Layer 4+5: Validate (oncologist + advocate)
         val_result = validate_guide(guide_text, diagnosis, knowledge_map, api_key, sonnet_model, cost)
         logger.info(f"  Validation: score={val_result.get('overall_score', '?')}, passed={val_result['passed']}")
 
@@ -492,5 +606,7 @@ def refine_guide(
         "language_issues_found": language_issues_found,
         "medical_corrections_applied": medical_corrections_applied,
         "rounds_completed": max_rounds,
+        "structural_blocks": sq.get("blocks", []),
+        "structural_warnings": sq.get("warnings", []),
     })
     return val_result

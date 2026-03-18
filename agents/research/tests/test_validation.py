@@ -2,7 +2,7 @@ import json
 import pytest
 from unittest.mock import patch, MagicMock, Mock
 
-from modules.validation import validate_guide, refine_guide, _apply_patches
+from modules.validation import validate_guide, refine_guide, _apply_patches, structural_qa
 from modules.cost_tracker import CostTracker
 
 
@@ -247,3 +247,39 @@ def test_refine_guide_has_backward_compat_keys(mock_api_call):
     for key in ("guide_text", "patches_applied", "language_issues_found",
                 "medical_corrections_applied", "rounds_completed"):
         assert key in result, f"Missing refine key: {key}"
+
+
+# ── Layer 1: Structural QA tests ────────────────────────────────────
+
+
+def test_structural_qa_detects_missing_exec_summary():
+    guide = "## 1. SECTION ONE\nContent here\n## 2. SECTION TWO\nMore content"
+    result = structural_qa(guide)
+    assert any("executive summary" in b.lower() or "BEFORE ANYTHING" in b for b in result["blocks"])
+
+
+def test_structural_qa_detects_emojis():
+    guide = "## BEFORE ANYTHING ELSE\nYou have cancer.\n" + "## Section\n" * 16 + "Great news! \U0001F389"
+    result = structural_qa(guide)
+    assert any("emoji" in b.lower() for b in result["blocks"])
+
+
+def test_structural_qa_detects_curly_quotes():
+    guide = "## BEFORE ANYTHING ELSE\nContent\n" + "## Section\n" * 16 + "This is \u201cgood\u201d"
+    result = structural_qa(guide)
+    assert any("curly" in b.lower() or "typographic" in b.lower() for b in result["blocks"])
+
+
+def test_structural_qa_passes_clean_guide():
+    # 250 words per section, enough for non-critical (200) and some headroom
+    body = " ".join(f"word{i}" for i in range(250))
+    sections = "\n\n".join(
+        f"## {i}. Section {i}\n\n{body}"
+        for i in range(1, 17)
+    )
+    exec_body = " ".join(f"word{i}" for i in range(120))
+    guide = f"## BEFORE ANYTHING ELSE\n\n{exec_body}\n\n{sections}"
+    result = structural_qa(guide)
+    # Should have no blocks about missing exec summary
+    exec_blocks = [b for b in result["blocks"] if "executive" in b.lower() or "BEFORE" in b]
+    assert len(exec_blocks) == 0
