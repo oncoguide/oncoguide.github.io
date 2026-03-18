@@ -739,10 +739,12 @@ def cmd_seed(cfg: dict, topic_id: str, cna_path: str, registry_path: str):
 
         for row in cna_rows:
             d = dict(row)
+            # Title fallback: use title_english if title_original is empty
+            title = d.get("title_original") or d.get("title_english", "") or ""
             # Compute content hash per SPEC 10.14
             ch = compute_content_hash(
                 topic_id,
-                d.get("title_original", "") or "",
+                title,
                 d.get("source_url", "") or "",
             )
             # Dedup against existing
@@ -753,7 +755,7 @@ def cmd_seed(cfg: dict, topic_id: str, cna_path: str, registry_path: str):
             db.insert_finding({
                 "content_hash": ch,
                 "topic_id": topic_id,
-                "title_original": d.get("title_original", ""),
+                "title_original": title,
                 "snippet_original": d.get("snippet_original", ""),
                 "source_language": d.get("source_language", "en"),
                 "title_english": d.get("title_english", ""),
@@ -983,5 +985,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-# test
-# test

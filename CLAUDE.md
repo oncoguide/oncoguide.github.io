@@ -171,7 +171,7 @@ python run_research.py --topic "topic-id"                  # Full research pipel
 python run_research.py --topic "topic-id" --dry-run        # Discovery + extraction, no search/DB
 python run_research.py --update-all --since 30d            # Update all published topics
 python run_research.py --list-topics                       # List topics from registry
-python run_research.py --seed --topic "topic-id"           # Import seed data from existing DBs (v6)
+python run_research.py --seed --topic "topic-id"           # Import seed data from existing DBs (v6, title_english fallback)
 python run_research.py --reclassify --topic "topic-id"     # Batch classify lifecycle_stage with Haiku (v6)
 ```
 
