@@ -220,7 +220,7 @@ topics/
 2. Discovery loop (Sonnet): oncologist (grounded with pre-search findings) <-> advocate iterate using Q1-Q8 lifecycle structure until all Q1-Q8 score >= 8.5/10. Abort if knowledge_map < 3 keys.
 3. Keyword extraction (Sonnet): methodologist extracts lifecycle-tagged queries (Q1-Q9) from conversation with per-stage minimums. Abort if < 80 queries.
 4. Search round 1: 5 backends execute queries + enrichment (Haiku, now outputs lifecycle_stage per finding). Abort if < 20 findings.
-5. Gap analysis + search round 2 (Haiku): fill weak lifecycle stages (thresholds per Q1-Q8). Pipeline gates check at each phase.
+5. Gap analysis + search round 2 (Haiku): fill weak lifecycle stages (thresholds per Q1-Q8). Pipeline gates (G0-G3) check at each phase -- G3 hard-stops at < 20 findings.
 6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
 7. Guide generation (Haiku + Sonnet): multi-pass, 16 sections; 4 critical sections (mistakes, side-effects, emergency-signs, resistance) use Sonnet, 12 non-critical use Haiku; informed by cross-verification report
 8. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found

@@ -433,11 +433,12 @@ def _gate_2(queries: list, lifecycle_mins: dict = None) -> tuple[bool, str]:
 
 
 def _gate_3(findings_count: int) -> tuple[bool, str]:
-    """GATE 3: Min 100 findings (hard stop at < 20)."""
+    """GATE 3: Min 100 findings. < 20 = hard stop, < 100 = warning (passes)."""
     if findings_count < 20:
         return False, f"Only {findings_count} findings -- too few, pipeline cannot continue"
     if findings_count < 100:
-        return False, f"Only {findings_count} findings (min 100) -- continuing with warning"
+        # Pass with warning per SPEC: "< 100 se logheaza warning"
+        return True, f"Only {findings_count} findings (min 100 recommended)"
     return True, ""
 
 
@@ -504,18 +505,16 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     km = discovery.get("knowledge_map", {})
     if not km or len(km) < 3:
         _abort("discovery", f"knowledge_map empty or too small: {list(km.keys())}")
-    # v6 sanity check: Q2 must have at least 1 drug, Q5 at least 1 mechanism
-    q2_drugs = km.get("Q2_treatment", {}).get("approved_drugs", [])
-    q5_mechs = km.get("Q5_resistance", {}).get("mechanisms", [])
-    if not q2_drugs:
-        logger.warning("GATE 1: No approved drugs in Q2_treatment -- continuing but guide may be incomplete")
-    if not q5_mechs:
-        logger.warning("GATE 1: No resistance mechanisms in Q5_resistance -- continuing but guide may be incomplete")
+    # GATE 1: minimum entities
+    g1_ok, g1_reason = _gate_1(km)
+    if not g1_ok:
+        logger.warning(f"GATE 1: {g1_reason} -- continuing but guide may be incomplete")
+        print(f"  [GATE 1 WARNING] {g1_reason}")
     if discovery.get("lifecycle_scores"):
         low = [f"{k}: {v.get('score', '?')}" for k, v in discovery["lifecycle_scores"].items()
                if isinstance(v, dict) and v.get("score", 10) < 8.5]
         if low:
-            print(f"  Low sections: {', '.join(low)}")
+            print(f"  Low lifecycle scores: {', '.join(low)}")
 
     # Phase 2: Keyword extraction (Sonnet)
     print("Phase 2: Extracting search queries from discovery...")
@@ -531,6 +530,12 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     print(f"  Extracted {len(queries)} precision queries ({time.time()-t0:.0f}s)")
     if len(queries) < 10:
         _abort("keyword_extraction", f"only {len(queries)} queries extracted, expected >= 10")
+    # GATE 2: query count + per-stage minimums
+    from modules.keyword_extractor import LIFECYCLE_MINIMUMS
+    g2_ok, g2_reason = _gate_2(queries, LIFECYCLE_MINIMUMS)
+    if not g2_ok:
+        logger.warning(f"GATE 2: {g2_reason}")
+        print(f"  [GATE 2 WARNING] {g2_reason}")
 
     if dry_run:
         print("\n--- DRY RUN ---")
@@ -559,8 +564,13 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     )
     print(f"  Round 1 done ({time.time()-t0:.0f}s)")
     total_findings = db.count_findings(topic_id)
-    if total_findings < 20:
-        _abort("search_round_1", f"only {total_findings} findings in DB, expected >= 20. Check API keys and search backends.")
+    # GATE 3: minimum findings
+    g3_ok, g3_reason = _gate_3(total_findings)
+    if not g3_ok:
+        _abort("search_round_1", f"{g3_reason}. Check API keys and search backends.")
+    elif g3_reason:
+        logger.warning(f"GATE 3: {g3_reason}")
+        print(f"  [GATE 3 WARNING] {g3_reason}")
 
     # Phase 4: Gap analysis + search round 2
     findings_so_far = db.get_findings_by_topic(topic_id, limit=500)

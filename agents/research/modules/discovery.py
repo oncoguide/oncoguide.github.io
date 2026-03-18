@@ -1,9 +1,9 @@
-"""Iterative oncologist <-> advocate discovery loop.
+"""Iterative oncologist <-> advocate discovery loop (v6 lifecycle).
 
 Input: diagnosis string only.
-Output: conversation transcript, knowledge map, section scores.
+Output: conversation transcript, Q1-Q8 knowledge map, lifecycle scores.
 
-The loop continues until the patient-advocate scores all 15 sections >= 8.5/10,
+The loop continues until the advocate scores all Q1-Q8 lifecycle questions >= 8.5/10,
 or max_rounds is reached (default 5).
 """
 

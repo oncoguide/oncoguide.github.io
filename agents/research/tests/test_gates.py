@@ -53,7 +53,14 @@ def test_gate_3_passes():
     assert ok is True
 
 
-def test_gate_3_too_few():
+def test_gate_3_hard_stop():
     ok, reason = _gate_3(15)
     assert ok is False
     assert "15" in reason
+
+
+def test_gate_3_warning():
+    """< 100 findings passes with a warning reason."""
+    ok, reason = _gate_3(60)
+    assert ok is True
+    assert "60" in reason  # warning message present
