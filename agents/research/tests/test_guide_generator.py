@@ -3,7 +3,7 @@ import os
 import pytest
 from unittest.mock import patch, MagicMock, Mock, call
 
-from modules.guide_generator import generate_guide, CRITICAL_SECTIONS
+from modules.guide_generator import generate_guide, CRITICAL_SECTIONS, SECTION_BRIEFS, GUIDE_SECTIONS
 
 
 def _mock_tool_use(input_dict):
@@ -34,10 +34,11 @@ _SINGLE_SECTION_PLAN = {
 
 @patch("modules.guide_generator.api_call")
 def test_generates_markdown_file(mock_api_call, tmp_path):
-    # First call = planner (tool use), subsequent calls = section generators (text)
+    # First call = planner (tool use), section generators (text), then executive summary (text)
     mock_api_call.side_effect = [
         _mock_tool_use(_SINGLE_SECTION_PLAN),
         _mock_text("# Test Guide\n\n## Summary\nTest content"),
+        _mock_text("You have a diagnosis. There is treatment. Here is what to do."),
     ]
     findings = [
         {"title_english": "Finding 1", "summary_english": "Summary 1",
@@ -55,6 +56,7 @@ def test_generates_markdown_file(mock_api_call, tmp_path):
     assert os.path.exists(output_path)
     content = open(output_path).read()
     assert len(content) > 0
+    assert "BEFORE ANYTHING ELSE" in content
 
 
 def test_no_findings_no_guide(tmp_path):
@@ -97,6 +99,7 @@ def test_section_planner_uses_tool_call(mock_api_call, tmp_path):
     mock_api_call.side_effect = [
         _mock_tool_use(_SINGLE_SECTION_PLAN),
         _mock_text(),
+        _mock_text("Executive summary"),  # exec summary
     ]
     findings = [
         {"title_english": "F1", "summary_english": "S1",
@@ -162,10 +165,11 @@ def test_critical_sections_use_sonnet(mock_api_call, tmp_path):
 @patch("modules.guide_generator.api_call")
 def test_cross_verify_report_passed_to_sections(mock_api_call, tmp_path):
     """Cross-verification report should be included in section generation prompts."""
-    # First call = planner (tool use), second call = section generator (text)
+    # planner + section generator + executive summary
     mock_api_call.side_effect = [
         _mock_tool_use(_SINGLE_SECTION_PLAN),
         _mock_text("Section content here"),
+        _mock_text("Executive summary"),
     ]
 
     findings = [
@@ -185,3 +189,20 @@ def test_cross_verify_report_passed_to_sections(mock_api_call, tmp_path):
     # Check that the report text appears in at least one of the section generation calls
     found = any("CONTRADICTED" in str(c) for c in mock_api_call.call_args_list)
     assert found, "Cross-verification report not found in any API call"
+
+
+def test_section_briefs_cover_all_sections():
+    """Every section in GUIDE_SECTIONS must have a brief."""
+    for s in GUIDE_SECTIONS:
+        assert s["id"] in SECTION_BRIEFS, f"Missing brief for section: {s['id']}"
+
+
+def test_guide_sections_count_16():
+    """GUIDE_SECTIONS must have exactly 16 sections."""
+    assert len(GUIDE_SECTIONS) == 16
+
+
+def test_guide_sections_have_lifecycle():
+    """Every section must have a lifecycle mapping."""
+    for s in GUIDE_SECTIONS:
+        assert "lifecycle" in s, f"Missing lifecycle for section: {s['id']}"

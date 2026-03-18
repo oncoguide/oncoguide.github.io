@@ -193,7 +193,7 @@ agents/research/
     gap_analyzer.py            — Identify weak sections, generate round 2 queries (Haiku); accepts optional CostTracker for both AI calls
     pre_search.py              — Phase 0: template + Haiku queries, search, enrich, format context for discovery
     cross_verify.py            — Compare discovery claims vs real findings (Haiku)
-    guide_generator.py         — Claude: generate master guide markdown (Haiku for 11 sections, Sonnet for 4 critical)
+    guide_generator.py         — Claude: generate master guide markdown (Haiku for 12 sections, Sonnet for 4 critical, + executive summary)
     searcher_serper.py         — Serper.dev Google search
     searcher_pubmed.py         — PubMed/NCBI Entrez
     searcher_clinicaltrials.py — ClinicalTrials.gov API v2

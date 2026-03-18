@@ -221,11 +221,44 @@ QUALITY EXAMPLE -- this is the level of density and actionability you must match
 
 Notice: tables with real numbers, bold actionable rules, direct language, no filler. Match this."""
 
+# v6: Section briefs -- what each section MUST contain (for validation Layer 1b)
+SECTION_BRIEFS = {
+    "understanding-diagnosis": "Diagnostic explained plainly + tests + staging + prognosis with numbers",
+    "best-treatment": "Comparative treatment table with ORR/PFS/OS + ESMO/NCCN guidelines",
+    "mistakes": "Min 8 mistakes in format MISTAKE/WHY DANGEROUS/WHAT TO DO INSTEAD",
+    "how-to-take": "Per drug: dose, timing, food, pH, PPI -- practical table",
+    "side-effects": "Per drug: table side effects with frequency %, grade, action",
+    "interactions": "Table interactions (drugs, food, supplements) with action",
+    "monitoring": "Table monitoring (test, frequency, why) + liquid biopsy if relevant",
+    "emergency-signs": "Min 5 PRINTABLE checkboxes: symptom -> immediate action",
+    "metastases": "Per metastasis site: frequency %, treatment, local options",
+    "resistance": "Resistance mechanisms BY NAME + Plan B/C/D CONCRETE + rebiopsy",
+    "pipeline": "Table pipeline drugs (drug, phase, mechanism, timeline) + active trials NCT",
+    "daily-life": "Nutrition + exercise + fatigue + work + travel + psych + fertility + realistic timeline",
+    "treatment-access": "Per country: legal access mechanisms + financial assistance",
+    "community": "Diagnosis-SPECIFIC communities with links + patient stories + caregiver support",
+    "questions-for-doctor": "Min 5 questions per stage (diagnosis, treatment, progression) with context",
+    "international-guidelines": "Explicit ESMO/NCCN differences + availability per country",
+}
+
+EXECUTIVE_SUMMARY_SYSTEM = """You are a patient who just received a cancer diagnosis.
+Write a MAX 200-word "BEFORE ANYTHING ELSE" section that answers:
+1. What do I have? (1-2 sentences, plain language)
+2. Is there treatment? (YES/NO + the specific drug name)
+3. How serious is it? (REAL prognosis with numbers -- not vague, not falsely optimistic)
+4. What do I do RIGHT NOW? (direct the reader to sections 3 and 4)
+
+End with: "The rest comes when you are ready. You have time. The information is not going anywhere."
+
+Tone: warm, direct, no condescension. You have been through this yourself.
+Do NOT use emojis, typographic quotes, or em-dashes. Use standard quotes and double hyphens."""
+
 GUIDE_HEADER = """# {title} -- Master Guide
 
 **Generated:** {date}
 **Findings analyzed:** {count}
 **Top sources:** {top_sources}
+**Last updated:** {date}
 
 ---
 
@@ -253,7 +286,7 @@ def _plan_sections(
     findings_count: int,
     model: str,
 ) -> list[dict]:
-    """Ask Claude to map findings to the 15 predefined guide sections."""
+    """Ask Claude to map findings to the 16 predefined guide sections."""
     sections_json = json.dumps(
         [{"id": s["id"], "title": s["title"], "description": s["description"]}
          for s in GUIDE_SECTIONS],
@@ -305,10 +338,12 @@ def _generate_section(
             f"{cross_verify_report}\n"
         )
 
-    # Look up description from GUIDE_SECTIONS if not in planner output
+    # Look up description and brief from GUIDE_SECTIONS
     section_id = section.get("id", "")
     section_def = next((s for s in GUIDE_SECTIONS if s["id"] == section_id), None)
     description = section.get("description") or (section_def["description"] if section_def else "")
+    brief = SECTION_BRIEFS.get(section_id, "")
+    brief_block = f"\n\nSECTION BRIEF (this section MUST contain): {brief}" if brief else ""
 
     message = api_call(
         client,
@@ -322,6 +357,7 @@ def _generate_section(
                     f"Topic: {topic_title}\n"
                     f"Section {section_num}: {section['title']}\n"
                     f"Section scope: {description}\n"
+                    f"{brief_block}\n"
                     f"Key finding IDs to use: {section.get('finding_ids', 'all relevant')}\n\n"
                     f"ALL findings (reference by number):\n{findings_text}"
                     f"{cross_verify_block}"
@@ -386,6 +422,34 @@ def generate_guide(
             logger.error(f"Section generation failed for '{section['title']}': {e}")
             guide_parts.append(f"## {i}. {section['title']}\n\n*Generation failed: {e}*")
 
+    # Pass 3: Generate executive summary from sections 1-3 (SPEC 10.4)
+    exec_summary = ""
+    sections_1_3 = "\n\n".join(guide_parts[:3]) if len(guide_parts) >= 3 else "\n\n".join(guide_parts)
+    try:
+        print(f"  Executive summary: BEFORE ANYTHING ELSE [Haiku]")
+        exec_msg = api_call(
+            client,
+            model=model,  # Haiku -- not safety-critical, just a summary
+            max_tokens=500,
+            system=EXECUTIVE_SUMMARY_SYSTEM,
+            messages=[{
+                "role": "user",
+                "content": (
+                    f"Diagnosis: {topic_title}\n\n"
+                    f"Here are the first 3 sections of the guide:\n\n{sections_1_3}"
+                ),
+            }],
+        )
+        exec_summary = exec_msg.content[0].text.strip()
+    except Exception as e:
+        logger.error(f"Executive summary generation failed: {e}")
+        exec_summary = (
+            "**What you have:** [Could not generate -- see Section 1]\n"
+            "**Is there treatment:** [See Section 2]\n"
+            "**How serious:** [See Section 1]\n"
+            "**What to do NOW:** Read Section 3 (what NOT to do) and Section 4 (how to take treatment)."
+        )
+
     # Assemble guide
     top_sources = ", ".join(
         extract_domain(f.get("source_url", ""))
@@ -400,6 +464,8 @@ def generate_guide(
             count=len(findings),
             top_sources=top_sources,
         ))
+        # Executive summary before all sections
+        f.write(f"## BEFORE ANYTHING ELSE\n\n{exec_summary}\n\n---\n\n")
         f.write("\n\n".join(guide_parts))
 
     total_size = os.path.getsize(output_path)
