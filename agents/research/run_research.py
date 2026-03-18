@@ -15,6 +15,7 @@ import logging
 import os
 import re
 import shutil
+import sqlite3
 import sys
 import time
 from datetime import datetime, timedelta
@@ -679,6 +680,232 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     print(f"  Enrichment tokens: {enrich_tokens['input']} in, {enrich_tokens['output']} out")
 
 
+# ── v6: Seed import ──────────────────────────────────────────────────
+
+# CNA section -> lifecycle stage mapping
+CNA_SECTION_MAP = {
+    "my_treatment": "Q2",
+    "resistance": "Q5",
+    "daily_life": "Q3",
+    "alerts_safety": "Q3",
+    "patient_community": "Q8",
+    "research_pipeline": "Q6",
+}
+
+
+def cmd_seed(cfg: dict, topic_id: str, cna_path: str, registry_path: str):
+    """Import seed data from onco-blog DB (in-place) + CNA DB (read-only copy)."""
+    db = Database(cfg["database_path"])
+    db.create_tables()
+
+    # Check if already seeded
+    existing_seed = db.execute(
+        "SELECT COUNT(*) FROM search_runs WHERE run_type LIKE 'seed%' AND topic_id = ?",
+        (topic_id,),
+    ).fetchone()[0]
+    if existing_seed > 0:
+        print(f"Seed already imported for '{topic_id}' ({existing_seed} seed runs found). Skipping.")
+        db.close()
+        return
+
+    # Step 1: Tag existing onco-blog findings (they're already in the DB)
+    onco_count = db.execute(
+        "SELECT COUNT(*) FROM findings WHERE topic_id = ?", (topic_id,),
+    ).fetchone()[0]
+    if onco_count > 0:
+        db.execute(
+            "UPDATE findings SET is_seeded = 0 WHERE topic_id = ? AND is_seeded IS NULL",
+            (topic_id,),
+        )
+        db.conn.commit()
+        print(f"  onco-blog: {onco_count} existing findings tagged (is_seeded=0, native)")
+
+    # Step 2: Import from CNA (read-only)
+    cna_imported = 0
+    if os.path.exists(cna_path):
+        cna_conn = sqlite3.connect(f"file:{cna_path}?mode=ro", uri=True)
+        cna_conn.row_factory = sqlite3.Row
+        cna_rows = cna_conn.execute("SELECT * FROM findings").fetchall()
+
+        run_id = db.start_run("seed_cna", topic_id)
+
+        for row in cna_rows:
+            d = dict(row)
+            # Compute content hash per SPEC 10.14
+            ch = compute_content_hash(
+                topic_id,
+                d.get("title_original", "") or "",
+                d.get("source_url", "") or "",
+            )
+            # Dedup against existing
+            if db.has_finding(topic_id, content_hash=ch, url=d.get("source_url")):
+                continue
+
+            lifecycle = CNA_SECTION_MAP.get(d.get("section"), None)
+            db.insert_finding({
+                "content_hash": ch,
+                "topic_id": topic_id,
+                "title_original": d.get("title_original", ""),
+                "snippet_original": d.get("snippet_original", ""),
+                "source_language": d.get("source_language", "en"),
+                "title_english": d.get("title_english", ""),
+                "summary_english": d.get("summary_english", ""),
+                "relevance_score": d.get("relevance_score", 5),
+                "authority_score": 0,  # reclassify fills this
+                "source_url": d.get("source_url", ""),
+                "source_domain": d.get("source_domain", ""),
+                "source_platform": d.get("source_platform", ""),
+                "date_published": d.get("date_published"),
+                "date_found": d.get("date_found") or now_iso(),
+                "run_id": run_id,
+                "lifecycle_stage": lifecycle,
+                "is_seeded": 1,
+                "seed_source": "cna",
+            })
+            cna_imported += 1
+
+        cna_conn.close()
+        db.finish_run(run_id, {"after_enrichment": cna_imported})
+        print(f"  CNA: {cna_imported} findings imported (of {len(cna_rows)} total, rest were duplicates)")
+    else:
+        print(f"  CNA database not found at {cna_path}, skipping CNA import")
+
+    total = db.count_findings(topic_id)
+    print(f"\n  Total findings for '{topic_id}': {total}")
+    db.close()
+
+
+def cmd_reclassify(cfg: dict, topic_id: str):
+    """Batch classify findings with NULL lifecycle_stage using Haiku."""
+    import anthropic
+
+    db = Database(cfg["database_path"])
+    db.create_tables()
+
+    # Get findings needing classification
+    rows = db.execute(
+        """SELECT id, title_english, summary_english, source_platform
+        FROM findings WHERE topic_id = ?
+          AND (lifecycle_stage IS NULL OR authority_score = 0)""",
+        (topic_id,),
+    ).fetchall()
+
+    if not rows:
+        print(f"No findings to reclassify for '{topic_id}'.")
+        db.close()
+        return
+
+    print(f"Reclassifying {len(rows)} findings for '{topic_id}'...")
+
+    RECLASSIFY_TOOL = {
+        "name": "submit_classifications",
+        "description": "Submit lifecycle stage and authority classifications for findings",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "classifications": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "finding_id": {"type": "integer"},
+                            "lifecycle_stage": {
+                                "type": "string",
+                                "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9"],
+                            },
+                            "authority_score": {"type": "integer", "minimum": 1, "maximum": 5},
+                        },
+                        "required": ["finding_id", "lifecycle_stage", "authority_score"],
+                    },
+                },
+            },
+            "required": ["classifications"],
+        },
+    }
+
+    RECLASSIFY_SYSTEM = """You classify oncology research findings into lifecycle stages.
+
+Lifecycle stages:
+  Q1 = Diagnosis confirmation (molecular tests, staging, subtypes)
+  Q2 = Treatment standard (approved drugs, guidelines, efficacy data)
+  Q3 = Living with treatment (dosing, side effects, interactions, monitoring, emergency signs, daily life, access)
+  Q4 = Metastases (common sites, detection, local treatment)
+  Q5 = Resistance and progression (mechanisms, next-line options, rebiopsy)
+  Q6 = Pipeline (drugs in development, clinical trials, novel modalities)
+  Q7 = Mistakes (dangerous interactions, contraindicated supplements, myths)
+  Q8 = Community (patient groups, caregiver support, organizations)
+  Q9 = Geographic access (country-specific access, legal mechanisms, reimbursement)
+
+Authority scores:
+  5 = Trial in top journal (NEJM, Lancet, JCO), ESMO/NCCN guideline
+  4 = Agency decision (FDA, EMA), systematic review
+  3 = Peer-reviewed review/meta-analysis, clinical registry
+  2 = Press release, medical news
+  1 = Blog, forum, unknown
+
+Classify each finding based on its title and summary."""
+
+    client = anthropic.Anthropic(api_key=cfg["anthropic_api_key"])
+    cost = CostTracker(cfg.get("max_cost_usd", 5.0))
+    batch_size = 5
+    classified = 0
+
+    for i in range(0, len(rows), batch_size):
+        batch = rows[i:i + batch_size]
+        findings_text = "\n".join(
+            f"ID:{r['id']} | TITLE: {r['title_english'] or '(none)'} | "
+            f"SUMMARY: {(r['summary_english'] or '')[:200]} | PLATFORM: {r['source_platform']}"
+            for r in batch
+        )
+
+        try:
+            message = client.messages.create(
+                model=cfg.get("enrichment_model", "claude-haiku-4-5-20251001"),
+                max_tokens=1000,
+                system=RECLASSIFY_SYSTEM,
+                messages=[{"role": "user", "content": f"Classify these findings:\n\n{findings_text}"}],
+                tools=[RECLASSIFY_TOOL],
+                tool_choice={"type": "tool", "name": "submit_classifications"},
+            )
+            cost.track(cfg.get("enrichment_model", "claude-haiku-4-5-20251001"),
+                      message.usage.input_tokens, message.usage.output_tokens)
+
+            for block in message.content:
+                if block.type == "tool_use":
+                    for c in block.input.get("classifications", []):
+                        db.execute(
+                            "UPDATE findings SET lifecycle_stage = ?, authority_score = ? WHERE id = ?",
+                            (c["lifecycle_stage"], c["authority_score"], c["finding_id"]),
+                        )
+                        classified += 1
+
+            db.conn.commit()
+            print(f"  {min(i + batch_size, len(rows))}/{len(rows)} classified", end="\r")
+
+        except Exception as e:
+            logger.error(f"Reclassify batch {i} failed: {e}")
+            print(f"\n  [ERROR] Batch {i} failed: {e}")
+
+        if i + batch_size < len(rows):
+            time.sleep(0.3)
+
+    # Report distribution
+    dist = db.execute(
+        """SELECT lifecycle_stage, COUNT(*) as cnt FROM findings
+        WHERE topic_id = ? AND lifecycle_stage IS NOT NULL
+        GROUP BY lifecycle_stage ORDER BY lifecycle_stage""",
+        (topic_id,),
+    ).fetchall()
+
+    print(f"\n\n  Classified {classified}/{len(rows)} findings")
+    print(f"\n  Lifecycle distribution for '{topic_id}':")
+    for r in dist:
+        print(f"    {r['lifecycle_stage']}: {r['cnt']}")
+    print(f"\n  Cost: {cost.report()}")
+
+    db.close()
+
+
 def cmd_update_all(cfg: dict, since: str, registry_path: str):
     """Incremental update for all published topics."""
     topics = load_registry(registry_path)
@@ -709,6 +936,12 @@ def main():
     parser.add_argument("--since", type=str, default="30d", help="Look back period for updates (e.g., 30d)")
     parser.add_argument("--list-topics", action="store_true", help="List all topics")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be executed without API calls")
+    parser.add_argument("--seed", action="store_true", help="Import seed data from existing DBs")
+    parser.add_argument("--seed-cna-path", type=str,
+        default="/Users/dorins/Documents/cancer-news-agent/data/ret_findings_v3.db",
+        help="Path to CNA database for seed import")
+    parser.add_argument("--reclassify", action="store_true",
+        help="Batch classify findings with NULL lifecycle_stage using Haiku")
     parser.add_argument("--config", type=str, default="config.json", help="Config file path")
     parser.add_argument("--registry", type=str, default="../../topics/registry.yaml", help="Registry file path")
     args = parser.parse_args()
@@ -722,6 +955,16 @@ def main():
 
     if args.init:
         cmd_init(cfg)
+    elif args.seed:
+        if not args.topic:
+            print("ERROR: --seed requires --topic")
+            sys.exit(1)
+        cmd_seed(cfg, args.topic, args.seed_cna_path, args.registry)
+    elif args.reclassify:
+        if not args.topic:
+            print("ERROR: --reclassify requires --topic")
+            sys.exit(1)
+        cmd_reclassify(cfg, args.topic)
     elif args.topic:
         cmd_topic(cfg, args.topic, args.registry, args.dry_run)
     elif args.update_all:

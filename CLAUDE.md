@@ -9,7 +9,10 @@ Author is anonymous — a cancer patient writing for other patients.
 
 ## Key Files
 
-- `prompt/PLAN.md` — Implementation plan with progress checkboxes (gitignored, local only). READ THIS FIRST every session.
+- `vision.md` — Project vision and operating principles. READ THIS BEFORE ANYTHING ELSE every session.
+- `agents/research/SPEC.md` — Research agent specification v6 (lifecycle pipeline, 16 sections, validation, monitoring). READ THIS for any pipeline work.
+- `agents/research/IMPLEMENTATION_PROMPT.md` — Prompt and milestone plan for implementation agent.
+- `prompt/PLAN.md` — Implementation plan with progress checkboxes (gitignored, local only).
 - `prompt/research/` — Research findings for articles (gitignored, local only). READ relevant research files BEFORE writing any article content.
 - `decisions/log.yaml` — Decision capture log. Update after significant interactions.
 - `hugo.yaml` — Central Hugo configuration (languages, menus, params).
@@ -28,6 +31,8 @@ Current research files:
 - `diagnostic-pathway.md` — Complete diagnostic protocol: molecular testing by cancer type, timelines, tumor board data
 - `anadolu-experience.md` — Real patient experience at Anadolu Medical Center vs Romania (anonymized, for comparative examples)
 - `content-strategy.md` — Editorial decisions: "avoid worst mistakes" philosophy, red flags pattern, patient advocacy tone
+- `ret-fusion-reference-guide.md` — RET fusion NSCLC reference guide (earlier version, for comparison with generated guide)
+- `ret-cancer-news-agent-report-2026-03-10.html` — Cancer News Agent HTML report for RET fusion (2026-03-10); use as reference for treatment data, clinical trial results, drug approvals, and patient-relevant summaries when writing/verifying RET fusion articles
 
 ## Content Conventions
 
@@ -166,6 +171,8 @@ python run_research.py --topic "topic-id"                  # Full research pipel
 python run_research.py --topic "topic-id" --dry-run        # Discovery + extraction, no search/DB
 python run_research.py --update-all --since 30d            # Update all published topics
 python run_research.py --list-topics                       # List topics from registry
+python run_research.py --seed --topic "topic-id"           # Import seed data from existing DBs (v6)
+python run_research.py --reclassify --topic "topic-id"     # Batch classify lifecycle_stage with Haiku (v6)
 ```
 
 ### Structure
@@ -314,9 +321,11 @@ When modifying files in the left column, you MUST also update the files in the r
 
 ## Session Start Checklist
 
-1. Read `prompt/PLAN.md` — find the first unchecked `[ ]` subfase
-2. Read `decisions/log.yaml` — understand prior context
-3. Read this file (`CLAUDE.md`) — refresh conventions
-4. If modifying pipeline code: check **Dependency Map** above for what else needs updating
+0. Read `vision.md` — understand WHY before anything else. Every decision must serve the patient.
+1. Read `agents/research/SPEC.md` sections 2+4 — lifecycle framework (Q1-Q9), the core logic
+2. Read `CLAUDE.md` (this file) — refresh conventions
+3. Read `decisions/log.yaml` — understand prior context
+4. If modifying pipeline code: read `agents/research/SPEC.md` fully + check **Dependency Map** above
 5. If writing content: read relevant files from `prompt/research/`
+6. If implementing v6: read `agents/research/IMPLEMENTATION_PROMPT.md` for milestones
 6. Continue implementation from where the last session left off
