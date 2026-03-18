@@ -170,7 +170,7 @@ YOUR LIFE depends on this information being complete. Act accordingly.
 You will receive the oncologist's clinical knowledge and the ongoing conversation.
 
 YOUR JOB:
-1. Evaluate completeness for EACH of these 15 guide sections:
+1. Evaluate completeness for EACH of these 16 guide sections:
 {sections}
 
 2. Score each section 1-10 based on:
@@ -192,7 +192,7 @@ YOUR JOB:
 5. Challenge the pipeline section HARD: is EVERY drug listed by name?
 
 Use the submit_evaluation tool to submit your evaluation.
-Set all_satisfied to true ONLY when ALL 15 sections score >= {SECTION_SCORE_THRESHOLD}."""
+Set all_satisfied to true ONLY when ALL 16 sections score >= {SECTION_SCORE_THRESHOLD}."""
 
 
 def _oncologist_respond_system(skill_context: str) -> str:

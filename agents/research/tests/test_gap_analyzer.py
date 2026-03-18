@@ -23,7 +23,7 @@ SAMPLE_FINDINGS = [
 ]
 
 SAMPLE_SECTIONS = [
-    {"id": "treatment-efficacy", "title": "Treatment Efficacy", "description": "Drug response rates"},
+    {"id": "best-treatment", "title": "Treatment Efficacy", "description": "Drug response rates"},
     {"id": "side-effects", "title": "Side Effects", "description": "Adverse events with frequencies"},
     {"id": "resistance", "title": "Resistance", "description": "Resistance mechanisms"},
 ]
@@ -33,14 +33,14 @@ def test_map_findings_uses_tool_call():
     """_map_findings_to_sections uses tool_choice."""
     mock_client = Mock()
     mock_client.messages.create.return_value = _mock_tool_use({
-        "section_map": {"treatment-efficacy": [0, 1, 2], "side-effects": [3, 4]}
+        "section_map": {"best-treatment": [0, 1, 2], "side-effects": [3, 4]}
     })
 
     result = _map_findings_to_sections(SAMPLE_FINDINGS, SAMPLE_SECTIONS, mock_client, "claude-haiku-4-5-20251001")
 
     call_kwargs = mock_client.messages.create.call_args[1]
     assert call_kwargs["tool_choice"]["name"] == "submit_section_map"
-    assert result == {"treatment-efficacy": [0, 1, 2], "side-effects": [3, 4]}
+    assert result == {"best-treatment": [0, 1, 2], "side-effects": [3, 4]}
 
 
 @patch("modules.gap_analyzer.anthropic.Anthropic")
@@ -51,7 +51,7 @@ def test_gap_queries_uses_tool_call(mock_cls):
 
     mock_client.messages.create.side_effect = [
         # First call: _map_findings_to_sections
-        _mock_tool_use({"section_map": {"treatment-efficacy": [1, 2], "side-effects": [], "resistance": [5]}}),
+        _mock_tool_use({"section_map": {"best-treatment": [1, 2], "side-effects": [], "resistance": [5]}}),
         # Second call: gap query generation
         _mock_tool_use({
             "queries": [{"query_text": "selpercatinib resistance", "search_engine": "pubmed", "section_id": "resistance"}]
@@ -75,7 +75,7 @@ def test_gap_queries_empty_when_all_covered(mock_cls):
     mock_cls.return_value = mock_client
 
     mock_client.messages.create.side_effect = [
-        _mock_tool_use({"section_map": {"treatment-efficacy": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}}),
+        _mock_tool_use({"section_map": {"best-treatment": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}}),
         _mock_tool_use({"queries": []}),
     ]
 

@@ -58,7 +58,7 @@ Current research files:
 ## Archetypes
 
 - `archetypes/article.md` — Standard article template with all required fields
-- `archetypes/master-guide-template.md` — Patient Master Guide per molecular subtype / final diagnosis (15 sections)
+- `archetypes/master-guide-template.md` — Patient Master Guide per molecular subtype / final diagnosis (16 sections, v6 lifecycle)
 
 ## Content Architecture
 
@@ -222,7 +222,7 @@ topics/
 4. Search round 1: 5 backends execute queries + enrichment (Haiku). Abort if < 20 findings.
 5. Gap analysis + search round 2 (Haiku): fill weak sections
 6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
-7. Guide generation (Haiku + Sonnet): multi-pass, 15 sections; 4 critical sections (treatment-efficacy, side-effects, emergency-signs, resistance) use Sonnet, 11 non-critical use Haiku; informed by cross-verification report
+7. Guide generation (Haiku + Sonnet): multi-pass, 16 sections; 4 critical sections (mistakes, side-effects, emergency-signs, resistance) use Sonnet, 12 non-critical use Haiku; informed by cross-verification report
 8. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found
 9. Human review checklist: generates `data/guides/{topic-id}-review.md` with safety concerns, accuracy issues, cross-verification discrepancies, section scores, and reviewer questions
 10. Skill self-improvement: learnings written back to skill files

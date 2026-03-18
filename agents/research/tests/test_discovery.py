@@ -63,8 +63,8 @@ def test_advocate_evaluate_uses_tool_call(mock_api_call, mock_client, cost_track
     """_advocate_evaluate uses tool_choice, guaranteeing structured output."""
     evaluation = {
         "section_scores": {
-            "big-picture": {"score": 9.0, "assessment": "Good"},
-            "treatment-efficacy": {"score": 7.0, "assessment": "Missing PFS data"},
+            "understanding-diagnosis": {"score": 9.0, "assessment": "Good"},
+            "best-treatment": {"score": 7.0, "assessment": "Missing PFS data"},
         },
         "questions": ["What about brain metastases ORR?"],
         "all_satisfied": False,
@@ -125,7 +125,7 @@ def test_discovery_loop_converges(mock_api_call):
         "resistance": [], "guidelines": [], "testing": [],
     }
     eval_round1 = {
-        "section_scores": {"big-picture": {"score": 9.0, "assessment": "OK"}, "pipeline": {"score": 6.0, "assessment": "Missing drugs"}},
+        "section_scores": {"understanding-diagnosis": {"score": 9.0, "assessment": "OK"}, "pipeline": {"score": 6.0, "assessment": "Missing drugs"}},
         "questions": ["What about LOXO-260?"], "all_satisfied": False,
     }
     response = {
@@ -133,7 +133,7 @@ def test_discovery_loop_converges(mock_api_call):
         "additional_knowledge": {"pipeline_drugs": [{"name": "LOXO-260", "phase": "I"}]},
     }
     eval_round2 = {
-        "section_scores": {"big-picture": {"score": 9.0, "assessment": "OK"}, "pipeline": {"score": 9.0, "assessment": "Complete now"}},
+        "section_scores": {"understanding-diagnosis": {"score": 9.0, "assessment": "OK"}, "pipeline": {"score": 9.0, "assessment": "Complete now"}},
         "questions": [], "all_satisfied": True,
     }
 
@@ -162,7 +162,7 @@ def test_discovery_loop_respects_max_rounds(mock_api_call):
         "guidelines": [], "testing": [],
     }
     never_satisfied = {
-        "section_scores": {"big-picture": {"score": 5.0, "assessment": "Weak"}},
+        "section_scores": {"understanding-diagnosis": {"score": 5.0, "assessment": "Weak"}},
         "questions": ["More info needed"], "all_satisfied": False,
     }
     response = {"answers": [{"question": "More info needed", "answer": "Some info"}], "additional_knowledge": {}}
@@ -234,7 +234,7 @@ def test_discovery_without_pre_search_context():
 def test_advocate_receives_pruned_history(mock_api_call, mock_client, cost_tracker):
     """Advocate receives at most last 2 conversation exchanges, not full history."""
     evaluation = {
-        "section_scores": {"big-picture": {"score": 9.0, "assessment": "OK"}},
+        "section_scores": {"understanding-diagnosis": {"score": 9.0, "assessment": "OK"}},
         "questions": [], "all_satisfied": True,
     }
     mock_api_call.return_value = _mock_tool_use(evaluation)

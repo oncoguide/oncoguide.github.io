@@ -24,7 +24,7 @@ def test_extract_queries_uses_tool_call(mock_api_call):
             {
                 "query_text": "selpercatinib LIBRETTO-001 ORR",
                 "search_engine": "pubmed",
-                "target_section": "treatment-efficacy",
+                "target_section": "best-treatment",
                 "priority": "high",
                 "language": "en",
             }
@@ -53,7 +53,7 @@ def test_extracts_queries_from_conversation(mock_api_call):
     queries_data = {
         "queries": [
             {"query_text": "selpercatinib ORR phase III", "search_engine": "pubmed",
-             "target_section": "treatment-efficacy", "language": "en"},
+             "target_section": "best-treatment", "language": "en"},
             {"query_text": "LOXO-260 RET inhibitor phase I", "search_engine": "serper",
              "target_section": "pipeline", "language": "en"},
         ]

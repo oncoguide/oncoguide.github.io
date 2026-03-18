@@ -19,87 +19,109 @@ logger = logging.getLogger(__name__)
 
 # Critical sections use Sonnet (safety-critical for patients)
 CRITICAL_SECTIONS = {
-    "treatment-efficacy",  # wrong number = wrong treatment decision
-    "side-effects",        # missing effect = patient unprepared
-    "emergency-signs",     # wrong alarm sign = direct danger
-    "resistance",          # missing Plan B = patient left without options
+    "mistakes",         # wrong info here = patient endangers themselves
+    "side-effects",     # missing effect = patient unprepared
+    "emergency-signs",  # wrong alarm sign = direct danger
+    "resistance",       # missing Plan B = patient left without options
 }
 
+# v6: 16 lifecycle sections mapped from Q1-Q8
 GUIDE_SECTIONS = [
     {
-        "id": "big-picture",
-        "title": "CE AI DE FAPT -- THE BIG PICTURE",
-        "description": "What this condition is concretely. Real numbers: incidence, honest prognosis. 'Not the end -- but you need to know exactly what you're fighting.'",
+        "id": "understanding-diagnosis",
+        "title": "WHAT YOU HAVE -- UNDERSTANDING YOUR DIAGNOSIS",
+        "lifecycle": "Q1",
+        "description": "What this diagnosis means exactly. Molecular testing, staging, subtypes and why they matter. Real prognosis with numbers.",
     },
     {
-        "id": "demographics",
-        "title": "CINE FACE ACEASTA BOALA",
-        "description": "Demographics, risk factors (or absence thereof), 'it's not your fault'. Typical age, smokers vs non-smokers, sex if relevant.",
+        "id": "best-treatment",
+        "title": "THE BEST TREATMENT RIGHT NOW",
+        "lifecycle": "Q2",
+        "description": "Approved drugs per line. Table: treatment | line | ORR% | PFS months | OS months | source. ESMO vs NCCN. Immunotherapy role. Head-to-head if available.",
     },
     {
-        "id": "treatment-efficacy",
-        "title": "CAT DE BINE FUNCTIONEAZA TRATAMENTUL",
-        "description": "ORR, median PFS, median OS -- real numbers from published trials. Table: treatment | line | ORR | PFS | OS | source. Compare options. NO marketing ('durable response') -- concrete numbers.",
+        "id": "mistakes",
+        "title": "WHAT NOT TO DO -- MISTAKES THAT CAN COST YOU",
+        "lifecycle": "Q7",
+        "description": "Format per mistake: MISTAKE: {what} / WHY DANGEROUS: {consequence} / INSTEAD: {alternative}. Dangerous interactions, contraindicated supplements, myths, stopping treatment.",
     },
     {
         "id": "how-to-take",
-        "title": "CUM SE IA MEDICAMENTUL CORECT",
-        "description": "Dose, timing, with/without food. pH-dependent absorption? Interactions with dairy? PPI? Practical rules that DIRECTLY affect efficacy. Table: situation | what to do | why it matters.",
+        "title": "HOW TO TAKE YOUR TREATMENT CORRECTLY",
+        "lifecycle": "Q3-dosing",
+        "description": "Per approved drug: dose, timing, food rules, pH/PPI/dairy interactions. Table: situation | what to do | why it matters.",
     },
     {
         "id": "side-effects",
-        "title": "EFECTE SECUNDARE -- PROBABILITATI REALE",
-        "description": "Table: effect | frequency % | grade | what to do. Not 'possible/rare' -- real percentages. Include effects doctors frequently omit. Hyperglycemia, QTc, hepatotoxicity if relevant.",
-    },
-    {
-        "id": "emergency-signs",
-        "title": "CAND MERGI LA URGENTE -- ACUM",
-        "description": "Printable checklist. Alarm signs requiring emergency. Format: symptom -> immediate action. Bold, clear, no ambiguity. Can save lives.",
+        "title": "SIDE EFFECTS -- REAL PROBABILITIES",
+        "lifecycle": "Q3-effects",
+        "description": "Per drug: table: effect | frequency % | grade | what to do. Include under-reported effects (hyperglycemia, QTc, taste changes). Practical management per major effect.",
     },
     {
         "id": "interactions",
-        "title": "INTERACTIUNI MEDICAMENTE SI ALIMENTE",
-        "description": "Table: drug/food | effect | action. 'NEVER with X', 'take 2h before Y'. Include supplements, natural remedies, common OTC.",
+        "title": "DRUG AND FOOD INTERACTIONS",
+        "lifecycle": "Q3-interactions",
+        "description": "Table: drug/food | effect | action. 'NEVER with X', 'take 2h before Y'. Supplements, OTC, natural remedies. CYP profile explained simply.",
     },
     {
         "id": "monitoring",
-        "title": "CE TREBUIE MONITORIZAT DE MEDIC",
-        "description": "Table: test | frequency | why | what to watch. What to request if doctor doesn't propose it. ECG, liver function, blood sugar, thyroid if relevant.",
+        "title": "WHAT MONITORING YOU NEED",
+        "lifecycle": "Q3-monitoring",
+        "description": "Table: test | frequency | why | what to watch. ECG, liver, glucose, thyroid, creatinine. Include liquid biopsy/ctDNA if relevant for this diagnosis.",
+    },
+    {
+        "id": "emergency-signs",
+        "title": "WHEN TO GO TO THE ER -- NOW",
+        "lifecycle": "Q3-emergency",
+        "description": "PRINTABLE checklist with checkboxes: - [ ] Symptom -> Immediate action. Bold, clear, no ambiguity. 'Print this page and put it on your fridge.'",
+    },
+    {
+        "id": "metastases",
+        "title": "WHERE IT SPREADS AND WHAT TO DO",
+        "lifecycle": "Q4",
+        "description": "Per common metastasis site: frequency %, detection, standard treatment, local options (SBRT, surgery, ablation), site-specific supportive care.",
     },
     {
         "id": "resistance",
-        "title": "CAND TRATAMENTUL NU MAI FUNCTIONEAZA",
-        "description": "Resistance: why it happens, how fast, signs. Concrete Plan B/C: re-biopsy, trials, other lines. 'You need a plan BEFORE you need it.'",
+        "title": "WHEN TREATMENT STOPS WORKING",
+        "lifecycle": "Q5",
+        "description": "How resistance develops. Specific mechanisms BY NAME. Median time. Plan B, C, D -- CONCRETE with data. Re-biopsy: when, what to look for. 'You need a plan BEFORE you need it.'",
     },
     {
         "id": "pipeline",
-        "title": "CE URMEAZA -- PIPELINE CERCETARE",
-        "description": "New drugs in trials, phase, when they could be available. Table: drug | phase | mechanism | estimated timeline. Realistic hope, not hype.",
-    },
-    {
-        "id": "timeline",
-        "title": "TIMELINE-UL TAU REALIST",
-        "description": "What to expect chronologically: Week 1-2, Month 1-3, Month 3-12, Year 1-2, Year 2+. Set expectations, reduce anxiety.",
+        "title": "WHAT'S COMING -- PIPELINE AND TRIALS",
+        "lifecycle": "Q6",
+        "description": "Per drug in development: table: drug | phase | mechanism | timeline | targets resistance? Active clinical trials with NCT, locations, eligibility. Realistic hope, not hype.",
     },
     {
         "id": "daily-life",
-        "title": "VIATA DE ZI CU ZI",
-        "description": "Exercise (specific, not generic), evidence-based nutrition. Work, travel (restrictions?), relationships, psychological support. Patient communities with links.",
+        "title": "DAILY LIFE",
+        "lifecycle": "Q3-daily",
+        "description": "Nutrition (specific, evidence-based). Exercise. Fatigue management. Work, travel, relationships. Psychological support. Sexuality and fertility. Realistic timeline: Week 1-2, Month 1-3, Month 3-12, Year 1-2.",
     },
     {
-        "id": "red-flags",
-        "title": "CE SA NU FACI -- GRESELI SI RED FLAGS",
-        "description": "List of frequent mistakes with explanation of why they're dangerous. Format: MISTAKE -> WHY IT'S DANGEROUS -> WHAT TO DO INSTEAD. Dangerous 'natural' treatments, stopping treatment, ignoring side effects.",
+        "id": "treatment-access",
+        "title": "ACCESS TO TREATMENT",
+        "lifecycle": "Q3-access+Q9",
+        "description": "Per major European country: how to get treatment. Presidential ordinance (Romania), ATU (France), Hartefallprogramm (Germany), NHS Cancer Drugs Fund (UK). Compassionate use (EMA). Financial assistance programs.",
+    },
+    {
+        "id": "community",
+        "title": "YOU ARE NOT ALONE",
+        "lifecycle": "Q8",
+        "description": "Patient communities specific to this diagnosis (with links). Real patient experiences. Caregiver support. Organizations and resources.",
     },
     {
         "id": "questions-for-doctor",
-        "title": "CE SA INTREBI MEDICUL",
-        "description": "Concrete questions per stage: At diagnosis, At treatment start, At progression. Context for each question (why it's important).",
+        "title": "WHAT TO ASK YOUR DOCTOR",
+        "lifecycle": "Q1-Q8-derived",
+        "description": "Concrete questions per stage: At diagnosis (5), At treatment start (5), At progression (5). Context for each (why it matters).",
     },
     {
-        "id": "european-access",
-        "title": "ACCES EUROPEAN SI GHIDURI INTERNATIONALE",
-        "description": "ESMO vs NCCN -- relevant differences. EMA approval, availability per country. Access disparities, what to do if not approved in your country. Patient rights, cross-border healthcare directive.",
+        "id": "international-guidelines",
+        "title": "INTERNATIONAL GUIDELINES",
+        "lifecycle": "Q2-guidelines",
+        "description": "ESMO vs NCCN -- explicit differences. EMA approvals vs FDA. Availability per country.",
     },
 ]
 
@@ -129,15 +151,16 @@ SECTION_PLAN_TOOL = {
 
 PLANNER_SYSTEM = """You are a medical content strategist mapping research findings to a fixed guide structure.
 
-You will receive a list of 15 predefined sections and research findings.
+You will receive a list of 16 predefined sections and research findings.
 Your job is to assign finding numbers to each section based on relevance.
 
 Rules:
-- Use ALL 15 sections, in the order given
+- Use ALL 16 sections, in the order given
 - A finding can appear in multiple sections if relevant
 - If no findings are relevant to a section, set finding_ids to empty array []
 - Prioritize findings with higher relevance scores
 - Be thorough: scan ALL findings, not just the first few
+- Use the lifecycle_stage tag on findings to guide initial placement (Q1->section 1, Q2->section 2, etc.)
 
 Use the submit_section_plan tool to submit your mapping."""
 

@@ -43,19 +43,19 @@ MOCK_DISCOVERY_RESULT = {
     "rounds": 3,
     "knowledge_map": MOCK_KNOWLEDGE_MAP,
     "section_scores": {
-        "treatment-efficacy": {"score": 9, "assessment": "Strong"},
+        "best-treatment": {"score": 9, "assessment": "Strong"},
         "side-effects": {"score": 8.5, "assessment": "Adequate"},
     },
     "conversation": [
         "Oncologist: RET fusions occur in 1-2% of NSCLC...",
-        "Advocate: Score 9/10 for treatment-efficacy...",
+        "Advocate: Score 9/10 for best-treatment...",
     ],
     "final_questions": [],
 }
 
 MOCK_QUERIES = [
     {"query_text": "selpercatinib LIBRETTO-001 ORR PFS",
-     "search_engine": "serper", "language": "en", "target_section": "treatment-efficacy",
+     "search_engine": "serper", "language": "en", "target_section": "best-treatment",
      "rationale": "Verify ORR and PFS from LIBRETTO-001"},
     {"query_text": "selpercatinib adverse events hypertension",
      "search_engine": "pubmed", "language": "en", "target_section": "side-effects",
@@ -115,7 +115,7 @@ MOCK_VALIDATION = {
     "safety_concerns": [],
     "missing_keywords": [],
     "section_scores": {
-        "treatment-efficacy": {"score": 9, "assessment": "Strong", "gaps": []},
+        "best-treatment": {"score": 9, "assessment": "Strong", "gaps": []},
         "side-effects": {"score": 8.5, "assessment": "Adequate", "gaps": []},
     },
     "learnings": ["LOXO-260 data is preliminary"],
@@ -158,7 +158,7 @@ def test_enrichment_output_valid_for_gap_analyzer():
         assert "source_url" in f
 
     # gap_analyzer also needs sections list
-    assert len(GUIDE_SECTIONS) == 15
+    assert len(GUIDE_SECTIONS) == 16
     for s in GUIDE_SECTIONS:
         assert "id" in s
         assert "title" in s
@@ -186,8 +186,8 @@ def test_guide_generator_output_valid_for_validation(mock_anthropic_cls, tmp_pat
     # Planner returns sections, section generator returns content
     call_count = [0]
     planner_json = json.dumps([
-        {"id": "big-picture", "title": "Big Picture", "description": "D", "finding_ids": [1, 2]},
-        {"id": "treatment-efficacy", "title": "Treatment", "description": "D", "finding_ids": [1]},
+        {"id": "understanding-diagnosis", "title": "Understanding Diagnosis", "description": "D", "finding_ids": [1, 2]},
+        {"id": "best-treatment", "title": "Best Treatment", "description": "D", "finding_ids": [1]},
     ])
 
     def mock_create(**kwargs):

@@ -24,7 +24,7 @@ GOOD_ONCO_REVIEW = {
 }
 
 GOOD_ADVOCATE_REVIEW = {
-    "section_scores": {"big-picture": {"score": 9.0, "assessment": "Good"},
+    "section_scores": {"understanding-diagnosis": {"score": 9.0, "assessment": "Good"},
                        "pipeline": {"score": 9.0, "assessment": "Complete"}},
     "missing_keywords": [],
     "overall_score": 9.0,
@@ -98,7 +98,7 @@ def test_validation_finds_gaps(mock_api_call):
         "safety_concerns": [],
     }
     bad_advocate_review = {
-        "section_scores": {"big-picture": {"score": 9.0, "assessment": "OK"},
+        "section_scores": {"understanding-diagnosis": {"score": 9.0, "assessment": "OK"},
                            "pipeline": {"score": 6.0, "assessment": "Incomplete"}},
         "missing_keywords": ["LOXO-260 phase I RET", "hyperglycemia selpercatinib incidence"],
         "overall_score": 7.5,
@@ -131,7 +131,7 @@ def test_safety_concerns_block_pass(mock_api_call):
         "overall": "POTENTIALLY HARMFUL",
         "accuracy_issues": [],
         "missing_data": [],
-        "safety_concerns": [{"section": "treatment-efficacy", "concern": "Dangerous dosing error"}],
+        "safety_concerns": [{"section": "best-treatment", "concern": "Dangerous dosing error"}],
     }
     # Advocate passes, but oncologist found harm
     mock_api_call.side_effect = [

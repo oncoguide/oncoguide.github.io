@@ -15,7 +15,7 @@ def test_review_checklist_generated(tmp_path):
         "safety_concerns": ["Drug X interaction not mentioned"],
         "accuracy_issues": ["PFS number differs from Phase III data"],
         "section_scores": {
-            "treatment-efficacy": {"score": 9, "notes": "Good"},
+            "best-treatment": {"score": 9, "notes": "Good"},
             "side-effects": {"score": 7, "notes": "Missing grade 1-2"},
         },
         "learnings": [],
@@ -44,7 +44,7 @@ def test_review_checklist_generated(tmp_path):
     assert "CONTRADICTED" in content
     assert "UNVERIFIED" in content
     assert "Section Scores" in content
-    assert "treatment-efficacy" in content
+    assert "best-treatment" in content
     assert "Human Review Questions" in content
     assert "recently approved drugs" in content
     assert "Pipeline Summary" in content

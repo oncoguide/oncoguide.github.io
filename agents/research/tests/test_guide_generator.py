@@ -27,7 +27,7 @@ def _mock_text(text="Section content here"):
 
 _SINGLE_SECTION_PLAN = {
     "sections": [
-        {"id": "big-picture", "title": "Big Picture", "description": "Overview section.", "finding_ids": [1]},
+        {"id": "understanding-diagnosis", "title": "Understanding Diagnosis", "description": "Overview section.", "finding_ids": [1]},
     ]
 }
 
@@ -84,7 +84,7 @@ def test_findings_text_includes_authority_score():
 
 def test_critical_sections_defined():
     """Critical sections list should contain exactly the 4 safety-critical section IDs."""
-    assert "treatment-efficacy" in CRITICAL_SECTIONS
+    assert "mistakes" in CRITICAL_SECTIONS
     assert "side-effects" in CRITICAL_SECTIONS
     assert "emergency-signs" in CRITICAL_SECTIONS
     assert "resistance" in CRITICAL_SECTIONS
@@ -123,8 +123,8 @@ def test_critical_sections_use_sonnet(mock_api_call, tmp_path):
     # Planner returns 2 sections: one non-critical, one critical
     planner_sections = {
         "sections": [
-            {"id": "big-picture", "title": "Big Picture", "description": "Overview.", "finding_ids": [1]},
-            {"id": "treatment-efficacy", "title": "Treatment Efficacy", "description": "Efficacy data.", "finding_ids": [1]},
+            {"id": "understanding-diagnosis", "title": "Understanding Diagnosis", "description": "Overview.", "finding_ids": [1]},
+            {"id": "mistakes", "title": "Mistakes", "description": "Critical mistakes.", "finding_ids": [1]},
         ]
     }
 
