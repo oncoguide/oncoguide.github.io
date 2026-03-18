@@ -431,10 +431,18 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         pre_search_context=pre_context,
     )
     print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']} ({time.time()-t0:.0f}s)")
-    if not discovery.get("knowledge_map") or len(discovery["knowledge_map"]) < 3:
-        _abort("discovery", f"knowledge_map empty or too small: {list(discovery.get('knowledge_map', {}).keys())}")
-    if discovery.get("section_scores"):
-        low = [f"{k}: {v.get('score', '?')}" for k, v in discovery["section_scores"].items()
+    km = discovery.get("knowledge_map", {})
+    if not km or len(km) < 3:
+        _abort("discovery", f"knowledge_map empty or too small: {list(km.keys())}")
+    # v6 sanity check: Q2 must have at least 1 drug, Q5 at least 1 mechanism
+    q2_drugs = km.get("Q2_treatment", {}).get("approved_drugs", [])
+    q5_mechs = km.get("Q5_resistance", {}).get("mechanisms", [])
+    if not q2_drugs:
+        logger.warning("GATE 1: No approved drugs in Q2_treatment -- continuing but guide may be incomplete")
+    if not q5_mechs:
+        logger.warning("GATE 1: No resistance mechanisms in Q5_resistance -- continuing but guide may be incomplete")
+    if discovery.get("lifecycle_scores"):
+        low = [f"{k}: {v.get('score', '?')}" for k, v in discovery["lifecycle_scores"].items()
                if isinstance(v, dict) and v.get("score", 10) < 8.5]
         if low:
             print(f"  Low sections: {', '.join(low)}")

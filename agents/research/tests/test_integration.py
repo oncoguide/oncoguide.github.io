@@ -24,18 +24,18 @@ MOCK_DIAGNOSIS = "RET Fusion Non-Small Cell Lung Cancer"
 MOCK_TOPIC_ID = "lung-ret-fusion"
 
 MOCK_KNOWLEDGE_MAP = {
-    "approved_drugs": [
-        {"name": "selpercatinib", "brand": "Retevmo", "status": "FDA/EMA approved"}
-    ],
-    "pipeline_drugs": [
-        {"name": "LOXO-260", "code": "LOXO-260", "phase": "Phase I/II", "mechanism": "next-gen RET"}
-    ],
-    "landmark_trials": [
-        {"name": "LIBRETTO-001", "drug": "selpercatinib", "ORR%": 84, "PFS_months": 24.8}
-    ],
-    "side_effects": [
-        {"effect": "hypertension", "frequency%": 35, "grade": "1-2"}
-    ],
+    "Q1_diagnostic": {"molecular_tests": [{"test": "NGS"}], "staging": "TNM I-IV", "subtypes": []},
+    "Q2_treatment": {
+        "approved_drugs": [{"name": "selpercatinib", "brand": "Retevmo", "status_fda": "approved"}],
+        "guidelines": {"esmo": "first-line selpercatinib", "nccn": "first-line selpercatinib"},
+        "immunotherapy_role": "No benefit in RET+ (LIBRETTO-431)",
+    },
+    "Q3_living": {"per_drug": [], "emergency_signs": [], "nutrition": "", "access": {}},
+    "Q4_metastases": {"sites": [{"site": "brain", "frequency_percent": 25}]},
+    "Q5_resistance": {"mechanisms": [{"type": "on-target", "name": "G810R"}], "median_time_months": 24, "next_line": []},
+    "Q6_pipeline": {"drugs": [{"name": "LOXO-260", "phase": "Phase I/II", "mechanism": "next-gen RET"}], "novel_modalities": []},
+    "Q7_mistakes": {"items": []},
+    "Q8_community": {"resources": []},
 }
 
 MOCK_DISCOVERY_RESULT = {
@@ -132,9 +132,9 @@ def test_discovery_output_valid_for_keyword_extractor():
     assert isinstance(result["conversation"], list)
     assert len(result["conversation"]) > 0
     assert isinstance(result["knowledge_map"], dict)
-    # Knowledge map must have drug/trial data for query generation
-    assert "approved_drugs" in result["knowledge_map"]
-    assert "landmark_trials" in result["knowledge_map"]
+    # Knowledge map must have Q1-Q8 structure
+    assert "Q2_treatment" in result["knowledge_map"]
+    assert "Q6_pipeline" in result["knowledge_map"]
 
 
 def test_keyword_extractor_output_valid_for_searchers():

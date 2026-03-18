@@ -28,33 +28,89 @@ _PROJECT_ROOT = os.path.abspath(os.path.join(_MODULE_DIR, "..", "..", ".."))
 SKILLS_DIR = os.path.join(_PROJECT_ROOT, ".claude", "skills")
 
 # --- Tool schemas (API-enforced structured output) ---
+# v6: Lifecycle Q1-Q8 structured schemas per SPEC.md 10.3
 
-ONCOLOGIST_INITIAL_TOOL = {
-    "name": "submit_knowledge_map",
-    "description": "Submit the complete Clinical Knowledge Map for this cancer diagnosis",
+ONCOLOGIST_LIFECYCLE_TOOL = {
+    "name": "submit_lifecycle_knowledge",
+    "description": "Submit structured clinical knowledge organized by patient lifecycle questions Q1-Q8",
     "input_schema": {
         "type": "object",
         "properties": {
-            "approved_drugs": {"type": "array", "items": {"type": "object"}},
-            "pipeline_drugs": {"type": "array", "items": {"type": "object"}},
-            "landmark_trials": {"type": "array", "items": {"type": "object"}},
-            "institutional_protocols": {"type": "array", "items": {"type": "object"}},
-            "side_effects": {"type": "array", "items": {"type": "object"}},
-            "resistance": {"type": "array", "items": {"type": "object"}},
-            "guidelines": {"type": "array", "items": {"type": "object"}},
-            "testing": {"type": "array", "items": {"type": "object"}},
+            "Q1_diagnostic": {
+                "type": "object",
+                "description": "Diagnosis confirmation: molecular tests, staging, subtypes",
+                "properties": {
+                    "molecular_tests": {"type": "array", "items": {"type": "object"}},
+                    "staging": {"type": "string"},
+                    "subtypes": {"type": "array", "items": {"type": "object"}},
+                },
+            },
+            "Q2_treatment": {
+                "type": "object",
+                "description": "Standard treatment: approved drugs, guidelines, immunotherapy role",
+                "properties": {
+                    "approved_drugs": {"type": "array", "items": {"type": "object"}},
+                    "guidelines": {"type": "object"},
+                    "immunotherapy_role": {"type": "string"},
+                },
+            },
+            "Q3_living": {
+                "type": "object",
+                "description": "Living with treatment: dosing, side effects, CYP, monitoring, emergencies, access",
+                "properties": {
+                    "per_drug": {"type": "array", "items": {"type": "object"}},
+                    "emergency_signs": {"type": "array", "items": {"type": "string"}},
+                    "nutrition": {"type": "string"},
+                    "access": {"type": "object"},
+                },
+            },
+            "Q4_metastases": {
+                "type": "object",
+                "description": "Common metastasis sites with frequency, detection, treatment",
+                "properties": {
+                    "sites": {"type": "array", "items": {"type": "object"}},
+                },
+            },
+            "Q5_resistance": {
+                "type": "object",
+                "description": "Resistance mechanisms, next-line options, rebiopsy",
+                "properties": {
+                    "mechanisms": {"type": "array", "items": {"type": "object"}},
+                    "median_time_months": {"type": "number"},
+                    "next_line": {"type": "array", "items": {"type": "object"}},
+                },
+            },
+            "Q6_pipeline": {
+                "type": "object",
+                "description": "Drugs in development, novel modalities, active trials",
+                "properties": {
+                    "drugs": {"type": "array", "items": {"type": "object"}},
+                    "novel_modalities": {"type": "array", "items": {"type": "object"}},
+                },
+            },
+            "Q7_mistakes": {
+                "type": "object",
+                "description": "Dangerous mistakes patients make",
+                "properties": {
+                    "items": {"type": "array", "items": {"type": "object"}},
+                },
+            },
+            "Q8_community": {
+                "type": "object",
+                "description": "Patient communities and support resources",
+                "properties": {
+                    "resources": {"type": "array", "items": {"type": "object"}},
+                },
+            },
         },
-        "required": [
-            "approved_drugs", "pipeline_drugs", "landmark_trials",
-            "institutional_protocols", "side_effects", "resistance",
-            "guidelines", "testing",
-        ],
+        "required": ["Q1_diagnostic", "Q2_treatment", "Q3_living", "Q4_metastases",
+                      "Q5_resistance", "Q6_pipeline", "Q7_mistakes", "Q8_community"],
     },
 }
 
 ONCOLOGIST_RESPOND_TOOL = {
     "name": "submit_oncologist_response",
-    "description": "Submit answers to the patient advocate's questions with updated clinical knowledge",
+    "description": "Submit answers to the patient advocate's questions with updated lifecycle knowledge",
     "input_schema": {
         "type": "object",
         "properties": {
@@ -71,15 +127,16 @@ ONCOLOGIST_RESPOND_TOOL = {
             },
             "additional_knowledge": {
                 "type": "object",
+                "description": "New Q1-Q8 data not in the original submission",
                 "properties": {
-                    "approved_drugs": {"type": "array", "items": {"type": "object"}},
-                    "pipeline_drugs": {"type": "array", "items": {"type": "object"}},
-                    "landmark_trials": {"type": "array", "items": {"type": "object"}},
-                    "institutional_protocols": {"type": "array", "items": {"type": "object"}},
-                    "side_effects": {"type": "array", "items": {"type": "object"}},
-                    "resistance": {"type": "array", "items": {"type": "object"}},
-                    "guidelines": {"type": "array", "items": {"type": "object"}},
-                    "testing": {"type": "array", "items": {"type": "object"}},
+                    "Q1_diagnostic": {"type": "object"},
+                    "Q2_treatment": {"type": "object"},
+                    "Q3_living": {"type": "object"},
+                    "Q4_metastases": {"type": "object"},
+                    "Q5_resistance": {"type": "object"},
+                    "Q6_pipeline": {"type": "object"},
+                    "Q7_mistakes": {"type": "object"},
+                    "Q8_community": {"type": "object"},
                 },
             },
         },
@@ -87,29 +144,37 @@ ONCOLOGIST_RESPOND_TOOL = {
     },
 }
 
-ADVOCATE_EVAL_TOOL = {
-    "name": "submit_evaluation",
-    "description": "Submit evaluation of the oncologist's knowledge with section scores and questions",
+ADVOCATE_LIFECYCLE_TOOL = {
+    "name": "submit_lifecycle_evaluation",
+    "description": "Submit evaluation of the oncologist's lifecycle knowledge with Q1-Q8 scores",
     "input_schema": {
         "type": "object",
         "properties": {
-            "section_scores": {
+            "scores": {
                 "type": "object",
-                "additionalProperties": {
-                    "type": "object",
-                    "properties": {
-                        "score": {"type": "number"},
-                        "assessment": {"type": "string"},
-                    },
-                    "required": ["score", "assessment"],
+                "description": "Score per lifecycle question Q1-Q8",
+                "properties": {
+                    "Q1": {"type": "object", "properties": {"score": {"type": "number"}, "assessment": {"type": "string"}}, "required": ["score", "assessment"]},
+                    "Q2": {"type": "object", "properties": {"score": {"type": "number"}, "assessment": {"type": "string"}}, "required": ["score", "assessment"]},
+                    "Q3": {"type": "object", "properties": {"score": {"type": "number"}, "assessment": {"type": "string"}}, "required": ["score", "assessment"]},
+                    "Q4": {"type": "object", "properties": {"score": {"type": "number"}, "assessment": {"type": "string"}}, "required": ["score", "assessment"]},
+                    "Q5": {"type": "object", "properties": {"score": {"type": "number"}, "assessment": {"type": "string"}}, "required": ["score", "assessment"]},
+                    "Q6": {"type": "object", "properties": {"score": {"type": "number"}, "assessment": {"type": "string"}}, "required": ["score", "assessment"]},
+                    "Q7": {"type": "object", "properties": {"score": {"type": "number"}, "assessment": {"type": "string"}}, "required": ["score", "assessment"]},
+                    "Q8": {"type": "object", "properties": {"score": {"type": "number"}, "assessment": {"type": "string"}}, "required": ["score", "assessment"]},
                 },
+                "required": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8"],
             },
-            "questions": {"type": "array", "items": {"type": "string"}},
             "all_satisfied": {"type": "boolean"},
+            "questions": {"type": "array", "items": {"type": "string"}},
         },
-        "required": ["section_scores", "questions", "all_satisfied"],
+        "required": ["scores", "all_satisfied", "questions"],
     },
 }
+
+# Backward compat aliases for tests that import old names
+ONCOLOGIST_INITIAL_TOOL = ONCOLOGIST_LIFECYCLE_TOOL
+ADVOCATE_EVAL_TOOL = ADVOCATE_LIFECYCLE_TOOL
 
 
 # --- Sections summary for prompts ---
@@ -142,57 +207,62 @@ trials, or data you were not previously aware of -- incorporate ALL of it.
     return f"""{skill_context}
 {pre_search_block}
 You are participating in a DISCOVERY CONVERSATION about a specific cancer diagnosis.
-Your role: provide COMPLETE clinical knowledge for a patient education guide.
+Your role: provide COMPLETE clinical knowledge organized by the PATIENT LIFECYCLE (Q1-Q8).
 
-Think like you are preparing a tumor board presentation. You need EVERYTHING:
+Answer these 8 questions as if a patient's life depends on completeness (it does):
 
-1. APPROVED DRUGS: Every drug approved worldwide. For each: generic name, brand, FDA/EMA status, approval date, ANY withdrawals or market exits.
-2. PIPELINE DRUGS: EVERY drug in development for this target. Be EXHAUSTIVE: next-gen inhibitors, PROTACs, bispecifics, ADCs, combinations. For each: drug name/code, manufacturer, mechanism, phase, key trial, NCT number.
-3. LANDMARK TRIALS: Every major trial. For each: name, drug, phase, ORR%, PFS months, OS months, intracranial ORR%.
-4. INSTITUTIONAL PROTOCOLS: How MD Anderson, MSK, Gustave Roussy ACTUALLY treat this NOW. Sequencing, combinations.
-5. SIDE EFFECTS: Every drug's side effects with frequency %. Include under-reported (hyperglycemia, QTc, taste changes).
-6. RESISTANCE: Specific mutations, bypass pathways, median time, what to do next.
-7. GUIDELINES: Current ESMO and NCCN recommendations AND differences.
-8. TESTING: Required molecular tests, methods, turnaround times.
+Q1 DIAGNOSTIC: What tests confirm this diagnosis? Staging? Molecular subtypes and why they matter?
+Q2 TREATMENT: What drugs are approved per line? Key trials (ORR%, PFS, OS)? ESMO vs NCCN differences? Immunotherapy role?
+Q3 LIVING WITH TREATMENT: Per drug -- dosing, CYP profile, ALL side effects with %, monitoring tests, emergency signs. Access per country.
+Q4 METASTASES: Top 3-5 metastasis sites with frequency %, detection, treatment (systemic + local options).
+Q5 RESISTANCE: Specific mechanisms BY NAME, median time, Plan B/C/D with data, rebiopsy guidance.
+Q6 PIPELINE: EVERY drug in development BY NAME -- phase, manufacturer, mechanism, targets resistance?, NCT number.
+Q7 MISTAKES: Dangerous interactions, contraindicated supplements, myths. Format: MISTAKE / WHY DANGEROUS / ALTERNATIVE.
+Q8 COMMUNITY: Patient communities specific to this diagnosis, caregiver resources.
 
-Use the submit_knowledge_map tool to submit your complete findings.
-Be EXHAUSTIVE. Missing a drug or trial means a patient might not learn about their best option.
-Keep values short -- abbreviations, no long sentences."""
+MANDATORY per question:
+- Q2: every approved drug with FDA/EMA status, any withdrawals
+- Q3: CYP profile per drug, ALL side effects with percentages
+- Q4: frequency % per metastasis site
+- Q5: each resistance mechanism BY NAME
+- Q6: each pipeline drug BY NAME with phase
+- Q7: each dangerous interaction BY NAME
+
+Use the submit_lifecycle_knowledge tool. Be EXHAUSTIVE.
+Keep values short -- abbreviations, key facts, no long sentences."""
 
 
 def _advocate_system(skill_context: str) -> str:
-    sections = _sections_summary()
     return f"""{skill_context}
 
 You are evaluating an oncologist's knowledge about a specific cancer diagnosis.
 YOUR LIFE depends on this information being complete. Act accordingly.
 
-You will receive the oncologist's clinical knowledge and the ongoing conversation.
+You will receive the oncologist's lifecycle knowledge (Q1-Q8) and the ongoing conversation.
 
-YOUR JOB:
-1. Evaluate completeness for EACH of these 16 guide sections:
-{sections}
+Score EACH lifecycle question Q1-Q8 (1-10):
 
-2. Score each section 1-10 based on:
-   - Does the oncologist's knowledge contain enough data to write a comprehensive section?
-   - Are there specific numbers (%, months, doses)?
-   - Are ALL relevant drugs/trials/effects listed?
+Q1 DIAGNOSTIC: Are the tests complete? Is staging explained? Subtypes with significance?
+Q2 TREATMENT: ALL approved drugs listed? Key trial data (ORR%, PFS, OS)? ESMO vs NCCN? Immunotherapy addressed?
+Q3 LIVING: Per drug -- is dosing correct? CYP profile? ALL side effects with %? Monitoring? Emergency signs? Access info?
+Q4 METASTASES: Top 3-5 sites with frequency %? Treatment per site?
+Q5 RESISTANCE: Mechanisms BY NAME? Median time? Plan B/C/D CONCRETE? Rebiopsy guidance?
+Q6 PIPELINE: EVERY drug in development BY NAME with phase? Novel modalities? Active trials with NCT?
+Q7 MISTAKES: Specific dangerous interactions? Contraindicated supplements? Common myths?
+Q8 COMMUNITY: Diagnosis-specific patient groups? Caregiver resources?
 
-3. For sections scoring below {SECTION_SCORE_THRESHOLD}, ask SPECIFIC questions.
+For any Q scoring below {SECTION_SCORE_THRESHOLD}, ask SPECIFIC questions.
 
-4. Follow YOUR natural journey as the patient:
-   - "What do I have exactly? How serious is it?"
-   - "What is the BEST treatment RIGHT NOW?"
-   - "What side effects will hit me? What do doctors FORGET to mention?"
-   - "When this stops working, what's my Plan B/C/D?"
-   - "What new drugs are being tested? When can I get them?"
-   - "Can I get this in my country? Cross-border options?"
-   - "How do I LIVE with this?"
+The patient's journey:
+- "What do I have exactly?" (Q1)
+- "What is the BEST treatment RIGHT NOW?" (Q2)
+- "What can HURT me?" (Q7, Q3)
+- "When this stops working?" (Q5)
+- "What's coming?" (Q6)
+- "Can I get this in MY country?" (Q3-access)
 
-5. Challenge the pipeline section HARD: is EVERY drug listed by name?
-
-Use the submit_evaluation tool to submit your evaluation.
-Set all_satisfied to true ONLY when ALL 16 sections score >= {SECTION_SCORE_THRESHOLD}."""
+Use the submit_lifecycle_evaluation tool.
+Set all_satisfied to true ONLY when ALL Q1-Q8 score >= {SECTION_SCORE_THRESHOLD}."""
 
 
 def _oncologist_respond_system(skill_context: str) -> str:
@@ -217,7 +287,7 @@ def _oncologist_initial(
     client: anthropic.Anthropic, diagnosis: str, model: str, cost: CostTracker,
     pre_search_context: str = "",
 ) -> dict:
-    """Round 1: Oncologist generates initial Clinical Knowledge Map using tool use."""
+    """Round 1: Oncologist generates lifecycle knowledge Q1-Q8 using tool use."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "oncologist.md"))
     message = api_call(
         client,
@@ -226,10 +296,10 @@ def _oncologist_initial(
         system=_oncologist_system(skill_context, pre_search_context=pre_search_context),
         messages=[{"role": "user", "content": (
             f"Diagnosis: {diagnosis}\n\n"
-            f"Generate the complete Clinical Knowledge Map."
+            f"Generate the complete lifecycle knowledge map (Q1-Q8)."
         )}],
-        tools=[ONCOLOGIST_INITIAL_TOOL],
-        tool_choice={"type": "tool", "name": "submit_knowledge_map"},
+        tools=[ONCOLOGIST_LIFECYCLE_TOOL],
+        tool_choice={"type": "tool", "name": "submit_lifecycle_knowledge"},
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
     return message.content[0].input
@@ -243,7 +313,7 @@ def _advocate_evaluate(
     model: str,
     cost: CostTracker,
 ) -> dict:
-    """Advocate evaluates current knowledge, scores sections, asks questions."""
+    """Advocate evaluates current knowledge, scores Q1-Q8, asks questions."""
     skill_context = load_skill_context(os.path.join(SKILLS_DIR, "patient-advocate.md"))
     # Keep only last 2 exchanges to prevent O(n^2) token growth
     recent_history = conversation_history[-2:] if len(conversation_history) > 2 else conversation_history
@@ -251,7 +321,7 @@ def _advocate_evaluate(
     if len(conversation_history) > 2:
         history_text = f"[{len(conversation_history)-2} earlier exchanges omitted]\n\n" + history_text
 
-    content = f"Diagnosis: {diagnosis}\n\nClinical Knowledge:\n{knowledge_text}"
+    content = f"Diagnosis: {diagnosis}\n\nLifecycle Knowledge (Q1-Q8):\n{knowledge_text}"
     if history_text:
         content += f"\n\nConversation so far:\n{history_text}"
 
@@ -261,8 +331,8 @@ def _advocate_evaluate(
         max_tokens=6000,
         system=_advocate_system(skill_context),
         messages=[{"role": "user", "content": content}],
-        tools=[ADVOCATE_EVAL_TOOL],
-        tool_choice={"type": "tool", "name": "submit_evaluation"},
+        tools=[ADVOCATE_LIFECYCLE_TOOL],
+        tool_choice={"type": "tool", "name": "submit_lifecycle_evaluation"},
     )
     cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
     return message.content[0].input
@@ -302,23 +372,47 @@ def _oncologist_respond(
 
 
 def _merge_knowledge(base: dict, additional: dict) -> dict:
-    """Merge additional knowledge into base knowledge map."""
-    for key in ("approved_drugs", "pipeline_drugs", "landmark_trials",
-                "institutional_protocols", "side_effects", "resistance",
-                "guidelines", "testing"):
-        if key in additional and additional[key]:
-            existing = base.get(key, [])
-            # Simple dedup by checking if item already exists (by name or first field)
-            existing_names = set()
-            for item in existing:
-                name = item.get("name", item.get("test", item.get("mechanism", str(item))))
-                existing_names.add(name.lower() if isinstance(name, str) else "")
-            for new_item in additional[key]:
-                name = new_item.get("name", new_item.get("test", new_item.get("mechanism", str(new_item))))
-                if isinstance(name, str) and name.lower() not in existing_names:
-                    existing.append(new_item)
-                    existing_names.add(name.lower())
-            base[key] = existing
+    """Merge additional Q1-Q8 knowledge into base knowledge map.
+
+    For each Q key, merges arrays by deduplicating on name fields.
+    Non-array values (strings, objects) are overwritten if the additional
+    value is non-empty.
+    """
+    for q_key in ("Q1_diagnostic", "Q2_treatment", "Q3_living", "Q4_metastases",
+                   "Q5_resistance", "Q6_pipeline", "Q7_mistakes", "Q8_community"):
+        if q_key not in additional or not additional[q_key]:
+            continue
+        if q_key not in base:
+            base[q_key] = {}
+
+        for field, new_val in additional[q_key].items():
+            if isinstance(new_val, list) and new_val:
+                existing = base[q_key].get(field, [])
+                if not isinstance(existing, list):
+                    existing = []
+                # Dedup by name
+                existing_names = set()
+                for item in existing:
+                    if isinstance(item, dict):
+                        name = item.get("name", item.get("test", item.get("mechanism",
+                               item.get("site", item.get("mistake", str(item))))))
+                        existing_names.add(name.lower() if isinstance(name, str) else "")
+                for new_item in new_val:
+                    if isinstance(new_item, dict):
+                        name = new_item.get("name", new_item.get("test", new_item.get("mechanism",
+                               new_item.get("site", new_item.get("mistake", str(new_item))))))
+                        if isinstance(name, str) and name.lower() not in existing_names:
+                            existing.append(new_item)
+                            existing_names.add(name.lower())
+                    else:
+                        existing.append(new_item)
+                base[q_key][field] = existing
+            elif isinstance(new_val, str) and new_val:
+                base[q_key][field] = new_val
+            elif isinstance(new_val, dict) and new_val:
+                if field not in base[q_key]:
+                    base[q_key][field] = {}
+                base[q_key][field].update(new_val)
     return base
 
 
@@ -347,61 +441,63 @@ def run_discovery(
         {
             "converged": bool,
             "rounds": int,
-            "knowledge_map": dict,
-            "section_scores": dict,
+            "knowledge_map": dict,       # Q1-Q8 structured
+            "section_scores": dict,      # backward compat alias for lifecycle_scores
+            "lifecycle_scores": dict,    # Q1-Q8 scores
             "conversation": list[str],
             "final_questions": list[str],
         }
     """
+    empty = {"converged": False, "rounds": 0, "knowledge_map": {},
+             "section_scores": {}, "lifecycle_scores": {},
+             "conversation": [], "final_questions": []}
     if not api_key:
         logger.warning("No API key for discovery, returning empty result")
-        return {"converged": False, "rounds": 0, "knowledge_map": {},
-                "section_scores": {}, "conversation": [], "final_questions": []}
+        return empty
 
     client = anthropic.Anthropic(api_key=api_key)
     conversation: list[str] = []
     knowledge_map: dict = {}
-    section_scores: dict = {}
+    lifecycle_scores: dict = {}
 
-    # Step 1: Oncologist initial knowledge dump
-    logger.info("Discovery Round 1: Oncologist initial knowledge map...")
+    # Step 1: Oncologist initial lifecycle knowledge
+    logger.info("Discovery Round 1: Oncologist initial lifecycle knowledge (Q1-Q8)...")
     knowledge_map = _oncologist_initial(client, diagnosis, model, cost,
                                         pre_search_context=pre_search_context)
     if not knowledge_map:
         logger.error("Oncologist returned empty knowledge map")
-        return {"converged": False, "rounds": 0, "knowledge_map": {},
-                "section_scores": {}, "conversation": [], "final_questions": []}
+        return empty
 
     knowledge_text = json.dumps(knowledge_map, indent=2)
     conversation.append(f"ONCOLOGIST (initial):\n{knowledge_text}")
 
     questions: list[str] = []
     for round_num in range(1, max_rounds + 1):
-        logger.info(f"Discovery Round {round_num}: Advocate evaluating...")
+        logger.info(f"Discovery Round {round_num}: Advocate evaluating Q1-Q8...")
 
-        # Advocate evaluates
+        # Advocate evaluates per Q1-Q8
         evaluation = _advocate_evaluate(
             client, diagnosis, knowledge_text, conversation, model, cost
         )
-        section_scores = evaluation.get("section_scores", {})
+        lifecycle_scores = evaluation.get("scores", {})
         questions = evaluation.get("questions", [])
         all_satisfied = evaluation.get("all_satisfied", False)
 
         conversation.append(
             f"ADVOCATE (round {round_num}):\n"
-            f"Scores: {json.dumps(section_scores, indent=2)}\n"
+            f"Scores: {json.dumps(lifecycle_scores, indent=2)}\n"
             f"Questions: {json.dumps(questions)}\n"
             f"Satisfied: {all_satisfied}"
         )
 
-        # Log scores
-        low_sections = [
-            f"{sid}: {info.get('score', 0)}"
-            for sid, info in section_scores.items()
+        # Log low scores
+        low_qs = [
+            f"{qid}: {info.get('score', 0)}"
+            for qid, info in lifecycle_scores.items()
             if isinstance(info, dict) and info.get("score", 0) < SECTION_SCORE_THRESHOLD
         ]
-        if low_sections:
-            logger.info(f"  Low sections: {', '.join(low_sections)}")
+        if low_qs:
+            logger.info(f"  Low lifecycle scores: {', '.join(low_qs)}")
 
         if all_satisfied or not questions:
             logger.info(f"Discovery converged after {round_num} rounds")
@@ -409,7 +505,8 @@ def run_discovery(
                 "converged": True,
                 "rounds": round_num,
                 "knowledge_map": knowledge_map,
-                "section_scores": section_scores,
+                "lifecycle_scores": lifecycle_scores,
+                "section_scores": lifecycle_scores,  # backward compat
                 "conversation": conversation,
                 "final_questions": [],
             }
@@ -422,7 +519,7 @@ def run_discovery(
         logger.info(f"Discovery Round {round_num}: Oncologist responding to {len(questions)} questions...")
         response = _oncologist_respond(client, diagnosis, questions, knowledge_text, model, cost)
 
-        # Merge new knowledge
+        # Merge new Q1-Q8 knowledge
         additional = response.get("additional_knowledge", {})
         if additional:
             knowledge_map = _merge_knowledge(knowledge_map, additional)
@@ -434,14 +531,15 @@ def run_discovery(
                 f"{json.dumps(response.get('answers', []), indent=2)}"
             )
         else:
-            logger.warning(f"Discovery Round {round_num}: oncologist response empty, skipping conversation update")
+            logger.warning(f"Discovery Round {round_num}: oncologist response empty")
 
     logger.warning(f"Discovery did not converge after {max_rounds} rounds")
     return {
         "converged": False,
         "rounds": max_rounds,
         "knowledge_map": knowledge_map,
-        "section_scores": section_scores,
+        "lifecycle_scores": lifecycle_scores,
+        "section_scores": lifecycle_scores,  # backward compat
         "conversation": conversation,
         "final_questions": questions,
     }
