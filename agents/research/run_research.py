@@ -40,7 +40,7 @@ from modules.searcher_openfda import search_openfda
 from modules.searcher_civic import search_civic
 from modules.skill_improver import append_learnings
 from modules.utils import compute_content_hash, extract_domain, now_iso, setup_logging
-from modules.validation import validate_guide
+from modules.validation import validate_guide, refine_guide
 
 logger = logging.getLogger(__name__)
 
@@ -548,32 +548,52 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         os.makedirs(guide_backup_dir, exist_ok=True)
         shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
 
-    # Phase 7: Validation (Sonnet)
+    # Phase 7: Validation + refinement (Sonnet + Haiku)
     validation_model = cfg.get("validation_model", "claude-sonnet-4-6")
+    haiku_model = cfg.get("guide_model", "claude-haiku-4-5-20251001")
     max_val_rounds = cfg.get("max_validation_rounds", 2)
     val_result = {"passed": False, "learnings": []}
-    if os.path.exists(output_path) and cost.has_budget(reserve_usd=0.50):
+    if os.path.exists(output_path) and cost.has_budget(reserve_usd=1.00):
         guide_text = open(output_path).read()
 
-        for val_round in range(1, max_val_rounds + 1):
-            print(f"\nPhase 7: Validation round {val_round}...")
-            val_result = validate_guide(
-                guide_text=guide_text,
-                diagnosis=diagnosis,
-                knowledge_map=discovery["knowledge_map"],
-                api_key=cfg["anthropic_api_key"],
-                model=validation_model,
-                cost=cost,
-            )
-            print(f"  Score: {val_result.get('overall_score', '?')}/10, Passed: {val_result['passed']}")
+        print(f"\nPhase 7: Validation + auto-correction (language check + medical accuracy)...")
+        val_result = refine_guide(
+            guide_text=guide_text,
+            diagnosis=diagnosis,
+            knowledge_map=discovery["knowledge_map"],
+            api_key=cfg["anthropic_api_key"],
+            sonnet_model=validation_model,
+            haiku_model=haiku_model,
+            cost=cost,
+            max_rounds=max_val_rounds,
+        )
+        refined_text = val_result.get("guide_text", guide_text)
+        patches = val_result.get("patches_applied", [])
+        lang_count = val_result.get("language_issues_found", 0)
+        med_count = val_result.get("medical_corrections_applied", 0)
 
-            if val_result["passed"]:
-                break
+        print(f"  Score: {val_result.get('overall_score', '?')}/10, Passed: {val_result['passed']}")
+        print(f"  Language issues fixed: {lang_count}, Medical corrections: {med_count}")
+        if patches:
+            print(f"  Patches applied: {len(patches)}")
+            for p in patches[:5]:
+                print(f"    {p}")
 
-            # Targeted search for missing keywords
+        # Save corrected guide if patches were applied
+        if patches and refined_text != guide_text:
+            with open(output_path, "w") as f:
+                f.write(refined_text)
+            guide_text = refined_text
+            shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
+            logger.info(f"Saved corrected guide to {output_path}")
+
+        # Targeted search for missing keywords if still not passing
+        if not val_result["passed"]:
             missing = val_result.get("missing_keywords", [])
-            if missing and cost.has_budget(reserve_usd=0.30):
-                print(f"  Targeted search: {len(missing)} keywords...")
+            for val_round in range(1, max_val_rounds + 1):
+                if not missing or not cost.has_budget(reserve_usd=0.30):
+                    break
+                print(f"\nPhase 7: Targeted search round {val_round} ({len(missing)} keywords)...")
                 targeted_queries = [
                     {"query_text": kw, "search_engine": "serper", "language": "en",
                      "target_section": "general"}
@@ -585,7 +605,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
                     cost=cost,
                 )
 
-                # Regenerate guide with new findings
+                # Regenerate + re-refine guide with new findings
                 findings = db.get_findings_by_topic(topic_id, limit=500)
                 print(f"  Regenerating guide ({len(findings)} findings)...")
                 generate_guide(
@@ -593,7 +613,27 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
                     cfg["anthropic_api_key"], cfg.get("guide_model", "claude-haiku-4-5-20251001"),
                 )
                 guide_text = open(output_path).read()
+
+                val_result = refine_guide(
+                    guide_text=guide_text,
+                    diagnosis=diagnosis,
+                    knowledge_map=discovery["knowledge_map"],
+                    api_key=cfg["anthropic_api_key"],
+                    sonnet_model=validation_model,
+                    haiku_model=haiku_model,
+                    cost=cost,
+                    max_rounds=1,
+                )
+                refined_text = val_result.get("guide_text", guide_text)
+                if val_result.get("patches_applied") and refined_text != guide_text:
+                    with open(output_path, "w") as f:
+                        f.write(refined_text)
+                    guide_text = refined_text
                 shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
+                print(f"  Score: {val_result.get('overall_score', '?')}/10, Passed: {val_result['passed']}")
+                if val_result["passed"]:
+                    break
+                missing = val_result.get("missing_keywords", [])
 
     # Phase 8: Generate human review checklist
     review_path = os.path.join(guides_dir, f"{topic_id}-review.md")

@@ -95,6 +95,82 @@ ADVOCATE_REVIEW_TOOL = {
     },
 }
 
+LANGUAGE_CHECK_TOOL = {
+    "name": "submit_language_issues",
+    "description": "Submit list of non-English text found in the guide",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "issues": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "find": {"type": "string", "description": "Verbatim text to replace (exact copy from guide)"},
+                        "replace": {"type": "string", "description": "English replacement text"},
+                        "language_detected": {"type": "string", "description": "Language name, e.g. Romanian"},
+                    },
+                    "required": ["find", "replace", "language_detected"],
+                },
+            },
+            "is_clean": {"type": "boolean", "description": "True if no non-English text found"},
+        },
+        "required": ["issues", "is_clean"],
+    },
+}
+
+MEDICAL_CORRECTION_TOOL = {
+    "name": "submit_medical_corrections",
+    "description": "Submit surgical find/replace corrections for medical accuracy issues",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "corrections": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "find": {"type": "string", "description": "Verbatim text from guide (50-300 chars)"},
+                        "replace": {"type": "string", "description": "Corrected version"},
+                        "rationale": {"type": "string", "description": "Why this correction is needed"},
+                        "severity": {"type": "string", "enum": ["CRITICAL", "MAJOR", "MINOR"]},
+                    },
+                    "required": ["find", "replace", "rationale", "severity"],
+                },
+            },
+            "has_corrections": {"type": "boolean"},
+        },
+        "required": ["corrections", "has_corrections"],
+    },
+}
+
+LANGUAGE_CHECK_SYSTEM = """You are a language quality checker for a medical guide that MUST be entirely in English.
+
+Scan the guide for ANY text that is not English. This includes:
+- Romanian words or phrases (e.g., "CE AI DE FAPT", "Ghid complet", section titles in Romanian)
+- French, German, Italian, Spanish, or any other non-English language
+- Mixed-language sentences or headings
+
+For each non-English fragment found, provide:
+1. The EXACT verbatim text from the guide (copy precisely)
+2. An English replacement
+
+Use the submit_language_issues tool. Set is_clean=true ONLY if you found zero non-English text."""
+
+MEDICAL_CORRECTION_SYSTEM = """You are a senior oncologist correcting medical accuracy issues in a patient guide.
+
+You will receive:
+1. The relevant sections of the guide
+2. A list of specific accuracy issues identified by peer review
+
+For each issue, produce a surgical find/replace patch:
+- "find": copy the EXACT verbatim text from the guide (50-300 characters, enough context to be unique)
+- "replace": the corrected version with accurate medical information
+- Keep replacements minimal -- change only what is wrong, preserve surrounding text
+
+Use the submit_medical_corrections tool. Only create corrections for issues you can verify and fix accurately.
+Do NOT invent corrections for issues you are uncertain about."""
+
 ONCOLOGIST_REVIEW_SYSTEM = """You are an experienced oncologist reviewing a patient education guide for medical accuracy.
 
 You will receive:
@@ -234,3 +310,187 @@ def validate_guide(
         "section_scores": adv_review.get("section_scores", {}),
         "learnings": adv_review.get("learnings", []),
     }
+
+
+def _apply_patches(guide_text: str, patches: list) -> tuple:
+    """Apply find/replace patches to guide text. Returns (updated_text, list_of_applied_descriptions)."""
+    applied = []
+    for patch in patches:
+        find = patch.get("find", "")
+        replace = patch.get("replace", "")
+        if find and replace and find != replace and find in guide_text:
+            guide_text = guide_text.replace(find, replace, 1)
+            severity = patch.get("severity", patch.get("language_detected", "?"))
+            applied.append(f"[{severity}] {find[:60]}...")
+        elif find and find not in guide_text:
+            logger.warning(f"Patch not applied -- text not found: {find[:80]!r}")
+    return guide_text, applied
+
+
+def _extract_issue_sections(guide_text: str, accuracy_issues: list) -> str:
+    """Extract only the guide sections referenced by accuracy issues (reduces Sonnet input tokens)."""
+    if not accuracy_issues:
+        return guide_text
+
+    mentioned_sections = {issue.get("section", "") for issue in accuracy_issues if issue.get("section")}
+    if not mentioned_sections:
+        return guide_text
+
+    lines = guide_text.split("\n")
+    selected = []
+    in_section = False
+    current_section_name = ""
+
+    for line in lines:
+        if line.startswith("## "):
+            current_section_name = line.lower()
+            in_section = any(sec.lower() in current_section_name for sec in mentioned_sections)
+        if in_section or line.startswith("# "):
+            selected.append(line)
+
+    return "\n".join(selected) if selected else guide_text
+
+
+def _check_language(guide_text: str, api_key: str, haiku_model: str, cost: CostTracker) -> list:
+    """Use Haiku to find non-English text. Returns list of patch dicts."""
+    client = anthropic.Anthropic(api_key=api_key)
+    try:
+        msg = api_call(
+            client,
+            model=haiku_model,
+            max_tokens=2000,
+            system=LANGUAGE_CHECK_SYSTEM,
+            messages=[{"role": "user", "content": f"Scan this guide for non-English text:\n\n{guide_text}"}],
+            tools=[LANGUAGE_CHECK_TOOL],
+            tool_choice={"type": "tool", "name": "submit_language_issues"},
+        )
+        cost.track(haiku_model, msg.usage.input_tokens, msg.usage.output_tokens)
+        result = msg.content[0].input
+        issues = result.get("issues", [])
+        if issues:
+            logger.info(f"Language check: {len(issues)} non-English fragment(s) found")
+        else:
+            logger.info("Language check: guide is clean (English only)")
+        return issues
+    except Exception as e:
+        logger.error(f"Language check failed: {e}")
+        return []
+
+
+def _correct_medical_errors(
+    guide_text: str,
+    diagnosis: str,
+    knowledge_map: dict,
+    accuracy_issues: list,
+    api_key: str,
+    sonnet_model: str,
+    cost: CostTracker,
+) -> list:
+    """Use Sonnet to convert accuracy issues into surgical find/replace patches."""
+    client = anthropic.Anthropic(api_key=api_key)
+    relevant_sections = _extract_issue_sections(guide_text, accuracy_issues)
+    issues_text = json.dumps(accuracy_issues, indent=2)
+    knowledge_text = json.dumps(knowledge_map, indent=2)
+
+    try:
+        msg = api_call(
+            client,
+            model=sonnet_model,
+            max_tokens=3000,
+            system=MEDICAL_CORRECTION_SYSTEM,
+            messages=[{
+                "role": "user",
+                "content": (
+                    f"Diagnosis: {diagnosis}\n\n"
+                    f"=== KNOWLEDGE MAP (ground truth) ===\n{knowledge_text}\n\n"
+                    f"=== ACCURACY ISSUES TO CORRECT ===\n{issues_text}\n\n"
+                    f"=== RELEVANT GUIDE SECTIONS ===\n{relevant_sections}"
+                ),
+            }],
+            tools=[MEDICAL_CORRECTION_TOOL],
+            tool_choice={"type": "tool", "name": "submit_medical_corrections"},
+        )
+        cost.track(sonnet_model, msg.usage.input_tokens, msg.usage.output_tokens)
+        result = msg.content[0].input
+        corrections = result.get("corrections", [])
+        if corrections:
+            logger.info(f"Medical corrections: {len(corrections)} patch(es) generated")
+        return corrections
+    except Exception as e:
+        logger.error(f"Medical correction failed: {e}")
+        return []
+
+
+def refine_guide(
+    guide_text: str,
+    diagnosis: str,
+    knowledge_map: dict,
+    api_key: str,
+    sonnet_model: str,
+    haiku_model: str,
+    cost: CostTracker,
+    max_rounds: int = 2,
+) -> dict:
+    """Validate + auto-correct guide: language check (Haiku) + medical corrections (Sonnet).
+
+    Wraps validate_guide() with automated correction loops. Returns a superset of
+    validate_guide() result, plus: guide_text, patches_applied, language_issues_found,
+    medical_corrections_applied, rounds_completed.
+    """
+    all_patches_applied = []
+    language_issues_found = 0
+    medical_corrections_applied = 0
+
+    for round_num in range(1, max_rounds + 1):
+        logger.info(f"refine_guide: round {round_num}/{max_rounds}")
+
+        # Language check (Haiku, cheap)
+        lang_patches = _check_language(guide_text, api_key, haiku_model, cost)
+        if lang_patches:
+            language_issues_found += len(lang_patches)
+            guide_text, applied = _apply_patches(guide_text, lang_patches)
+            all_patches_applied.extend(applied)
+            logger.info(f"  Applied {len(applied)} language patch(es)")
+
+        # Validate
+        val_result = validate_guide(guide_text, diagnosis, knowledge_map, api_key, sonnet_model, cost)
+        logger.info(f"  Validation: score={val_result.get('overall_score', '?')}, passed={val_result['passed']}")
+
+        accuracy_issues = val_result.get("accuracy_issues", [])
+
+        # If clean, stop early
+        if val_result["passed"] and not accuracy_issues and not lang_patches:
+            logger.info("  Guide is clean -- stopping refinement")
+            val_result.update({
+                "guide_text": guide_text,
+                "patches_applied": all_patches_applied,
+                "language_issues_found": language_issues_found,
+                "medical_corrections_applied": medical_corrections_applied,
+                "rounds_completed": round_num,
+            })
+            return val_result
+
+        # Medical corrections (Sonnet, more expensive)
+        if accuracy_issues and cost.has_budget(reserve_usd=0.25):
+            med_patches = _correct_medical_errors(
+                guide_text, diagnosis, knowledge_map, accuracy_issues, api_key, sonnet_model, cost
+            )
+            if med_patches:
+                medical_corrections_applied += len(med_patches)
+                guide_text, applied = _apply_patches(guide_text, med_patches)
+                all_patches_applied.extend(applied)
+                logger.info(f"  Applied {len(applied)} medical correction(s)")
+            else:
+                # No patches generated -- no point continuing
+                break
+        else:
+            break
+
+    val_result.update({
+        "guide_text": guide_text,
+        "patches_applied": all_patches_applied,
+        "language_issues_found": language_issues_found,
+        "medical_corrections_applied": medical_corrections_applied,
+        "rounds_completed": max_rounds,
+    })
+    return val_result

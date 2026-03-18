@@ -180,7 +180,7 @@ agents/research/
     cost_tracker.py            — Track API costs, enforce $5 budget cap
     discovery.py               — Iterative oncologist <-> advocate loop (Sonnet); all 3 AI calls use tool_choice (no JSON parsing)
     keyword_extractor.py       — Methodologist: extract queries from discovery (Sonnet); uses tool_choice
-    validation.py              — Post-generation oncologist + advocate review (Sonnet)
+    validation.py              — Post-generation oncologist + advocate review (Sonnet); refine_guide() adds language check (Haiku) + auto-correction before final output
     skill_improver.py          — Write learnings back to skill files
     enrichment.py              — Claude: classify relevant/irrelevant + score 1-10 + authority 1-5 (Haiku); uses tool_choice; accepts optional CostTracker
     gap_analyzer.py            — Identify weak sections, generate round 2 queries (Haiku); accepts optional CostTracker for both AI calls
