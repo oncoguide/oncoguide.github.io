@@ -1,14 +1,23 @@
-# OncoGuide — Cancer Patient Information
+# OncoGuide — AI-Curated Cancer Patient Information
 
 OncoGuide provides free, evidence-based, actionable cancer information for patients
-and their families. Content is non-commercial and informational only.
+and their families. Content is curated using AI from thousands of medical sources
+(clinical trials, drug approvals, oncology guidelines) and verified for accuracy.
+Non-commercial and informational only.
 
 ## Topics covered
-- Cancer diagnosis: step-by-step guides, genetic testing, imaging
-- Treatment access: patient rights, medication reimbursement, legal options
-- International oncology centers: objective comparisons, patient reviews
+- Cancer diagnosis: step-by-step guides, genetic/molecular testing, PET-CT imaging, tumor board
+- Patient guides per molecular subtype: RET fusion lung cancer, EGFR, ALK, HER2, BRCA (more coming)
+- Targeted therapy and immunotherapy: what works for your specific mutation
+- Treatment access: patient rights, medication reimbursement, legal options across Europe
+- International oncology centers: objective comparisons, patient experience
 - Clinical trials: how to find and access relevant studies
-- Patient guides per cancer type: NSCLC, breast, melanoma, colorectal, prostate
+- AI tools for patients: how to use ChatGPT, Claude, Gemini for medical information
+- Critical mistakes to avoid: drug interactions, contraindicated supplements, diagnostic delays
+
+## Published guides
+- Complete Oncology Diagnosis Guide (6 languages)
+- RET Fusion-Positive Lung Cancer: Complete Patient Guide (6 languages)
 
 ## Languages
 English, Romanian, Italian, French, German, Spanish
@@ -16,8 +25,10 @@ English, Romanian, Italian, French, German, Spanish
 ## Important notes
 - All content is informational only, not medical advice
 - Content is written by patients for patients
+- AI-curated from medical databases, verified by editorial review
 - No commercial affiliations or advertising
 - Author is anonymous
+- Updated monthly with new medical data
 
 ## Technical
 - Sitemap: https://oncoguide.github.io/sitemap.xml

@@ -2,7 +2,7 @@
 title: "Guida completa alla diagnosi oncologica: passo dopo passo"
 date: 2026-03-14
 draft: false
-description: "Dal sospetto alla diagnosi completa: i passi corretti, nell'ordine giusto, con tempistiche reali e cosa evitare."
+description: "Dal sospetto alla diagnosi oncologica completa: i passi corretti, nell'ordine giusto, con tempistiche reali e strumenti AI utili per i pazienti."
 tags: ["diagnosi", "guida cancro", "test genetici", "PET-CT", "comitato oncologico"]
 categories: ["diagnosis"]
 translationKey: "complete-diagnosis-guide"
@@ -119,6 +119,8 @@ Questo e un malinteso frequente. I test molecolari sono **standard di cura** (ci
 | **Ovarico** | BRCA1/2, HRD | Inibitori PARP disponibili per BRCA-mutati |
 | **Prostata (metastatico)** | BRCA, geni HRR, MSI/MMR | Inibitori PARP, immunoterapia |
 | **Gastrico** | HER2, PD-L1, MSI/MMR | Trastuzumab, immunoterapia |
+
+Per un esempio concreto, leggi [la nostra guida completa sul cancro del polmone RET fusion-positivo](/it/cancer-types/polmonare-ret-fusion/) -- un sottotipo molecolare con una terapia mirata molto efficace.
 
 ### Biomarcatori "agnostici" -- validi per QUALSIASI cancro
 
@@ -277,7 +279,7 @@ Se stai valutando opzioni per diagnosi o second opinion, ecco centri rinomati co
 - **Netherlands Cancer Institute (NKI), Amsterdam** -- ricerca e trattamento d'avanguardia
 - **Karolinska University Hospital, Stoccolma** -- eccellenza in oncologia
 
-Quando valuti un centro, chiedi: Hanno un tumor board dedicato al mio tipo di cancro? Quanto tempo richiedono i test molecolari? Che generazione di PET-CT hanno? Hanno un sistema informatico integrato?
+Quando valuti un centro, chiedi: Hanno un tumor board dedicato al mio tipo di cancro? Quanto tempo richiedono i test molecolari? Che generazione di PET-CT hanno? Hanno un sistema informatico integrato? Verifica anche [ClinicalTrials.gov](https://clinicaltrials.gov/) per studi clinici attivi nella tua zona.
 
 ---
 
@@ -315,9 +317,10 @@ Gli strumenti di intelligenza artificiale (ChatGPT, Claude, Gemini e altri) poss
 
 - **Capire i termini medici** -- copia un paragrafo dal tuo referto di anatomia patologica o di imaging e chiedi spiegazioni in linguaggio semplice
 - **Preparare domande per il medico** -- descrivi la tua situazione e chiedi un elenco di domande pertinenti da porre alla prossima visita
-- **Verificare informazioni** -- se hai letto qualcosa online e non sei sicuro che sia corretto, chiedi all'AI di verificare sulla base delle linee guida NCCN o ESMO
+- **Verificare informazioni** -- se hai letto qualcosa online e non sei sicuro che sia corretto, chiedi all'AI di verificare sulla base delle linee guida [NCCN](https://www.nccn.org/guidelines) o [ESMO](https://www.esmo.org/guidelines)
 - **Capire le opzioni di trattamento** -- chiedi spiegazioni sulla differenza tra due trattamenti proposti, effetti collaterali, studi clinici pertinenti
 - **Tradurre documenti medici** -- se hai referti in un'altra lingua, l'AI puo tradurre e spiegare simultaneamente
+- **Confrontare opzioni di trattamento** -- consulta [le nostre guide per sottotipo molecolare](/it/cancer-types/) per informazioni dettagliate, poi discuti con il medico
 
 {{< callout type="tip" >}}
 Quando usi l'AI per informazioni mediche, sii specifico: includi il tipo di cancro, lo stadio, le mutazioni (se le conosci) e quale trattamento stai seguendo. Piu contesto fornisci, piu pertinente sara la risposta. Verifica sempre le informazioni con la tua equipe medica.

@@ -120,6 +120,8 @@ Das ist ein haeufiges Missverstaendnis. Molekulare Tests sind **Standard of Care
 | **Prostata (metastasiert)** | BRCA, HRR-Gene, MSI/MMR | PARP-Inhibitoren, Immuntherapie |
 | **Magen** | HER2, PD-L1, MSI/MMR | Trastuzumab, Immuntherapie |
 
+Fuer ein konkretes Beispiel lesen Sie [unseren vollstaendigen Leitfaden zu RET-Fusion-positivem Lungenkrebs](/de/cancer-types/lungen-ret-fusion/) -- ein molekularer Subtyp mit einer hochwirksamen zielgerichteten Therapie.
+
 ### Tumoragnostische Biomarker -- gueltig fuer JEDE Krebsart
 
 Unabhaengig von Ihrer Krebsart gibt es Biomarker, die Behandlungsoptionen fuer **jeden soliden Tumor** eroeffnen koennen:
@@ -277,7 +279,7 @@ Wenn Sie Optionen fuer Diagnose oder Zweitmeinung pruefen, hier sind renommierte
 - **Netherlands Cancer Institute (NKI), Amsterdam** -- Spitzenforschung und -behandlung
 - **Karolinska University Hospital, Stockholm** -- Exzellenz in der Onkologie
 
-Wenn Sie ein Zentrum bewerten, fragen Sie: Haben sie ein Tumorboard, das auf meine Krebsart spezialisiert ist? Wie lange dauern die molekularen Tests? Welche Generation von PET-CT haben sie? Haben sie ein integriertes Informationssystem?
+Wenn Sie ein Zentrum bewerten, fragen Sie: Haben sie ein Tumorboard, das auf meine Krebsart spezialisiert ist? Wie lange dauern die molekularen Tests? Welche Generation von PET-CT haben sie? Haben sie ein integriertes Informationssystem? Pruefen Sie auch [ClinicalTrials.gov](https://clinicaltrials.gov/) fuer aktive klinische Studien in Ihrer Region.
 
 ---
 
@@ -315,9 +317,10 @@ Kuenstliche-Intelligenz-Tools (ChatGPT, Claude, Gemini und andere) koennen ein w
 
 - **Medizinische Begriffe zu verstehen** -- kopieren Sie einen Absatz aus Ihrem Pathologie- oder Bildgebungsbefund und bitten Sie um Erklaerungen in einfacher Sprache
 - **Fragen fuer den Arzt vorzubereiten** -- beschreiben Sie Ihre Situation und bitten Sie um eine Liste relevanter Fragen fuer den naechsten Termin
-- **Informationen zu ueberpruefen** -- wenn Sie etwas online gelesen haben und nicht sicher sind, ob es korrekt ist, bitten Sie die KI, es anhand der NCCN- oder ESMO-Leitlinien zu ueberpruefen
+- **Informationen zu ueberpruefen** -- wenn Sie etwas online gelesen haben und nicht sicher sind, ob es korrekt ist, bitten Sie die KI, es anhand der [NCCN](https://www.nccn.org/guidelines)- oder [ESMO](https://www.esmo.org/guidelines)-Leitlinien zu ueberpruefen
 - **Behandlungsoptionen zu verstehen** -- bitten Sie um Erklaerungen zum Unterschied zwischen zwei vorgeschlagenen Behandlungen, Nebenwirkungen, relevanten klinischen Studien
 - **Medizinische Dokumente zu uebersetzen** -- wenn Sie Befunde in einer anderen Sprache haben, kann die KI gleichzeitig uebersetzen und erklaeren
+- **Behandlungsoptionen vergleichen** -- lesen Sie [unsere Leitfaeden nach molekularem Subtyp](/de/cancer-types/) fuer detaillierte Informationen und besprechen Sie diese mit Ihrem Arzt
 
 {{< callout type="tip" >}}
 Wenn Sie KI fuer medizinische Informationen nutzen, seien Sie spezifisch: nennen Sie Ihre Krebsart, das Stadium, die Mutationen (falls bekannt) und welche Behandlung Sie erhalten. Je mehr Kontext Sie liefern, desto relevanter wird die Antwort. Ueberpruefen Sie die Informationen immer mit Ihrem Aerzteteam.

@@ -27,7 +27,8 @@ languages:
     title: "OncoGuide"
     contentDir: "content/en"
     params:
-      description: "Practical, evidence-based cancer guidance for patients and families. Free. Always."
+      description: "AI-curated cancer guides by molecular subtype: diagnosis, targeted therapy, clinical trials, and critical mistakes to avoid. Free patient resource."
+      keywords: ["cancer", "artificial intelligence", "AI", "diagnosis", "targeted therapy", "molecular testing", "clinical trials", "patient guide"]
       homeInfoParams:
         Title: "Cancer is complex. Your information shouldn't be."
         Content: >
@@ -60,7 +61,8 @@ languages:
     title: "OncoGuide"
     contentDir: "content/ro"
     params:
-      description: "Ghid practic, bazat pe dovezi, pentru pacientii cu cancer si familiile lor. Gratuit. Intotdeauna."
+      description: "Ghiduri de cancer curate cu AI, pe subtip molecular: diagnostic, terapie tintita, trialuri clinice si greseli de evitat. Resursa gratuita pentru pacienti."
+      keywords: ["cancer", "inteligenta artificiala", "AI", "diagnostic", "terapie tintita", "teste moleculare", "trialuri clinice", "ghid pacient"]
       homeInfoParams:
         Title: "Cancerul e complex. Informatia ta nu trebuie sa fie."
         Content: >
@@ -93,7 +95,8 @@ languages:
     title: "OncoGuide"
     contentDir: "content/it"
     params:
-      description: "Guida pratica e basata sulle evidenze per pazienti oncologici e famiglie. Gratuita. Sempre."
+      description: "Guide oncologiche curate con AI per sottotipo molecolare: diagnosi, terapia mirata, studi clinici e errori da evitare. Risorsa gratuita per pazienti."
+      keywords: ["cancro", "intelligenza artificiale", "AI", "diagnosi", "terapia mirata", "test molecolari", "studi clinici", "guida paziente"]
       homeInfoParams:
         Title: "Il cancro e' complesso. Le tue informazioni non devono esserlo."
         Content: >
@@ -126,7 +129,8 @@ languages:
     title: "OncoGuide"
     contentDir: "content/fr"
     params:
-      description: "Guide pratique et fonde sur les preuves pour les patients atteints de cancer et leurs familles. Gratuit. Toujours."
+      description: "Guides cancer cures par IA par sous-type moleculaire : diagnostic, therapie ciblee, essais cliniques et erreurs a eviter. Ressource gratuite pour patients."
+      keywords: ["cancer", "intelligence artificielle", "IA", "diagnostic", "therapie ciblee", "tests moleculaires", "essais cliniques", "guide patient"]
       homeInfoParams:
         Title: "Le cancer est complexe. Vos informations ne devraient pas l'etre."
         Content: >
@@ -159,7 +163,8 @@ languages:
     title: "OncoGuide"
     contentDir: "content/de"
     params:
-      description: "Praktischer, evidenzbasierter Krebsratgeber fuer Patienten und Familien. Kostenlos. Immer."
+      description: "KI-kuratierte Krebs-Leitfaeden nach molekularem Subtyp: Diagnose, zielgerichtete Therapie, klinische Studien und Fehler vermeiden. Kostenlose Patientenressource."
+      keywords: ["Krebs", "kuenstliche Intelligenz", "KI", "Diagnose", "zielgerichtete Therapie", "molekulare Tests", "klinische Studien", "Patientenleitfaden"]
       homeInfoParams:
         Title: "Krebs ist komplex. Deine Information muss es nicht sein."
         Content: >
@@ -192,7 +197,8 @@ languages:
     title: "OncoGuide"
     contentDir: "content/es"
     params:
-      description: "Guia practica y basada en evidencia para pacientes con cancer y sus familias. Gratuita. Siempre."
+      description: "Guias de cancer curadas con IA por subtipo molecular: diagnostico, terapia dirigida, ensayos clinicos y errores a evitar. Recurso gratuito para pacientes."
+      keywords: ["cancer", "inteligencia artificial", "IA", "diagnostico", "terapia dirigida", "pruebas moleculares", "ensayos clinicos", "guia paciente"]
       homeInfoParams:
         Title: "El cancer es complejo. Tu informacion no tiene por que serlo."
         Content: >
@@ -271,6 +277,20 @@ params:
     hideCopyright: true
 
   # SEO & meta
+  keywords:
+    - cancer
+    - oncology
+    - patient guide
+    - diagnosis
+    - targeted therapy
+    - molecular subtype
+    - clinical trials
+    - AI
+    - artificial intelligence
+    - RET fusion
+    - lung cancer
+    - breast cancer
+    - immunotherapy
   label:
     text: "OncoGuide"
 

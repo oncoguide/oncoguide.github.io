@@ -2,7 +2,7 @@
 title: "Guia completa de diagnostico oncologico: paso a paso"
 date: 2026-03-14
 draft: false
-description: "De la sospecha al diagnostico completo: los pasos correctos, en el orden correcto, con plazos reales y que evitar."
+description: "De la sospecha al diagnostico completo de cancer: los pasos correctos, en el orden correcto, con plazos reales y herramientas de IA para pacientes."
 tags: ["diagnostico", "guia cancer", "pruebas geneticas", "PET-CT", "comite de tumores"]
 categories: ["diagnosis"]
 translationKey: "complete-diagnosis-guide"
@@ -119,6 +119,8 @@ Este es un malentendido frecuente. Las pruebas moleculares son **estandar de ate
 | **Ovario** | BRCA1/2, HRD | Inhibidores de PARP disponibles para BRCA-mutante |
 | **Prostata (metastasico)** | BRCA, genes HRR, MSI/MMR | Inhibidores de PARP, inmunoterapia |
 | **Gastrico** | HER2, PD-L1, MSI/MMR | Trastuzumab, inmunoterapia |
+
+Para un ejemplo concreto, lee [nuestra guia completa sobre cancer de pulmon RET fusion-positivo](/es/cancer-types/pulmonar-ret-fusion/) -- un subtipo molecular con una terapia dirigida muy eficaz.
 
 ### Biomarcadores "agnosticos" --validos para CUALQUIER cancer
 
@@ -277,7 +279,7 @@ Si estas evaluando opciones para diagnostico o segunda opinion, estos son centro
 - **Netherlands Cancer Institute (NKI), Amsterdam** -- investigacion y tratamiento de vanguardia
 - **Karolinska University Hospital, Stockholm** -- excelencia en oncologia
 
-Al evaluar un centro, pregunta: Tienen comite de tumores dedicado a mi tipo de cancer? Cuanto tardan las pruebas moleculares? Que generacion de PET-CT tienen? Tienen sistema informatico integrado?
+Al evaluar un centro, pregunta: Tienen comite de tumores dedicado a mi tipo de cancer? Cuanto tardan las pruebas moleculares? Que generacion de PET-CT tienen? Tienen sistema informatico integrado? Consulta tambien [ClinicalTrials.gov](https://clinicaltrials.gov/) para ensayos clinicos activos en tu zona.
 
 ---
 
@@ -315,9 +317,10 @@ Las herramientas de inteligencia artificial (ChatGPT, Claude, Gemini y otras) pu
 
 - **Entender los terminos medicos** -- copia un parrafo de tu informe de patologia o de imagen y pide explicaciones en lenguaje sencillo
 - **Preparar preguntas para el medico** -- describe tu situacion y pide una lista de preguntas relevantes para tu proxima consulta
-- **Verificar informacion** -- si leiste algo en internet y no estas seguro de si es correcto, pide a la IA que lo verifique con base en las guias NCCN o ESMO
+- **Verificar informacion** -- si leiste algo en internet y no estas seguro de si es correcto, pide a la IA que lo verifique con base en las guias [NCCN](https://www.nccn.org/guidelines) o [ESMO](https://www.esmo.org/guidelines)
 - **Entender las opciones de tratamiento** -- pide explicaciones sobre la diferencia entre dos tratamientos propuestos, efectos secundarios, ensayos clinicos relevantes
 - **Traducir documentos medicos** -- si tienes informes en otro idioma, la IA puede traducir y explicar al mismo tiempo
+- **Comparar opciones de tratamiento** -- consulta [nuestras guias por subtipo molecular](/es/cancer-types/) para informacion detallada, luego discute con tu medico
 
 {{< callout type="tip" >}}
 Cuando uses IA para informacion medica, se especifico: incluye tu tipo de cancer, estadio, mutaciones (si las conoces) y que tratamiento sigues. Cuanto mas contexto ofrezcas, mas relevante sera la respuesta. Siempre verifica la informacion con tu equipo medico.

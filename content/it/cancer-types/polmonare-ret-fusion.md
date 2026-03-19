@@ -2,7 +2,7 @@
 title: "Cancro polmonare con fusione RET: la guida completa per i pazienti"
 date: 2026-03-19
 draft: false
-description: "Cancro polmonare RET fusion-positivo: trattamento con Selpercatinib, effetti collaterali, emergenze, resistenza e accesso in Europa."
+description: "Cancro polmonare RET fusion-positivo: guida completa su Selpercatinib, effetti collaterali, interazioni, emergenze, resistenza e accesso al trattamento in Europa."
 tags: ["cancro polmonare", "fusione RET", "selpercatinib", "Retevmo", "terapia mirata", "guida paziente"]
 categories: ["cancer-types"]
 translationKey: "lung-ret-fusion"

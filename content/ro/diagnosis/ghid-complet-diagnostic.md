@@ -2,7 +2,7 @@
 title: "Ghidul complet de diagnostic oncologic: pas cu pas"
 date: 2026-03-14
 draft: false
-description: "De la suspiciune la diagnostic complet: pașii corecți, în ordinea corectă, cu timeline-uri reale și ce să eviți."
+description: "De la suspiciune la diagnostic complet de cancer: pașii corecți, în ordinea corectă, cu timeline-uri reale și instrumente AI utile pentru pacienți."
 tags: ["diagnostic", "ghid cancer", "teste genetice", "PET-CT", "comisie oncologică"]
 categories: ["diagnosis"]
 translationKey: "complete-diagnosis-guide"
@@ -119,6 +119,8 @@ Aceasta este o neînțelegere frecventă. Testele moleculare sunt **standard de 
 | **Ovarian** | BRCA1/2, HRD | Inhibitori PARP disponibili pentru BRCA-mutant |
 | **Prostată (metastatic)** | BRCA, gene HRR, MSI/MMR | PARP inhibitori, imunoterapie |
 | **Gastric** | HER2, PD-L1, MSI/MMR | Trastuzumab, imunoterapie |
+
+Pentru un exemplu concret, citește [ghidul nostru complet despre cancerul pulmonar RET fusion-pozitiv](/ro/cancer-types/pulmonar-ret-fusion/) -- un subtip molecular cu tratament țintit foarte eficient.
 
 ### Biomarkeri "agnostici" --valabili pentru ORICE cancer
 
@@ -277,7 +279,7 @@ Dacă evaluezi opțiuni pentru diagnostic sau second opinion, iată centre renum
 - **Netherlands Cancer Institute (NKI), Amsterdam** -- cercetare și tratament de vârf
 - **Karolinska University Hospital, Stockholm** -- excelență în oncologie
 
-Când evaluezi un centru, întreabă: Au tumor board dedicat tipului meu de cancer? Cât durează testele moleculare? Ce generație de PET-CT au? Au sistem informatic integrat?
+Când evaluezi un centru, întreabă: Au tumor board dedicat tipului meu de cancer? Cât durează testele moleculare? Ce generație de PET-CT au? Au sistem informatic integrat? Verifică și [ClinicalTrials.gov](https://clinicaltrials.gov/) pentru studii clinice active în zona ta.
 
 ---
 
@@ -315,9 +317,10 @@ Instrumentele de inteligență artificială (ChatGPT, Claude, Gemini și altele)
 
 - **Înțelegi termenii medicali** -- copiază un paragraf din raportul tău de patologie sau imagistică și cere explicații în limbaj simplu
 - **Pregătești întrebări pentru medic** -- descrie-ți situația și cere o listă de întrebări relevante pe care să le pui la următoarea consultație
-- **Verifici informații** -- dacă ai citit ceva online și nu ești sigur dacă e corect, cere AI-ului să verifice pe baza ghidurilor NCCN sau ESMO
+- **Verifici informații** -- dacă ai citit ceva online și nu ești sigur dacă e corect, cere AI-ului să verifice pe baza ghidurilor [NCCN](https://www.nccn.org/guidelines) sau [ESMO](https://www.esmo.org/guidelines)
 - **Înțelegi opțiunile de tratament** -- cere explicații despre diferența dintre două tratamente propuse, efecte secundare, studii clinice relevante
 - **Traduci documente medicale** -- dacă ai rapoarte în altă limbă, AI-ul poate traduce și explica simultan
+- **Compară opțiuni de tratament** -- consultă [ghidurile noastre per subtip molecular](/ro/cancer-types/) pentru informații detaliate, apoi discută cu medicul
 
 {{< callout type="tip" >}}
 Când folosești AI pentru informații medicale, fii specific: include tipul tău de cancer, stadiul, mutațiile (dacă le știi) și ce tratament urmezi. Cu cât oferi mai mult context, cu atât răspunsul va fi mai relevant. Întotdeauna verifică informațiile cu echipa ta medicală.

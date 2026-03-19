@@ -2,7 +2,7 @@
 title: "The Complete Oncology Diagnosis Guide: Step by Step"
 date: 2026-03-14
 draft: false
-description: "From suspicion to a complete diagnosis: the right steps, in the right order, with real timelines and what to avoid."
+description: "From suspicion to a complete cancer diagnosis: the right steps, in the right order, with real timelines and AI tools to help patients navigate."
 tags: ["diagnosis", "cancer guide", "genetic testing", "PET-CT", "tumor board"]
 categories: ["diagnosis"]
 translationKey: "complete-diagnosis-guide"
@@ -119,6 +119,8 @@ This is a common misconception. Molecular testing is the **standard of care** (m
 | **Ovarian** | BRCA1/2, HRD | PARP inhibitors available for BRCA-mutant |
 | **Prostate (metastatic)** | BRCA, HRR genes, MSI/MMR | PARP inhibitors, immunotherapy |
 | **Gastric** | HER2, PD-L1, MSI/MMR | Trastuzumab, immunotherapy |
+
+For a concrete example, read [our complete guide to RET fusion-positive lung cancer](/en/cancer-types/lung-ret-fusion/) -- a molecular subtype with a highly effective targeted treatment.
 
 ### "Agnostic" biomarkers --valid for ANY cancer
 
@@ -277,7 +279,7 @@ If you are evaluating options for diagnosis or second opinion, here are renowned
 - **Netherlands Cancer Institute (NKI), Amsterdam** -- cutting-edge research and treatment
 - **Karolinska University Hospital, Stockholm** -- excellence in oncology
 
-When evaluating a center, ask: Do they have a tumor board dedicated to my cancer type? How long do molecular tests take? What generation of PET-CT do they have? Do they have an integrated information system?
+When evaluating a center, ask: Do they have a tumor board dedicated to my cancer type? How long do molecular tests take? What generation of PET-CT do they have? Do they have an integrated information system? Also check [ClinicalTrials.gov](https://clinicaltrials.gov/) for active clinical trials in your area.
 
 ---
 
@@ -315,9 +317,10 @@ Artificial intelligence tools (ChatGPT, Claude, Gemini, and others) can be a val
 
 - **Understand medical terms** -- copy a paragraph from your pathology or imaging report and ask for an explanation in plain language
 - **Prepare questions for your doctor** -- describe your situation and ask for a list of relevant questions to bring to your next appointment
-- **Verify information** -- if you read something online and are not sure whether it is correct, ask the AI to check against NCCN or ESMO guidelines
+- **Verify information** -- if you read something online and are not sure whether it is correct, ask the AI to check against [NCCN](https://www.nccn.org/guidelines) or [ESMO](https://www.esmo.org/guidelines) guidelines
 - **Understand treatment options** -- ask for explanations about the difference between two proposed treatments, side effects, relevant clinical trials
 - **Translate medical documents** -- if you have reports in another language, AI can translate and explain simultaneously
+- **Compare treatment options** -- check [our molecular subtype guides](/en/cancer-types/) for detailed information, then discuss with your doctor
 
 {{< callout type="tip" >}}
 When using AI for medical information, be specific: include your cancer type, stage, mutations (if you know them), and what treatment you are on. The more context you provide, the more relevant the answer will be. Always verify the information with your medical team.

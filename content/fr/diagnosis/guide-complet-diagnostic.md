@@ -2,7 +2,7 @@
 title: "Le guide complet du diagnostic oncologique : etape par etape"
 date: 2026-03-14
 draft: false
-description: "Du premier soupcon au diagnostic complet : les etapes correctes, dans le bon ordre, avec des delais reels et les erreurs a eviter."
+description: "Du premier soupcon au diagnostic complet de cancer : les etapes correctes, dans le bon ordre, avec des delais reels et des outils IA pour les patients."
 tags: ["diagnostic", "guide cancer", "tests genetiques", "TEP-TDM", "reunion de concertation pluridisciplinaire"]
 categories: ["diagnosis"]
 translationKey: "complete-diagnosis-guide"
@@ -119,6 +119,8 @@ C'est un malentendu frequent. Les tests moleculaires sont le **standard de soins
 | **Ovaire** | BRCA1/2, HRD | Les inhibiteurs de PARP sont disponibles pour les mutations BRCA |
 | **Prostate (metastatique)** | BRCA, genes HRR, MSI/MMR | Inhibiteurs de PARP, immunotherapie |
 | **Estomac** | HER2, PD-L1, MSI/MMR | Trastuzumab, immunotherapie |
+
+Pour un exemple concret, lisez [notre guide complet sur le cancer du poumon RET fusion-positif](/fr/cancer-types/poumon-ret-fusion/) -- un sous-type moleculaire avec une therapie ciblee tres efficace.
 
 ### Biomarqueurs "agnostiques" -- valables pour TOUT cancer
 
@@ -277,7 +279,7 @@ Si vous evaluez des options pour un diagnostic ou un deuxieme avis, voici des ce
 - **Netherlands Cancer Institute (NKI), Amsterdam** -- recherche et traitement de pointe
 - **Karolinska University Hospital, Stockholm** -- excellence en oncologie
 
-Lorsque vous evaluez un centre, demandez : Ont-ils une RCP dediee a mon type de cancer ? Combien de temps prennent les tests moleculaires ? Quelle generation de TEP-TDM ont-ils ? Ont-ils un systeme informatique integre ?
+Lorsque vous evaluez un centre, demandez : Ont-ils une RCP dediee a mon type de cancer ? Combien de temps prennent les tests moleculaires ? Quelle generation de TEP-TDM ont-ils ? Ont-ils un systeme informatique integre ? Consultez egalement [ClinicalTrials.gov](https://clinicaltrials.gov/) pour les essais cliniques actifs dans votre region.
 
 ---
 
@@ -315,9 +317,10 @@ Les outils d'intelligence artificielle (ChatGPT, Claude, Gemini et autres) peuve
 
 - **Comprendre les termes medicaux** -- copiez un paragraphe de votre rapport d'anatomopathologie ou d'imagerie et demandez des explications en langage simple
 - **Preparer des questions pour le medecin** -- decrivez votre situation et demandez une liste de questions pertinentes a poser lors de la prochaine consultation
-- **Verifier des informations** -- si vous avez lu quelque chose en ligne et n'etes pas sur que ce soit correct, demandez a l'IA de verifier sur la base des recommandations NCCN ou ESMO
+- **Verifier des informations** -- si vous avez lu quelque chose en ligne et n'etes pas sur que ce soit correct, demandez a l'IA de verifier sur la base des recommandations [NCCN](https://www.nccn.org/guidelines) ou [ESMO](https://www.esmo.org/guidelines)
 - **Comprendre les options de traitement** -- demandez des explications sur la difference entre deux traitements proposes, les effets secondaires, les essais cliniques pertinents
 - **Traduire des documents medicaux** -- si vous avez des rapports dans une autre langue, l'IA peut traduire et expliquer simultanement
+- **Comparer les options de traitement** -- consultez [nos guides par sous-type moleculaire](/fr/cancer-types/) pour des informations detaillees, puis discutez avec votre medecin
 
 {{< callout type="tip" >}}
 Lorsque vous utilisez l'IA pour des informations medicales, soyez specifique : incluez votre type de cancer, le stade, les mutations (si vous les connaissez) et le traitement que vous suivez. Plus vous fournissez de contexte, plus la reponse sera pertinente. Verifiez toujours les informations avec votre equipe medicale.
