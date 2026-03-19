@@ -9,6 +9,7 @@ import logging
 import os
 import json
 import re
+from collections import defaultdict
 from datetime import datetime
 
 import anthropic
@@ -377,6 +378,258 @@ def _format_grouped_findings(groups, token_budget=180_000, prefer_patient_source
         "pct_used": f"{tokens_used / token_budget:.0%}" if token_budget else "N/A",
     }
     return "\n".join(output_parts), metadata
+
+
+# ── Smart Grouping + Q3 Routing ───────────────────────────────────
+
+GROUP_FINDINGS_TOOL = {
+    "name": "group_findings",
+    "description": "Assign each finding to one or more topic groups based on its title and subject matter.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "groups": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {"type": "string", "description": "Short descriptive group name (3-6 words)"},
+                        "finding_ids": {"type": "array", "items": {"type": "integer"}},
+                    },
+                    "required": ["name", "finding_ids"],
+                },
+                "minItems": 5,
+                "maxItems": 15,
+            }
+        },
+        "required": ["groups"],
+    },
+}
+
+ROUTE_Q3_TOOL = {
+    "name": "route_q3_findings",
+    "description": "Route each Q3 finding to one or more guide sections.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "routes": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "finding_id": {"type": "integer"},
+                        "categories": {
+                            "type": "array",
+                            "items": {"enum": ["dosing", "side-effects", "interactions",
+                                               "monitoring", "emergency", "daily-life", "access"]},
+                        },
+                    },
+                    "required": ["finding_id", "categories"],
+                },
+            }
+        },
+        "required": ["routes"],
+    },
+}
+
+GROUPING_SYSTEM = """You are organizing medical research findings into topic groups for a patient guide about {diagnosis}.
+
+Rules:
+- Create 8-12 groups based on subject matter similarity
+- A finding can be assigned to MULTIPLE groups if it covers multiple topics
+- Order groups by clinical importance (most important for patient first)
+- Group names should be specific: "Selpercatinib First-Line Efficacy" not "Treatment"
+- Do not create groups smaller than 3 findings; merge small topics into related groups"""
+
+Q3_ROUTING_SYSTEM = """You are routing medical findings to guide sections. A finding can belong to MULTIPLE sections if it covers multiple topics.
+
+Assign each finding to ALL relevant sections:
+- "dosing": drug doses, timing, administration, food requirements
+- "side-effects": adverse events, toxicity, frequency, management
+- "interactions": drug-drug, drug-food, CYP metabolism, supplements
+- "monitoring": lab tests, imaging, frequency, what to watch for
+- "emergency": urgent symptoms, when to go to ER, danger signs
+- "daily-life": nutrition, exercise, fatigue, work, travel, fertility, psychology
+- "access": treatment cost, insurance, reimbursement, patient programs"""
+
+ROUTE_TO_SECTION = {
+    "dosing": "how-to-take",
+    "side-effects": "side-effects",
+    "interactions": "interactions",
+    "monitoring": "monitoring",
+    "emergency": "emergency-signs",
+    "daily-life": "daily-life",
+    "access": "treatment-access",
+}
+
+GUIDELINES_KEYWORDS = {"esmo", "nccn", "guideline", "fda", "ema",
+                       "approval", "regulatory", "recommendation"}
+
+
+def _group_findings_by_topic(findings, section_key, topic_title,
+                              api_key=None, model=None):
+    """Group findings into topic clusters. Returns list of group dicts.
+
+    For < 500 findings or no api_key: returns single group (no AI call).
+    For >= 500 findings: uses Haiku to cluster by topic.
+    On failure: falls back to authority-tier grouping.
+    """
+    if len(findings) < 500 or not api_key:
+        return [{"name": "all", "findings": findings}]
+
+    findings_by_id = {f["id"]: f for f in findings}
+    table = "\n".join(
+        f'{f["id"]} | {f.get("authority_score", 0)} | {f.get("title_english", "N/A")}'
+        for f in findings
+    )
+
+    client = anthropic.Anthropic(api_key=api_key)
+    try:
+        response = api_call(
+            client, model=model or "claude-haiku-4-5-20251001",
+            max_tokens=4096,
+            system=GROUPING_SYSTEM.format(diagnosis=topic_title),
+            messages=[{"role": "user", "content":
+                       f"Section: {section_key} ({len(findings)} findings)\n\n"
+                       f"ID | Authority | Title\n{table}"}],
+            tools=[GROUP_FINDINGS_TOOL],
+            tool_choice={"type": "tool", "name": "group_findings"},
+        )
+        groups_raw = response.content[0].input["groups"]
+
+        # Build groups with full finding objects; findings can appear in multiple groups
+        groups = []
+        all_assigned = set()
+        for g in groups_raw:
+            group_findings = [findings_by_id[fid] for fid in g["finding_ids"]
+                            if fid in findings_by_id]
+            if group_findings:
+                groups.append({"name": g["name"], "findings": group_findings})
+                all_assigned.update(f["id"] for f in group_findings)
+
+        # Orphan check: findings not in any group
+        orphans = [f for f in findings if f["id"] not in all_assigned]
+        if orphans:
+            groups.append({"name": "Other Findings", "findings": orphans})
+            logger.warning(f"Grouping: {len(orphans)} orphan findings added to 'Other'")
+
+        return groups if groups else [{"name": "all", "findings": findings}]
+
+    except Exception as e:
+        logger.warning(f"Grouping failed ({e}), falling back to authority-tier grouping")
+        return _authority_tier_fallback(findings)
+
+
+def _authority_tier_fallback(findings):
+    """Fallback grouping by authority score tiers."""
+    tiers = defaultdict(list)
+    labels = {5: "Highest Authority", 4: "High Authority", 3: "Medium Authority",
+              2: "Lower Authority", 1: "Other Sources"}
+    for f in findings:
+        score = f.get("authority_score", 1)
+        tiers[score].append(f)
+    groups = []
+    for score in sorted(tiers.keys(), reverse=True):
+        label = labels.get(score, f"Authority {score}")
+        groups.append({"name": label, "findings": tiers[score]})
+    return groups if groups else [{"name": "all", "findings": findings}]
+
+
+def _route_q3_findings(findings, api_key, model, topic_title):
+    """Route Q3 findings to section categories. Returns {category: set(finding_ids)}."""
+    if not findings:
+        return {}
+
+    table = "\n".join(
+        f'{f["id"]} | {f.get("title_english", "N/A")}'
+        for f in findings
+    )
+
+    client = anthropic.Anthropic(api_key=api_key)
+    try:
+        response = api_call(
+            client, model=model or "claude-haiku-4-5-20251001",
+            max_tokens=8192,
+            system=Q3_ROUTING_SYSTEM,
+            messages=[{"role": "user", "content":
+                       f"Diagnosis: {topic_title}\n{len(findings)} Q3 findings to route:\n\n"
+                       f"ID | Title\n{table}"}],
+            tools=[ROUTE_Q3_TOOL],
+            tool_choice={"type": "tool", "name": "route_q3_findings"},
+        )
+        routes_raw = response.content[0].input["routes"]
+
+        routes = defaultdict(set)
+        for r in routes_raw:
+            for cat in r["categories"]:
+                routes[cat].add(r["finding_id"])
+
+        # Orphan check
+        all_routed = set()
+        for ids in routes.values():
+            all_routed.update(ids)
+        orphans = {f["id"] for f in findings} - all_routed
+        if orphans:
+            routes["daily-life"].update(orphans)  # safe default
+            logger.warning(f"Q3 routing: {len(orphans)} orphans defaulted to daily-life")
+
+        return dict(routes)
+
+    except Exception as e:
+        logger.warning(f"Q3 routing failed ({e}), assigning all to all sections")
+        all_ids = {f["id"] for f in findings}
+        return {cat: all_ids for cat in
+                ["dosing", "side-effects", "interactions", "monitoring",
+                 "emergency", "daily-life", "access"]}
+
+
+def _identify_guidelines_groups(groups):
+    """Identify which groups are guidelines-related by keyword matching."""
+    matched = []
+    for g in groups:
+        name_words = set(g["name"].lower().split())
+        if name_words & GUIDELINES_KEYWORDS:
+            matched.append(g)
+    return matched
+
+
+def _assign_findings_to_sections(findings, api_key, model, topic_title):
+    """Assign findings to sections. Q3 routed via AI, others by lifecycle prefix.
+
+    Returns {section_id: [list of finding dicts]}.
+    Section 15 (questions-for-doctor) is NOT populated here -- it uses prior section text.
+    Section 16 (international-guidelines) receives Q9 findings.
+    """
+    section_findings = defaultdict(list)
+
+    q3 = [f for f in findings if (f.get("lifecycle_stage") or "").startswith("Q3")]
+    non_q3 = [f for f in findings if not (f.get("lifecycle_stage") or "").startswith("Q3")]
+
+    # Route Q3 findings to specific sections via AI
+    if q3:
+        routes = _route_q3_findings(q3, api_key, model, topic_title)
+        for route_key, finding_ids in routes.items():
+            section_key = ROUTE_TO_SECTION.get(route_key)
+            if section_key:
+                section_findings[section_key].extend(
+                    [f for f in q3 if f["id"] in finding_ids]
+                )
+
+    # Assign non-Q3 findings by lifecycle prefix
+    for section in GUIDE_SECTIONS:
+        key = section["id"]
+        if key in ("questions-for-doctor", "international-guidelines"):
+            continue  # handled separately
+        prefixes = _get_lifecycle_prefixes(section["lifecycle"])
+        matched = [f for f in non_q3
+                   if any((f.get("lifecycle_stage") or "").startswith(p) for p in prefixes)]
+        section_findings[key].extend(matched)
+
+    # Section 16: Q9 findings
+    q9 = [f for f in findings if (f.get("lifecycle_stage") or "").startswith("Q9")]
+    section_findings["international-guidelines"] = list(q9)
+
+    return dict(section_findings)
 
 
 def _generate_section(
