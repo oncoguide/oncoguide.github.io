@@ -45,7 +45,7 @@ topics:
   title: Cancer pulmonar RET Fusion-Positive
   type: subtype
   section: cancer-types
-  status: drafting
+  status: published
   priority: 2
   parent: lung-cancer-master
   languages:
