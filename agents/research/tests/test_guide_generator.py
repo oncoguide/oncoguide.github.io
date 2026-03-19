@@ -11,6 +11,7 @@ from modules.guide_generator import (
     _format_grouped_findings, _group_findings_by_topic, _route_q3_findings,
     _assign_findings_to_sections, GROUP_FINDINGS_TOOL, ROUTE_Q3_TOOL,
     ROUTE_TO_SECTION, GUIDELINES_KEYWORDS, _identify_guidelines_groups,
+    mini_discovery, MINI_DISCOVERY_TOOL,
 )
 
 
@@ -611,3 +612,66 @@ def test_grouping_threshold_still_skips_tiny():
                                        api_key="test", model="test")
     assert len(groups) == 1
     assert groups[0]["name"] == "all"
+
+
+# ── Mini-discovery ──
+
+def test_mini_discovery_returns_insights():
+    """mini_discovery returns cross-domain insights from top findings."""
+    findings = [
+        {**_make_finding(1, authority=5), "lifecycle_stage": "Q3",
+         "title_english": "Selpercatinib causes hyperglycemia in 53%",
+         "summary_english": "Phase III data shows 53% hyperglycemia incidence"},
+        {**_make_finding(2, authority=4), "lifecycle_stage": "Q3",
+         "title_english": "Hyperglycemia causes gastroparesis",
+         "summary_english": "Chronic hyperglycemia impairs gastric motility"},
+        {**_make_finding(3, authority=5), "lifecycle_stage": "Q3",
+         "title_english": "Selpercatinib absorption is pH-dependent",
+         "summary_english": "Drug requires acidic gastric environment for dissolution"},
+    ]
+    mock_response = MagicMock()
+    mock_response.content = [MagicMock()]
+    mock_response.content[0].input = {
+        "insights": [
+            {
+                "insight": "Hyperglycemia -> gastroparesis -> impaired selpercatinib absorption",
+                "finding_ids": [1, 2, 3],
+                "clinical_relevance": "Patients on selpercatinib must monitor blood glucose closely",
+            }
+        ]
+    }
+    with patch("modules.guide_generator.api_call", return_value=mock_response):
+        result = mini_discovery(findings, "RET Fusion NSCLC", "fake-key")
+    assert len(result) >= 1
+    assert "insight" in result[0]
+    assert "finding_ids" in result[0]
+
+
+def test_mini_discovery_empty_findings():
+    """mini_discovery returns empty list when no findings provided."""
+    result = mini_discovery([], "RET Fusion NSCLC", "fake-key")
+    assert result == []
+
+
+def test_mini_discovery_tool_definition():
+    """MINI_DISCOVERY_TOOL has correct schema."""
+    assert MINI_DISCOVERY_TOOL["name"] == "submit_insights"
+    schema = MINI_DISCOVERY_TOOL["input_schema"]
+    assert "insights" in schema["properties"]
+
+
+def test_mini_discovery_limits_input():
+    """mini_discovery should select top 50 findings, not send all."""
+    findings = [{**_make_finding(i, authority=5 - i // 100), "lifecycle_stage": "Q1",
+                 "title_english": f"Finding {i}", "summary_english": f"Summary {i}"}
+                for i in range(500)]
+    mock_response = MagicMock()
+    mock_response.content = [MagicMock()]
+    mock_response.content[0].input = {"insights": []}
+    with patch("modules.guide_generator.api_call", return_value=mock_response) as mock_call:
+        mini_discovery(findings, "Test Cancer", "fake-key")
+    # Check that the user message doesn't contain all 500 findings
+    call_args = mock_call.call_args
+    user_msg = call_args[1]["messages"][0]["content"]
+    # Should have ~50 findings, not 500
+    assert "Finding 499" not in user_msg

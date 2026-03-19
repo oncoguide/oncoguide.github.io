@@ -241,7 +241,7 @@ topics/
 11. Output: `data/guides/{topic-id}.md` + `data/guides/{topic-id}-review.md`
 12. Pipeline dashboard: post-run summary with per-phase timing, cost, findings, guide size
 
-**Data-first pipeline** (`--generate-from-data`): For topics with >= 200 existing findings, skips phases 1-4 (discovery/search) and goes directly to gap analysis -> guide generation -> validation. Used for RET Fusion (3473 seeded findings).
+**Data-first pipeline** (`--generate-from-data`): For topics with >= 200 existing findings, skips phases 1-3 (discovery/search) and runs: gap analysis -> mini-discovery (1 Sonnet call, cross-domain clinical insights from top 50 findings, ~$0.05) -> guide generation -> validation. Used for RET Fusion (3473 seeded findings).
 
 **Checkpoint/resume**: Each phase saves state to `pipeline_state` table. On re-run, pipeline resumes from last completed phase. Use `--force-phase N` to re-run a specific phase.
 

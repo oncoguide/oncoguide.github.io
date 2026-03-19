@@ -632,6 +632,85 @@ def _assign_findings_to_sections(findings, api_key, model, topic_title):
     return dict(section_findings)
 
 
+# ── Mini-discovery for data-first mode ────────────────────────────
+
+MINI_DISCOVERY_TOOL = {
+    "name": "submit_insights",
+    "description": "Submit cross-domain clinical insights connecting multiple findings.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "insights": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "insight": {"type": "string", "description": "The cross-domain connection (1-2 sentences)"},
+                        "finding_ids": {"type": "array", "items": {"type": "integer"}, "description": "IDs of findings that support this insight"},
+                        "clinical_relevance": {"type": "string", "description": "Why this matters for the patient"},
+                    },
+                    "required": ["insight", "finding_ids", "clinical_relevance"],
+                },
+            }
+        },
+        "required": ["insights"],
+    },
+}
+
+MINI_DISCOVERY_SYSTEM = """You are an expert oncologist reviewing research findings for a patient guide about {diagnosis}.
+
+Your task: identify CROSS-DOMAIN insights that connect findings from different areas.
+These are connections that no single finding states, but that emerge when you read multiple findings together.
+
+Examples of cross-domain insights:
+- Drug X causes hyperglycemia (53%) + hyperglycemia causes gastroparesis + Drug X is pH-dependent = patients must monitor glucose closely or drug absorption drops
+- Drug Y has 69% reduced absorption with PPI fasting + Drug Y should be taken with food when on PPI = specific dosing guidance
+- Resistance mutation Z appears at median 18 months + Drug W targets mutation Z in Phase II = start discussing backup plan at month 12
+
+Focus on insights that are ACTIONABLE for patients. Skip trivial connections.
+Maximum 10 insights. Each must cite the finding IDs that support it."""
+
+
+def mini_discovery(findings, diagnosis, api_key, model="claude-sonnet-4-6", max_findings=50):
+    """Generate cross-domain clinical insights from top findings.
+
+    Used in data-first mode to compensate for skipping the discovery loop.
+    Single Sonnet call with top findings, returns list of insight dicts.
+    Cost: ~$0.05 per call.
+    """
+    if not findings or not api_key:
+        return []
+
+    # Select diverse top findings: top by authority, then sample from each lifecycle stage
+    sorted_by_auth = sorted(findings, key=lambda f: (-f.get("authority_score", 0), -f.get("relevance_score", 0)))
+    selected = sorted_by_auth[:max_findings]
+
+    findings_text = "\n\n".join(
+        f"[F:{f['id']}] Authority:{f.get('authority_score', 0)} | Stage:{f.get('lifecycle_stage', '?')}\n"
+        f"Title: {f.get('title_english', 'N/A')}\n"
+        f"Summary: {f.get('summary_english', 'N/A')}"
+        for f in selected
+    )
+
+    client = anthropic.Anthropic(api_key=api_key)
+    try:
+        response = api_call(
+            client, model=model, max_tokens=4000,
+            system=MINI_DISCOVERY_SYSTEM.format(diagnosis=diagnosis),
+            messages=[{"role": "user", "content":
+                       f"Diagnosis: {diagnosis}\n\n"
+                       f"{len(selected)} top findings to analyze:\n\n{findings_text}"}],
+            tools=[MINI_DISCOVERY_TOOL],
+            tool_choice={"type": "tool", "name": "submit_insights"},
+        )
+        insights = response.content[0].input["insights"]
+        logger.info(f"Mini-discovery: {len(insights)} cross-domain insights generated")
+        return insights
+    except Exception as e:
+        logger.warning(f"Mini-discovery failed ({e}), continuing without insights")
+        return []
+
+
 ANTI_HALLUCINATION_RULES = """
 ABSOLUTE RULES -- VIOLATION OF THESE RULES MAKES THE GUIDE DANGEROUS:
 
@@ -767,6 +846,19 @@ def _generate_section_from_context(client, topic_title, section, section_num,
     return message.content[0].text.strip()
 
 
+def _format_insights(insights):
+    """Format mini-discovery insights as context text for section generation."""
+    if not insights:
+        return ""
+    lines = ["\n=== CROSS-DOMAIN INSIGHTS (from mini-discovery) ===",
+             "These insights connect multiple findings. Use them to enrich your section where relevant.\n"]
+    for i, ins in enumerate(insights, 1):
+        lines.append(f"{i}. {ins['insight']}")
+        lines.append(f"   Supporting findings: {ins['finding_ids']}")
+        lines.append(f"   Clinical relevance: {ins['clinical_relevance']}\n")
+    return "\n".join(lines)
+
+
 def generate_guide(
     topic_title: str,
     findings: list[dict],
@@ -775,6 +867,7 @@ def generate_guide(
     model: str = "claude-haiku-4-5-20251001",
     critical_model: str = "",
     cross_verify_report: str = "",
+    insights: list[dict] = None,
 ):
     """Generate a comprehensive master guide from findings.
 
@@ -788,6 +881,7 @@ def generate_guide(
         critical_model: Model for safety-critical sections (mistakes, side-effects,
             emergency-signs, resistance). If empty, uses `model` for all sections.
         cross_verify_report: Formatted cross-verification report.
+        insights: Cross-domain insights from mini_discovery() (data-first mode).
     """
     from .utils import load_skill_context, TokenBudgetExceeded
 
@@ -800,6 +894,12 @@ def generate_guide(
     # Load expert skill contexts
     oncologist_ctx = load_skill_context(".claude/skills/oncologist.md")
     advocate_ctx = load_skill_context(".claude/skills/patient-advocate.md")
+
+    # Format mini-discovery insights (appended to cross_verify_report for each section)
+    insights_text = _format_insights(insights or [])
+    if insights_text:
+        cross_verify_report = (cross_verify_report + "\n\n" + insights_text) if cross_verify_report else insights_text
+        logger.info(f"Mini-discovery insights injected into section context ({len(insights or [])} insights)")
 
     # Step 1: Assign findings to sections (Q3 routing + lifecycle filtering)
     section_findings = _assign_findings_to_sections(findings, api_key, model, topic_title)

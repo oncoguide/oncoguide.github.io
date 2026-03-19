@@ -1071,8 +1071,22 @@ def cmd_generate_from_data(cfg: dict, topic_id: str, registry_path: str,
     _save_checkpoint(db, topic_id, run_id, 4, "complete", cost, t0)
 
     # Phase 5: Cross-verification -- skip (no discovery knowledge_map in data-first mode)
-    print("\nPhase 5: Cross-verification -- skipped (no discovery in data-first mode)")
+    # Instead, run mini-discovery to generate cross-domain clinical insights
+    print("\nPhase 5: Mini-discovery (cross-domain insights from top findings)...")
     cv_report_text = ""
+    t0 = time.time()
+    from modules.guide_generator import mini_discovery
+    insights = []
+    if cost.has_budget(reserve_usd=0.50):
+        insights = mini_discovery(
+            findings, diagnosis, cfg["anthropic_api_key"],
+            model=cfg.get("discovery_model", "claude-sonnet-4-6"),
+        )
+        print(f"  {len(insights)} cross-domain insights generated")
+    else:
+        print("  Skipped (insufficient budget)")
+    phase_timings.append({"phase": 5, "name": "mini-discovery", "duration": time.time() - t0,
+                          "detail": f"{len(insights)} insights"})
 
     # Phase 6: Guide generation (Haiku + Sonnet for critical sections)
     findings = db.get_findings_by_topic(topic_id, limit=0)
@@ -1088,6 +1102,7 @@ def cmd_generate_from_data(cfg: dict, topic_id: str, registry_path: str,
         cfg["anthropic_api_key"], cfg.get("guide_model", "claude-haiku-4-5-20251001"),
         critical_model=critical_model,
         cross_verify_report=cv_report_text,
+        insights=insights,
     )
     if not os.path.exists(output_path):
         _abort("guide_generation", "guide file not created")
