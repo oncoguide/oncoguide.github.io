@@ -41,29 +41,17 @@ languages:
           url: /en/diagnosis/
           weight: 10
         - identifier: cancer-types
-          name: "Cancer Types"
+          name: "Patient Guides"
           url: /en/cancer-types/
           weight: 20
-        - identifier: treatment-access
-          name: "Treatment Access"
-          url: /en/treatment-access/
-          weight: 30
-        - identifier: imaging
-          name: "Imaging Centers"
-          url: /en/imaging/
-          weight: 40
-        - identifier: clinical-trials
-          name: "Clinical Trials"
-          url: /en/clinical-trials/
-          weight: 50
         - identifier: contact
           name: "Contact"
           url: /en/contact/
-          weight: 60
+          weight: 30
         - identifier: search
           name: "Search"
           url: /en/search/
-          weight: 70
+          weight: 40
 
   ro:
     languageName: "Română"
@@ -86,29 +74,17 @@ languages:
           url: /ro/diagnosis/
           weight: 10
         - identifier: cancer-types
-          name: "Tipuri Cancer"
+          name: "Ghiduri Pacienti"
           url: /ro/cancer-types/
           weight: 20
-        - identifier: treatment-access
-          name: "Acces Tratament"
-          url: /ro/treatment-access/
-          weight: 30
-        - identifier: imaging
-          name: "Imagistică"
-          url: /ro/imaging/
-          weight: 40
-        - identifier: clinical-trials
-          name: "Trialuri Clinice"
-          url: /ro/clinical-trials/
-          weight: 50
         - identifier: contact
           name: "Contact"
           url: /ro/contact/
-          weight: 60
+          weight: 30
         - identifier: search
-          name: "Căutare"
+          name: "Cautare"
           url: /ro/search/
-          weight: 70
+          weight: 40
 
   it:
     languageName: "Italiano"
@@ -131,29 +107,17 @@ languages:
           url: /it/diagnosis/
           weight: 10
         - identifier: cancer-types
-          name: "Tipi di Cancro"
+          name: "Guide Pazienti"
           url: /it/cancer-types/
           weight: 20
-        - identifier: treatment-access
-          name: "Accesso ai Trattamenti"
-          url: /it/treatment-access/
-          weight: 30
-        - identifier: imaging
-          name: "Imaging"
-          url: /it/imaging/
-          weight: 40
-        - identifier: clinical-trials
-          name: "Studi Clinici"
-          url: /it/clinical-trials/
-          weight: 50
         - identifier: contact
           name: "Contatto"
           url: /it/contact/
-          weight: 60
+          weight: 30
         - identifier: search
           name: "Cerca"
           url: /it/search/
-          weight: 70
+          weight: 40
 
   fr:
     languageName: "Français"
@@ -176,29 +140,17 @@ languages:
           url: /fr/diagnosis/
           weight: 10
         - identifier: cancer-types
-          name: "Types de Cancer"
+          name: "Guides Patients"
           url: /fr/cancer-types/
           weight: 20
-        - identifier: treatment-access
-          name: "Accès aux Traitements"
-          url: /fr/treatment-access/
-          weight: 30
-        - identifier: imaging
-          name: "Imagerie"
-          url: /fr/imaging/
-          weight: 40
-        - identifier: clinical-trials
-          name: "Essais Cliniques"
-          url: /fr/clinical-trials/
-          weight: 50
         - identifier: contact
           name: "Contact"
           url: /fr/contact/
-          weight: 60
+          weight: 30
         - identifier: search
           name: "Recherche"
           url: /fr/search/
-          weight: 70
+          weight: 40
 
   de:
     languageName: "Deutsch"
@@ -221,29 +173,17 @@ languages:
           url: /de/diagnosis/
           weight: 10
         - identifier: cancer-types
-          name: "Krebsarten"
+          name: "Patientenleitfaden"
           url: /de/cancer-types/
           weight: 20
-        - identifier: treatment-access
-          name: "Behandlungszugang"
-          url: /de/treatment-access/
-          weight: 30
-        - identifier: imaging
-          name: "Bildgebung"
-          url: /de/imaging/
-          weight: 40
-        - identifier: clinical-trials
-          name: "Klinische Studien"
-          url: /de/clinical-trials/
-          weight: 50
         - identifier: contact
           name: "Kontakt"
           url: /de/contact/
-          weight: 60
+          weight: 30
         - identifier: search
           name: "Suche"
           url: /de/search/
-          weight: 70
+          weight: 40
 
   es:
     languageName: "Español"
@@ -262,33 +202,21 @@ languages:
     menu:
       main:
         - identifier: diagnosis
-          name: "Diagnóstico"
+          name: "Diagnostico"
           url: /es/diagnosis/
           weight: 10
         - identifier: cancer-types
-          name: "Tipos de Cáncer"
+          name: "Guias de Pacientes"
           url: /es/cancer-types/
           weight: 20
-        - identifier: treatment-access
-          name: "Acceso a Tratamientos"
-          url: /es/treatment-access/
-          weight: 30
-        - identifier: imaging
-          name: "Imagenología"
-          url: /es/imaging/
-          weight: 40
-        - identifier: clinical-trials
-          name: "Ensayos Clínicos"
-          url: /es/clinical-trials/
-          weight: 50
         - identifier: contact
           name: "Contacto"
           url: /es/contact/
-          weight: 60
+          weight: 30
         - identifier: search
           name: "Buscar"
           url: /es/search/
-          weight: 70
+          weight: 40
 
 # ============================================
 # PaperMod Theme Parameters
@@ -337,6 +265,10 @@ params:
     threshold: 0.4
     minMatchCharLength: 0
     keys: ["title", "permalink", "summary", "content"]
+
+  # Footer
+  footer:
+    hideCopyright: true
 
   # SEO & meta
   label:
