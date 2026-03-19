@@ -8,6 +8,7 @@ categories: ["cancer-types"]
 translationKey: "lung-ret-fusion"
 weight: 1
 author: "OncoGuide"
+hiddenInHomeList: true
 ShowToc: true
 TocOpen: false
 ---

@@ -8,6 +8,7 @@ categories: ["diagnosis"]
 translationKey: "complete-diagnosis-guide"
 weight: 1
 author: "OncoGuide"
+hiddenInHomeList: true
 ShowToc: true
 TocOpen: false
 ---

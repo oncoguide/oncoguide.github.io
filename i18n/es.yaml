@@ -34,8 +34,13 @@ homeFeaturedBadge: "Ultima guia"
 homeFeaturedRead: "Leer la guia completa"
 
 # Bloque mision
-homeMissionText: "Cuando me diagnosticaron, descubri que la informacion en oncologia cambia mas rapido de lo que cualquier persona puede seguir. Puse la IA a trabajar y transforme lo que encontre en este sitio."
+homeMissionText: "Cuando me diagnosticaron, descubri que la informacion en oncologia cambia mas rapido de lo que cualquier persona puede seguir. Puse la Inteligencia Artificial (AI) a trabajar y transforme lo que encontre en este sitio."
 homeMissionLink: "Contactanos"
+
+# PaperMod keys (override theme to prevent <no value>)
+read_time:
+  one: "1 min"
+  other: "{{ .Count }} min"
 
 # Footer
 footerTagline: "Creado por pacientes, para pacientes."

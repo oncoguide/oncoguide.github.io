@@ -34,8 +34,13 @@ homeFeaturedBadge: "Dernier guide"
 homeFeaturedRead: "Lire le guide complet"
 
 # Bloc mission
-homeMissionText: "Quand j'ai ete diagnostique, j'ai decouvert que l'information en oncologie change plus vite que quiconque ne peut suivre. J'ai mis l'IA au travail et j'ai transforme ce que j'ai trouve en ce site."
+homeMissionText: "Quand j'ai ete diagnostique, j'ai decouvert que l'information en oncologie change plus vite que quiconque ne peut suivre. J'ai mis l'Intelligence Artificielle (AI) au travail et j'ai transforme ce que j'ai trouve en ce site."
 homeMissionLink: "Nous contacter"
+
+# PaperMod keys (override theme to prevent <no value>)
+read_time:
+  one: "1 min"
+  other: "{{ .Count }} min"
 
 # Footer
 footerTagline: "Créé par des patients, pour des patients."

@@ -12,7 +12,6 @@
 
 {{- /* Featured article — latest from mainSections */ -}}
 {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
-{{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true" }}
 {{- $featured := first 1 $pages }}
 {{- with index $featured 0 }}
 <section class="home-featured" aria-label="{{ i18n "homeFeaturedLabel" | default "Featured article" }}">
@@ -25,12 +24,41 @@
         <div class="home-featured-meta">
             <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
             <span class="home-featured-dot">&middot;</span>
-            <span>{{ .ReadingTime }} {{ i18n "read_time" | default "min read" }}</span>
+            <span>{{ .ReadingTime }} min</span>
         </div>
         <a href="{{ .Permalink }}" class="home-cta">
             {{ i18n "homeFeaturedRead" | default "Read the full guide" }}
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
     </div>
+</section>
+{{- end -}}
+
+{{- /* More articles — curated, shows diagnosis guide (lookup by translationKey) */ -}}
+{{- $diagnosis := false }}
+{{- range site.RegularPages }}
+  {{- if eq .Params.translationKey "complete-diagnosis-guide" }}
+    {{- $diagnosis = . }}
+  {{- end }}
+{{- end }}
+{{- with $diagnosis }}
+<section class="home-more" aria-label="{{ i18n "homeRecentArticles" | default "More articles" }}">
+    <h3 class="home-more-title">{{ i18n "homeRecentArticles" | default "More articles" }}</h3>
+    <article class="post-entry">
+        <header class="entry-header">
+            <h2>{{ .Title }}</h2>
+        </header>
+        <div class="entry-content">
+            <p>{{ .Summary | plainify | htmlUnescape | truncate 240 }}</p>
+        </div>
+        <footer class="entry-footer">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
+            <span>&middot;</span>
+            <span>{{ .ReadingTime }} min</span>
+            <span>&middot;</span>
+            <span>{{ .Params.author }}</span>
+        </footer>
+        <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+    </article>
 </section>
 {{- end -}}

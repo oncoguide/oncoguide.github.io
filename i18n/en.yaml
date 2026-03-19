@@ -34,8 +34,13 @@ homeFeaturedBadge: "Latest Guide"
 homeFeaturedRead: "Read the full guide"
 
 # Mission block
-homeMissionText: "When I was diagnosed, I discovered that information in oncology changes faster than any person can keep up with. I put AI to work and turned what I found into this site."
+homeMissionText: "When I was diagnosed, I discovered that information in oncology changes faster than any person can keep up with. I put Artificial Intelligence (AI) to work and turned what I found into this site."
 homeMissionLink: "Get in touch"
+
+# PaperMod keys (override theme to prevent <no value>)
+read_time:
+  one: "1 min"
+  other: "{{ .Count }} min"
 
 # Footer
 footerTagline: "Created by patients, for patients."

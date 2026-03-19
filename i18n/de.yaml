@@ -34,8 +34,13 @@ homeFeaturedBadge: "Neuester Leitfaden"
 homeFeaturedRead: "Den vollstaendigen Leitfaden lesen"
 
 # Missionsblock
-homeMissionText: "Als ich die Diagnose erhielt, entdeckte ich, dass sich die Informationen in der Onkologie schneller aendern, als jeder Mensch mithalten kann. Ich habe KI eingesetzt und das, was ich gefunden habe, in diese Seite verwandelt."
+homeMissionText: "Als ich die Diagnose erhielt, entdeckte ich, dass sich die Informationen in der Onkologie schneller aendern, als jeder Mensch mithalten kann. Ich habe Kuenstliche Intelligenz (AI) eingesetzt und das, was ich gefunden habe, in diese Seite verwandelt."
 homeMissionLink: "Kontakt aufnehmen"
+
+# PaperMod keys (override theme to prevent <no value>)
+read_time:
+  one: "1 Min."
+  other: "{{ .Count }} Min."
 
 # Footer
 footerTagline: "Von Patienten erstellt, für Patienten."

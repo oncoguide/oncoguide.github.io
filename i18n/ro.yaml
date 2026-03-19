@@ -34,8 +34,13 @@ homeFeaturedBadge: "Ultimul ghid"
 homeFeaturedRead: "Citeste ghidul complet"
 
 # Bloc misiune
-homeMissionText: "Cand am fost diagnosticat, am descoperit ca informatia in oncologie se schimba mai repede decat orice om poate urmari. Am pus AI-ul la lucru si am transformat ce am gasit in acest site."
+homeMissionText: "Cand am fost diagnosticat, am descoperit ca informatia in oncologie se schimba mai repede decat orice om poate urmari. Am pus Inteligenta Artificiala (AI) la lucru si am transformat ce am gasit in acest site."
 homeMissionLink: "Contacteaza-ne"
+
+# PaperMod keys (override theme to prevent <no value>)
+read_time:
+  one: "1 minut"
+  other: "{{ .Count }} minute"
 
 # Footer
 footerTagline: "Creat de pacienți, pentru pacienți."
