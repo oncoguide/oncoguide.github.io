@@ -601,3 +601,23 @@ decisions:
       - "max_tokens 16000 -> 32000+ -- ar depasi costul si latenta, cauza ramane"
       - "Reduce numarul de intrebari la 3 -- limiteaza calitatea discovery"
     outcome: "Fix: eliminat pre_search_context din _oncologist_respond_system() si din semnatura. max_tokens 16000 -> 24000 pentru headroom. Run real: rounds 1+2 tot au hit max_tokens (dar raspunsurile partiale au ajutat advocacy), round 3 a converge cu 3011 tokens, round 4 satisfacut toate sectiunile."
+
+  - id: 61
+    date: "2026-03-18"
+    category: "content"
+    summary: "Ghidul generat vs referinta umana: comparatie completa -- puncte forte si lacune identificate"
+    context: "Comparat lung-ret-fusion.md generat (174KB, 500 findings) cu ret-fusion-reference-guide.md (74KB, 1684 findings, scris de pacient expert). Ghidul generat are pipeline mai complet (15+ medicamente next-gen, date din 2026, frontier science ANKTIVA/histotripsy/LungVax), date clinice mai detaliate (tabele demografice, mecanisme CYP3A4, date real-world vs trial). Ghidul de referinta e superior pe: resurse comunitate (RETpositive.org, Happy Lungs Project, RET Renegades), viata zilnica practica (exercitiu, nutritie, fertilitate), context Romania/CNAS, ton empatic pacient-centrat, status corect pralsetinib ('retras din UE oct 2024 SI partial din piata US'). CONFLICT CRITIC: referinta spune pralsetinib retras SI din US (partial); ghidul generat a mentionat doar EU withdrawal. Conflict numeric: referinta 59% elevare enzime hepatice (AST), ghidul generat ~40% (ALT) -- enzime diferite sau definitii diferite."
+    alternatives_considered:
+      - "Publicare ghid generat ca atare -- lipsesc resurse comunitate, context Romania, ghidul e prea clinic"
+      - "Publicare referinta ca atare -- lipsesc date pipeline recente, frontier science, date demografice formale"
+    outcome: "Decizie: ghidul final pentru articol va combina ambele surse. Ghidul generat = fundatie clinica. Referinta = sectiunile viata zilnica, comunitate, tone, context Romania/EU. ACTIUNE URMATOARE: verifica status US pralsetinib (partial withdrawal claim din referinta)."
+
+  - id: 62
+    date: "2026-03-18"
+    category: "learning"
+    summary: "Comparatie aprofundata: referinta are frontier science mai bun decat ghidul generat -- comparatia initiala a fost gresita"
+    context: "Re-citire completa a ambelor fisiere sectiune cu sectiune. Concluzie: referinta (cancer-news-agent, 1684 findings) acopera frontier science MAI BINE decat ghidul generat (500 findings). Ghidul generat omite complet: ANKTIVA (aprobat in 33 tari, Saudi NSCLC jan 2026, EU feb 2026, Phase 3 ResQ201A activ), Vepafestinib (MARGARET trial Phase 1/2, BBB penetration superioara), PROTACs, mRNA vaccines (BNT116, LungVax), CAR-T (CARv3-TEAM-E, celule TCR-RET), MVX-ONCO-1 (Pfizer Prize), bispecifice (Ivonescimab, Amivantamab). Cauza: query-urile discovery phase au fost focusate pe 'RET inhibitor' -- nu au capturat frontier immunotherapy, vaccine platforms, etc. Conflicte numerice identificate: selpercatinib 1st-line PFS 24.8mo (referinta) vs 22.0mo (generat); pralsetinib ORR ~65% (referinta) vs 70% (generat)."
+    alternatives_considered:
+      - "Publicare ghid generat cu adaugare manuala din referinta -- mai rapid"
+      - "Re-rulare pipeline cu query-uri frontier science suplimentare -- cost suplimentar ~$1-2"
+    outcome: "Ghidul final trebuie sa integreze datele frontier din referinta: in special ANKTIVA (relevant imediat pentru pacienti UE 2026), Vepafestinib, si celelalte tehnologii. De adaugat manual in ghidul generat, sectiunea 10 (pipeline) si 9 (when treatment stops working)."
