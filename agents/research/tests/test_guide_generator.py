@@ -113,12 +113,12 @@ def test_generates_markdown_file(mock_api_call, tmp_path):
     mock_api_call.return_value = _mock_text("Section content here")
 
     findings = [
-        {"title_english": "Finding 1", "summary_english": "Summary 1",
+        {"id": 1, "title_english": "Finding 1", "summary_english": "Summary 1",
          "source_url": "https://example.com/1", "relevance_score": 9,
-         "lifecycle_stage": "Q1", "authority_score": 3},
-        {"title_english": "Finding 2", "summary_english": "Summary 2",
+         "lifecycle_stage": "Q1", "authority_score": 3, "content_hash": "h1"},
+        {"id": 2, "title_english": "Finding 2", "summary_english": "Summary 2",
          "source_url": "https://example.com/2", "relevance_score": 7,
-         "lifecycle_stage": "Q2", "authority_score": 4},
+         "lifecycle_stage": "Q2", "authority_score": 4, "content_hash": "h2"},
     ]
     output_path = str(tmp_path / "test-guide.md")
     generate_guide(
@@ -131,8 +131,6 @@ def test_generates_markdown_file(mock_api_call, tmp_path):
     content = open(output_path).read()
     assert len(content) > 0
     assert "BEFORE ANYTHING ELSE" in content
-    # No planner call -- should be 16 sections + 1 exec summary = 17 calls
-    # (some sections may have 0 findings, but still generate a placeholder)
 
 
 def test_no_findings_no_guide(tmp_path):
@@ -167,18 +165,18 @@ def test_critical_sections_use_sonnet(mock_api_call, tmp_path):
 
     # Provide findings for Q1 (non-critical) and Q7 (critical=mistakes)
     findings = [
-        {"title_english": "F1", "summary_english": "S1",
+        {"id": 1, "title_english": "F1", "summary_english": "S1",
          "source_url": "https://example.com/1", "relevance_score": 9,
-         "authority_score": 5, "lifecycle_stage": "Q1"},
-        {"title_english": "F2", "summary_english": "S2",
+         "authority_score": 5, "lifecycle_stage": "Q1", "content_hash": "h1"},
+        {"id": 2, "title_english": "F2", "summary_english": "S2",
          "source_url": "https://example.com/2", "relevance_score": 8,
-         "authority_score": 4, "lifecycle_stage": "Q7"},
-        {"title_english": "F3", "summary_english": "S3",
+         "authority_score": 4, "lifecycle_stage": "Q7", "content_hash": "h2"},
+        {"id": 3, "title_english": "F3", "summary_english": "S3",
          "source_url": "https://example.com/3", "relevance_score": 7,
-         "authority_score": 3, "lifecycle_stage": "Q5"},
-        {"title_english": "F4", "summary_english": "S4",
+         "authority_score": 3, "lifecycle_stage": "Q5", "content_hash": "h3"},
+        {"id": 4, "title_english": "F4", "summary_english": "S4",
          "source_url": "https://example.com/4", "relevance_score": 7,
-         "authority_score": 3, "lifecycle_stage": "Q3"},
+         "authority_score": 3, "lifecycle_stage": "Q3", "content_hash": "h4"},
     ]
     generate_guide(
         topic_title="Test Cancer",
@@ -199,9 +197,9 @@ def test_cross_verify_report_passed_to_sections(mock_api_call, tmp_path):
     mock_api_call.return_value = _mock_text("Section content here")
 
     findings = [
-        {"title_english": "F1", "summary_english": "S1",
+        {"id": 1, "title_english": "F1", "summary_english": "S1",
          "source_url": "https://example.com/1", "relevance_score": 9,
-         "lifecycle_stage": "Q1", "authority_score": 3},
+         "lifecycle_stage": "Q1", "authority_score": 3, "content_hash": "h1"},
     ]
     report = "CONTRADICTED: PFS 24.8mo -> USE Finding 7: PFS 22.0mo"
     generate_guide(
@@ -218,13 +216,13 @@ def test_cross_verify_report_passed_to_sections(mock_api_call, tmp_path):
 
 @patch("modules.guide_generator.api_call")
 def test_no_planner_call(mock_api_call, tmp_path):
-    """v6: No planner call -- no tool_choice in any API call."""
+    """v6: No planner call. tool_choice only used by grouping/routing, not section generation."""
     mock_api_call.return_value = _mock_text("Content")
 
     findings = [
-        {"title_english": "F1", "summary_english": "S1",
+        {"id": 1, "title_english": "F1", "summary_english": "S1",
          "source_url": "https://example.com/1", "relevance_score": 9,
-         "lifecycle_stage": "Q2", "authority_score": 4},
+         "lifecycle_stage": "Q2", "authority_score": 4, "content_hash": "h1"},
     ]
     generate_guide(
         topic_title="Test",
@@ -233,10 +231,15 @@ def test_no_planner_call(mock_api_call, tmp_path):
         api_key="fake-key",
     )
 
-    # No call should use tool_choice (planner removed)
+    # Section generation calls should NOT use tool_choice (planner removed).
+    # Only grouping/Q3 routing calls may use tool_choice.
     for c in mock_api_call.call_args_list:
         kwargs = c[1] if len(c) > 1 else {}
-        assert "tool_choice" not in kwargs, f"Unexpected tool_choice in call: {kwargs}"
+        if "tool_choice" in kwargs:
+            # Must be a grouping or routing call, not a section generation call
+            tool_name = kwargs["tool_choice"].get("name", "")
+            assert tool_name in ("group_findings", "route_q3_findings"), \
+                f"Unexpected tool_choice in section call: {kwargs}"
 
 
 def test_section_briefs_cover_all_sections():

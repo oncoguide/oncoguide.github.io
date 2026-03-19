@@ -632,6 +632,56 @@ def _assign_findings_to_sections(findings, api_key, model, topic_title):
     return dict(section_findings)
 
 
+ANTI_HALLUCINATION_RULES = """
+ABSOLUTE RULES -- VIOLATION OF THESE RULES MAKES THE GUIDE DANGEROUS:
+
+1. EVERY number (percentage, months, mg, dose) MUST come from a finding
+   cited as [F:N]. If no finding supports a number, do NOT write that number.
+
+2. EVERY drug name, trial name (NCT), mutation name must appear in at
+   least one finding provided to you.
+
+3. If you do not have data for something, write explicitly:
+   "Data not available in current sources -- discuss with your oncologist."
+   This is SAFER than guessing.
+
+4. NEVER round, estimate, or extrapolate. If a finding says 64.8%, write
+   64.8%, not "approximately 65%" and not "64%".
+
+5. When two findings give different numbers for the same metric, present
+   BOTH with their sources:
+   "PFS 24.8 months (LIBRETTO-431 [F:12]) vs 22 months (real-world [F:512])"
+   Contradictions are VALUABLE information for the patient. Never hide them.
+
+6. Do NOT cite a Finding ID that was not provided to you. Every [F:N] must
+   correspond to a finding in your input.
+"""
+
+# Sections that need oncologist expertise in system prompt
+ONCOLOGIST_SECTIONS = {"understanding-diagnosis", "best-treatment", "mistakes",
+                       "side-effects", "emergency-signs", "resistance",
+                       "international-guidelines"}
+
+# Patient-centric sections where relevance > authority for sorting
+PATIENT_CENTRIC_SECTIONS = {"daily-life", "community"}
+
+
+def _build_section_system(section_id, section_num, topic_title, section,
+                          oncologist_ctx="", advocate_ctx=""):
+    """Build the system prompt for a section, including expert skills and anti-hallucination rules."""
+    parts = [SECTION_SYSTEM]
+
+    if section_id in ONCOLOGIST_SECTIONS and oncologist_ctx:
+        parts.append(f"\n=== ONCOLOGIST GUIDANCE ===\n{oncologist_ctx}")
+
+    if advocate_ctx:
+        parts.append(f"\n=== PATIENT ADVOCATE GUIDANCE ===\n{advocate_ctx}")
+
+    parts.append(ANTI_HALLUCINATION_RULES)
+
+    return "\n\n".join(parts)
+
+
 def _generate_section(
     client: anthropic.Anthropic,
     topic_title: str,
@@ -641,8 +691,10 @@ def _generate_section(
     findings_count: int,
     model: str,
     cross_verify_report: str = "",
+    oncologist_ctx: str = "",
+    advocate_ctx: str = "",
 ) -> str:
-    """Generate one section of the guide using lifecycle-filtered findings."""
+    """Generate one section of the guide using grouped + tiered findings."""
     cross_verify_block = ""
     if cross_verify_report:
         cross_verify_block = (
@@ -656,11 +708,16 @@ def _generate_section(
     brief = SECTION_BRIEFS.get(section["id"], "")
     brief_block = f"\n\nSECTION BRIEF (this section MUST contain): {brief}" if brief else ""
 
+    system = _build_section_system(
+        section["id"], section_num, topic_title, section,
+        oncologist_ctx=oncologist_ctx, advocate_ctx=advocate_ctx,
+    )
+
     message = api_call(
         client,
         model=model,
         max_tokens=4000,
-        system=SECTION_SYSTEM,
+        system=system,
         messages=[
             {
                 "role": "user",
@@ -680,6 +737,36 @@ def _generate_section(
     return message.content[0].text.strip()
 
 
+def _generate_section_from_context(client, topic_title, section, section_num,
+                                    context_text, model, advocate_ctx=""):
+    """Generate a section from prior section text instead of findings.
+
+    Used for Section 15 (Questions for Doctor) which derives its content
+    from the guide itself, not from raw findings.
+    """
+    system_parts = [
+        f"You are writing Section {section_num} of a patient guide about {topic_title}.\n"
+        f"Section: {section['title']}\n"
+        f"Brief: {section['description']}\n\n"
+        f"IMPORTANT: Generate questions based ONLY on the guide sections provided below. "
+        f"Do not invent medical information. Every question should help the patient "
+        f"discuss topics covered in the guide with their oncologist."
+    ]
+    if advocate_ctx:
+        system_parts.append(f"\n=== PATIENT ADVOCATE GUIDANCE ===\n{advocate_ctx}")
+
+    user_msg = (
+        f"Here are the first 14 sections of the guide. "
+        f"Generate questions the patient should ask their doctor, organized by stage "
+        f"(at diagnosis, during treatment, at progression).\n\n"
+        f"{context_text}"
+    )
+    message = api_call(client, model=model, max_tokens=4000,
+                       system="\n\n".join(system_parts),
+                       messages=[{"role": "user", "content": user_msg}])
+    return message.content[0].text.strip()
+
+
 def generate_guide(
     topic_title: str,
     findings: list[dict],
@@ -691,8 +778,10 @@ def generate_guide(
 ):
     """Generate a comprehensive master guide from findings.
 
-    v6: No planner call. Each section receives lifecycle-filtered findings only.
-    Uses lifecycle_stage from enrichment as the section mapping.
+    v6.1: Smart grouping + tiered formatting + expert skills + anti-hallucination.
+    Uses _assign_findings_to_sections() for lifecycle + Q3 routing,
+    _group_findings_by_topic() for large sections, _format_grouped_findings()
+    for tiered output, and verify_section_citations() post-generation.
 
     Args:
         model: Model for non-critical sections (default Haiku).
@@ -700,54 +789,168 @@ def generate_guide(
             emergency-signs, resistance). If empty, uses `model` for all sections.
         cross_verify_report: Formatted cross-verification report.
     """
+    from .utils import load_skill_context, TokenBudgetExceeded
+
     if not findings:
         logger.warning(f"No findings for '{topic_title}', skipping guide generation")
         return
 
     client = anthropic.Anthropic(api_key=api_key)
 
-    # Generate each section with lifecycle-filtered findings
+    # Load expert skill contexts
+    oncologist_ctx = load_skill_context(".claude/skills/oncologist.md")
+    advocate_ctx = load_skill_context(".claude/skills/patient-advocate.md")
+
+    # Step 1: Assign findings to sections (Q3 routing + lifecycle filtering)
+    section_findings = _assign_findings_to_sections(findings, api_key, model, topic_title)
+
+    # Step 2: Generate sections 1-14
     guide_parts = []
+    generated_sections = {}  # key -> text, for Section 15
     total_findings_used = 0
-    for i, section in enumerate(GUIDE_SECTIONS, 1):
+    failed_sections = []
+
+    for i, section in enumerate(GUIDE_SECTIONS[:14], 1):
         section_id = section["id"]
         is_critical = section_id in CRITICAL_SECTIONS
         section_model = critical_model if (is_critical and critical_model) else model
         model_label = "Sonnet" if section_model == critical_model and critical_model else "Haiku"
 
-        # Filter findings for this section's lifecycle
-        section_findings = _filter_findings_for_section(findings, section["lifecycle"])
-        findings_text = _build_findings_text(section_findings)
-        total_findings_used += len(section_findings)
+        my_findings = section_findings.get(section_id, [])
+        total_findings_used += len(my_findings)
 
-        print(f"  Section {i}/{len(GUIDE_SECTIONS)}: {section['title']} [{model_label}] ({len(section_findings)} findings)")
+        print(f"  Section {i}/{len(GUIDE_SECTIONS)}: {section['title']} [{model_label}] ({len(my_findings)} findings)")
 
-        if not section_findings:
+        if not my_findings:
             logger.warning(f"No findings for section '{section_id}' (lifecycle={section['lifecycle']})")
-            guide_parts.append(f"## {i}. {section['title']}\n\n*No findings available for this section. This section needs additional research.*")
+            part = f"## {i}. {section['title']}\n\n*No findings available for this section. This section needs additional research.*"
+            guide_parts.append(part)
+            generated_sections[section_id] = part
             continue
+
+        # Group within section if large
+        groups = _group_findings_by_topic(my_findings, section_id, topic_title,
+                                           api_key=api_key, model=model)
+
+        # Tiered formatting with patient source priority for patient-centric sections
+        prefer_patient = section_id in PATIENT_CENTRIC_SECTIONS
+        findings_text, meta = _format_grouped_findings(
+            groups, token_budget=180_000, prefer_patient_sources=prefer_patient
+        )
+        logger.info(
+            f"[Section {i}] {meta['total_findings']} findings | "
+            f"{len(groups)} groups | T1:{meta['tier1_count']} T2:{meta['tier2_shown']} | "
+            f"{meta['tokens_used'] // 1000}K/{meta['tokens_budget'] // 1000}K tokens ({meta['pct_used']})"
+        )
 
         try:
             content = _generate_section(
                 client, topic_title, section, i,
-                findings_text, len(section_findings), section_model,
+                findings_text, len(my_findings), section_model,
                 cross_verify_report=cross_verify_report,
+                oncologist_ctx=oncologist_ctx,
+                advocate_ctx=advocate_ctx,
             )
-            guide_parts.append(f"## {i}. {section['title']}\n\n{content}")
+
+            # Post-generation citation verification
+            issues = verify_section_citations(content, my_findings)
+            critical_issues = [iss for iss in issues if iss["severity"] == "CRITICAL"]
+            if critical_issues:
+                logger.warning(
+                    f"[Section {i}] {len(critical_issues)} CRITICAL citation issues: "
+                    f"{[iss['detail'] for iss in critical_issues]}"
+                )
+
+            part = f"## {i}. {section['title']}\n\n{content}"
+            guide_parts.append(part)
+            generated_sections[section_id] = content
+
+        except TokenBudgetExceeded:
+            # Retry once with halved token budget
+            logger.warning(f"[Section {i}] TokenBudgetExceeded, retrying with halved budget")
+            try:
+                findings_text_retry, meta_retry = _format_grouped_findings(
+                    groups, token_budget=90_000, prefer_patient_sources=prefer_patient
+                )
+                content = _generate_section(
+                    client, topic_title, section, i,
+                    findings_text_retry, len(my_findings), section_model,
+                    cross_verify_report=cross_verify_report,
+                    oncologist_ctx=oncologist_ctx,
+                    advocate_ctx=advocate_ctx,
+                )
+                part = f"## {i}. {section['title']}\n\n{content}"
+                guide_parts.append(part)
+                generated_sections[section_id] = content
+            except Exception as e2:
+                logger.error(f"[Section {i}] Retry also failed: {e2}")
+                part = f"## {i}. {section['title']}\n\n*[FAILED - token overflow]*"
+                guide_parts.append(part)
+                failed_sections.append(section_id)
+
         except Exception as e:
             logger.error(f"Section generation failed for '{section['title']}': {e}")
-            guide_parts.append(f"## {i}. {section['title']}\n\n*Generation failed: {e}*")
+            part = f"## {i}. {section['title']}\n\n*Generation failed: {e}*"
+            guide_parts.append(part)
+            failed_sections.append(section_id)
 
+    # Step 3: Section 15 -- Questions for Doctor (from prior sections text, NOT findings)
+    print(f"  Section 15/{len(GUIDE_SECTIONS)}: {GUIDE_SECTIONS[14]['title']} [Haiku] (from prior sections)")
+    try:
+        prior_sections_text = "\n\n".join(
+            f"## Section {i + 1}: {GUIDE_SECTIONS[i]['title']}\n{text}"
+            for i, (key, text) in enumerate(generated_sections.items())
+        )
+        section_15_text = _generate_section_from_context(
+            client, topic_title, GUIDE_SECTIONS[14], 15,
+            context_text=prior_sections_text,
+            model=model,
+            advocate_ctx=advocate_ctx,
+        )
+        guide_parts.append(f"## 15. {GUIDE_SECTIONS[14]['title']}\n\n{section_15_text}")
+    except Exception as e:
+        logger.error(f"Section 15 generation failed: {e}")
+        guide_parts.append(f"## 15. {GUIDE_SECTIONS[14]['title']}\n\n*Generation failed: {e}*")
+        failed_sections.append("questions-for-doctor")
+
+    # Step 4: Section 16 -- International Guidelines (Q9 + Q2 guidelines groups)
+    guidelines_findings = section_findings.get("international-guidelines", [])
+    print(f"  Section 16/{len(GUIDE_SECTIONS)}: {GUIDE_SECTIONS[15]['title']} [Haiku] ({len(guidelines_findings)} findings)")
+    try:
+        if guidelines_findings:
+            guidelines_groups = [{"name": "all", "findings": guidelines_findings}]
+            guidelines_text, _ = _format_grouped_findings(guidelines_groups, token_budget=180_000)
+            section_16_text = _generate_section(
+                client, topic_title, GUIDE_SECTIONS[15], 16,
+                guidelines_text, len(guidelines_findings), model,
+                cross_verify_report=cross_verify_report,
+                oncologist_ctx=oncologist_ctx,
+            )
+        else:
+            section_16_text = "*No guidelines findings available. This section needs additional research.*"
+        guide_parts.append(f"## 16. {GUIDE_SECTIONS[15]['title']}\n\n{section_16_text}")
+    except Exception as e:
+        logger.error(f"Section 16 generation failed: {e}")
+        guide_parts.append(f"## 16. {GUIDE_SECTIONS[15]['title']}\n\n*Generation failed: {e}*")
+        failed_sections.append("international-guidelines")
+
+    total_findings_used += len(guidelines_findings)
     logger.info(f"Total finding-section assignments: {total_findings_used} (from {len(findings)} unique findings)")
 
-    # Executive summary from sections 1-3
+    if failed_sections:
+        critical_failed = [s for s in failed_sections if s in CRITICAL_SECTIONS]
+        if critical_failed:
+            logger.error(f"UNSAFE: Critical sections failed: {critical_failed}")
+        logger.warning(f"Failed sections: {failed_sections}")
+
+    # Step 5: Executive summary from sections 1-3
     exec_summary = ""
     sections_1_3 = "\n\n".join(guide_parts[:3]) if len(guide_parts) >= 3 else "\n\n".join(guide_parts)
     try:
         print(f"  Executive summary: BEFORE ANYTHING ELSE [Haiku]")
         exec_msg = api_call(
             client,
-            model=model,  # Haiku -- not safety-critical, just a summary
+            model=model,
             max_tokens=500,
             system=EXECUTIVE_SUMMARY_SYSTEM,
             messages=[{
@@ -782,12 +985,15 @@ def generate_guide(
             count=len(findings),
             top_sources=top_sources,
         ))
-        # Executive summary before all sections
         f.write(f"## BEFORE ANYTHING ELSE\n\n{exec_summary}\n\n---\n\n")
         f.write("\n\n".join(guide_parts))
 
     total_size = os.path.getsize(output_path)
-    logger.info(f"Guide generated: {output_path} ({len(findings)} findings, {len(GUIDE_SECTIONS)} sections, {total_size // 1024}KB)")
+    guide_status = "guide_needs_review" if failed_sections else "guide_ready"
+    logger.info(
+        f"Guide generated: {output_path} ({len(findings)} findings, "
+        f"{len(GUIDE_SECTIONS)} sections, {total_size // 1024}KB, status={guide_status})"
+    )
 
 
 def verify_section_citations(section_text, provided_findings):
