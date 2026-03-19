@@ -6,6 +6,7 @@ from unittest.mock import patch, MagicMock, Mock, call
 from modules.guide_generator import (
     generate_guide, CRITICAL_SECTIONS, SECTION_BRIEFS, GUIDE_SECTIONS,
     _build_findings_text, _filter_findings_for_section, _get_lifecycle_prefixes,
+    _format_grouped_findings,
 )
 
 
@@ -246,3 +247,89 @@ def test_guide_sections_count_16():
 def test_guide_sections_have_lifecycle():
     for s in GUIDE_SECTIONS:
         assert "lifecycle" in s, f"Missing lifecycle for section: {s['id']}"
+
+
+# ── Tiered formatting ──
+
+def _make_finding(id, authority=3, relevance=7, title="Test", summary="Summary text", url="http://example.com"):
+    return {
+        "id": id, "authority_score": authority, "relevance_score": relevance,
+        "title_english": title, "summary_english": summary,
+        "source_url": url, "content_hash": f"hash_{id:04d}",
+    }
+
+
+def test_format_single_group_small():
+    """Small group: all findings become Tier 1 (full detail)."""
+    findings = [_make_finding(i, authority=5) for i in range(10)]
+    groups = [{"name": "Test Group", "findings": findings}]
+    text, meta = _format_grouped_findings(groups)
+    assert "HIGH-DETAIL" in text
+    assert meta["tier1_count"] == 10
+    assert "[F:0]" in text
+    assert "Authority:5" in text
+    assert "http://example.com" in text
+
+
+def test_format_single_group_large():
+    """Large group: top 20 Tier 1, rest Tier 2 with summaries."""
+    findings = [_make_finding(i, authority=5 - i // 100, relevance=9 - i // 200) for i in range(200)]
+    groups = [{"name": "Large Group", "findings": findings}]
+    text, meta = _format_grouped_findings(groups)
+    assert meta["tier1_count"] == 20
+    assert "ADDITIONAL FINDINGS" in text
+    # Tier 2 should have summaries, not just titles
+    assert "Summary text" in text.split("ADDITIONAL FINDINGS")[1]
+
+
+def test_format_respects_token_budget():
+    """Truncates Tier 2 when budget exceeded."""
+    findings = [_make_finding(i, authority=3, summary="A" * 50) for i in range(100)]
+    groups = [{"name": "Budget Test", "findings": findings}]
+    text, meta = _format_grouped_findings(groups, token_budget=1000)
+    assert meta["tokens_used"] <= 1100  # Tier 1 exempt, but Tier 2 truncated
+    assert "plus" in text.lower() and "more findings" in text.lower()
+
+
+def test_format_tier1_budget_exempt():
+    """Tier 1 is never truncated even with tight budget."""
+    findings = [_make_finding(i, authority=5, summary="A" * 300) for i in range(20)]
+    groups = [{"name": "Tier1 Test", "findings": findings}]
+    text, meta = _format_grouped_findings(groups, token_budget=500)
+    tier1_count = meta["tier1_count"]
+    assert tier1_count >= 15  # min(20, max(15, 20//5))
+    # Tier 1 exceeds budget -- that's by design
+    assert meta["tokens_used"] > 500
+
+
+def test_format_deterministic_ordering():
+    """Same input produces same output."""
+    findings = [_make_finding(i, authority=3, relevance=7) for i in range(50)]
+    groups = [{"name": "Determinism", "findings": findings}]
+    text1, _ = _format_grouped_findings(groups)
+    text2, _ = _format_grouped_findings(groups)
+    assert text1 == text2
+
+
+def test_format_patient_source_priority():
+    """prefer_patient_sources reverses sort order."""
+    f_clinical = _make_finding(1, authority=5, relevance=7, title="Clinical trial")
+    f_patient = _make_finding(2, authority=2, relevance=9, title="Patient experience")
+    groups = [{"name": "Priority", "findings": [f_clinical, f_patient]}]
+    text_default, _ = _format_grouped_findings(groups)
+    text_patient, _ = _format_grouped_findings(groups, prefer_patient_sources=True)
+    default_clinical_first = text_default.index("Clinical trial") < text_default.index("Patient experience")
+    patient_patient_first = text_patient.index("Patient experience") < text_patient.index("Clinical trial")
+    assert default_clinical_first
+    assert patient_patient_first
+
+
+def test_format_multiple_groups():
+    """Multiple groups each get their own header and tiering."""
+    g1 = [_make_finding(i, authority=5) for i in range(30)]
+    g2 = [_make_finding(i + 100, authority=4) for i in range(25)]
+    groups = [{"name": "Group A", "findings": g1}, {"name": "Group B", "findings": g2}]
+    text, meta = _format_grouped_findings(groups)
+    assert "GROUP A" in text
+    assert "GROUP B" in text
+    assert meta["total_findings"] == 55
