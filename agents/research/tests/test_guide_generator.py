@@ -581,3 +581,33 @@ def test_section_scope_daily_life_supportive_care():
     desc = section["description"].lower()
     assert "supportive" in desc or "bone" in desc, \
         "daily-life should cover supportive care (bone health, Xgeva, etc.)"
+
+
+# ── Topic-diverse Tier 1 ──
+
+def test_grouping_threshold_lowered():
+    """Sections with >= 50 findings should be grouped by AI (threshold lowered from 500)."""
+    findings = [_make_finding(i) for i in range(60)]
+    mock_response = MagicMock()
+    mock_response.content = [MagicMock()]
+    mock_response.content[0].input = {
+        "groups": [
+            {"name": "Group A", "finding_ids": list(range(30))},
+            {"name": "Group B", "finding_ids": list(range(30, 60))},
+        ]
+    }
+    with patch("modules.guide_generator.api_call", return_value=mock_response) as mock_call:
+        groups = _group_findings_by_topic(findings, "test-key", "dummy-topic",
+                                           api_key="test", model="test")
+    # With lowered threshold, AI grouping should be called for 60 findings
+    mock_call.assert_called_once()
+    assert len(groups) == 2
+
+
+def test_grouping_threshold_still_skips_tiny():
+    """Sections with < 50 findings should NOT be grouped (single 'all' group)."""
+    findings = [_make_finding(i) for i in range(30)]
+    groups = _group_findings_by_topic(findings, "test-key", "dummy-topic",
+                                       api_key="test", model="test")
+    assert len(groups) == 1
+    assert groups[0]["name"] == "all"

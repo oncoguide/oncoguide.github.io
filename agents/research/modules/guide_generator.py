@@ -474,7 +474,7 @@ def _group_findings_by_topic(findings, section_key, topic_title,
     For >= 500 findings: uses Haiku to cluster by topic.
     On failure: falls back to authority-tier grouping.
     """
-    if len(findings) < 500 or not api_key:
+    if len(findings) < 50 or not api_key:
         return [{"name": "all", "findings": findings}]
 
     findings_by_id = {f["id"]: f for f in findings}
