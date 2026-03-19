@@ -8,6 +8,7 @@ lifecycle_stage from enrichment IS the mapping.
 import logging
 import os
 import json
+import re
 from datetime import datetime
 
 import anthropic
@@ -303,6 +304,81 @@ def _build_findings_text(findings: list[dict], start_index: int = 1) -> str:
     return "\n\n".join(parts)
 
 
+def _format_grouped_findings(groups, token_budget=180_000, prefer_patient_sources=False):
+    """Format findings in tiers within groups, respecting token budget.
+
+    Per group:
+      - Top 15-20 findings: FULL DETAIL (title + summary + URL + authority)
+      - Remaining: SUMMARY ONLY ([F:id] summary_english)
+
+    Token budget measured as chars // 3 (conservative for medical text).
+    Tier 1 is NEVER truncated (budget exempt). Tier 2 truncated if budget exceeded.
+    """
+    output_parts = []
+    tokens_used = 0
+    total_tier1 = 0
+    total_tier2_shown = 0
+    total_tier2_truncated = 0
+
+    for group in groups:
+        findings = group["findings"]
+        header = f"\n=== {group['name'].upper()} ({len(findings)} findings) ===\n"
+        tokens_used += len(header) // 3
+
+        if prefer_patient_sources:
+            sort_key = lambda f: (-f.get("relevance_score", 0), f.get("authority_score", 0), f.get("content_hash", ""))
+        else:
+            sort_key = lambda f: (-f.get("authority_score", 0), -f.get("relevance_score", 0), f.get("content_hash", ""))
+        sorted_findings = sorted(findings, key=sort_key)
+
+        tier1_count = min(20, max(15, len(sorted_findings) // 5))
+        tier1 = sorted_findings[:tier1_count]
+        tier2 = sorted_findings[tier1_count:]
+        total_tier1 += len(tier1)
+
+        tier1_text = "\n[HIGH-DETAIL FINDINGS]\n"
+        for f in tier1:
+            entry = (
+                f'[F:{f["id"]}] Authority:{f.get("authority_score", 0)} | '
+                f'{f.get("title_english", "N/A")}\n'
+                f'{f.get("summary_english", "N/A")}\n'
+                f'URL: {f.get("source_url", "N/A")}\n'
+            )
+            tier1_text += entry
+        tokens_used += len(tier1_text) // 3
+
+        tier2_text = "\n[ADDITIONAL FINDINGS]\n"
+        truncated = False
+        for idx, f in enumerate(tier2):
+            entry = f'[F:{f["id"]}] {f.get("summary_english", f.get("title_english", "N/A"))}\n'
+            entry_tokens = len(entry) // 3
+            if tokens_used + entry_tokens >= token_budget:
+                remaining = len(tier2) - idx
+                tier2_text += f"... plus {remaining} more findings in this group\n"
+                total_tier2_truncated += remaining
+                truncated = True
+                break
+            tier2_text += entry
+            tokens_used += entry_tokens
+            total_tier2_shown += 1
+
+        if not truncated:
+            total_tier2_shown += len(tier2)
+
+        output_parts.append(header + tier1_text + tier2_text)
+
+    metadata = {
+        "total_findings": sum(len(g["findings"]) for g in groups),
+        "tier1_count": total_tier1,
+        "tier2_shown": total_tier2_shown,
+        "tier2_truncated": total_tier2_truncated,
+        "tokens_used": tokens_used,
+        "tokens_budget": token_budget,
+        "pct_used": f"{tokens_used / token_budget:.0%}" if token_budget else "N/A",
+    }
+    return "\n".join(output_parts), metadata
+
+
 def _generate_section(
     client: anthropic.Anthropic,
     topic_title: str,
@@ -459,3 +535,52 @@ def generate_guide(
 
     total_size = os.path.getsize(output_path)
     logger.info(f"Guide generated: {output_path} ({len(findings)} findings, {len(GUIDE_SECTIONS)} sections, {total_size // 1024}KB)")
+
+
+def verify_section_citations(section_text, provided_findings):
+    """Verify citations and numbers in generated text are grounded in findings.
+
+    Returns list of issues: [{type, severity, detail}]
+
+    Issue types:
+    - PHANTOM_CITATION (CRITICAL): [F:N] references a finding not in input
+    - UNGROUNDED_NUMBER (MAJOR): number cited with [F:N] but not in that finding
+    - UNCITED_NUMBER (WARNING): number in text with no nearby [F:N] citation
+    """
+    issues = []
+    provided_ids = {f["id"] for f in provided_findings}
+    provided_texts = {
+        f["id"]: f"{f.get('title_english', '')} {f.get('summary_english', '')}"
+        for f in provided_findings
+    }
+
+    # 1. Phantom citations
+    cited_ids = [int(m) for m in re.findall(r'\[F:(\d+)\]', section_text)]
+    for fid in set(cited_ids):
+        if fid not in provided_ids:
+            issues.append({
+                "type": "PHANTOM_CITATION", "severity": "CRITICAL",
+                "detail": f"[F:{fid}] cited but not in provided findings",
+            })
+
+    # 2. Numbers with unit suffixes: check grounding
+    for match in re.finditer(r'(\d+\.?\d*)\s*(%|months?|mg|years?|weeks?)', section_text):
+        num_str = match.group(1)
+        pos = match.start()
+        nearby = section_text[max(0, pos - 300):pos + 300]
+        citation_match = re.search(r'\[F:(\d+)\]', nearby)
+
+        if not citation_match:
+            issues.append({
+                "type": "UNCITED_NUMBER", "severity": "WARNING",
+                "detail": f"{match.group(0)} at pos {pos} has no nearby citation",
+            })
+        else:
+            fid = int(citation_match.group(1))
+            if fid in provided_texts and num_str not in provided_texts[fid]:
+                issues.append({
+                    "type": "UNGROUNDED_NUMBER", "severity": "MAJOR",
+                    "detail": f"{match.group(0)} cited as [F:{fid}] but '{num_str}' not in that finding",
+                })
+
+    return issues
