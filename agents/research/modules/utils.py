@@ -69,13 +69,81 @@ def now_iso() -> str:
     return datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
 
+MODEL_CONTEXT_LIMITS = {
+    "claude-haiku-4-5-20251001": 200_000,
+    "claude-sonnet-4-6": 200_000,
+}
+DEFAULT_CONTEXT_LIMIT = 200_000
+
+
+class TokenBudgetExceeded(Exception):
+    """Raised when estimated prompt tokens exceed context window."""
+    pass
+
+
+def _get_context_limit(model: str) -> int:
+    """Look up context window size for a model, with prefix matching fallback."""
+    if model in MODEL_CONTEXT_LIMITS:
+        return MODEL_CONTEXT_LIMITS[model]
+    for known, limit in MODEL_CONTEXT_LIMITS.items():
+        if model.startswith(known.rsplit("-", 1)[0]):
+            return limit
+    logger.warning(f"Unknown model '{model}', using default {DEFAULT_CONTEXT_LIMIT}")
+    return DEFAULT_CONTEXT_LIMIT
+
+
+def check_prompt_size(messages, system="", max_tokens_output=4000,
+                      context_limit=200_000):
+    """Estimate input tokens and verify they fit in context window.
+
+    Uses chars // 3 (conservative for medical text with drug names/URLs).
+    Returns (ok: bool, estimated_tokens: int).
+    """
+    total_chars = len(system)
+    for msg in messages:
+        content = msg.get("content", "")
+        if isinstance(content, str):
+            total_chars += len(content)
+        elif isinstance(content, list):
+            for block in content:
+                if isinstance(block, dict) and "text" in block:
+                    total_chars += len(block["text"])
+    estimated_input = total_chars // 3
+    available = context_limit - max_tokens_output
+
+    if estimated_input > available:
+        logger.error(
+            f"[SAFETY NET] Prompt too large: ~{estimated_input:,} tokens "
+            f"> {available:,} available"
+        )
+        return False, estimated_input
+    if estimated_input > available * 0.90:
+        logger.warning(
+            f"[SAFETY NET] Prompt near limit: ~{estimated_input:,} tokens "
+            f"({estimated_input / available:.0%} of {available:,})"
+        )
+    return True, estimated_input
+
+
 def api_call(client, **kwargs):
-    """Make an API call using streaming to keep the TCP connection alive.
+    """Make an API call using streaming, with token budget check.
 
     Long Sonnet calls with large prompts can take > 60 seconds before the first
     token arrives. ISP/router idle-TCP timeouts kill the connection at 60s.
     Streaming sends a response header immediately, keeping the connection live.
     """
+    model = kwargs.get("model", "")
+    context_limit = _get_context_limit(model) if model else DEFAULT_CONTEXT_LIMIT
+    ok, est = check_prompt_size(
+        kwargs.get("messages", []),
+        kwargs.get("system", ""),
+        kwargs.get("max_tokens", 4000),
+        context_limit=context_limit,
+    )
+    if not ok:
+        raise TokenBudgetExceeded(
+            f"Estimated ~{est:,} input tokens exceeds context window"
+        )
     with client.messages.stream(**kwargs) as stream:
         return stream.get_final_message()
 
