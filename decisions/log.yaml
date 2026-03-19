@@ -621,3 +621,72 @@ decisions:
       - "Publicare ghid generat cu adaugare manuala din referinta -- mai rapid"
       - "Re-rulare pipeline cu query-uri frontier science suplimentare -- cost suplimentar ~$1-2"
     outcome: "Ghidul final trebuie sa integreze datele frontier din referinta: in special ANKTIVA (relevant imediat pentru pacienti UE 2026), Vepafestinib, si celelalte tehnologii. De adaugat manual in ghidul generat, sectiunea 10 (pipeline) si 9 (when treatment stops working)."
+
+  - id: 63
+    date: "2026-03-19"
+    category: "technical"
+    summary: "Token budget fix: smart grouping + tiered formatting solves 400 Bad Request overflow"
+    context: "RET Fusion guide generation (3473 findings) had 3 sections fail with 400 Bad Request -- Q2 (1118 findings), Q6 (781), Q3 (532) exceeded 200K context window. Solution: group findings by topic (Haiku AI), format in two tiers (top 15-20 full detail, rest summary-only), safety net in api_call(), retry with halved budget on overflow."
+    alternatives_considered:
+      - "Truncate findings per section to a fixed cap (e.g., 200) -- loses data"
+      - "Compress findings text (shorter summaries) -- loses nuance"
+      - "Increase context window / switch model -- not available"
+    outcome: "Smart grouping + tiered formatting chosen. Organization not compression. All 16 sections generated, 0 errors, 203KB guide, $0.63 cost, 19m30s. Merged to main as 7 commits, 202 tests."
+
+  - id: 64
+    date: "2026-03-19"
+    category: "learning"
+    summary: "Low-authority frontier tech findings drowned by tiered formatting in large sections"
+    context: "Comparison of generated guide vs human reference guide revealed systematic gap: histotripsy (4 findings, auth 2), PCCT (13, auth 2), LungVax (12, auth 2), ANKTIVA (22, auth 2-3) all exist in DB but were placed in Tier 2 summary-only in sections with 500-780 findings. Model never saw them in full detail. Authority-first sorting is correct for clinical accuracy but kills frontier tech, patient communities, and practical tips."
+    alternatives_considered:
+      - "Lower authority threshold for Tier 1 -- risks promoting unreliable sources"
+      - "Add keyword whitelist for frontier tech -- fragile, topic-dependent"
+    outcome: "Identified fix: topic-diverse Tier 1 -- guarantee at least 1 finding per topic group in full detail. Not yet implemented. Tracked as pipeline quality improvement."
+
+  - id: 65
+    date: "2026-03-19"
+    category: "learning"
+    summary: "FDA label structured data not captured by pipeline searches"
+    context: "Reference guide had exact adverse event frequencies (AST 59%, hyperglycemia 53%), dosing specifics (200ml water, 7-day surgery hold), Xgeva protocol (vitamin D 400IU, calcium 600mg, 2h timing). None of these were in the 3473 findings DB. They come from FDA structured product labels (DailyMed) which the pipeline does not parse."
+    alternatives_considered:
+      - "Add more search queries targeting FDA labels -- unreliable, may not capture structured tables"
+      - "Manual addition per topic -- not scalable"
+    outcome: "Identified fix: FDA label auto-extraction in Phase 0 (zero AI cost, structured data, authority 5). Not yet implemented."
+
+  - id: 66
+    date: "2026-03-19"
+    category: "learning"
+    summary: "Human reference guide's unique value is cross-domain clinical reasoning"
+    context: "The insight 'hyperglycemia -> gastroparesis -> impaired selpercatinib absorption' does not exist in any single finding. It requires connecting: (1) 53% hyperglycemia prevalence, (2) medical knowledge that hyperglycemia causes gastroparesis, (3) drug fact that selpercatinib is pH-dependent. This multi-hop reasoning is what makes the human guide superior for practical patient advice."
+    alternatives_considered:
+      - "Use reference guide as input for all topics -- only works when reference exists"
+      - "Add more sections to template -- doesn't solve reasoning gap"
+    outcome: "Identified fix: mini-discovery in data-first mode -- 1 Sonnet call with top 50 findings to generate cross-domain insights before guide generation. Cost ~$0.05. Not yet implemented."
+
+  - id: 67
+    date: "2026-03-19"
+    category: "process"
+    summary: "Combined guide created by merging generated + reference with 4 parallel agents"
+    context: "Generated guide (203KB, 3473 findings, formal citations) merged with reference guide (74KB, human insights) into lung-ret-fusion-combined.md (196KB). Each agent handled 4 sections. Deduplication: CYP3A4 only in S6, monitoring only in S7, resistance only in S10, pipeline only in S11. Romania section enriched with real patient experience (Ordonanta Presedintiala process, pharmacy logistics)."
+    alternatives_considered:
+      - "Single agent processing all 16 sections -- context overflow risk"
+      - "Manual section-by-section editing -- slower"
+    outcome: "4 parallel agents produced clean parts in ~7 minutes each. Assembled into single file. Romania section manually enriched with patient-lived experience."
+
+  - id: 68
+    date: "2026-03-19"
+    category: "technical"
+    summary: "4 pipeline quality fixes identified for future implementation"
+    context: "Root cause analysis of generated vs reference guide gap identified 4 fixes: (1) FDA label auto-extraction in Phase 0, (2) topic-diverse Tier 1 in _format_grouped_findings(), (3) mini-discovery in data-first mode, (4) expanded section scopes for monitoring tech + expert centers + supportive care."
+    alternatives_considered:
+      - "Implement all 4 now -- scope creep on already-long session"
+      - "Use reference guide as input for all topics -- only works for RET Fusion"
+    outcome: "Deferred to new branch. FDA label extraction is highest-value single fix (covers ~50% of gap). Section scope expansion is lowest effort. Recommended order: FDA label -> section scopes -> topic-diverse Tier 1 -> mini-discovery."
+
+  - id: 69
+    date: "2026-03-19"
+    category: "technical"
+    summary: "4 pipeline quality fixes implemented on fix/pipeline-quality branch"
+    context: "All 4 fixes from decision 68 implemented with TDD (12 new tests, 214 total). Branch: fix/pipeline-quality with 5 commits."
+    alternatives_considered: []
+    outcome: "Implemented: (1) FDA label queries in pre_search.py (+2 templates, 20->22), (2) section scope expansion in guide_generator.py (4 sections: expert centers, advanced imaging, frontier tech, supportive care), (3) grouping threshold lowered 500->50 for topic-diverse Tier 1, (4) mini_discovery() function in guide_generator.py + wired into run_research.py cmd_generate_from_data. Zero cost increase for fixes 1-3. Fix 4 adds ~$0.05/run (1 Sonnet call). 214 tests passing. NOT merged yet."
