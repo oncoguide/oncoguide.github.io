@@ -1049,7 +1049,7 @@ def cmd_generate_from_data(cfg: dict, topic_id: str, registry_path: str,
         save_registry(topics, registry_path)
 
     # Phase 4: Gap analysis on existing findings
-    findings = db.get_findings_by_topic(topic_id, limit=2000)
+    findings = db.get_findings_by_topic(topic_id, limit=0)
     print(f"\nPhase 4: Gap analysis ({len(findings)} findings)...")
     t0 = time.time()
     gap_queries = analyze_gaps(
@@ -1075,7 +1075,7 @@ def cmd_generate_from_data(cfg: dict, topic_id: str, registry_path: str,
     cv_report_text = ""
 
     # Phase 6: Guide generation (Haiku + Sonnet for critical sections)
-    findings = db.get_findings_by_topic(topic_id, limit=2000)
+    findings = db.get_findings_by_topic(topic_id, limit=0)
     guides_dir = cfg.get("guides_dir", "data/guides")
     output_path = os.path.join(guides_dir, f"{topic_id}.md")
     guide_backup_dir = os.path.join(cfg.get("backup_dir", "data/backups"), "guides")

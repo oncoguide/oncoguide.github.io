@@ -148,14 +148,24 @@ FORMATTING:
 - For emergency/checklist sections, use checkbox format: - [ ] Symptom -> Action
 - End each section with 1-2 bold KEY TAKEAWAYS
 
-RULES:
+CITATION AND AUTHORITY RULES (CRITICAL):
 - Every claim MUST cite a finding by number: [[Finding N](URL)]
+- **AUTHORITY HIERARCHY**: Always prefer higher-authority findings:
+  - Authority 5 (NEJM, Lancet, JCO, ESMO/NCCN guidelines) = gold standard, cite first
+  - Authority 4 (FDA/EMA decisions, systematic reviews) = strong evidence
+  - Authority 3 (peer-reviewed reviews, registries) = supportive
+  - Authority 2 (press releases, medical news) = use only if no better source exists
+  - Authority 1 (blogs, forums) = NEVER cite alone for medical claims
+- When findings contradict each other, ALWAYS use the higher-authority source
 - Include specific numbers (percentages, months, dosages) whenever available
 - Do NOT invent or extrapolate data beyond what findings provide
-- If findings contain contradictory data, present both with context
-- For critical claims (survival, response rates, safety), PREFER findings with Authority 4-5 (top journals, guidelines, agencies). Flag claims based only on Authority 1-2 sources.
+
+FORMATTING RULES:
 - Use standard quotes (""), double hyphens (--), NO emojis, NO typographic quotes, NO em-dashes
 - Prefer tables over prose for any comparative or list-like data
+- For emergency sections: use checkbox format - [ ] Symptom -> Action (min 5 checkboxes)
+- For pipeline sections: use table format drug | phase | mechanism | timeline
+- For treatment/side-effects: use comparative tables with real numbers
 
 LENGTH: 400-1200 words per section. Be dense and precise, not verbose. Every sentence must
 earn its place. If a table says it better than a paragraph, use the table.

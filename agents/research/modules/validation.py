@@ -258,8 +258,14 @@ def structural_qa(guide_text: str) -> dict:
                 warnings.append(f"Executive summary too long: {word_count} words (max 250)")
             continue  # no minimum check for exec summary
 
-        # Check if this is a critical section
-        is_critical = any(cs in title.lower() for cs in ["mistake", "side effect", "emergency", "er --", "resistance", "stops working"])
+        # Check if this is a critical section (match section ID from GUIDE_SECTIONS)
+        section_id = ""
+        title_upper = title.split("--")[0].strip().upper()[:30]
+        for gs in GUIDE_SECTIONS:
+            if gs["title"].split("--")[0].strip().upper()[:20] in title_upper:
+                section_id = gs["id"]
+                break
+        is_critical = section_id in CRITICAL_SECTIONS
         min_words = 500 if is_critical else 200
 
         if word_count < min_words:
@@ -275,7 +281,7 @@ def structural_qa(guide_text: str) -> dict:
             warnings.append(f"Section matching '{ts}' has no table (| delimiter)")
 
     # Section 8 (emergency) needs checkboxes
-    emergency_pattern = re.compile(r'^## .*(?:EMERGENCY|URGENTE|ER --).*?(?=^## |\Z)', re.MULTILINE | re.DOTALL | re.IGNORECASE)
+    emergency_pattern = re.compile(r'^## .*(?:EMERGENCY|WHEN TO GO TO THE ER).*?(?=^## |\Z)', re.MULTILINE | re.DOTALL | re.IGNORECASE)
     em_match = emergency_pattern.search(guide_text)
     if em_match:
         checkbox_count = em_match.group().count("- [ ]")

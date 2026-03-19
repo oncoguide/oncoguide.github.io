@@ -237,12 +237,23 @@ class Database:
             return None  # duplicate content_hash
 
     def get_findings_by_topic(self, topic_id: str, limit: int = 100) -> list[dict]:
-        """Get findings for a topic, sorted by relevance_score desc."""
-        rows = self.execute(
-            """SELECT * FROM findings WHERE topic_id = ?
-               ORDER BY relevance_score DESC LIMIT ?""",
-            (topic_id, limit),
-        ).fetchall()
+        """Get findings for a topic, sorted by relevance_score desc.
+
+        Args:
+            limit: Max findings to return. 0 means no limit (return all).
+        """
+        if limit == 0:
+            rows = self.execute(
+                """SELECT * FROM findings WHERE topic_id = ?
+                   ORDER BY relevance_score DESC""",
+                (topic_id,),
+            ).fetchall()
+        else:
+            rows = self.execute(
+                """SELECT * FROM findings WHERE topic_id = ?
+                   ORDER BY relevance_score DESC LIMIT ?""",
+                (topic_id, limit),
+            ).fetchall()
         return [dict(r) for r in rows]
 
     def count_findings(self, topic_id: str) -> int:
