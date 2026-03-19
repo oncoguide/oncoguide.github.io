@@ -52,6 +52,8 @@ TEMPLATES = [
     ("{diagnosis} European access reimbursement", "serper"),
     ("{diagnosis}", "civic"),
     ("{diagnosis}", "openfda"),
+    ("{diagnosis} FDA prescribing information adverse reactions", "serper"),
+    ("{diagnosis} DailyMed drug label", "serper"),
 ]
 
 

@@ -207,7 +207,7 @@ agents/research/
   config.example.json          — Template (copy to config.json, fill API keys)
   config.json                  — Actual config (gitignored)
   requirements.txt             — Python dependencies
-  tests/                       — 202 unit + integration tests
+  tests/                       — 214 unit + integration tests
 data/
   research.db                  — SQLite database (gitignored)
   guides/                      — Master guide markdown per topic (gitignored)
@@ -221,7 +221,7 @@ topics/
 **Full pipeline** (`--topic`):
 
 0. Health check: DB accessible, topic exists, disk space > 100MB
-1. Pre-search: 20 template queries (zero AI) + ~20 Haiku complement queries, search all 5 backends, enrich with Haiku, top 50 findings formatted as context for discovery
+1. Pre-search: 22 template queries (zero AI, includes FDA label/DailyMed) + ~20 Haiku complement queries, search all 5 backends, enrich with Haiku, top 50 findings formatted as context for discovery
 2. Discovery loop (Sonnet): oncologist (grounded with pre-search findings) <-> advocate iterate using Q1-Q8 lifecycle structure until all Q1-Q8 score >= 8.5/10. Abort if knowledge_map < 3 keys.
 3. Keyword extraction (Sonnet): methodologist extracts lifecycle-tagged queries (Q1-Q9) from conversation with per-stage minimums. Abort if < 80 queries.
 4. Search round 1: 5 backends execute queries + enrichment (Haiku, now outputs lifecycle_stage per finding). Abort if < 20 findings.
@@ -229,7 +229,7 @@ topics/
 6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
 7. Guide generation (Haiku + Sonnet): v6.1 smart pipeline:
    a. Section assignment: `_assign_findings_to_sections()` -- Q3 findings routed via Haiku AI to 7 categories (dosing, side-effects, interactions, monitoring, emergency, daily-life, access); non-Q3 assigned by lifecycle prefix. Q9 -> Section 16 (guidelines).
-   b. Smart grouping: `_group_findings_by_topic()` -- sections with >= 500 findings clustered by Haiku AI into 8-12 topic groups (fallback: authority-tier grouping).
+   b. Smart grouping: `_group_findings_by_topic()` -- sections with >= 50 findings clustered by Haiku AI into 8-12 topic groups (fallback: authority-tier grouping). Lowered from 500 to ensure frontier tech gets own Tier 1.
    c. Tiered formatting: `_format_grouped_findings()` -- Tier 1 (top 15-20 per group): full detail with URL + authority; Tier 2: summary only; respects 180K token budget (Tier 1 exempt).
    d. Expert skills: oncologist + advocate skill context loaded into system prompts. Anti-hallucination rules injected into every section.
    e. Section generation: 4 critical sections (mistakes, side-effects, emergency-signs, resistance) use Sonnet, 12 non-critical use Haiku. Section 15 (questions) generated from prior section text, not findings. Section 16 uses Q9 findings.
@@ -241,7 +241,7 @@ topics/
 11. Output: `data/guides/{topic-id}.md` + `data/guides/{topic-id}-review.md`
 12. Pipeline dashboard: post-run summary with per-phase timing, cost, findings, guide size
 
-**Data-first pipeline** (`--generate-from-data`): For topics with >= 200 existing findings, skips phases 1-4 (discovery/search) and goes directly to gap analysis -> guide generation -> validation. Used for RET Fusion (3473 seeded findings).
+**Data-first pipeline** (`--generate-from-data`): For topics with >= 200 existing findings, skips phases 1-3 (discovery/search) and runs: gap analysis -> mini-discovery (1 Sonnet call, cross-domain clinical insights from top 50 findings, ~$0.05) -> guide generation -> validation. Used for RET Fusion (3473 seeded findings).
 
 **Checkpoint/resume**: Each phase saves state to `pipeline_state` table. On re-run, pipeline resumes from last completed phase. Use `--force-phase N` to re-run a specific phase.
 

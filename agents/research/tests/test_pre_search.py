@@ -14,6 +14,7 @@ from modules.pre_search import (
     pre_search,
     MAX_CONTEXT_CHARS,
     _get_available_searchers,
+    TEMPLATES,
 )
 from modules.cost_tracker import CostTracker
 
@@ -23,7 +24,7 @@ from modules.cost_tracker import CostTracker
 
 def test_template_queries_generated():
     queries = generate_template_queries("RET fusion NSCLC")
-    assert len(queries) == 20
+    assert len(queries) == 22
     for q in queries:
         assert "RET fusion NSCLC" in q["query_text"]
         assert q["search_engine"] in ("serper", "pubmed", "clinicaltrials", "openfda", "civic")
@@ -42,6 +43,21 @@ def test_template_no_hardcoded_years():
     all_text = " ".join(q["query_text"] for q in queries)
     # Should not contain hardcoded years from development time
     assert "2024" not in all_text
+
+
+def test_template_includes_fda_label_queries():
+    """Templates should include FDA label / DailyMed queries for structured drug data."""
+    all_templates_text = " ".join(t[0] for t in TEMPLATES).lower()
+    assert "fda label" in all_templates_text or "dailymed" in all_templates_text or "prescribing information" in all_templates_text, \
+        "Templates should include FDA label queries for structured adverse event data"
+
+
+def test_template_fda_label_uses_serper():
+    """FDA label queries should use serper (web search to find DailyMed pages)."""
+    fda_templates = [t for t in TEMPLATES if "label" in t[0].lower() or "prescribing" in t[0].lower() or "dailymed" in t[0].lower()]
+    assert len(fda_templates) >= 1
+    for t in fda_templates:
+        assert t[1] == "serper", f"FDA label query should use serper, not {t[1]}"
 
 
 def test_template_different_diagnosis():

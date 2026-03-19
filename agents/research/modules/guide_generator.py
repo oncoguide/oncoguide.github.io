@@ -34,7 +34,7 @@ GUIDE_SECTIONS = [
         "id": "understanding-diagnosis",
         "title": "WHAT YOU HAVE -- UNDERSTANDING YOUR DIAGNOSIS",
         "lifecycle": "Q1",
-        "description": "What this diagnosis means exactly. Molecular testing, staging, subtypes and why they matter. Real prognosis with numbers.",
+        "description": "What this diagnosis means exactly. Molecular testing, staging, subtypes and why they matter. Real prognosis with numbers. Where to get expert molecular testing (academic centers, reference labs). Second opinion value.",
     },
     {
         "id": "best-treatment",
@@ -70,7 +70,7 @@ GUIDE_SECTIONS = [
         "id": "monitoring",
         "title": "WHAT MONITORING YOU NEED",
         "lifecycle": "Q3-monitoring",
-        "description": "Table: test | frequency | why | what to watch. ECG, liver, glucose, thyroid, creatinine. Include liquid biopsy/ctDNA if relevant for this diagnosis.",
+        "description": "Table: test | frequency | why | what to watch. ECG, liver, glucose, thyroid, creatinine. Include liquid biopsy/ctDNA if relevant for this diagnosis. Advanced imaging technologies (PCCT, PET/CT innovations). AI-assisted pathology if emerging.",
     },
     {
         "id": "emergency-signs",
@@ -94,13 +94,13 @@ GUIDE_SECTIONS = [
         "id": "pipeline",
         "title": "WHAT'S COMING -- PIPELINE AND TRIALS",
         "lifecycle": "Q6",
-        "description": "Per drug in development: table: drug | phase | mechanism | timeline | targets resistance? Active clinical trials with NCT, locations, eligibility. Realistic hope, not hype.",
+        "description": "Per drug in development: table: drug | phase | mechanism | timeline | targets resistance? Include frontier immunotherapy, vaccine platforms, PROTACs, bispecifics, CAR-T -- not just next-gen inhibitors. Active clinical trials with NCT, locations, eligibility. Realistic hope, not hype.",
     },
     {
         "id": "daily-life",
         "title": "DAILY LIFE",
         "lifecycle": "Q3-daily",
-        "description": "Nutrition (specific, evidence-based). Exercise. Fatigue management. Work, travel, relationships. Psychological support. Sexuality and fertility. Realistic timeline: Week 1-2, Month 1-3, Month 3-12, Year 1-2.",
+        "description": "Nutrition (specific, evidence-based). Exercise. Fatigue management. Supportive care protocols (bone health, dental, vitamin D). Work, travel, relationships. Psychological support. Sexuality and fertility. Realistic timeline: Week 1-2, Month 1-3, Month 3-12, Year 1-2.",
     },
     {
         "id": "treatment-access",
@@ -197,18 +197,18 @@ Notice: tables with real numbers, bold actionable rules, direct language, no fil
 
 # v6: Section briefs -- what each section MUST contain (for validation Layer 1b)
 SECTION_BRIEFS = {
-    "understanding-diagnosis": "Diagnostic explained plainly + tests + staging + prognosis with numbers",
+    "understanding-diagnosis": "Diagnostic explained plainly + tests + staging + prognosis with numbers + expert centers for molecular testing",
     "best-treatment": "Comparative treatment table with ORR/PFS/OS + ESMO/NCCN guidelines",
     "mistakes": "Min 8 mistakes in format MISTAKE/WHY DANGEROUS/WHAT TO DO INSTEAD",
     "how-to-take": "Per drug: dose, timing, food, pH, PPI -- practical table",
     "side-effects": "Per drug: table side effects with frequency %, grade, action",
     "interactions": "Table interactions (drugs, food, supplements) with action",
-    "monitoring": "Table monitoring (test, frequency, why) + liquid biopsy if relevant",
+    "monitoring": "Table monitoring (test, frequency, why) + liquid biopsy if relevant + advanced imaging",
     "emergency-signs": "Min 5 PRINTABLE checkboxes: symptom -> immediate action",
     "metastases": "Per metastasis site: frequency %, treatment, local options",
     "resistance": "Resistance mechanisms BY NAME + Plan B/C/D CONCRETE + rebiopsy",
-    "pipeline": "Table pipeline drugs (drug, phase, mechanism, timeline) + active trials NCT",
-    "daily-life": "Nutrition + exercise + fatigue + work + travel + psych + fertility + realistic timeline",
+    "pipeline": "Table pipeline drugs (drug, phase, mechanism, timeline) + frontier immunotherapy/vaccines/PROTACs + active trials NCT",
+    "daily-life": "Nutrition + exercise + fatigue + supportive care (bone health, dental) + work + travel + psych + fertility + realistic timeline",
     "treatment-access": "Per country: legal access mechanisms + financial assistance",
     "community": "Diagnosis-SPECIFIC communities with links + patient stories + caregiver support",
     "questions-for-doctor": "Min 5 questions per stage (diagnosis, treatment, progression) with context",
@@ -474,7 +474,7 @@ def _group_findings_by_topic(findings, section_key, topic_title,
     For >= 500 findings: uses Haiku to cluster by topic.
     On failure: falls back to authority-tier grouping.
     """
-    if len(findings) < 500 or not api_key:
+    if len(findings) < 50 or not api_key:
         return [{"name": "all", "findings": findings}]
 
     findings_by_id = {f["id"]: f for f in findings}
@@ -632,6 +632,85 @@ def _assign_findings_to_sections(findings, api_key, model, topic_title):
     return dict(section_findings)
 
 
+# ── Mini-discovery for data-first mode ────────────────────────────
+
+MINI_DISCOVERY_TOOL = {
+    "name": "submit_insights",
+    "description": "Submit cross-domain clinical insights connecting multiple findings.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "insights": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "insight": {"type": "string", "description": "The cross-domain connection (1-2 sentences)"},
+                        "finding_ids": {"type": "array", "items": {"type": "integer"}, "description": "IDs of findings that support this insight"},
+                        "clinical_relevance": {"type": "string", "description": "Why this matters for the patient"},
+                    },
+                    "required": ["insight", "finding_ids", "clinical_relevance"],
+                },
+            }
+        },
+        "required": ["insights"],
+    },
+}
+
+MINI_DISCOVERY_SYSTEM = """You are an expert oncologist reviewing research findings for a patient guide about {diagnosis}.
+
+Your task: identify CROSS-DOMAIN insights that connect findings from different areas.
+These are connections that no single finding states, but that emerge when you read multiple findings together.
+
+Examples of cross-domain insights:
+- Drug X causes hyperglycemia (53%) + hyperglycemia causes gastroparesis + Drug X is pH-dependent = patients must monitor glucose closely or drug absorption drops
+- Drug Y has 69% reduced absorption with PPI fasting + Drug Y should be taken with food when on PPI = specific dosing guidance
+- Resistance mutation Z appears at median 18 months + Drug W targets mutation Z in Phase II = start discussing backup plan at month 12
+
+Focus on insights that are ACTIONABLE for patients. Skip trivial connections.
+Maximum 10 insights. Each must cite the finding IDs that support it."""
+
+
+def mini_discovery(findings, diagnosis, api_key, model="claude-sonnet-4-6", max_findings=50):
+    """Generate cross-domain clinical insights from top findings.
+
+    Used in data-first mode to compensate for skipping the discovery loop.
+    Single Sonnet call with top findings, returns list of insight dicts.
+    Cost: ~$0.05 per call.
+    """
+    if not findings or not api_key:
+        return []
+
+    # Select diverse top findings: top by authority, then sample from each lifecycle stage
+    sorted_by_auth = sorted(findings, key=lambda f: (-f.get("authority_score", 0), -f.get("relevance_score", 0)))
+    selected = sorted_by_auth[:max_findings]
+
+    findings_text = "\n\n".join(
+        f"[F:{f['id']}] Authority:{f.get('authority_score', 0)} | Stage:{f.get('lifecycle_stage', '?')}\n"
+        f"Title: {f.get('title_english', 'N/A')}\n"
+        f"Summary: {f.get('summary_english', 'N/A')}"
+        for f in selected
+    )
+
+    client = anthropic.Anthropic(api_key=api_key)
+    try:
+        response = api_call(
+            client, model=model, max_tokens=4000,
+            system=MINI_DISCOVERY_SYSTEM.format(diagnosis=diagnosis),
+            messages=[{"role": "user", "content":
+                       f"Diagnosis: {diagnosis}\n\n"
+                       f"{len(selected)} top findings to analyze:\n\n{findings_text}"}],
+            tools=[MINI_DISCOVERY_TOOL],
+            tool_choice={"type": "tool", "name": "submit_insights"},
+        )
+        insights = response.content[0].input["insights"]
+        logger.info(f"Mini-discovery: {len(insights)} cross-domain insights generated")
+        return insights
+    except Exception as e:
+        logger.warning(f"Mini-discovery failed ({e}), continuing without insights")
+        return []
+
+
 ANTI_HALLUCINATION_RULES = """
 ABSOLUTE RULES -- VIOLATION OF THESE RULES MAKES THE GUIDE DANGEROUS:
 
@@ -767,6 +846,19 @@ def _generate_section_from_context(client, topic_title, section, section_num,
     return message.content[0].text.strip()
 
 
+def _format_insights(insights):
+    """Format mini-discovery insights as context text for section generation."""
+    if not insights:
+        return ""
+    lines = ["\n=== CROSS-DOMAIN INSIGHTS (from mini-discovery) ===",
+             "These insights connect multiple findings. Use them to enrich your section where relevant.\n"]
+    for i, ins in enumerate(insights, 1):
+        lines.append(f"{i}. {ins['insight']}")
+        lines.append(f"   Supporting findings: {ins['finding_ids']}")
+        lines.append(f"   Clinical relevance: {ins['clinical_relevance']}\n")
+    return "\n".join(lines)
+
+
 def generate_guide(
     topic_title: str,
     findings: list[dict],
@@ -775,6 +867,7 @@ def generate_guide(
     model: str = "claude-haiku-4-5-20251001",
     critical_model: str = "",
     cross_verify_report: str = "",
+    insights: list[dict] = None,
 ):
     """Generate a comprehensive master guide from findings.
 
@@ -788,6 +881,7 @@ def generate_guide(
         critical_model: Model for safety-critical sections (mistakes, side-effects,
             emergency-signs, resistance). If empty, uses `model` for all sections.
         cross_verify_report: Formatted cross-verification report.
+        insights: Cross-domain insights from mini_discovery() (data-first mode).
     """
     from .utils import load_skill_context, TokenBudgetExceeded
 
@@ -800,6 +894,12 @@ def generate_guide(
     # Load expert skill contexts
     oncologist_ctx = load_skill_context(".claude/skills/oncologist.md")
     advocate_ctx = load_skill_context(".claude/skills/patient-advocate.md")
+
+    # Format mini-discovery insights (appended to cross_verify_report for each section)
+    insights_text = _format_insights(insights or [])
+    if insights_text:
+        cross_verify_report = (cross_verify_report + "\n\n" + insights_text) if cross_verify_report else insights_text
+        logger.info(f"Mini-discovery insights injected into section context ({len(insights or [])} insights)")
 
     # Step 1: Assign findings to sections (Q3 routing + lifecycle filtering)
     section_findings = _assign_findings_to_sections(findings, api_key, model, topic_title)
