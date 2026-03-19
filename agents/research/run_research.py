@@ -5,6 +5,7 @@ Usage:
     python run_research.py --init
     python run_research.py --topic "topic-id"
     python run_research.py --topic "topic-id" --dry-run
+    python run_research.py --topic "topic-id" --generate-from-data
     python run_research.py --update-all --since 30d
     python run_research.py --list-topics
 """
@@ -460,9 +461,128 @@ def _gate_6(guide_path: str) -> tuple[bool, str]:
     return True, ""
 
 
+# ── v6: Health check ────────────────────────────────────────────────
+
+def _health_check(cfg: dict, topic_id: str, registry_path: str) -> bool:
+    """Verify prerequisites before pipeline run. Returns True if healthy.
+
+    Note: API key validation is already done by load_config() at startup.
+    This checks DB, topic, and disk space only.
+    """
+    issues = []
+
+    # DB accessible
+    db_path = cfg.get("database_path", "data/research.db")
+    db_dir = os.path.dirname(db_path) or "."
+    if db_path != ":memory:" and not os.path.isdir(db_dir):
+        issues.append(f"Database directory does not exist: {db_dir}")
+
+    # Topic exists in registry
+    try:
+        topics = load_registry(registry_path)
+        topic = find_topic(topics, topic_id)
+        if not topic:
+            issues.append(f"Topic '{topic_id}' not found in registry")
+    except SystemExit:
+        issues.append(f"Registry file not found: {registry_path}")
+
+    # Disk space (min 100MB)
+    if db_path != ":memory:":
+        try:
+            stat = shutil.disk_usage(db_dir)
+            free_mb = stat.free / (1024 * 1024)
+            if free_mb < 100:
+                issues.append(f"Low disk space: {free_mb:.0f}MB free (min 100MB)")
+        except OSError:
+            pass  # non-critical
+
+    if issues:
+        print("\n[HEALTH CHECK FAILED]")
+        for issue in issues:
+            print(f"  - {issue}")
+        return False
+
+    print("[Health check] OK")
+    return True
+
+
+# ── v6: Pipeline dashboard ──────────────────────────────────────────
+
+def _print_dashboard(topic_id: str, mode: str, duration: float, cost_report: str,
+                     phases: list[dict], findings_count: int = 0,
+                     guide_size_kb: float = 0, section_count: int = 0,
+                     alerts: dict = None, status: str = "complete"):
+    """Print formatted summary at end of run per SPEC format."""
+    print(f"\n{'=' * 50}")
+    print(f"  PIPELINE SUMMARY")
+    print(f"{'=' * 50}")
+    print(f"  Topic:    {topic_id}")
+    print(f"  Mode:     {mode}")
+    mins = int(duration // 60)
+    secs = int(duration % 60)
+    print(f"  Duration: {mins}m{secs:02d}s")
+    print(f"  Cost:     {cost_report}")
+    print()
+
+    for p in phases:
+        dur = p.get("duration", 0)
+        pm, ps = int(dur // 60), int(dur % 60)
+        cost_str = f"${p.get('cost', 0):.2f}" if p.get("cost", 0) > 0 else "$0.00"
+        detail = p.get("detail", "")
+        print(f"  Phase {p['phase']} ({p['name']:<16}): {pm}m{ps:02d}s  {cost_str:>8}  {detail}")
+
+    print()
+    if findings_count:
+        print(f"  Findings: {findings_count} total")
+    if guide_size_kb > 0:
+        print(f"  Guide:    {guide_size_kb:.0f}KB, {section_count}/16 sections")
+    if alerts:
+        print(f"  Alerts:   {alerts.get('safety', 0)} safety, {alerts.get('critical', 0)} critical")
+    print(f"  Status:   {status}")
+    print(f"{'=' * 50}\n")
+
+
+# ── v6: Checkpoint helper ───────────────────────────────────────────
+
+# Phase name constants for checkpoint/resume
+PHASE_NAMES = {
+    0: "pre-search",
+    1: "discovery",
+    2: "query-gen",
+    3: "search-r1",
+    4: "gap-analysis",
+    5: "cross-verify",
+    6: "guide-gen",
+    7: "validation",
+    8: "review",
+    9: "skills",
+}
+
+
+def _save_checkpoint(db, topic_id: str, run_id: int, phase: int,
+                     status: str, cost: "CostTracker", phase_start: float,
+                     output_ref: str = None, error: str = None):
+    """Save pipeline checkpoint after a phase completes."""
+    duration = time.time() - phase_start
+    phase_name = PHASE_NAMES.get(phase, f"phase-{phase}")
+    db.save_pipeline_state(
+        topic_id=topic_id, run_id=run_id, phase=phase,
+        phase_name=phase_name, status=status,
+        output_ref=output_ref,
+        cost_usd=cost.total_cost_usd if hasattr(cost, "total_cost_usd") else 0,
+        duration_seconds=round(duration, 1),
+        error=error,
+    )
+
+
 def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = False,
-              date_from: str = None, date_to: str = None, update_status: bool = True):
-    """Research a specific topic -- full v4 pipeline."""
+              date_from: str = None, date_to: str = None, update_status: bool = True,
+              force_phase: int = None, skip_health_check: bool = False):
+    """Research a specific topic -- full v6 pipeline."""
+    # Health check
+    if not skip_health_check and not _health_check(cfg, topic_id, registry_path):
+        sys.exit(1)
+
     topics = load_registry(registry_path)
     topic = find_topic(topics, topic_id)
     if not topic:
@@ -471,71 +591,99 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
 
     start_time = time.time()
     cost = CostTracker(max_cost_usd=cfg.get("max_cost_usd", 5.0))
+    phase_timings = []  # For dashboard
 
     diagnosis = topic["title"]
     reset_token_usage()  # Reset enrichment module's internal token counter
     print(f"\n=== Researching: {diagnosis} ===\n")
 
+    # Resume logic: check last completed phase
+    resume_phase = None
+    db_check = Database(cfg["database_path"])
+    db_check.create_tables()
+    last_completed = db_check.get_last_completed_phase(topic_id)
+    db_check.close()
+    if last_completed is not None and force_phase is None:
+        resume_phase = last_completed + 1
+        print(f"  Resuming from Phase {resume_phase} (last completed: Phase {last_completed})")
+    elif force_phase is not None:
+        print(f"  Force-phase {force_phase}: ignoring checkpoint for that phase")
+
     # Phase 0: Pre-search (ground discovery with real data)
-    print("Phase 0: Pre-search (grounding discovery with real data)...")
-    try:
-        pre_context = pre_search(diagnosis, cfg, cost, dry_run=dry_run)
-        if pre_context:
-            print(f"  Pre-search: {len(pre_context)} chars of context from external sources")
-        elif not dry_run:
-            print("  Pre-search: no relevant findings (discovery will use parametric knowledge only)")
-    except Exception as e:
-        logger.error(f"Pre-search failed: {e}")
-        print(f"  Pre-search failed ({e}), continuing without grounding data")
-        pre_context = ""
+    _should_skip = lambda phase_num: (resume_phase is not None and phase_num < resume_phase
+                                       and force_phase != phase_num)
+    pre_context = ""
+    if _should_skip(0):
+        print("Phase 0: Pre-search -- skipped (checkpoint)")
+    else:
+        print("Phase 0: Pre-search (grounding discovery with real data)...")
+        t0 = time.time()
+        try:
+            pre_context = pre_search(diagnosis, cfg, cost, dry_run=dry_run)
+            if pre_context:
+                print(f"  Pre-search: {len(pre_context)} chars of context from external sources")
+            elif not dry_run:
+                print("  Pre-search: no relevant findings (discovery will use parametric knowledge only)")
+        except Exception as e:
+            logger.error(f"Pre-search failed: {e}")
+            print(f"  Pre-search failed ({e}), continuing without grounding data")
+            pre_context = ""
 
     # Phase 1: Discovery loop (Sonnet)
     discovery_model = cfg.get("discovery_model", "claude-sonnet-4-6")
-    print(f"Phase 1: Discovery loop (max {cfg.get('max_discovery_rounds', 5)} rounds)...")
-    t0 = time.time()
-    discovery = run_discovery(
-        diagnosis=diagnosis,
-        model=discovery_model,
-        cost=cost,
-        api_key=cfg["anthropic_api_key"],
-        max_rounds=cfg.get("max_discovery_rounds", 5),
-        pre_search_context=pre_context,
-    )
-    print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']} ({time.time()-t0:.0f}s)")
-    km = discovery.get("knowledge_map", {})
-    if not km or len(km) < 3:
-        _abort("discovery", f"knowledge_map empty or too small: {list(km.keys())}")
-    # GATE 1: minimum entities
-    g1_ok, g1_reason = _gate_1(km)
-    if not g1_ok:
-        logger.warning(f"GATE 1: {g1_reason} -- continuing but guide may be incomplete")
-        print(f"  [GATE 1 WARNING] {g1_reason}")
-    if discovery.get("lifecycle_scores"):
-        low = [f"{k}: {v.get('score', '?')}" for k, v in discovery["lifecycle_scores"].items()
-               if isinstance(v, dict) and v.get("score", 10) < 8.5]
-        if low:
-            print(f"  Low lifecycle scores: {', '.join(low)}")
+    discovery = {"rounds": 0, "converged": False, "knowledge_map": {}, "conversation": [], "lifecycle_scores": {}}
+    if _should_skip(1):
+        print("Phase 1: Discovery -- skipped (checkpoint)")
+    else:
+        print(f"Phase 1: Discovery loop (max {cfg.get('max_discovery_rounds', 5)} rounds)...")
+        t0 = time.time()
+        discovery = run_discovery(
+            diagnosis=diagnosis,
+            model=discovery_model,
+            cost=cost,
+            api_key=cfg["anthropic_api_key"],
+            max_rounds=cfg.get("max_discovery_rounds", 5),
+            pre_search_context=pre_context,
+        )
+        print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']} ({time.time()-t0:.0f}s)")
+        km = discovery.get("knowledge_map", {})
+        if not km or len(km) < 3:
+            _abort("discovery", f"knowledge_map empty or too small: {list(km.keys())}")
+        # GATE 1: minimum entities
+        g1_ok, g1_reason = _gate_1(km)
+        if not g1_ok:
+            logger.warning(f"GATE 1: {g1_reason} -- continuing but guide may be incomplete")
+            print(f"  [GATE 1 WARNING] {g1_reason}")
+        if discovery.get("lifecycle_scores"):
+            low = [f"{k}: {v.get('score', '?')}" for k, v in discovery["lifecycle_scores"].items()
+                   if isinstance(v, dict) and v.get("score", 10) < 8.5]
+            if low:
+                print(f"  Low lifecycle scores: {', '.join(low)}")
 
     # Phase 2: Keyword extraction (Sonnet)
-    print("Phase 2: Extracting search queries from discovery...")
-    t0 = time.time()
-    queries = extract_queries(
-        diagnosis=diagnosis,
-        conversation=discovery["conversation"],
-        knowledge_map=discovery["knowledge_map"],
-        api_key=cfg["anthropic_api_key"],
-        model=discovery_model,
-        cost=cost,
-    )
-    print(f"  Extracted {len(queries)} precision queries ({time.time()-t0:.0f}s)")
-    if len(queries) < 10:
-        _abort("keyword_extraction", f"only {len(queries)} queries extracted, expected >= 10")
-    # GATE 2: query count + per-stage minimums
-    from modules.keyword_extractor import LIFECYCLE_MINIMUMS
-    g2_ok, g2_reason = _gate_2(queries, LIFECYCLE_MINIMUMS)
-    if not g2_ok:
-        logger.warning(f"GATE 2: {g2_reason}")
-        print(f"  [GATE 2 WARNING] {g2_reason}")
+    queries = []
+    if _should_skip(2):
+        print("Phase 2: Query extraction -- skipped (checkpoint)")
+    else:
+        print("Phase 2: Extracting search queries from discovery...")
+        t0 = time.time()
+        queries = extract_queries(
+            diagnosis=diagnosis,
+            conversation=discovery["conversation"],
+            knowledge_map=discovery["knowledge_map"],
+            api_key=cfg["anthropic_api_key"],
+            model=discovery_model,
+            cost=cost,
+        )
+        print(f"  Extracted {len(queries)} precision queries ({time.time()-t0:.0f}s)")
+        if len(queries) < 10:
+            _abort("keyword_extraction", f"only {len(queries)} queries extracted, expected >= 10")
+        # GATE 2: query count + per-stage minimums
+        from modules.keyword_extractor import LIFECYCLE_MINIMUMS
+        g2_ok, g2_reason = _gate_2(queries, LIFECYCLE_MINIMUMS)
+        if not g2_ok:
+            logger.warning(f"GATE 2: {g2_reason}")
+            print(f"  [GATE 2 WARNING] {g2_reason}")
 
     if dry_run:
         print("\n--- DRY RUN ---")
@@ -556,46 +704,66 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         topic["status"] = "researching"
         save_registry(topics, registry_path)
 
-    print("Phase 3: Search round 1...")
-    t0 = time.time()
-    stats_r1 = _search_and_enrich(
-        queries, topic_id, diagnosis, cfg, db, run_id,
-        date_from=date_from, date_to=date_to, label="Round 1 -- ", cost=cost,
-    )
-    print(f"  Round 1 done ({time.time()-t0:.0f}s)")
+    stats_r1 = {"queries_total": 0, "raw_results": 0, "after_dedup": 0,
+                "after_enrichment": 0, "discarded": 0}
+    if _should_skip(3):
+        print("Phase 3: Search round 1 -- skipped (checkpoint)")
+    else:
+        print("Phase 3: Search round 1...")
+        t0 = time.time()
+        stats_r1 = _search_and_enrich(
+            queries, topic_id, diagnosis, cfg, db, run_id,
+            date_from=date_from, date_to=date_to, label="Round 1 -- ", cost=cost,
+        )
+        phase_timings.append({"phase": 3, "name": "search-r1", "duration": time.time() - t0,
+                              "detail": f"{stats_r1['after_enrichment']} relevant"})
+        _save_checkpoint(db, topic_id, run_id, 3, "complete", cost, t0)
+        print(f"  Round 1 done ({time.time()-t0:.0f}s)")
+
     total_findings = db.count_findings(topic_id)
-    # GATE 3: minimum findings
-    g3_ok, g3_reason = _gate_3(total_findings)
-    if not g3_ok:
-        _abort("search_round_1", f"{g3_reason}. Check API keys and search backends.")
-    elif g3_reason:
-        logger.warning(f"GATE 3: {g3_reason}")
-        print(f"  [GATE 3 WARNING] {g3_reason}")
+    # GATE 3: minimum findings (only if we just did search)
+    if not _should_skip(3):
+        g3_ok, g3_reason = _gate_3(total_findings)
+        if not g3_ok:
+            _abort("search_round_1", f"{g3_reason}. Check API keys and search backends.")
+        elif g3_reason:
+            logger.warning(f"GATE 3: {g3_reason}")
+            print(f"  [GATE 3 WARNING] {g3_reason}")
 
     # Phase 4: Gap analysis + search round 2
-    findings_so_far = db.get_findings_by_topic(topic_id, limit=500)
     stats_r2 = {"queries_total": 0, "raw_results": 0, "after_dedup": 0,
                 "after_enrichment": 0, "discarded": 0}
-    if findings_so_far and len(findings_so_far) >= 10:
-        print(f"\nPhase 4: Gap analysis ({len(findings_so_far)} findings)...")
-        gap_queries = analyze_gaps(
-            diagnosis, findings_so_far, GUIDE_SECTIONS,
-            cfg["anthropic_api_key"],
-            cfg.get("query_expansion_model", "claude-haiku-4-5-20251001"),
-            cost=cost,
-        )
-        if gap_queries:
-            print(f"  {len(gap_queries)} gap-filling queries for round 2")
-            stats_r2 = _search_and_enrich(
-                gap_queries, topic_id, diagnosis, cfg, db, run_id,
-                date_from=date_from, date_to=date_to, label="Round 2 -- ", cost=cost,
+    if _should_skip(4):
+        print("Phase 4: Gap analysis -- skipped (checkpoint)")
+    else:
+        findings_so_far = db.get_findings_by_topic(topic_id, limit=500)
+        if findings_so_far and len(findings_so_far) >= 10:
+            print(f"\nPhase 4: Gap analysis ({len(findings_so_far)} findings)...")
+            t0 = time.time()
+            gap_queries = analyze_gaps(
+                diagnosis, findings_so_far, GUIDE_SECTIONS,
+                cfg["anthropic_api_key"],
+                cfg.get("query_expansion_model", "claude-haiku-4-5-20251001"),
+                cost=cost,
             )
+            if gap_queries:
+                print(f"  {len(gap_queries)} gap-filling queries for round 2")
+                stats_r2 = _search_and_enrich(
+                    gap_queries, topic_id, diagnosis, cfg, db, run_id,
+                    date_from=date_from, date_to=date_to, label="Round 2 -- ", cost=cost,
+                )
+            phase_timings.append({"phase": 4, "name": "gap-analysis", "duration": time.time() - t0,
+                                  "detail": f"+{stats_r2['after_enrichment']} findings"})
+            _save_checkpoint(db, topic_id, run_id, 4, "complete", cost, t0)
 
     # Phase 5: Cross-verification (Haiku)
     findings = db.get_findings_by_topic(topic_id, limit=500)
     cv_report_text = ""
-    if findings and discovery.get("knowledge_map"):
+    if _should_skip(5):
+        print("Phase 5: Cross-verification -- skipped (checkpoint)")
+    elif findings and discovery.get("knowledge_map"):
         print(f"\nPhase 5: Cross-verification ({len(findings)} findings vs discovery claims)...")
+        t0 = time.time()
         try:
             cv_report = cross_verify(
                 knowledge_map=discovery["knowledge_map"],
@@ -609,6 +777,9 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
             c = len(cv_report.get("contradicted", []))
             u = len(cv_report.get("unverified", []))
             print(f"  {v} verified, {c} contradicted, {u} unverified")
+            phase_timings.append({"phase": 5, "name": "cross-verify", "duration": time.time() - t0,
+                                  "detail": f"{v} verified, {c} contradicted"})
+            _save_checkpoint(db, topic_id, run_id, 5, "complete", cost, t0)
         except Exception as e:
             logger.error(f"Cross-verification failed: {e}")
             print(f"  Cross-verification failed ({e}), continuing without")
@@ -616,9 +787,16 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     # Phase 6: Guide generation (Haiku + Sonnet for critical sections)
     guides_dir = cfg.get("guides_dir", "data/guides")
     output_path = os.path.join(guides_dir, f"{topic_id}.md")
+    guide_backup_dir = os.path.join(cfg.get("backup_dir", "data/backups"), "guides")
     critical_model = cfg.get("critical_guide_model", cfg.get("discovery_model", "claude-sonnet-4-6"))
-    if findings:
+    guide_size_kb = 0
+    if _should_skip(6):
+        print("Phase 6: Guide generation -- skipped (checkpoint)")
+        if os.path.exists(output_path):
+            guide_size_kb = os.path.getsize(output_path) / 1024
+    elif findings:
         print(f"\nPhase 6: Generating guide ({len(findings)} findings, critical sections with Sonnet)...")
+        t0 = time.time()
         generate_guide(
             diagnosis, findings, output_path,
             cfg["anthropic_api_key"], cfg.get("guide_model", "claude-haiku-4-5-20251001"),
@@ -631,9 +809,11 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
         if guide_size_kb < 10:
             _abort("guide_generation", f"guide too small: {guide_size_kb:.1f}KB (expected >= 10KB)")
         print(f"  Guide saved: {output_path}")
+        phase_timings.append({"phase": 6, "name": "guide-gen", "duration": time.time() - t0,
+                              "detail": f"{guide_size_kb:.0f}KB"})
+        _save_checkpoint(db, topic_id, run_id, 6, "complete", cost, t0)
 
         # Backup
-        guide_backup_dir = os.path.join(cfg.get("backup_dir", "data/backups"), "guides")
         os.makedirs(guide_backup_dir, exist_ok=True)
         shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
 
@@ -642,8 +822,11 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     haiku_model = cfg.get("guide_model", "claude-haiku-4-5-20251001")
     max_val_rounds = cfg.get("max_validation_rounds", 2)
     val_result = {"passed": False, "learnings": []}
-    if os.path.exists(output_path) and cost.has_budget(reserve_usd=1.00):
+    if _should_skip(7):
+        print("Phase 7: Validation -- skipped (checkpoint)")
+    elif os.path.exists(output_path) and cost.has_budget(reserve_usd=1.00):
         guide_text = open(output_path).read()
+        t0 = time.time()
 
         print(f"\nPhase 7: Validation + auto-correction (language check + medical accuracy)...")
         val_result = refine_guide(
@@ -673,6 +856,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
             with open(output_path, "w") as f:
                 f.write(refined_text)
             guide_text = refined_text
+            os.makedirs(guide_backup_dir, exist_ok=True)
             shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
             logger.info(f"Saved corrected guide to {output_path}")
 
@@ -718,11 +902,16 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
                     with open(output_path, "w") as f:
                         f.write(refined_text)
                     guide_text = refined_text
+                os.makedirs(guide_backup_dir, exist_ok=True)
                 shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
                 print(f"  Score: {val_result.get('overall_score', '?')}/10, Passed: {val_result['passed']}")
                 if val_result["passed"]:
                     break
                 missing = val_result.get("missing_keywords", [])
+
+        phase_timings.append({"phase": 7, "name": "validation", "duration": time.time() - t0,
+                              "detail": f"score {val_result.get('overall_score', '?')}/10"})
+        _save_checkpoint(db, topic_id, run_id, 7, "complete", cost, t0)
 
     # Phase 8: Generate human review checklist
     review_path = os.path.join(guides_dir, f"{topic_id}-review.md")
@@ -757,15 +946,264 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     topic["last_researched"] = datetime.now().strftime("%Y-%m-%d")
     save_registry(topics, registry_path)
 
-    # Report (CostTracker covers discovery/extraction/validation;
-    # enrichment tokens tracked separately via get_token_usage())
-    enrich_tokens = get_token_usage()
-    print(f"\n=== Done in {duration:.0f}s ===")
-    print(f"  Discovery: {discovery['rounds']} rounds, converged={discovery['converged']}")
-    print(f"  Queries: {stats.get('queries_total', 0)}")
-    print(f"  Findings: {stats.get('raw_results', 0)} raw -> {stats.get('after_enrichment', 0)} relevant")
-    print(f"  Cost (Sonnet+Haiku discovery/validation):\n  {cost.report()}")
-    print(f"  Enrichment tokens: {enrich_tokens['input']} in, {enrich_tokens['output']} out")
+    # Dashboard
+    section_count = 0
+    if os.path.exists(output_path):
+        guide_size_kb = os.path.getsize(output_path) / 1024
+        with open(output_path) as f:
+            content = f.read()
+        section_count = content.count("\n## ")
+    _print_dashboard(
+        topic_id=topic_id, mode="research", duration=duration,
+        cost_report=cost.report(), phases=phase_timings,
+        findings_count=stats.get("after_enrichment", 0),
+        guide_size_kb=guide_size_kb, section_count=section_count,
+        status="guide_ready" if val_result.get("passed") else "guide_needs_review",
+    )
+
+
+# ── v6: Generate from existing data ──────────────────────────────────
+
+def cmd_generate_from_data(cfg: dict, topic_id: str, registry_path: str,
+                           dry_run: bool = False):
+    """Generate guide from existing DB findings -- skip discovery/search phases.
+
+    For topics with enough seeded/existing findings (>= 200), skips phases 0-3
+    and goes directly to gap analysis -> guide generation -> validation.
+    """
+    # Health check
+    if not _health_check(cfg, topic_id, registry_path):
+        sys.exit(1)
+
+    topics = load_registry(registry_path)
+    topic = find_topic(topics, topic_id)
+    if not topic:
+        print(f"ERROR: Topic '{topic_id}' not found in registry.")
+        sys.exit(1)
+
+    start_time = time.time()
+    cost = CostTracker(max_cost_usd=cfg.get("max_cost_usd", 5.0))
+    phase_timings = []
+
+    diagnosis = topic["title"]
+    reset_token_usage()
+
+    # Initialize DB
+    db = Database(cfg["database_path"])
+    db.create_tables()
+
+    # Check findings count
+    total = db.count_findings(topic_id)
+    if total < 200:
+        print(f"ERROR: Only {total} findings for '{topic_id}' (min 200 for --generate-from-data).")
+        print(f"  Run full pipeline (--topic) or import more seed data (--seed).")
+        db.close()
+        sys.exit(1)
+
+    # Show lifecycle distribution
+    dist = db.execute(
+        """SELECT lifecycle_stage, COUNT(*) as cnt FROM findings
+        WHERE topic_id = ? AND lifecycle_stage IS NOT NULL
+        GROUP BY lifecycle_stage ORDER BY lifecycle_stage""",
+        (topic_id,),
+    ).fetchall()
+
+    print(f"\n=== Generate from data: {diagnosis} ===")
+    print(f"  Total findings: {total}")
+    print(f"  Lifecycle distribution:")
+    for r in dist:
+        print(f"    {r['lifecycle_stage']}: {r['cnt']}")
+
+    # Check for lifecycle gaps
+    from modules.gap_analyzer import LIFECYCLE_THRESHOLDS
+    stage_counts = {r["lifecycle_stage"]: r["cnt"] for r in dist}
+    gaps = []
+    for stage, threshold in LIFECYCLE_THRESHOLDS.items():
+        count = stage_counts.get(stage, 0)
+        if count < threshold:
+            gaps.append(f"{stage}: {count}/{threshold}")
+    if gaps:
+        print(f"  Lifecycle gaps: {', '.join(gaps)}")
+
+    # Sonnet vs Haiku section breakdown
+    from modules.guide_generator import CRITICAL_SECTIONS
+    print(f"\n  Section model assignment:")
+    for sec in GUIDE_SECTIONS:
+        model_label = "Sonnet" if sec["id"] in CRITICAL_SECTIONS else "Haiku"
+        print(f"    {sec['id']:<30} {model_label} ({sec['lifecycle']})")
+
+    # Estimate cost
+    print(f"\n  Estimated cost: ~$1.50-3.00 (gap analysis + guide gen + validation)")
+
+    if dry_run:
+        print("\n--- DRY RUN --- (no API calls made)")
+        db.close()
+        return
+
+    # Backup before generation
+    db.backup(cfg.get("backup_dir", "data/backups"), cfg.get("max_backups", 10))
+    run_id = db.start_run("generate_from_data", topic_id)
+
+    if topic.get("status") not in ("guide_ready", "drafting", "review", "published"):
+        topic["status"] = "researching"
+        save_registry(topics, registry_path)
+
+    # Phase 4: Gap analysis on existing findings
+    findings = db.get_findings_by_topic(topic_id, limit=2000)
+    print(f"\nPhase 4: Gap analysis ({len(findings)} findings)...")
+    t0 = time.time()
+    gap_queries = analyze_gaps(
+        diagnosis, findings, GUIDE_SECTIONS,
+        cfg["anthropic_api_key"],
+        cfg.get("query_expansion_model", "claude-haiku-4-5-20251001"),
+        cost=cost,
+    )
+    stats_gap = {"queries_total": 0, "raw_results": 0, "after_dedup": 0,
+                 "after_enrichment": 0, "discarded": 0}
+    if gap_queries:
+        print(f"  {len(gap_queries)} gap-filling queries -- running targeted search...")
+        stats_gap = _search_and_enrich(
+            gap_queries, topic_id, diagnosis, cfg, db, run_id,
+            label="Gap fill -- ", cost=cost,
+        )
+    phase_timings.append({"phase": 4, "name": "gap-analysis", "duration": time.time() - t0,
+                          "detail": f"+{stats_gap['after_enrichment']} findings"})
+    _save_checkpoint(db, topic_id, run_id, 4, "complete", cost, t0)
+
+    # Phase 5: Cross-verification -- skip (no discovery knowledge_map in data-first mode)
+    print("\nPhase 5: Cross-verification -- skipped (no discovery in data-first mode)")
+    cv_report_text = ""
+
+    # Phase 6: Guide generation (Haiku + Sonnet for critical sections)
+    findings = db.get_findings_by_topic(topic_id, limit=2000)
+    guides_dir = cfg.get("guides_dir", "data/guides")
+    output_path = os.path.join(guides_dir, f"{topic_id}.md")
+    guide_backup_dir = os.path.join(cfg.get("backup_dir", "data/backups"), "guides")
+    critical_model = cfg.get("critical_guide_model", cfg.get("discovery_model", "claude-sonnet-4-6"))
+
+    print(f"\nPhase 6: Generating guide ({len(findings)} findings, critical sections with Sonnet)...")
+    t0 = time.time()
+    generate_guide(
+        diagnosis, findings, output_path,
+        cfg["anthropic_api_key"], cfg.get("guide_model", "claude-haiku-4-5-20251001"),
+        critical_model=critical_model,
+        cross_verify_report=cv_report_text,
+    )
+    if not os.path.exists(output_path):
+        _abort("guide_generation", "guide file not created")
+    guide_size_kb = os.path.getsize(output_path) / 1024
+    if guide_size_kb < 10:
+        _abort("guide_generation", f"guide too small: {guide_size_kb:.1f}KB (expected >= 10KB)")
+    print(f"  Guide saved: {output_path} ({guide_size_kb:.0f}KB)")
+
+    # GATE 6
+    g6_ok, g6_reason = _gate_6(output_path)
+    if not g6_ok:
+        _abort("guide_generation", g6_reason)
+
+    phase_timings.append({"phase": 6, "name": "guide-gen", "duration": time.time() - t0,
+                          "detail": f"{guide_size_kb:.0f}KB"})
+    _save_checkpoint(db, topic_id, run_id, 6, "complete", cost, t0)
+
+    # Backup guide
+    os.makedirs(guide_backup_dir, exist_ok=True)
+    shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
+
+    # Phase 7: Validation + refinement
+    validation_model = cfg.get("validation_model", "claude-sonnet-4-6")
+    haiku_model = cfg.get("guide_model", "claude-haiku-4-5-20251001")
+    max_val_rounds = cfg.get("max_validation_rounds", 2)
+    val_result = {"passed": False, "learnings": []}
+
+    if cost.has_budget(reserve_usd=1.00):
+        guide_text = open(output_path).read()
+        t0 = time.time()
+
+        print(f"\nPhase 7: Validation + auto-correction...")
+        # In data-first mode, we pass empty knowledge_map (no discovery claims to validate against)
+        val_result = refine_guide(
+            guide_text=guide_text,
+            diagnosis=diagnosis,
+            knowledge_map={},
+            api_key=cfg["anthropic_api_key"],
+            sonnet_model=validation_model,
+            haiku_model=haiku_model,
+            cost=cost,
+            max_rounds=max_val_rounds,
+        )
+        refined_text = val_result.get("guide_text", guide_text)
+        patches = val_result.get("patches_applied", [])
+        lang_count = val_result.get("language_issues_found", 0)
+        med_count = val_result.get("medical_corrections_applied", 0)
+
+        print(f"  Score: {val_result.get('overall_score', '?')}/10, Passed: {val_result['passed']}")
+        print(f"  Language issues fixed: {lang_count}, Medical corrections: {med_count}")
+        if patches:
+            print(f"  Patches applied: {len(patches)}")
+            for p in patches[:5]:
+                print(f"    {p}")
+
+        # Save corrected guide
+        if patches and refined_text != guide_text:
+            with open(output_path, "w") as f:
+                f.write(refined_text)
+            guide_text = refined_text
+            shutil.copy2(output_path, os.path.join(guide_backup_dir, f"{topic_id}.md"))
+            logger.info(f"Saved corrected guide to {output_path}")
+
+        phase_timings.append({"phase": 7, "name": "validation", "duration": time.time() - t0,
+                              "detail": f"score {val_result.get('overall_score', '?')}/10"})
+        _save_checkpoint(db, topic_id, run_id, 7, "complete", cost, t0)
+    else:
+        print("\nPhase 7: Validation -- skipped (insufficient budget)")
+
+    # Phase 8: Generate human review checklist
+    review_path = os.path.join(guides_dir, f"{topic_id}-review.md")
+    _generate_review_checklist(
+        review_path, topic_id, diagnosis, val_result, cv_report_text,
+        findings_count=len(findings),
+        cost_report=cost.report(),
+    )
+    print(f"  Review checklist: {review_path}")
+
+    # Phase 9: Skill self-improvement
+    learnings = val_result.get("learnings", [])
+    if learnings:
+        print(f"\nPhase 9: Updating skills with {len(learnings)} learnings...")
+        skills_dir = os.path.join(os.path.dirname(__file__), "..", "..", ".claude", "skills")
+        skills_dir = os.path.abspath(skills_dir)
+        append_learnings(os.path.join(skills_dir, "oncologist.md"), learnings)
+        append_learnings(os.path.join(skills_dir, "patient-advocate.md"), learnings)
+
+    # Finish
+    duration = time.time() - start_time
+    stats = {"queries_total": stats_gap["queries_total"],
+             "after_enrichment": stats_gap["after_enrichment"],
+             "duration_seconds": round(duration, 1)}
+    db.finish_run(run_id, stats)
+
+    # Update registry
+    topic["status"] = "guide_ready"
+    topic["last_researched"] = datetime.now().strftime("%Y-%m-%d")
+    save_registry(topics, registry_path)
+
+    # Read final guide for dashboard
+    section_count = 0
+    if os.path.exists(output_path):
+        guide_size_kb = os.path.getsize(output_path) / 1024
+        with open(output_path) as f:
+            content = f.read()
+        section_count = content.count("\n## ")
+
+    _print_dashboard(
+        topic_id=topic_id, mode="generate-from-data", duration=duration,
+        cost_report=cost.report(), phases=phase_timings,
+        findings_count=len(findings), guide_size_kb=guide_size_kb,
+        section_count=section_count,
+        status="guide_ready" if val_result.get("passed") else "guide_needs_review",
+    )
+
+    db.close()
 
 
 # ── v6: Seed import ──────────────────────────────────────────────────
@@ -1026,6 +1464,10 @@ def main():
     parser.add_argument("--since", type=str, default="30d", help="Look back period for updates (e.g., 30d)")
     parser.add_argument("--list-topics", action="store_true", help="List all topics")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be executed without API calls")
+    parser.add_argument("--generate-from-data", action="store_true",
+        help="Generate guide from existing DB findings (skip discovery/search)")
+    parser.add_argument("--force-phase", type=int, default=None,
+        help="Force re-execution of a specific phase (ignores checkpoint)")
     parser.add_argument("--seed", action="store_true", help="Import seed data from existing DBs")
     parser.add_argument("--seed-cna-path", type=str,
         default="/Users/dorins/Documents/cancer-news-agent/data/ret_findings_v3.db",
@@ -1055,8 +1497,11 @@ def main():
             print("ERROR: --reclassify requires --topic")
             sys.exit(1)
         cmd_reclassify(cfg, args.topic)
+    elif args.topic and args.generate_from_data:
+        cmd_generate_from_data(cfg, args.topic, args.registry, args.dry_run)
     elif args.topic:
-        cmd_topic(cfg, args.topic, args.registry, args.dry_run)
+        cmd_topic(cfg, args.topic, args.registry, args.dry_run,
+                  force_phase=args.force_phase)
     elif args.update_all:
         cmd_update_all(cfg, args.since, args.registry)
     else:

@@ -169,6 +169,9 @@ source .venv/bin/activate  # Python venv with all deps
 python run_research.py --init                              # Initialize database
 python run_research.py --topic "topic-id"                  # Full research pipeline
 python run_research.py --topic "topic-id" --dry-run        # Discovery + extraction, no search/DB
+python run_research.py --topic "topic-id" --generate-from-data          # Generate guide from existing findings (skip discovery/search)
+python run_research.py --topic "topic-id" --generate-from-data --dry-run  # Preview findings distribution + cost estimate
+python run_research.py --topic "topic-id" --force-phase 6  # Force re-run of a specific phase (ignores checkpoint)
 python run_research.py --update-all --since 30d            # Update all published topics
 python run_research.py --list-topics                       # List topics from registry
 python run_research.py --seed --topic "topic-id"           # Import seed data from existing DBs (v6, title_english fallback)
@@ -213,10 +216,12 @@ topics/
   registry.yaml                — Topic definitions (diagnosis only, committed to git)
 ```
 
-### Data Flow (v4+)
+### Data Flow (v6)
 
-0. Pre-search: 20 template queries (zero AI) + ~20 Haiku complement queries, search all 5 backends, enrich with Haiku, top 50 findings formatted as context for discovery
-1. Diagnosis from `topics/registry.yaml` (no hardcoded search queries)
+**Full pipeline** (`--topic`):
+
+0. Health check: DB accessible, topic exists, disk space > 100MB
+1. Pre-search: 20 template queries (zero AI) + ~20 Haiku complement queries, search all 5 backends, enrich with Haiku, top 50 findings formatted as context for discovery
 2. Discovery loop (Sonnet): oncologist (grounded with pre-search findings) <-> advocate iterate using Q1-Q8 lifecycle structure until all Q1-Q8 score >= 8.5/10. Abort if knowledge_map < 3 keys.
 3. Keyword extraction (Sonnet): methodologist extracts lifecycle-tagged queries (Q1-Q9) from conversation with per-stage minimums. Abort if < 80 queries.
 4. Search round 1: 5 backends execute queries + enrichment (Haiku, now outputs lifecycle_stage per finding). Abort if < 20 findings.
@@ -227,6 +232,11 @@ topics/
 9. Human review checklist: generates `data/guides/{topic-id}-review.md` with safety concerns, accuracy issues, cross-verification discrepancies, section scores, and reviewer questions
 10. Skill self-improvement: learnings written back to skill files
 11. Output: `data/guides/{topic-id}.md` + `data/guides/{topic-id}-review.md`
+12. Pipeline dashboard: post-run summary with per-phase timing, cost, findings, guide size
+
+**Data-first pipeline** (`--generate-from-data`): For topics with >= 200 existing findings, skips phases 1-4 (discovery/search) and goes directly to gap analysis -> guide generation -> validation. Used for RET Fusion (3473 seeded findings).
+
+**Checkpoint/resume**: Each phase saves state to `pipeline_state` table. On re-run, pipeline resumes from last completed phase. Use `--force-phase N` to re-run a specific phase.
 
 ### Topic Workflow
 
