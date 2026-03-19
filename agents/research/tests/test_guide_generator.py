@@ -547,3 +547,37 @@ def test_route_to_section_mapping():
     expected = {"dosing", "side-effects", "interactions", "monitoring",
                 "emergency", "daily-life", "access"}
     assert set(ROUTE_TO_SECTION.keys()) == expected
+
+
+# ── Section scope expansion ──
+
+def test_section_scope_expert_centers():
+    """understanding-diagnosis should mention expert centers for molecular testing."""
+    section = next(s for s in GUIDE_SECTIONS if s["id"] == "understanding-diagnosis")
+    desc = section["description"].lower()
+    assert "expert" in desc or "center" in desc or "where to get" in desc, \
+        "understanding-diagnosis should guide patients to expert centers for molecular testing"
+
+
+def test_section_scope_monitoring_advanced_diagnostics():
+    """monitoring should mention advanced diagnostics beyond standard labs."""
+    section = next(s for s in GUIDE_SECTIONS if s["id"] == "monitoring")
+    desc = section["description"].lower()
+    assert "imaging" in desc or "advanced" in desc, \
+        "monitoring should cover advanced diagnostic technologies"
+
+
+def test_section_scope_pipeline_beyond_targeted():
+    """pipeline should cover frontier immunotherapy, vaccines, PROTACs -- not just targeted therapy."""
+    section = next(s for s in GUIDE_SECTIONS if s["id"] == "pipeline")
+    desc = section["description"].lower()
+    assert "immunotherapy" in desc or "vaccine" in desc or "frontier" in desc, \
+        "pipeline should prompt for frontier tech beyond targeted therapy inhibitors"
+
+
+def test_section_scope_daily_life_supportive_care():
+    """daily-life should mention bone health and supportive care protocols."""
+    section = next(s for s in GUIDE_SECTIONS if s["id"] == "daily-life")
+    desc = section["description"].lower()
+    assert "supportive" in desc or "bone" in desc, \
+        "daily-life should cover supportive care (bone health, Xgeva, etc.)"

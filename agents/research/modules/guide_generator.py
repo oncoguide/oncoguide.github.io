@@ -34,7 +34,7 @@ GUIDE_SECTIONS = [
         "id": "understanding-diagnosis",
         "title": "WHAT YOU HAVE -- UNDERSTANDING YOUR DIAGNOSIS",
         "lifecycle": "Q1",
-        "description": "What this diagnosis means exactly. Molecular testing, staging, subtypes and why they matter. Real prognosis with numbers.",
+        "description": "What this diagnosis means exactly. Molecular testing, staging, subtypes and why they matter. Real prognosis with numbers. Where to get expert molecular testing (academic centers, reference labs). Second opinion value.",
     },
     {
         "id": "best-treatment",
@@ -70,7 +70,7 @@ GUIDE_SECTIONS = [
         "id": "monitoring",
         "title": "WHAT MONITORING YOU NEED",
         "lifecycle": "Q3-monitoring",
-        "description": "Table: test | frequency | why | what to watch. ECG, liver, glucose, thyroid, creatinine. Include liquid biopsy/ctDNA if relevant for this diagnosis.",
+        "description": "Table: test | frequency | why | what to watch. ECG, liver, glucose, thyroid, creatinine. Include liquid biopsy/ctDNA if relevant for this diagnosis. Advanced imaging technologies (PCCT, PET/CT innovations). AI-assisted pathology if emerging.",
     },
     {
         "id": "emergency-signs",
@@ -94,13 +94,13 @@ GUIDE_SECTIONS = [
         "id": "pipeline",
         "title": "WHAT'S COMING -- PIPELINE AND TRIALS",
         "lifecycle": "Q6",
-        "description": "Per drug in development: table: drug | phase | mechanism | timeline | targets resistance? Active clinical trials with NCT, locations, eligibility. Realistic hope, not hype.",
+        "description": "Per drug in development: table: drug | phase | mechanism | timeline | targets resistance? Include frontier immunotherapy, vaccine platforms, PROTACs, bispecifics, CAR-T -- not just next-gen inhibitors. Active clinical trials with NCT, locations, eligibility. Realistic hope, not hype.",
     },
     {
         "id": "daily-life",
         "title": "DAILY LIFE",
         "lifecycle": "Q3-daily",
-        "description": "Nutrition (specific, evidence-based). Exercise. Fatigue management. Work, travel, relationships. Psychological support. Sexuality and fertility. Realistic timeline: Week 1-2, Month 1-3, Month 3-12, Year 1-2.",
+        "description": "Nutrition (specific, evidence-based). Exercise. Fatigue management. Supportive care protocols (bone health, dental, vitamin D). Work, travel, relationships. Psychological support. Sexuality and fertility. Realistic timeline: Week 1-2, Month 1-3, Month 3-12, Year 1-2.",
     },
     {
         "id": "treatment-access",
@@ -197,18 +197,18 @@ Notice: tables with real numbers, bold actionable rules, direct language, no fil
 
 # v6: Section briefs -- what each section MUST contain (for validation Layer 1b)
 SECTION_BRIEFS = {
-    "understanding-diagnosis": "Diagnostic explained plainly + tests + staging + prognosis with numbers",
+    "understanding-diagnosis": "Diagnostic explained plainly + tests + staging + prognosis with numbers + expert centers for molecular testing",
     "best-treatment": "Comparative treatment table with ORR/PFS/OS + ESMO/NCCN guidelines",
     "mistakes": "Min 8 mistakes in format MISTAKE/WHY DANGEROUS/WHAT TO DO INSTEAD",
     "how-to-take": "Per drug: dose, timing, food, pH, PPI -- practical table",
     "side-effects": "Per drug: table side effects with frequency %, grade, action",
     "interactions": "Table interactions (drugs, food, supplements) with action",
-    "monitoring": "Table monitoring (test, frequency, why) + liquid biopsy if relevant",
+    "monitoring": "Table monitoring (test, frequency, why) + liquid biopsy if relevant + advanced imaging",
     "emergency-signs": "Min 5 PRINTABLE checkboxes: symptom -> immediate action",
     "metastases": "Per metastasis site: frequency %, treatment, local options",
     "resistance": "Resistance mechanisms BY NAME + Plan B/C/D CONCRETE + rebiopsy",
-    "pipeline": "Table pipeline drugs (drug, phase, mechanism, timeline) + active trials NCT",
-    "daily-life": "Nutrition + exercise + fatigue + work + travel + psych + fertility + realistic timeline",
+    "pipeline": "Table pipeline drugs (drug, phase, mechanism, timeline) + frontier immunotherapy/vaccines/PROTACs + active trials NCT",
+    "daily-life": "Nutrition + exercise + fatigue + supportive care (bone health, dental) + work + travel + psych + fertility + realistic timeline",
     "treatment-access": "Per country: legal access mechanisms + financial assistance",
     "community": "Diagnosis-SPECIFIC communities with links + patient stories + caregiver support",
     "questions-for-doctor": "Min 5 questions per stage (diagnosis, treatment, progression) with context",
