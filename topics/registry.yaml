@@ -57,7 +57,7 @@ topics:
   - es
   content_file: cancer-types/pulmonar-ret-fusion.md
   created: '2026-03-15'
-  last_researched: '2026-03-17'
+  last_researched: '2026-03-19'
 - id: lung-egfr
   title: Cancer pulmonar EGFR-mutant
   type: subtype

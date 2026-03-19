@@ -207,7 +207,7 @@ agents/research/
   config.example.json          — Template (copy to config.json, fill API keys)
   config.json                  — Actual config (gitignored)
   requirements.txt             — Python dependencies
-  tests/                       — 99 unit + integration tests
+  tests/                       — 202 unit + integration tests
 data/
   research.db                  — SQLite database (gitignored)
   guides/                      — Master guide markdown per topic (gitignored)
@@ -227,7 +227,14 @@ topics/
 4. Search round 1: 5 backends execute queries + enrichment (Haiku, now outputs lifecycle_stage per finding). Abort if < 20 findings.
 5. Gap analysis + search round 2 (Haiku): fill weak lifecycle stages (thresholds per Q1-Q8). Pipeline gates (G0-G3) check at each phase -- G3 hard-stops at < 20 findings.
 6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
-7. Guide generation (Haiku + Sonnet): lifecycle-filtered, 16 sections; each section receives only findings matching its lifecycle_stage (no planner call, no findings cap). 4 critical sections (mistakes, side-effects, emergency-signs, resistance) use Sonnet, 12 non-critical use Haiku. Authority hierarchy: prefer Authority 4-5 sources for citations.
+7. Guide generation (Haiku + Sonnet): v6.1 smart pipeline:
+   a. Section assignment: `_assign_findings_to_sections()` -- Q3 findings routed via Haiku AI to 7 categories (dosing, side-effects, interactions, monitoring, emergency, daily-life, access); non-Q3 assigned by lifecycle prefix. Q9 -> Section 16 (guidelines).
+   b. Smart grouping: `_group_findings_by_topic()` -- sections with >= 500 findings clustered by Haiku AI into 8-12 topic groups (fallback: authority-tier grouping).
+   c. Tiered formatting: `_format_grouped_findings()` -- Tier 1 (top 15-20 per group): full detail with URL + authority; Tier 2: summary only; respects 180K token budget (Tier 1 exempt).
+   d. Expert skills: oncologist + advocate skill context loaded into system prompts. Anti-hallucination rules injected into every section.
+   e. Section generation: 4 critical sections (mistakes, side-effects, emergency-signs, resistance) use Sonnet, 12 non-critical use Haiku. Section 15 (questions) generated from prior section text, not findings. Section 16 uses Q9 findings.
+   f. Post-generation: `verify_section_citations()` per section catches phantom citations, ungrounded numbers, uncited statistics.
+   g. Retry: `TokenBudgetExceeded` triggers one retry with halved budget (90K tokens). Failed critical sections flag guide as UNSAFE.
 8. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found
 9. Human review checklist: generates `data/guides/{topic-id}-review.md` with safety concerns, accuracy issues, cross-verification discrepancies, section scores, and reviewer questions
 10. Skill self-improvement: learnings written back to skill files
@@ -317,7 +324,7 @@ When modifying files in the left column, you MUST also update the files in the r
 | `run_research.py` (phases, flow, CLI args) | This file ("Data Flow" + "CLI Commands") + `.claude/skills/research.md` |
 | `discovery.py` (prompts, params, rounds) | `.claude/skills/oncologist.md` (Learnings section) |
 | `validation.py` (prompts, output format) | `.claude/skills/oncologist.md` + `.claude/skills/patient-advocate.md` |
-| `guide_generator.py` (sections, models) | This file ("Content Architecture") + `archetypes/master-guide-template.md` |
+| `guide_generator.py` (sections, models) | This file ("Content Architecture") + `archetypes/master-guide-template.md` + `docs/architecture.md` |
 | `cross_verify.py` (prompts, thresholds) | This file ("Data Flow") + `guide_generator.py` (if report format changes) |
 | `enrichment.py` (output fields) | This file ("Data Flow") + `database.py` (schema if new column) |
 | `topics/registry.yaml` (fields, statuses) | This file ("Topic Workflow") |
