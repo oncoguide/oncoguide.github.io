@@ -455,6 +455,11 @@ select:focus-visible {
   to { opacity: 1; }
 }
 
+/* --- Homepage: remove min-height gap when only hero is shown --- */
+.main:has(.home-hero:only-child) {
+  min-height: auto;
+}
+
 /* --- Hero section --- */
 .home-hero {
   text-align: center;
