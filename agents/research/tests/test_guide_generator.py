@@ -3,48 +3,117 @@ import os
 import pytest
 from unittest.mock import patch, MagicMock, Mock, call
 
-from modules.guide_generator import generate_guide, CRITICAL_SECTIONS, SECTION_BRIEFS, GUIDE_SECTIONS
-
-
-def _mock_tool_use(input_dict):
-    """Helper: create a mock message with tool_use content (planner responses)."""
-    mock_tool = Mock()
-    mock_tool.type = "tool_use"
-    mock_tool.input = input_dict
-    mock_msg = Mock()
-    mock_msg.content = [mock_tool]
-    mock_msg.usage = Mock(input_tokens=100, output_tokens=50)
-    return mock_msg
+from modules.guide_generator import (
+    generate_guide, CRITICAL_SECTIONS, SECTION_BRIEFS, GUIDE_SECTIONS,
+    _build_findings_text, _filter_findings_for_section, _get_lifecycle_prefixes,
+)
 
 
 def _mock_text(text="Section content here"):
-    """Helper: create a mock message with text content (section generation responses)."""
+    """Helper: create a mock message with text content."""
     return MagicMock(
         content=[MagicMock(text=text)],
         usage=MagicMock(input_tokens=100, output_tokens=50),
     )
 
 
-_SINGLE_SECTION_PLAN = {
-    "sections": [
-        {"id": "understanding-diagnosis", "title": "Understanding Diagnosis", "description": "Overview section.", "finding_ids": [1]},
-    ]
-}
+# ── Lifecycle filtering ──
 
+def test_get_lifecycle_prefixes_simple():
+    assert _get_lifecycle_prefixes("Q1") == ["Q1"]
+    assert _get_lifecycle_prefixes("Q5") == ["Q5"]
+
+
+def test_get_lifecycle_prefixes_sub_stage():
+    assert _get_lifecycle_prefixes("Q3-dosing") == ["Q3"]
+    assert _get_lifecycle_prefixes("Q3-effects") == ["Q3"]
+
+
+def test_get_lifecycle_prefixes_multi_stage():
+    prefixes = _get_lifecycle_prefixes("Q3-access+Q9")
+    assert "Q3" in prefixes
+    assert "Q9" in prefixes
+
+
+def test_get_lifecycle_prefixes_derived():
+    prefixes = _get_lifecycle_prefixes("Q1-Q8-derived")
+    assert len(prefixes) == 9  # Q1 through Q9
+
+
+def test_filter_findings_for_section():
+    findings = [
+        {"lifecycle_stage": "Q1", "authority_score": 3, "relevance_score": 8},
+        {"lifecycle_stage": "Q2", "authority_score": 5, "relevance_score": 9},
+        {"lifecycle_stage": "Q3", "authority_score": 4, "relevance_score": 7},
+        {"lifecycle_stage": "Q5", "authority_score": 2, "relevance_score": 6},
+    ]
+    # Q2 section should only get Q2 findings
+    q2_findings = _filter_findings_for_section(findings, "Q2")
+    assert len(q2_findings) == 1
+    assert q2_findings[0]["lifecycle_stage"] == "Q2"
+
+
+def test_filter_findings_multi_stage():
+    findings = [
+        {"lifecycle_stage": "Q3", "authority_score": 3, "relevance_score": 8},
+        {"lifecycle_stage": "Q9", "authority_score": 5, "relevance_score": 9},
+        {"lifecycle_stage": "Q1", "authority_score": 4, "relevance_score": 7},
+    ]
+    # Q3-access+Q9 should match Q3 and Q9
+    matched = _filter_findings_for_section(findings, "Q3-access+Q9")
+    assert len(matched) == 2
+    stages = {f["lifecycle_stage"] for f in matched}
+    assert stages == {"Q3", "Q9"}
+
+
+def test_filter_findings_sorted_by_authority():
+    findings = [
+        {"lifecycle_stage": "Q2", "authority_score": 1, "relevance_score": 9},
+        {"lifecycle_stage": "Q2", "authority_score": 5, "relevance_score": 7},
+        {"lifecycle_stage": "Q2", "authority_score": 3, "relevance_score": 8},
+    ]
+    filtered = _filter_findings_for_section(findings, "Q2")
+    assert filtered[0]["authority_score"] == 5
+    assert filtered[1]["authority_score"] == 3
+    assert filtered[2]["authority_score"] == 1
+
+
+def test_filter_findings_derived_gets_all():
+    findings = [
+        {"lifecycle_stage": f"Q{i}", "authority_score": 3, "relevance_score": 8}
+        for i in range(1, 9)
+    ]
+    matched = _filter_findings_for_section(findings, "Q1-Q8-derived")
+    assert len(matched) == 8
+
+
+# ── Findings text ──
+
+def test_findings_text_includes_authority_and_lifecycle():
+    findings = [
+        {"title_english": "LIBRETTO-431 Phase III", "summary_english": "Phase III",
+         "source_url": "https://nejm.org/1", "relevance_score": 9, "authority_score": 5,
+         "lifecycle_stage": "Q2"},
+    ]
+    text = _build_findings_text(findings)
+    assert "Authority: 5/5" in text
+    assert "Stage: Q2" in text
+
+
+# ── Guide generation ──
 
 @patch("modules.guide_generator.api_call")
 def test_generates_markdown_file(mock_api_call, tmp_path):
-    # First call = planner (tool use), section generators (text), then executive summary (text)
-    mock_api_call.side_effect = [
-        _mock_tool_use(_SINGLE_SECTION_PLAN),
-        _mock_text("# Test Guide\n\n## Summary\nTest content"),
-        _mock_text("You have a diagnosis. There is treatment. Here is what to do."),
-    ]
+    # 16 section calls + 1 executive summary = 17 calls (no planner)
+    mock_api_call.return_value = _mock_text("Section content here")
+
     findings = [
         {"title_english": "Finding 1", "summary_english": "Summary 1",
-         "source_url": "https://example.com/1", "relevance_score": 9},
+         "source_url": "https://example.com/1", "relevance_score": 9,
+         "lifecycle_stage": "Q1", "authority_score": 3},
         {"title_english": "Finding 2", "summary_english": "Summary 2",
-         "source_url": "https://example.com/2", "relevance_score": 7},
+         "source_url": "https://example.com/2", "relevance_score": 7,
+         "lifecycle_stage": "Q2", "authority_score": 4},
     ]
     output_path = str(tmp_path / "test-guide.md")
     generate_guide(
@@ -57,6 +126,8 @@ def test_generates_markdown_file(mock_api_call, tmp_path):
     content = open(output_path).read()
     assert len(content) > 0
     assert "BEFORE ANYTHING ELSE" in content
+    # No planner call -- should be 16 sections + 1 exec summary = 17 calls
+    # (some sections may have 0 findings, but still generate a placeholder)
 
 
 def test_no_findings_no_guide(tmp_path):
@@ -70,22 +141,7 @@ def test_no_findings_no_guide(tmp_path):
     assert not os.path.exists(output_path)
 
 
-def test_findings_text_includes_authority_score():
-    """Guide generator should include authority_score in the findings text passed to Claude."""
-    from modules.guide_generator import _build_findings_text
-    findings = [
-        {"title_english": "LIBRETTO-431 Phase III", "summary_english": "Phase III",
-         "source_url": "https://nejm.org/1", "relevance_score": 9, "authority_score": 5},
-        {"title_english": "Blog post", "summary_english": "Some info",
-         "source_url": "https://blog.com/1", "relevance_score": 6, "authority_score": 1},
-    ]
-    text = _build_findings_text(findings)
-    assert "Authority: 5/5" in text
-    assert "Authority: 1/5" in text
-
-
 def test_critical_sections_defined():
-    """Critical sections list should contain exactly the 4 safety-critical section IDs."""
     assert "mistakes" in CRITICAL_SECTIONS
     assert "side-effects" in CRITICAL_SECTIONS
     assert "emergency-signs" in CRITICAL_SECTIONS
@@ -94,16 +150,76 @@ def test_critical_sections_defined():
 
 
 @patch("modules.guide_generator.api_call")
-def test_section_planner_uses_tool_call(mock_api_call, tmp_path):
-    """Section planner must use tool_choice to guarantee structured output."""
-    mock_api_call.side_effect = [
-        _mock_tool_use(_SINGLE_SECTION_PLAN),
-        _mock_text(),
-        _mock_text("Executive summary"),  # exec summary
-    ]
+def test_critical_sections_use_sonnet(mock_api_call, tmp_path):
+    """Critical sections should use critical_model (Sonnet), others Haiku."""
+    models_used = []
+
+    def track_model(client, **kwargs):
+        models_used.append(kwargs.get("model", "unknown"))
+        return _mock_text("Section content here")
+
+    mock_api_call.side_effect = track_model
+
+    # Provide findings for Q1 (non-critical) and Q7 (critical=mistakes)
     findings = [
         {"title_english": "F1", "summary_english": "S1",
-         "source_url": "https://example.com/1", "relevance_score": 9},
+         "source_url": "https://example.com/1", "relevance_score": 9,
+         "authority_score": 5, "lifecycle_stage": "Q1"},
+        {"title_english": "F2", "summary_english": "S2",
+         "source_url": "https://example.com/2", "relevance_score": 8,
+         "authority_score": 4, "lifecycle_stage": "Q7"},
+        {"title_english": "F3", "summary_english": "S3",
+         "source_url": "https://example.com/3", "relevance_score": 7,
+         "authority_score": 3, "lifecycle_stage": "Q5"},
+        {"title_english": "F4", "summary_english": "S4",
+         "source_url": "https://example.com/4", "relevance_score": 7,
+         "authority_score": 3, "lifecycle_stage": "Q3"},
+    ]
+    generate_guide(
+        topic_title="Test Cancer",
+        findings=findings,
+        output_path=str(tmp_path / "split-guide.md"),
+        api_key="fake-key",
+        model="claude-haiku-4-5-20251001",
+        critical_model="claude-sonnet-4-6",
+    )
+
+    assert "claude-sonnet-4-6" in models_used, f"Sonnet not used. Models: {models_used}"
+    assert "claude-haiku-4-5-20251001" in models_used, f"Haiku not used. Models: {models_used}"
+
+
+@patch("modules.guide_generator.api_call")
+def test_cross_verify_report_passed_to_sections(mock_api_call, tmp_path):
+    """Cross-verification report should be included in section generation prompts."""
+    mock_api_call.return_value = _mock_text("Section content here")
+
+    findings = [
+        {"title_english": "F1", "summary_english": "S1",
+         "source_url": "https://example.com/1", "relevance_score": 9,
+         "lifecycle_stage": "Q1", "authority_score": 3},
+    ]
+    report = "CONTRADICTED: PFS 24.8mo -> USE Finding 7: PFS 22.0mo"
+    generate_guide(
+        topic_title="Test",
+        findings=findings,
+        output_path=str(tmp_path / "cv-guide.md"),
+        api_key="fake-key",
+        cross_verify_report=report,
+    )
+
+    found = any("CONTRADICTED" in str(c) for c in mock_api_call.call_args_list)
+    assert found, "Cross-verification report not found in any API call"
+
+
+@patch("modules.guide_generator.api_call")
+def test_no_planner_call(mock_api_call, tmp_path):
+    """v6: No planner call -- no tool_choice in any API call."""
+    mock_api_call.return_value = _mock_text("Content")
+
+    findings = [
+        {"title_english": "F1", "summary_english": "S1",
+         "source_url": "https://example.com/1", "relevance_score": 9,
+         "lifecycle_stage": "Q2", "authority_score": 4},
     ]
     generate_guide(
         topic_title="Test",
@@ -111,98 +227,22 @@ def test_section_planner_uses_tool_call(mock_api_call, tmp_path):
         output_path=str(tmp_path / "out.md"),
         api_key="fake-key",
     )
-    # First call is the planner
-    planner_kwargs = mock_api_call.call_args_list[0][1]
-    assert planner_kwargs["tool_choice"] == {"type": "tool", "name": "submit_section_plan"}
 
-
-@patch("modules.guide_generator.api_call")
-def test_critical_sections_use_sonnet(mock_api_call, tmp_path):
-    """Critical sections should be generated with the critical_model (Sonnet), others with Haiku."""
-    # Track which model is used for each call
-    models_used = []
-    call_count = [0]
-
-    # Planner returns 2 sections: one non-critical, one critical
-    planner_sections = {
-        "sections": [
-            {"id": "understanding-diagnosis", "title": "Understanding Diagnosis", "description": "Overview.", "finding_ids": [1]},
-            {"id": "mistakes", "title": "Mistakes", "description": "Critical mistakes.", "finding_ids": [1]},
-        ]
-    }
-
-    def track_model(client, **kwargs):
-        models_used.append(kwargs.get("model", "unknown"))
-        call_count[0] += 1
-        # First call is planner (tool use), rest are section generators (text)
-        if call_count[0] == 1:
-            return _mock_tool_use(planner_sections)
-        return _mock_text("Section content here")
-
-    mock_api_call.side_effect = track_model
-
-    findings = [
-        {"title_english": "F1", "summary_english": "S1",
-         "source_url": "https://example.com/1", "relevance_score": 9, "authority_score": 5},
-    ]
-    output_path = str(tmp_path / "split-guide.md")
-    generate_guide(
-        topic_title="Test Cancer",
-        findings=findings,
-        output_path=output_path,
-        api_key="fake-key",
-        model="claude-haiku-4-5-20251001",
-        critical_model="claude-sonnet-4-6",
-    )
-
-    # First call is the planner (uses base model), then 2 section calls
-    # Check that Sonnet was used at least once (for critical sections)
-    assert "claude-sonnet-4-6" in models_used, f"Sonnet not used. Models: {models_used}"
-    # Check that Haiku was used for non-critical sections
-    assert "claude-haiku-4-5-20251001" in models_used, f"Haiku not used. Models: {models_used}"
-
-
-@patch("modules.guide_generator.api_call")
-def test_cross_verify_report_passed_to_sections(mock_api_call, tmp_path):
-    """Cross-verification report should be included in section generation prompts."""
-    # planner + section generator + executive summary
-    mock_api_call.side_effect = [
-        _mock_tool_use(_SINGLE_SECTION_PLAN),
-        _mock_text("Section content here"),
-        _mock_text("Executive summary"),
-    ]
-
-    findings = [
-        {"title_english": "F1", "summary_english": "S1",
-         "source_url": "https://example.com/1", "relevance_score": 9},
-    ]
-    output_path = str(tmp_path / "cv-guide.md")
-    report = "CONTRADICTED: PFS 24.8mo -> USE Finding 7: PFS 22.0mo"
-    generate_guide(
-        topic_title="Test",
-        findings=findings,
-        output_path=output_path,
-        api_key="fake-key",
-        cross_verify_report=report,
-    )
-
-    # Check that the report text appears in at least one of the section generation calls
-    found = any("CONTRADICTED" in str(c) for c in mock_api_call.call_args_list)
-    assert found, "Cross-verification report not found in any API call"
+    # No call should use tool_choice (planner removed)
+    for c in mock_api_call.call_args_list:
+        kwargs = c[1] if len(c) > 1 else {}
+        assert "tool_choice" not in kwargs, f"Unexpected tool_choice in call: {kwargs}"
 
 
 def test_section_briefs_cover_all_sections():
-    """Every section in GUIDE_SECTIONS must have a brief."""
     for s in GUIDE_SECTIONS:
         assert s["id"] in SECTION_BRIEFS, f"Missing brief for section: {s['id']}"
 
 
 def test_guide_sections_count_16():
-    """GUIDE_SECTIONS must have exactly 16 sections."""
     assert len(GUIDE_SECTIONS) == 16
 
 
 def test_guide_sections_have_lifecycle():
-    """Every section must have a lifecycle mapping."""
     for s in GUIDE_SECTIONS:
         assert "lifecycle" in s, f"Missing lifecycle for section: {s['id']}"

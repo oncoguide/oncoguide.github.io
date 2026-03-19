@@ -55,13 +55,13 @@ MOCK_DISCOVERY_RESULT = {
 
 MOCK_QUERIES = [
     {"query_text": "selpercatinib LIBRETTO-001 ORR PFS",
-     "search_engine": "serper", "language": "en", "target_section": "best-treatment",
+     "search_engine": "serper", "language": "en", "lifecycle_stage": "Q2",
      "rationale": "Verify ORR and PFS from LIBRETTO-001"},
     {"query_text": "selpercatinib adverse events hypertension",
-     "search_engine": "pubmed", "language": "en", "target_section": "side-effects",
+     "search_engine": "pubmed", "language": "en", "lifecycle_stage": "Q3",
      "rationale": "Verify hypertension frequency"},
     {"query_text": "RET fusion NSCLC clinical trials",
-     "search_engine": "clinicaltrials", "language": "en", "target_section": "pipeline",
+     "search_engine": "clinicaltrials", "language": "en", "lifecycle_stage": "Q6",
      "rationale": "Find active trials"},
 ]
 

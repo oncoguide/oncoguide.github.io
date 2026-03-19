@@ -456,7 +456,7 @@ def _gate_6(guide_path: str) -> tuple[bool, str]:
     section_count = content.count("\n## ")
     if section_count < 16:
         return False, f"Only {section_count} sections found (need 16)"
-    if "BEFORE ANYTHING ELSE" not in content and "INAINTE DE TOATE" not in content:
+    if "BEFORE ANYTHING ELSE" not in content:
         return False, "Executive summary (BEFORE ANYTHING ELSE) not found"
     return True, ""
 
@@ -688,8 +688,8 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
     if dry_run:
         print("\n--- DRY RUN ---")
         for q in queries:
-            sec = q.get("target_section", "general")
-            print(f"  [{q['search_engine']}] [{q.get('language', 'en')}] ({sec}) {q['query_text']}")
+            ls = q.get("lifecycle_stage", "?")
+            print(f"  [{q['search_engine']}] [{q.get('language', 'en')}] ({ls}) {q['query_text']}")
         print(f"\nDiscovery rounds: {discovery['rounds']}")
         print(f"Cost so far:\n  {cost.report()}")
         return
@@ -869,7 +869,7 @@ def cmd_topic(cfg: dict, topic_id: str, registry_path: str, dry_run: bool = Fals
                 print(f"\nPhase 7: Targeted search round {val_round} ({len(missing)} keywords)...")
                 targeted_queries = [
                     {"query_text": kw, "search_engine": "serper", "language": "en",
-                     "target_section": "general"}
+                     "lifecycle_stage": "Q3"}
                     for kw in missing[:20]  # cap at 20 queries
                 ]
                 _search_and_enrich(

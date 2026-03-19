@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock, Mock
 
-from modules.gap_analyzer import analyze_gaps, _map_findings_to_sections, LIFECYCLE_THRESHOLDS
+from modules.gap_analyzer import analyze_gaps, LIFECYCLE_THRESHOLDS
 
 
 def _mock_tool_use(input_dict):
@@ -32,21 +32,6 @@ def _make_findings(stage_counts: dict) -> list[dict]:
                 "lifecycle_stage": stage,
             })
     return findings
-
-
-def test_map_findings_uses_tool_call():
-    """_map_findings_to_sections uses tool_choice (still available for planner)."""
-    mock_client = Mock()
-    mock_client.messages.create.return_value = _mock_tool_use({
-        "section_map": {"best-treatment": [0, 1, 2], "side-effects": [3, 4]}
-    })
-
-    result = _map_findings_to_sections(
-        _make_findings({"Q2": 3}), SAMPLE_SECTIONS, mock_client, "claude-haiku-4-5-20251001"
-    )
-
-    call_kwargs = mock_client.messages.create.call_args[1]
-    assert call_kwargs["tool_choice"]["name"] == "submit_section_map"
 
 
 @patch("modules.gap_analyzer.anthropic.Anthropic")

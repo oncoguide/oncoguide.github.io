@@ -227,7 +227,7 @@ topics/
 4. Search round 1: 5 backends execute queries + enrichment (Haiku, now outputs lifecycle_stage per finding). Abort if < 20 findings.
 5. Gap analysis + search round 2 (Haiku): fill weak lifecycle stages (thresholds per Q1-Q8). Pipeline gates (G0-G3) check at each phase -- G3 hard-stops at < 20 findings.
 6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
-7. Guide generation (Haiku + Sonnet): multi-pass, 16 sections; 4 critical sections (mistakes, side-effects, emergency-signs, resistance) use Sonnet, 12 non-critical use Haiku; informed by cross-verification report
+7. Guide generation (Haiku + Sonnet): lifecycle-filtered, 16 sections; each section receives only findings matching its lifecycle_stage (no planner call). 4 critical sections (mistakes, side-effects, emergency-signs, resistance) use Sonnet, 12 non-critical use Haiku; informed by cross-verification report
 8. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found
 9. Human review checklist: generates `data/guides/{topic-id}-review.md` with safety concerns, accuracy issues, cross-verification discrepancies, section scores, and reviewer questions
 10. Skill self-improvement: learnings written back to skill files

@@ -16,22 +16,6 @@ LIFECYCLE_THRESHOLDS = {
     "Q5": 10, "Q6": 8, "Q7": 5, "Q8": 3,
 }
 
-SECTION_MAP_TOOL = {
-    "name": "submit_section_map",
-    "description": "Map guide section IDs to relevant finding indices",
-    "input_schema": {
-        "type": "object",
-        "properties": {
-            "section_map": {
-                "type": "object",
-                "description": "Keys are section IDs, values are arrays of finding indices",
-                "additionalProperties": {"type": "array", "items": {"type": "integer"}},
-            }
-        },
-        "required": ["section_map"],
-    },
-}
-
 GAP_QUERIES_TOOL = {
     "name": "submit_gap_queries",
     "description": "Submit targeted queries to fill weak lifecycle stages",
@@ -79,47 +63,6 @@ Query rules:
 
 DO NOT generate queries for stages that are well-covered.
 Use the submit_gap_queries tool. If all stages are covered, submit empty queries array."""
-
-
-def _map_findings_to_sections(
-    findings: list[dict], sections: list[dict],
-    client: anthropic.Anthropic, model: str,
-    cost: Optional[CostTracker] = None,
-) -> dict:
-    """Quick mapping of existing findings to sections for gap analysis."""
-    finding_summaries = []
-    for i, f in enumerate(findings[:500], 1):
-        finding_summaries.append(
-            f"[{i}] (Score {f.get('relevance_score', '?')}) {f.get('title_english', 'N/A')}"
-        )
-    findings_text = "\n".join(finding_summaries)
-
-    sections_json = json.dumps(
-        [{"id": s["id"], "title": s["title"], "description": s["description"]}
-         for s in sections],
-        indent=2,
-    )
-
-    message = client.messages.create(
-        model=model,
-        max_tokens=4000,
-        system="Map findings to guide sections. Use the submit_section_map tool. "
-               "Keys are section IDs, values are arrays of finding numbers most relevant "
-               "to that section. Be thorough but fast -- use titles and scores to judge relevance.",
-        messages=[{
-            "role": "user",
-            "content": (
-                f"Sections:\n{sections_json}\n\n"
-                f"Findings:\n{findings_text}"
-            ),
-        }],
-        tools=[SECTION_MAP_TOOL],
-        tool_choice={"type": "tool", "name": "submit_section_map"},
-    )
-
-    if cost:
-        cost.track(model, message.usage.input_tokens, message.usage.output_tokens)
-    return message.content[0].input["section_map"]
 
 
 def analyze_gaps(
@@ -204,9 +147,6 @@ def analyze_gaps(
         gap_queries = []
         for q in gap_queries_raw:
             normalized = dict(q)
-            # lifecycle_stage -> also set target_section for backward compat
-            if "lifecycle_stage" in normalized and "target_section" not in normalized:
-                normalized["target_section"] = normalized["lifecycle_stage"]
             normalized.setdefault("language", "en")
             normalized.setdefault("lifecycle_stage", "Q3")
             gap_queries.append(normalized)

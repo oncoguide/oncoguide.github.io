@@ -164,9 +164,6 @@ def extract_queries(
         for q in queries:
             q.setdefault("lifecycle_stage", "Q3")  # default to largest stage
             q.setdefault("language", "en")
-            # backward compat: set target_section from lifecycle_stage
-            if "target_section" not in q:
-                q["target_section"] = q["lifecycle_stage"]
 
         # Log per-stage distribution
         stage_counts = {}

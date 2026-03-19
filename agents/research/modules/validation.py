@@ -234,7 +234,7 @@ def structural_qa(guide_text: str) -> dict:
                 section_ids_found.add(gs["id"])
 
     # Check: all 16 sections + executive summary present
-    has_exec = "BEFORE ANYTHING ELSE" in guide_text or "INAINTE DE TOATE" in guide_text
+    has_exec = "BEFORE ANYTHING ELSE" in guide_text
     if not has_exec:
         blocks.append("Missing executive summary (BEFORE ANYTHING ELSE)")
 
@@ -252,7 +252,7 @@ def structural_qa(guide_text: str) -> dict:
         word_count = len(body.split())
 
         # Executive summary has different limits (100-250 words per SPEC 10.4)
-        is_exec = "BEFORE ANYTHING" in title.upper() or "INAINTE DE TOATE" in title.upper()
+        is_exec = "BEFORE ANYTHING" in title.upper()
         if is_exec:
             if word_count > 250:
                 warnings.append(f"Executive summary too long: {word_count} words (max 250)")

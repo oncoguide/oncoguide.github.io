@@ -1,7 +1,8 @@
 """Generate master guide markdown from enriched findings.
 
-Multi-pass approach: first plan sections, then generate each section separately.
-This produces comprehensive, patient-focused guides (30-70KB) instead of short summaries.
+v6: Lifecycle-filtered generation. Each section receives only findings matching
+its lifecycle_stage, sorted by authority_score DESC. No planner call needed --
+lifecycle_stage from enrichment IS the mapping.
 """
 
 import logging
@@ -125,45 +126,6 @@ GUIDE_SECTIONS = [
     },
 ]
 
-SECTION_PLAN_TOOL = {
-    "name": "submit_section_plan",
-    "description": "Submit section-to-findings mapping plan for guide generation",
-    "input_schema": {
-        "type": "object",
-        "properties": {
-            "sections": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "id": {"type": "string"},
-                        "title": {"type": "string"},
-                        "finding_ids": {"type": "array", "items": {"type": "integer"}},
-                        "priority_claims": {"type": "array", "items": {"type": "string"}},
-                    },
-                    "required": ["id", "title", "finding_ids"],
-                },
-            }
-        },
-        "required": ["sections"],
-    },
-}
-
-PLANNER_SYSTEM = """You are a medical content strategist mapping research findings to a fixed guide structure.
-
-You will receive a list of 16 predefined sections and research findings.
-Your job is to assign finding numbers to each section based on relevance.
-
-Rules:
-- Use ALL 16 sections, in the order given
-- A finding can appear in multiple sections if relevant
-- If no findings are relevant to a section, set finding_ids to empty array []
-- Prioritize findings with higher relevance scores
-- Be thorough: scan ALL findings, not just the first few
-- Use the lifecycle_stage tag on findings to guide initial placement (Q1->section 1, Q2->section 2, etc.)
-
-Use the submit_section_plan tool to submit your mapping."""
-
 SECTION_SYSTEM = """You are a medical writer creating ONE section of a comprehensive patient guide
 for an oncology education blog (OncoGuide).
 
@@ -265,57 +227,70 @@ GUIDE_HEADER = """# {title} -- Master Guide
 """
 
 
-def _build_findings_text(findings: list[dict]) -> str:
+# ── v6: Lifecycle-based finding filtering ───────────────────────────
+
+def _get_lifecycle_prefixes(lifecycle: str) -> list[str]:
+    """Get all lifecycle_stage prefixes that match a section's lifecycle tag.
+
+    Section lifecycle tags like "Q3-dosing" match findings with lifecycle_stage
+    "Q3" (parent) plus any Q3-* sub-stage. Special cases:
+    - "Q3-access+Q9" matches Q3, Q3-access, Q9
+    - "Q1-Q8-derived" matches ALL stages (questions-for-doctor needs full context)
+    - "Q2-guidelines" matches Q2
+    """
+    if lifecycle == "Q1-Q8-derived":
+        # Questions-for-doctor needs a sample from all stages
+        return ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9"]
+    if "+" in lifecycle:
+        # Multi-stage: "Q3-access+Q9" -> ["Q3", "Q9"]
+        parts = lifecycle.split("+")
+        prefixes = []
+        for part in parts:
+            base = part.split("-")[0]  # "Q3-access" -> "Q3"
+            if base not in prefixes:
+                prefixes.append(base)
+        return prefixes
+    # Single stage: "Q3-dosing" -> "Q3", "Q7" -> "Q7"
+    base = lifecycle.split("-")[0]
+    return [base]
+
+
+def _filter_findings_for_section(
+    findings: list[dict], lifecycle: str
+) -> list[dict]:
+    """Filter findings matching a section's lifecycle, sorted by authority DESC."""
+    prefixes = _get_lifecycle_prefixes(lifecycle)
+
+    matching = [
+        f for f in findings
+        if any(
+            (f.get("lifecycle_stage") or "").startswith(prefix)
+            for prefix in prefixes
+        )
+    ]
+
+    # Sort by authority_score DESC, then relevance_score DESC
+    matching.sort(
+        key=lambda f: (f.get("authority_score", 0), f.get("relevance_score", 0)),
+        reverse=True,
+    )
+
+    return matching
+
+
+def _build_findings_text(findings: list[dict], start_index: int = 1) -> str:
     """Build formatted findings text for Claude context."""
     parts = []
-    for i, f in enumerate(findings, 1):
+    for i, f in enumerate(findings, start_index):
         authority = f.get('authority_score', 0)
+        lifecycle = f.get('lifecycle_stage', '?')
         parts.append(
-            f"[{i}] Score: {f.get('relevance_score', '?')}/10 | Authority: {authority}/5\n"
+            f"[{i}] Score: {f.get('relevance_score', '?')}/10 | Authority: {authority}/5 | Stage: {lifecycle}\n"
             f"Title: {f.get('title_english', 'N/A')}\n"
             f"Summary: {f.get('summary_english', 'N/A')}\n"
             f"URL: {f.get('source_url', 'N/A')}"
         )
     return "\n\n".join(parts)
-
-
-def _plan_sections(
-    client: anthropic.Anthropic,
-    topic_title: str,
-    findings_text: str,
-    findings_count: int,
-    model: str,
-) -> list[dict]:
-    """Ask Claude to map findings to the 16 predefined guide sections."""
-    sections_json = json.dumps(
-        [{"id": s["id"], "title": s["title"], "description": s["description"]}
-         for s in GUIDE_SECTIONS],
-        indent=2,
-    )
-
-    message = api_call(
-        client,
-        model=model,
-        max_tokens=4000,
-        system=PLANNER_SYSTEM,
-        messages=[
-            {
-                "role": "user",
-                "content": (
-                    f"Topic: {topic_title}\n"
-                    f"Total findings: {findings_count}\n\n"
-                    f"Predefined sections:\n{sections_json}\n\n"
-                    f"Findings:\n{findings_text}"
-                ),
-            }
-        ],
-        tools=[SECTION_PLAN_TOOL],
-        tool_choice={"type": "tool", "name": "submit_section_plan"},
-    )
-
-    sections = message.content[0].input["sections"]
-    logger.info(f"Mapped findings to {len(sections)} sections for guide")
-    return sections
 
 
 def _generate_section(
@@ -324,10 +299,11 @@ def _generate_section(
     section: dict,
     section_num: int,
     findings_text: str,
+    findings_count: int,
     model: str,
     cross_verify_report: str = "",
 ) -> str:
-    """Generate one section of the guide."""
+    """Generate one section of the guide using lifecycle-filtered findings."""
     cross_verify_block = ""
     if cross_verify_report:
         cross_verify_block = (
@@ -338,11 +314,7 @@ def _generate_section(
             f"{cross_verify_report}\n"
         )
 
-    # Look up description and brief from GUIDE_SECTIONS
-    section_id = section.get("id", "")
-    section_def = next((s for s in GUIDE_SECTIONS if s["id"] == section_id), None)
-    description = section.get("description") or (section_def["description"] if section_def else "")
-    brief = SECTION_BRIEFS.get(section_id, "")
+    brief = SECTION_BRIEFS.get(section["id"], "")
     brief_block = f"\n\nSECTION BRIEF (this section MUST contain): {brief}" if brief else ""
 
     message = api_call(
@@ -356,10 +328,11 @@ def _generate_section(
                 "content": (
                     f"Topic: {topic_title}\n"
                     f"Section {section_num}: {section['title']}\n"
-                    f"Section scope: {description}\n"
+                    f"Section scope: {section['description']}\n"
                     f"{brief_block}\n"
-                    f"Key finding IDs to use: {section.get('finding_ids', 'all relevant')}\n\n"
-                    f"ALL findings (reference by number):\n{findings_text}"
+                    f"You have {findings_count} findings specifically selected for this section.\n"
+                    f"Use as many as possible -- every finding was selected because it is relevant.\n\n"
+                    f"Findings for this section:\n{findings_text}"
                     f"{cross_verify_block}"
                 ),
             }
@@ -377,44 +350,48 @@ def generate_guide(
     critical_model: str = "",
     cross_verify_report: str = "",
 ):
-    """Generate a comprehensive master guide from findings using multi-pass generation.
+    """Generate a comprehensive master guide from findings.
 
-    Pass 1: Plan sections based on all findings
-    Pass 2: Generate each section individually with full context
+    v6: No planner call. Each section receives lifecycle-filtered findings only.
+    Uses lifecycle_stage from enrichment as the section mapping.
 
     Args:
-        model: Model for non-critical sections and planning (default Haiku).
-        critical_model: Model for safety-critical sections (treatment-efficacy, side-effects,
+        model: Model for non-critical sections (default Haiku).
+        critical_model: Model for safety-critical sections (mistakes, side-effects,
             emergency-signs, resistance). If empty, uses `model` for all sections.
-        cross_verify_report: Formatted cross-verification report (VERIFIED/CONTRADICTED/UNVERIFIED).
-            When provided, each section generation receives this as context to prefer real findings
-            over discovery claims where they differ.
+        cross_verify_report: Formatted cross-verification report.
     """
     if not findings:
         logger.warning(f"No findings for '{topic_title}', skipping guide generation")
         return
 
     client = anthropic.Anthropic(api_key=api_key)
-    findings_text = _build_findings_text(findings)
 
-    # Pass 1: Plan sections
-    try:
-        sections = _plan_sections(client, topic_title, findings_text, len(findings), model)
-    except Exception as e:
-        logger.error(f"Finding mapping failed: {e}")
-        raise
-
-    # Pass 2: Generate each section (critical sections use Sonnet if available)
+    # Generate each section with lifecycle-filtered findings
     guide_parts = []
-    for i, section in enumerate(sections, 1):
-        section_id = section.get("id", "")
+    total_findings_used = 0
+    for i, section in enumerate(GUIDE_SECTIONS, 1):
+        section_id = section["id"]
         is_critical = section_id in CRITICAL_SECTIONS
         section_model = critical_model if (is_critical and critical_model) else model
         model_label = "Sonnet" if section_model == critical_model and critical_model else "Haiku"
-        print(f"  Section {i}/{len(sections)}: {section['title']} [{model_label}]")
+
+        # Filter findings for this section's lifecycle
+        section_findings = _filter_findings_for_section(findings, section["lifecycle"])
+        findings_text = _build_findings_text(section_findings)
+        total_findings_used += len(section_findings)
+
+        print(f"  Section {i}/{len(GUIDE_SECTIONS)}: {section['title']} [{model_label}] ({len(section_findings)} findings)")
+
+        if not section_findings:
+            logger.warning(f"No findings for section '{section_id}' (lifecycle={section['lifecycle']})")
+            guide_parts.append(f"## {i}. {section['title']}\n\n*No findings available for this section. This section needs additional research.*")
+            continue
+
         try:
             content = _generate_section(
-                client, topic_title, section, i, findings_text, section_model,
+                client, topic_title, section, i,
+                findings_text, len(section_findings), section_model,
                 cross_verify_report=cross_verify_report,
             )
             guide_parts.append(f"## {i}. {section['title']}\n\n{content}")
@@ -422,7 +399,9 @@ def generate_guide(
             logger.error(f"Section generation failed for '{section['title']}': {e}")
             guide_parts.append(f"## {i}. {section['title']}\n\n*Generation failed: {e}*")
 
-    # Pass 3: Generate executive summary from sections 1-3 (SPEC 10.4)
+    logger.info(f"Total finding-section assignments: {total_findings_used} (from {len(findings)} unique findings)")
+
+    # Executive summary from sections 1-3
     exec_summary = ""
     sections_1_3 = "\n\n".join(guide_parts[:3]) if len(guide_parts) >= 3 else "\n\n".join(guide_parts)
     try:
@@ -469,4 +448,4 @@ def generate_guide(
         f.write("\n\n".join(guide_parts))
 
     total_size = os.path.getsize(output_path)
-    logger.info(f"Guide generated: {output_path} ({len(findings)} findings, {len(sections)} sections, {total_size // 1024}KB)")
+    logger.info(f"Guide generated: {output_path} ({len(findings)} findings, {len(GUIDE_SECTIONS)} sections, {total_size // 1024}KB)")
