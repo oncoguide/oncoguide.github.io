@@ -12,7 +12,7 @@ Author is anonymous — a cancer patient writing for other patients.
 - `vision.md` — Project vision and operating principles. READ THIS BEFORE ANYTHING ELSE every session.
 - `agents/research/SPEC.md` — Research agent specification v6 (lifecycle pipeline, 16 sections, validation, monitoring). READ THIS for any pipeline work.
 - `agents/research/IMPLEMENTATION_PROMPT.md` — Prompt and milestone plan for implementation agent.
-- `prompt/PLAN.md` — Implementation plan with progress checkboxes (gitignored, local only).
+- `PLAN.md` — Implementation plan with progress checkboxes (gitignored, local only).
 - `prompt/research/` — Research findings for articles (gitignored, local only). READ relevant research files BEFORE writing any article content.
 - `decisions/log.yaml` — Decision capture log. Update after significant interactions.
 - `hugo.yaml` — Central Hugo configuration (languages, menus, params).

@@ -5,8 +5,12 @@
 # Claude Code agent memory (may contain personal data)
 .claude/
 
+# Private documents (founding members' personal data, legal docs)
+.private/
+
 # Planning prompts (internal only)
 prompt/
+PLAN.md
 
 # Internal docs (specs, plans)
 docs/
