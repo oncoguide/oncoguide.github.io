@@ -305,7 +305,7 @@ Esta seccion te muestra lo que realmente les ocurre a los pacientes con Selperca
 | **Diarrea / estrenimiento** | Muy frecuente | Dieta BRAT; loperamida; hidratacion |
 | **Nauseas** | Frecuente | Comidas pequenas y frecuentes; hay medicamentos antiemeticos |
 | **Erupciones cutaneas** | Frecuente | Crema hidratante; esteroides topicos |
-| **Creatinina elevada** | ~18% | Generalmente NO significa dano renal real -- el medicamento eleva artificialmente la lectura |
+| **Creatinina elevada** | ~18% | Generalmente es una falsa alarma llamada **pseudo-IRA** -- selpercatinib bloquea los transportadores MATE en el rinon, elevando artificialmente la creatinina sin dano real. **Para distinguir lo real de lo falso:** pide **cistatina C** y **electrolitos (sodio, magnesio, calcio)** en cada analitica. Si la creatinina sube pero la cistatina C es normal y los electrolitos son estables: continua con la dosis completa. Si la cistatina C tambien esta elevada o los electrolitos bajan: contacta al oncologo de inmediato |
 
 ---
 
@@ -324,11 +324,40 @@ Esta seccion te muestra lo que realmente les ocurre a los pacientes con Selperca
 
 ### Riesgos recien identificados (datos del mundo real, diciembre 2024)
 
-Tres efectos secundarios **que antes no figuraban en el prospecto**, hallados en farmacovigilancia:
+Efectos secundarios **que antes no figuraban en el prospecto**, hallados en farmacovigilancia y estudios del mundo real:
 
-- **Disfagia** -- dificultad para tragar
-- **Derrame pericardico** -- liquido alrededor del corazon (presion toracica, disnea en posicion tumbada)
-- **Hemiparesia** -- debilidad en un lado del cuerpo (similar a un ictus)
+- **Disfagia** -- dificultad para tragar. Reportar al oncologo si es nueva o empeora
+- **Derrame pericardico** -- liquido alrededor del corazon (presion toracica, disnea en posicion tumbada). Se recomienda ecocardiograma basal, repetir cada 6 meses o ante la aparicion de sintomas
+- **Hemiparesia** -- debilidad en un lado del cuerpo (similar a un ictus). Requiere RM cerebral urgente para diferenciar de metastasis cerebrales
+- **Linfangiectasia intestinal** -- enteropatia perdedora de proteinas encontrada en hasta el 29% de los pacientes (TTLC 2026, MSKCC). Causa diarrea cronica, malabsorcion y albumina baja. Manejable con dieta baja en grasa con TCM y ajuste de dosis. Monitorizar la albumina en cada analitica
+
+### Funcion tiroidea -- el control olvidado
+
+Selpercatinib inhibe DIO2, la enzima que convierte T4 (hormona tiroidea inactiva) en T3 (la forma activa). Aproximadamente el **13% de los pacientes** desarrollan hipotiroidismo clinico -- que causa fatiga, aumento de peso y retencion de liquidos que pueden confundirse con otros efectos secundarios.
+
+**La solucion es simple:** levotiroxina, un medicamento barato sin interaccion con CYP3A4. Pero solo funciona si el problema se detecta.
+
+**Pide a tu oncologo que anade TSH + T4 libre a cada analitica.** Si la TSH sube por encima de 4,5 o la T4 libre baja por debajo de lo normal, se debe iniciar levotiroxina.
+
+### Como evolucionan los efectos secundarios con el tiempo
+
+El perfil de efectos secundarios de selpercatinib **cambia significativamente** entre los 6 y los 24 meses. Lo que te molesta en el mes 2 no es lo mismo que lo que te molesta en el mes 18:
+
+| Efecto secundario | Temprano (meses 1-6) | Tardio (24+ meses) | Por que cambia |
+|---|---|---|---|
+| **Edema** | 27,5% | **63,2%** | La inhibicion acumulativa de VEGFR deteriora el drenaje linfatico |
+| **Diarrea** | 30,5% | **60,7%** | La linfangiectasia intestinal se desarrolla gradualmente (mediana de inicio 15 meses) |
+| **Fatiga** | 36,6% | **53,0%** | Multifactorial (metabolica, hipotiroidismo, anemia) |
+| **Enzimas hepaticas (ALT)** | 30,5% | 15,8% | El higado se adapta con el tiempo -- buena noticia |
+
+Esto es importante saberlo porque:
+- **Es manejable** -- solo el 2% de los pacientes discontinuan selpercatinib por efectos secundarios
+- **La preparacion ayuda** -- medias de compresion, reserva de loperamida, conocimiento de la dieta TCM, monitorizacion tiroidea
+- **El ajuste de dosis funciona** -- los efectos secundarios tardios responden a la reduccion de dosis sin necesariamente perder eficacia
+
+{{< callout type="tip" >}}
+**Medidas proactivas a partir del mes 6:** Comienza a usar medias de compresion para prevenir el edema. Asegura que la albumina se analice mensualmente para detectar la perdida de proteinas tempranamente. Ten loperamida disponible. Continua la monitorizacion de TSH en cada analitica.
+{{< /callout >}}
 
 ---
 
@@ -599,7 +628,7 @@ La logica: si la mayor parte del cancer responde a Selpercatinib pero 1-2 sitios
 | Medicamento | Que hace | Estado |
 |---|---|---|
 | **EP0031 (Lunbotinib)** | Inhibidor RET selectivo; actividad amplia vs. mutaciones solvent front | Fase 1-2, datos ASCO 2025 |
-| **LOXO-260** | Actua sobre mutaciones solvent front y gatekeeper | Fase 1; **acceso expandido disponible ahora** |
+| **LOXO-260** | Actua sobre mutaciones solvent front y gatekeeper | Fase 1; finalizacion estimada junio 2026. No hay programa de acceso expandido disponible actualmente |
 | **Vepafestinib** | Selectivo RET; **penetracion cerebral mejorada** | Fase 1-2; estudio MARGARET |
 | **SY-5007** | Inhibidor RET selectivo; 62% tasa de respuesta | Fase 2-3 (China) |
 
@@ -608,7 +637,7 @@ La logica: si la mayor parte del cancer responde a Selpercatinib pero 1-2 sitios
 | Bypass identificado | Estrategia de combinacion |
 |---|---|
 | **Amplificacion MET** | Selpercatinib + crizotinib (inhibidor MET) -- 4 casos documentados con respuesta |
-| **Activacion EGFR/HER3** | Selpercatinib + afatinib -- muerte celular restaurada en celulas resistentes |
+| **Activacion EGFR/HER3** | Discutir con el oncologo -- existen datos preclinicos (afatinib) pero la adopcion clinica es limitada por preocupaciones de toxicidad |
 | **Fusion BRAF** | Inhibidor RET + inhibidor MEK -- 1 caso documentado de exito |
 
 ---
@@ -836,6 +865,7 @@ Los miembros de tu familia tambien estan afectados. **No les pidas que naveguen 
 5. **Inscribete** en RETpositive.org y The Happy Lungs Project -- encuentra tu comunidad
 6. **Habla con tu oncologo** sobre el plan de accion si aparece resistencia -- antes de necesitarlo
 7. **Pide la biopsia liquida (ctDNA)** para monitorizacion -- puede detectar resistencia meses antes de que las exploraciones lo muestren
+8. **Quieres saber mas?** Lee [Mas alla del tratamiento estandar: una estrategia proactiva para el cancer de pulmon con fusion RET](/es/cancer-types/pulmonar-ret-fusion-estrategia-proactiva/) -- vacunas, crioablacion, monitorizacion ctDNA y opciones de reposicionamiento de farmacos
 {{< /action-box >}}
 
 ---

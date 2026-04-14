@@ -305,7 +305,7 @@ Dieser Abschnitt zeigt dir, was Patienten unter Selpercatinib tatsaechlich erleb
 | **Durchfall / Verstopfung** | Sehr haeufig | BRAT-Diaet; Loperamid; Fluessigkeitszufuhr |
 | **Uebelkeit** | Haeufig | Kleine, haeufige Mahlzeiten; es gibt Anti-Uebelkeit-Medikamente |
 | **Hautausschlag** | Haeufig | Feuchtigkeitscreme; topische Steroide |
-| **Erhoehtes Kreatinin** | ~18% | Bedeutet in der Regel KEINE echte Nierenschaedigung -- das Medikament erhoeht den Messwert kuenstlich |
+| **Erhoehtes Kreatinin** | ~18% | In der Regel ein Fehlalarm, genannt **Pseudo-AKI** -- Selpercatinib blockiert MATE-Transporter in der Niere und erhoeht das Kreatinin kuenstlich, ohne tatsaechlichen Schaden. **Zur Unterscheidung echt vs. falsch:** Fordere bei jeder Blutabnahme **Cystatin C** und **Elektrolyte (Natrium, Magnesium, Kalzium)** an. Wenn Kreatinin erhoeht, aber Cystatin C normal und Elektrolyte stabil: volle Dosis fortsetzen. Wenn Cystatin C ebenfalls erhoeht oder Elektrolyte sinken: sofort den Onkologen kontaktieren |
 
 ---
 
@@ -324,11 +324,40 @@ Dieser Abschnitt zeigt dir, was Patienten unter Selpercatinib tatsaechlich erleb
 
 ### Neu identifizierte Risiken (Real-World-Daten, Dezember 2024)
 
-Drei Nebenwirkungen, **die vorher nicht in der Fachinformation standen**, gefunden in der Pharmakovigilanz:
+Nebenwirkungen, **die vorher nicht in der Fachinformation standen**, gefunden durch Pharmakovigilanz und Real-World-Studien:
 
-- **Dysphagie** -- Schluckbeschwerden
-- **Perikarderguss** -- Fluessigkeit um das Herz (Brustdruck, Atemnot im Liegen)
-- **Hemiparese** -- Schwaeche auf einer Koerperseite (schlaganfallartig)
+- **Dysphagie** -- Schluckbeschwerden. Dem Onkologen melden, wenn neu oder zunehmend
+- **Perikarderguss** -- Fluessigkeit um das Herz (Brustdruck, Atemnot im Liegen). Echokardiographie als Ausgangswert empfohlen, Wiederholung alle 6 Monate oder bei Symptombeginn
+- **Hemiparese** -- Schwaeche auf einer Koerperseite (schlaganfallartig). Erfordert dringende Hirn-MRT zur Abgrenzung von Hirnmetastasen
+- **Intestinale Lymphangiektasie** -- proteinverlierende Enteropathie, bei bis zu 29% der Patienten gefunden (TTLC 2026, MSKCC). Verursacht chronischen Durchfall, Malabsorption und niedrigen Albuminspiegel. Behandelbar mit fettarmer MCT-Diaet und Dosisanpassung. Albumin bei jeder Blutabnahme kontrollieren
+
+### Schilddruesenfunktion -- die vergessene Kontrolle
+
+Selpercatinib hemmt DIO2, das Enzym, das T4 (inaktives Schilddruesenhormon) in T3 (die aktive Form) umwandelt. Ungefaehr **13% der Patienten** entwickeln eine klinische Hypothyreose -- die Muedigkeit, Gewichtszunahme und Fluessigkeitsretention verursacht, die mit anderen Nebenwirkungen verwechselt werden koennen.
+
+**Die Loesung ist einfach:** Levothyroxin, ein guenstiges Medikament ohne CYP3A4-Wechselwirkung. Aber es wirkt nur, wenn das Problem erkannt wird.
+
+**Bitte deinen Onkologen, TSH + freies T4 zu jeder Blutabnahme hinzuzufuegen.** Wenn TSH ueber 4,5 steigt oder freies T4 unter den Normalwert faellt, sollte Levothyroxin begonnen werden.
+
+### Wie sich Nebenwirkungen im Laufe der Zeit veraendern
+
+Das Nebenwirkungsprofil von Selpercatinib **veraendert sich erheblich** ueber 6-24 Monate. Was dich in Monat 2 stoert, ist nicht dasselbe wie in Monat 18:
+
+| Nebenwirkung | Frueh (Monate 1-6) | Spaet (24+ Monate) | Warum es sich aendert |
+|---|---|---|---|
+| **Oedeme** | 27,5% | **63,2%** | Kumulative VEGFR-Hemmung beeintraechtigt den Lymphabfluss |
+| **Durchfall** | 30,5% | **60,7%** | Intestinale Lymphangiektasie entwickelt sich allmaehlich (medianer Beginn 15 Monate) |
+| **Muedigkeit** | 36,6% | **53,0%** | Multifaktoriell (metabolisch, Hypothyreose, Anaemie) |
+| **Leberenzyme (ALT)** | 30,5% | 15,8% | Die Leber passt sich mit der Zeit an -- gute Nachricht |
+
+Das ist wichtig zu wissen, weil:
+- **Es ist handhabbar** -- nur 2% der Patienten setzen Selpercatinib wegen Nebenwirkungen ab
+- **Vorbereitung hilft** -- Kompressionsstruempfe, Loperamid-Vorrat, MCT-Diaet-Wissen, Schilddruesenueberwachung
+- **Dosisanpassung wirkt** -- spaete Nebenwirkungen sprechen auf Dosisreduktion an, ohne notwendigerweise die Wirksamkeit zu verlieren
+
+{{< callout type="tip" >}}
+**Proaktive Massnahmen ab Monat 6:** Beginne mit dem Tragen von Kompressionsstruempfen zur Oedem-Praevention. Stelle sicher, dass Albumin monatlich getestet wird, um Proteinverlust frueh zu erkennen. Halte Loperamid bereit. Setze die TSH-Ueberwachung bei jeder Blutabnahme fort.
+{{< /callout >}}
 
 ---
 
@@ -598,7 +627,7 @@ Die Logik: Wenn der groesste Teil des Krebses auf Selpercatinib anspricht, aber 
 | Medikament | Was es tut | Status |
 |---|---|---|
 | **EP0031 (Lunbotinib)** | Selektiver RET-Inhibitor; breite Aktivitaet gegen Solvent-Front-Mutationen | Phase 1-2, Daten ASCO 2025 |
-| **LOXO-260** | Zielt auf Solvent-Front- und Gatekeeper-Mutationen | Phase 1; **erweiterter Zugang jetzt verfuegbar** |
+| **LOXO-260** | Zielt auf Solvent-Front- und Gatekeeper-Mutationen | Phase 1; voraussichtlicher Abschluss Juni 2026. Derzeit kein Programm fuer erweiterten Zugang verfuegbar |
 | **Vepafestinib** | Selektiver RET-Inhibitor; **verbesserte Hirnpenetration** | Phase 1-2; MARGARET-Studie |
 | **SY-5007** | Selektiver RET-Inhibitor; 62% Ansprechrate | Phase 2-3 (China) |
 
@@ -607,7 +636,7 @@ Die Logik: Wenn der groesste Teil des Krebses auf Selpercatinib anspricht, aber 
 | Identifizierter Bypass | Kombinationsstrategie |
 |---|---|
 | **MET-Amplifikation** | Selpercatinib + Crizotinib (MET-Inhibitor) -- 4 dokumentierte Faelle mit Ansprechen |
-| **EGFR/HER3-Aktivierung** | Selpercatinib + Afatinib -- wiederhergestellter Zelltod in resistenten Zellen |
+| **EGFR/HER3-Aktivierung** | Mit Onkologen besprechen -- praeklinische Daten existieren (Afatinib), aber die klinische Anwendung ist aufgrund von Toxizitaetsbedenken begrenzt |
 | **BRAF-Fusion** | RET-Inhibitor + MEK-Inhibitor -- 1 dokumentierter Erfolgsfall |
 
 ---
@@ -806,6 +835,7 @@ Deine Familienmitglieder sind ebenfalls betroffen. **Verlange nicht von ihnen, d
 5. **Melde dich an** bei RETpositive.org und The Happy Lungs Project -- finde deine Gemeinschaft
 6. **Besprich mit deinem Onkologen** den Aktionsplan fuer den Fall einer Resistenz -- bevor du ihn brauchst
 7. **Fordere die Fluessigbiopsie (ctDNA)** zur Ueberwachung an -- sie kann Resistenz Monate vor den Scans erkennen
+8. **Bereit fuer mehr?** Lies [Ueber die Standardbehandlung hinaus: Eine proaktive Strategie fuer Lungenkrebs mit RET-Fusion](/de/cancer-types/lungen-ret-fusion-proaktive-strategie/) -- Impfstoffe, Kryoablation, ctDNA-Monitoring und Moeglichkeiten der Medikamenten-Zweitverwendung
 {{< /action-box >}}
 
 ---

@@ -305,7 +305,7 @@ This section shows you what actually happens to patients on Selpercatinib. Real 
 | **Diarrhea / constipation** | Very common | BRAT diet; loperamide; hydration |
 | **Nausea** | Common | Small frequent meals; anti-nausea medication available |
 | **Skin rash** | Common | Moisturizer; topical steroids |
-| **Elevated creatinine** | ~18% | Usually does NOT mean real kidney damage -- the drug artificially raises the reading |
+| **Elevated creatinine** | ~18% | Usually a false alarm called **pseudo-AKI** -- selpercatinib blocks MATE transporters in the kidney, artificially raising creatinine without actual damage. **To distinguish real from false:** ask for **cystatin C** and **electrolytes (sodium, magnesium, calcium)** at every blood draw. If creatinine is up but cystatin C is normal and electrolytes are stable: continue full dose. If cystatin C is also elevated or electrolytes are dropping: contact oncologist immediately |
 
 ---
 
@@ -324,11 +324,40 @@ This section shows you what actually happens to patients on Selpercatinib. Real 
 
 ### Newly identified risks (real-world data, December 2024)
 
-Three side effects **not previously on the label**, found through pharmacovigilance:
+Side effects **not previously on the label**, found through pharmacovigilance and real-world studies:
 
-- **Dysphagia** -- difficulty swallowing
-- **Pericardial effusion** -- fluid around the heart (chest pressure, shortness of breath when lying down)
-- **Hemiparesis** -- weakness on one side of the body (stroke-like)
+- **Dysphagia** -- difficulty swallowing. Report to oncologist if new or worsening
+- **Pericardial effusion** -- fluid around the heart (chest pressure, shortness of breath when lying down). Baseline echocardiogram recommended, repeat every 6 months or at symptom onset
+- **Hemiparesis** -- weakness on one side of the body (stroke-like). Requires urgent brain MRI to differentiate from brain metastases
+- **Intestinal lymphangiectasia** -- protein-losing enteropathy found in up to 29% of patients (TTLC 2026, MSKCC). Causes chronic diarrhea, malabsorption, and low albumin. Manageable with low-fat MCT diet and dose adjustment. Monitor albumin at every blood draw
+
+### Thyroid function -- the forgotten check
+
+Selpercatinib inhibits DIO2, the enzyme that converts T4 (inactive thyroid hormone) to T3 (the active form). Approximately **13% of patients** develop clinical hypothyroidism -- which causes fatigue, weight gain, and fluid retention that can be confused with other side effects.
+
+**The fix is simple:** levothyroxine, a cheap medication with zero CYP3A4 interaction. But it only works if the problem is detected.
+
+**Ask your oncologist to add TSH + free T4 to every blood draw.** If TSH rises above 4.5 or free T4 drops below normal, levothyroxine should be started.
+
+### How side effects evolve over time
+
+The side effect profile of selpercatinib **changes significantly** over 6-24 months. What bothers you at month 2 is not the same as what bothers you at month 18:
+
+| Side effect | Early (months 1-6) | Late (24+ months) | Why it changes |
+|---|---|---|---|
+| **Edema** | 27.5% | **63.2%** | Cumulative VEGFR inhibition impairs lymphatic drainage |
+| **Diarrhea** | 30.5% | **60.7%** | Intestinal lymphangiectasia develops gradually (median onset 15 months) |
+| **Fatigue** | 36.6% | **53.0%** | Multifactorial (metabolic, hypothyroidism, anemia) |
+| **Liver enzymes (ALT)** | 30.5% | 15.8% | Liver adapts over time -- good news |
+
+This is important to know because:
+- **It is manageable** -- only 2% of patients discontinue selpercatinib due to side effects
+- **Preparation helps** -- compression stockings, loperamide supply, MCT diet knowledge, thyroid monitoring
+- **Dose adjustment works** -- late side effects respond to dose reduction without necessarily losing efficacy
+
+{{< callout type="tip" >}}
+**Proactive steps starting month 6:** Begin wearing compression stockings for edema prevention. Ensure albumin is tested monthly to detect protein loss early. Have loperamide available. Continue TSH monitoring at every blood draw.
+{{< /callout >}}
 
 ---
 
@@ -597,7 +626,7 @@ The logic: if most of your cancer responds to Selpercatinib but 1-2 sites are gr
 | Drug | What it does | Status |
 |---|---|---|
 | **EP0031 (Lunbotinib)** | Selective RET inhibitor; broad activity vs. solvent front mutations | Phase 1-2, ASCO 2025 data |
-| **LOXO-260** | Targets solvent front and gatekeeper mutations | Phase 1; **expanded access available now** |
+| **LOXO-260** | Targets solvent front and gatekeeper mutations | Phase 1; estimated completion June 2026. No expanded access program currently available |
 | **Vepafestinib** | Selective RET; **improved brain penetration** | Phase 1-2; MARGARET trial |
 | **SY-5007** | Selective RET inhibitor; 62% response rate | Phase 2-3 (China) |
 
@@ -606,7 +635,7 @@ The logic: if most of your cancer responds to Selpercatinib but 1-2 sites are gr
 | Bypass identified | Combination strategy |
 |---|---|
 | **MET amplification** | Selpercatinib + crizotinib (MET inhibitor) -- 4 documented cases with response |
-| **EGFR/HER3 activation** | Selpercatinib + afatinib -- cell death restored in resistant cells |
+| **EGFR/HER3 activation** | Discuss with oncologist -- preclinical data exists (afatinib) but clinical adoption is limited due to toxicity concerns |
 | **BRAF fusion** | RET inhibitor + MEK inhibitor -- 1 documented case of success |
 
 ---
@@ -824,6 +853,7 @@ Your family members are affected too. **Do not ask them to navigate this alone.*
 5. **Sign up** at RETpositive.org and The Happy Lungs Project -- find your community
 6. **Discuss with your oncologist** the action plan if resistance develops -- before you need it
 7. **Request a liquid biopsy (ctDNA)** for monitoring -- it can detect resistance months before scans show it
+8. **Ready for more?** Read [Beyond Standard Treatment: A Proactive Strategy for RET Fusion Lung Cancer](/en/cancer-types/lung-ret-fusion-proactive-strategy/) -- vaccines, cryoablation, ctDNA monitoring, and drug repurposing options
 {{< /action-box >}}
 
 ---

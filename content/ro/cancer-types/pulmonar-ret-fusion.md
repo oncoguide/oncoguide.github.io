@@ -305,7 +305,7 @@ Aceasta sectiune iti arata ce li se intampla de fapt pacientilor pe Selpercatini
 | **Diaree / constipatie** | Foarte frecvent | Dieta BRAT; loperamid; hidratare |
 | **Greata** | Frecvent | Mese mici si frecvente; exista medicamente anti-greata |
 | **Eruptii cutanate** | Frecvent | Cremă hidratanta; steroizi topici |
-| **Creatinina crescuta** | ~18% | De obicei NU inseamna leziune renala reala -- medicamentul creste artificial citirea |
+| **Creatinina crescuta** | ~18% | De obicei o alarma falsa numita **pseudo-AKI** -- selpercatinib blocheaza transportorii MATE din rinichi, crescand artificial creatinina fara leziune reala. **Pentru a distinge real de fals:** cere **cistatina C** si **electroliti (sodiu, magneziu, calciu)** la fiecare recoltare de sange. Daca creatinina e crescuta dar cistatina C e normala si electrolitii sunt stabili: continua doza completa. Daca cistatina C e si ea crescuta sau electrolitii scad: contacteaza oncologul imediat |
 
 ---
 
@@ -324,11 +324,40 @@ Aceasta sectiune iti arata ce li se intampla de fapt pacientilor pe Selpercatini
 
 ### Riscuri nou identificate (date din lumea reala, decembrie 2024)
 
-Trei efecte secundare **care nu erau anterior pe prospect**, gasite in farmacovigilenta:
+Efecte secundare **care nu erau anterior pe prospect**, gasite prin farmacovigilenta si studii din lumea reala:
 
-- **Disfagie** -- dificultate la inghitire
-- **Revărsat pericardic** -- lichid in jurul inimii (presiune toracica, dispnee in pozitie culcata)
-- **Hemipareza** -- slabiciune pe o parte a corpului (asemanatoare cu AVC)
+- **Disfagie** -- dificultate la inghitire. Raporteaza oncologului daca apare sau se agraveaza
+- **Revărsat pericardic** -- lichid in jurul inimii (presiune toracica, dispnee in pozitie culcata). Ecocardiograma de referinta recomandata, repetare la fiecare 6 luni sau la aparitia simptomelor
+- **Hemipareza** -- slabiciune pe o parte a corpului (asemanatoare cu AVC). Necesita RMN cerebral urgent pentru diferentiere de metastaze cerebrale
+- **Limfangiectazie intestinala** -- enteropatie cu pierdere de proteine, gasita la pana la 29% din pacienti (TTLC 2026, MSKCC). Cauzeaza diaree cronica, malabsorbtie si albumina scazuta. Gestionabila cu dieta saraca in grasimi cu MCT si ajustarea dozei. Monitorizeaza albumina la fiecare recoltare de sange
+
+### Functia tiroidiana -- verificarea uitata
+
+Selpercatinib inhiba DIO2, enzima care converteste T4 (hormon tiroidian inactiv) in T3 (forma activa). Aproximativ **13% din pacienti** dezvolta hipotiroidism clinic -- care cauzeaza oboseala, crestere in greutate si retentie de lichide, simptome care pot fi confundate cu alte efecte secundare.
+
+**Solutia e simpla:** levotiroxina, un medicament ieftin fara nicio interactiune CYP3A4. Dar functioneaza doar daca problema e detectata.
+
+**Cere oncologului sa adauge TSH + T4 liber la fiecare recoltare de sange.** Daca TSH creste peste 4,5 sau T4 liber scade sub normal, levotiroxina trebuie inceputa.
+
+### Cum evolueaza efectele secundare in timp
+
+Profilul efectelor secundare ale selpercatinib **se schimba semnificativ** pe parcursul a 6-24 de luni. Ce te deranjeaza la luna 2 nu e acelasi lucru cu ce te deranjeaza la luna 18:
+
+| Efect secundar | Devreme (lunile 1-6) | Tarziu (24+ luni) | De ce se schimba |
+|---|---|---|---|
+| **Edeme** | 27,5% | **63,2%** | Inhibitia cumulativa a VEGFR afecteaza drenajul limfatic |
+| **Diaree** | 30,5% | **60,7%** | Limfangiectazia intestinala se dezvolta treptat (debut median 15 luni) |
+| **Oboseala** | 36,6% | **53,0%** | Multifactoriala (metabolica, hipotiroidism, anemie) |
+| **Enzime hepatice (ALT)** | 30,5% | 15,8% | Ficatul se adapteaza in timp -- veste buna |
+
+Acest lucru e important de stiut pentru ca:
+- **E gestionabil** -- doar 2% din pacienti intrerup selpercatinib din cauza efectelor secundare
+- **Pregatirea ajuta** -- ciorapi compresivi, stoc de loperamid, cunostinte despre dieta MCT, monitorizare tiroidiana
+- **Ajustarea dozei functioneaza** -- efectele secundare tardive raspund la reducerea dozei fara a pierde neaparat eficacitatea
+
+{{< callout type="tip" >}}
+**Pasi proactivi incepand cu luna 6:** Incepe sa porti ciorapi compresivi pentru prevenirea edemelor. Asigura-te ca albumina e testata lunar pentru a detecta pierderea de proteine devreme. Ai loperamid disponibil. Continua monitorizarea TSH la fiecare recoltare de sange.
+{{< /callout >}}
 
 ---
 
@@ -597,7 +626,7 @@ Logica: daca cea mai mare parte a cancerului raspunde la Selpercatinib dar 1-2 l
 | Medicament | Ce face | Status |
 |---|---|---|
 | **EP0031 (Lunbotinib)** | Inhibitor RET selectiv; activitate larga vs. mutatii solvent front | Faza 1-2, date ASCO 2025 |
-| **LOXO-260** | Tinteste mutatii solvent front si gatekeeper | Faza 1; **acces expandat disponibil acum** |
+| **LOXO-260** | Tinteste mutatii solvent front si gatekeeper | Faza 1; finalizare estimata iunie 2026. Nu exista un program de acces expandat disponibil in prezent |
 | **Vepafestinib** | Selectiv RET; **penetrare cerebrala imbunatatita** | Faza 1-2; studiul MARGARET |
 | **SY-5007** | Inhibitor RET selectiv; 62% rata de raspuns | Faza 2-3 (China) |
 
@@ -606,7 +635,7 @@ Logica: daca cea mai mare parte a cancerului raspunde la Selpercatinib dar 1-2 l
 | Bypass identificat | Strategie de combinatie |
 |---|---|
 | **Amplificare MET** | Selpercatinib + crizotinib (inhibitor MET) -- 4 cazuri documentate cu raspuns |
-| **Activare EGFR/HER3** | Selpercatinib + afatinib -- moarte celulara restaurata in celulele rezistente |
+| **Activare EGFR/HER3** | Discuta cu oncologul -- exista date preclinice (afatinib) dar adoptia clinica este limitata din cauza ingrijorarilor legate de toxicitate |
 | **Fuziune BRAF** | Inhibitor RET + inhibitor MEK -- 1 caz documentat de succes |
 
 ---
@@ -824,6 +853,7 @@ Membrii familiei tale sunt si ei afectati. **Nu le cere sa navigheze singuri.**
 5. **Inscrie-te** pe RETpositive.org si The Happy Lungs Project -- gaseste-ti comunitatea
 6. **Discuta cu oncologul** planul de actiune daca apare rezistenta -- inainte sa ai nevoie de el
 7. **Cere biopsia lichida (ctDNA)** pentru monitorizare -- poate detecta rezistenta cu luni inainte ca scanarile sa arate
+8. **Vrei sa mergi mai departe?** Citeste [Dincolo de tratamentul standard: o strategie proactiva pentru cancerul pulmonar cu fuziune RET](/ro/cancer-types/lung-ret-fusion-strategie-proactiva/) -- vaccinuri, crioablatie, monitorizare ctDNA si optiuni de repozitionare a medicamentelor
 {{< /action-box >}}
 
 ---

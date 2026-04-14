@@ -305,7 +305,7 @@ Cette section vous montre ce qui arrive reellement aux patients sous Selpercatin
 | **Diarrhee / constipation** | Tres frequent | Regime BRAT ; loperamide ; hydratation |
 | **Nausees** | Frequent | Petits repas frequents ; des antiemetiques existent |
 | **Eruptions cutanees** | Frequent | Creme hydratante ; corticoides topiques |
-| **Creatinine elevee** | ~18% | Generalement NE signifie PAS de lesion renale reelle -- le medicament eleve artificiellement la valeur |
+| **Creatinine elevee** | ~18% | Generalement une fausse alerte appelee **pseudo-IRA** -- le selpercatinib bloque les transporteurs MATE dans le rein, elevant artificiellement la creatinine sans lesion reelle. **Pour distinguer le vrai du faux :** demandez la **cystatine C** et les **electrolytes (sodium, magnesium, calcium)** a chaque prise de sang. Si la creatinine est elevee mais que la cystatine C est normale et les electrolytes stables : continuez a dose pleine. Si la cystatine C est aussi elevee ou les electrolytes chutent : contactez l'oncologue immediatement |
 
 ---
 
@@ -322,13 +322,42 @@ Cette section vous montre ce qui arrive reellement aux patients sous Selpercatin
 
 ---
 
-### Risques nouvellement identifies (donnees de pharmacovigilance, decembre 2024)
+### Risques nouvellement identifies (donnees reelles, decembre 2024)
 
-Trois effets secondaires **qui ne figuraient pas anterieurement sur la notice**, trouves en pharmacovigilance :
+Effets secondaires **qui ne figuraient pas anterieurement sur la notice**, trouves en pharmacovigilance et dans les etudes en conditions reelles :
 
-- **Dysphagie** -- difficulte a avaler
-- **Epanchement pericardique** -- liquide autour du coeur (pression thoracique, dyspnee en position allongee)
-- **Hemiparesie** -- faiblesse d'un cote du corps (similaire a un AVC)
+- **Dysphagie** -- difficulte a avaler. Signalez a l'oncologue si c'est nouveau ou s'aggrave
+- **Epanchement pericardique** -- liquide autour du coeur (pression thoracique, dyspnee en position allongee). Echocardiogramme de reference recommande, a repeter tous les 6 mois ou a l'apparition des symptomes
+- **Hemiparesie** -- faiblesse d'un cote du corps (similaire a un AVC). Necessite une IRM cerebrale urgente pour differencier des metastases cerebrales
+- **Lymphangiectasie intestinale** -- enteropathie avec perte proteique trouvee chez jusqu'a 29% des patients (TTLC 2026, MSKCC). Cause diarrhee chronique, malabsorption et hypoalbuminemie. Gerable avec un regime pauvre en graisses a base de TCM et un ajustement de dose. Surveillez l'albumine a chaque prise de sang
+
+### Fonction thyroidienne -- le controle oublie
+
+Le Selpercatinib inhibe la DIO2, l'enzyme qui convertit la T4 (hormone thyroidienne inactive) en T3 (la forme active). Environ **13% des patients** developpent une hypothyroidie clinique -- qui provoque fatigue, prise de poids et retention d'eau, pouvant etre confondues avec d'autres effets secondaires.
+
+**La solution est simple :** la levothyroxine, un medicament peu couteux sans aucune interaction CYP3A4. Mais elle ne fonctionne que si le probleme est detecte.
+
+**Demandez a votre oncologue d'ajouter la TSH + T4 libre a chaque prise de sang.** Si la TSH depasse 4,5 ou si la T4 libre descend sous la normale, la levothyroxine doit etre initiee.
+
+### Comment les effets secondaires evoluent dans le temps
+
+Le profil d'effets secondaires du selpercatinib **change significativement** sur 6-24 mois. Ce qui vous gene au mois 2 n'est pas la meme chose que ce qui vous gene au mois 18 :
+
+| Effet secondaire | Debut (mois 1-6) | Tardif (24+ mois) | Pourquoi cela change |
+|---|---|---|---|
+| **Oedemes** | 27,5% | **63,2%** | L'inhibition cumulative du VEGFR altere le drainage lymphatique |
+| **Diarrhee** | 30,5% | **60,7%** | La lymphangiectasie intestinale se developpe progressivement (debut median 15 mois) |
+| **Fatigue** | 36,6% | **53,0%** | Multifactorielle (metabolique, hypothyroidie, anemie) |
+| **Enzymes hepatiques (ALT)** | 30,5% | 15,8% | Le foie s'adapte avec le temps -- bonne nouvelle |
+
+C'est important a savoir car :
+- **C'est gerable** -- seulement 2% des patients arretent le selpercatinib a cause des effets secondaires
+- **L'anticipation aide** -- bas de contention, reserve de loperamide, connaissance du regime TCM, surveillance thyroidienne
+- **L'ajustement de dose fonctionne** -- les effets secondaires tardifs repondent a la reduction de dose sans necessairement perdre en efficacite
+
+{{< callout type="tip" >}}
+**Mesures proactives a partir du mois 6 :** Commencez a porter des bas de contention pour prevenir les oedemes. Assurez-vous que l'albumine est testee mensuellement pour detecter la perte proteique precocement. Ayez du loperamide disponible. Continuez la surveillance de la TSH a chaque prise de sang.
+{{< /callout >}}
 
 ---
 
@@ -598,7 +627,7 @@ La logique : si la majeure partie du cancer repond au Selpercatinib mais que 1-2
 | Medicament | Ce qu'il fait | Statut |
 |---|---|---|
 | **EP0031 (Lunbotinib)** | Inhibiteur selectif de RET ; activite large contre les mutations du front de solvant | Phase 1-2, donnees ASCO 2025 |
-| **LOXO-260** | Cible les mutations du front de solvant et du gatekeeper | Phase 1 ; **acces elargi disponible maintenant** |
+| **LOXO-260** | Cible les mutations du front de solvant et du gatekeeper | Phase 1 ; fin estimee juin 2026. Aucun programme d'acces elargi disponible actuellement |
 | **Vepafestinib** | Selectif RET ; **penetration cerebrale amelioree** | Phase 1-2 ; etude MARGARET |
 | **SY-5007** | Inhibiteur selectif de RET ; 62% de taux de reponse | Phase 2-3 (Chine) |
 
@@ -607,7 +636,7 @@ La logique : si la majeure partie du cancer repond au Selpercatinib mais que 1-2
 | Bypass identifie | Strategie de combinaison |
 |---|---|
 | **Amplification MET** | Selpercatinib + crizotinib (inhibiteur MET) -- 4 cas documentes avec reponse |
-| **Activation EGFR/HER3** | Selpercatinib + afatinib -- mort cellulaire restauree dans les cellules resistantes |
+| **Activation EGFR/HER3** | A discuter avec l'oncologue -- des donnees precliniques existent (afatinib) mais l'adoption clinique est limitee en raison de preoccupations liees a la toxicite |
 | **Fusion BRAF** | Inhibiteur RET + inhibiteur MEK -- 1 cas documente de succes |
 
 ---
@@ -813,6 +842,7 @@ Les membres de votre famille sont aussi touches. **Ne leur demandez pas de navig
 5. **Inscrivez-vous** sur RETpositive.org et The Happy Lungs Project -- trouvez votre communaute
 6. **Discutez avec votre oncologue** du plan d'action en cas de resistance -- avant d'en avoir besoin
 7. **Demandez la biopsie liquide (ctDNA)** pour la surveillance -- elle peut detecter la resistance des mois avant que les scanners ne montrent quoi que ce soit
+8. **Pret pour aller plus loin ?** Lisez [Au-dela du traitement standard : une strategie proactive pour le cancer du poumon avec fusion RET](/fr/cancer-types/poumon-ret-fusion-strategie-proactive/) -- vaccins, cryoablation, surveillance ctDNA, et options de repositionnement de medicaments
 {{< /action-box >}}
 
 ---
