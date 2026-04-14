@@ -637,7 +637,7 @@ Da. Nu este garantat, dar datele susțin:
 
 ### Exemplu real: Sid Sijbrandij
 
-Sid Sijbrandij, CEO GitLab, a documentat public strategia sa contra cancerului metastatic. A combinat TKI + vaccinuri + ANKTIVA + studii clinice paralele, menținând transparența completă pe [blogul său](https://about.gitlab.com/blog/categories/sid-health/). Nu este cancer RET, dar demonstrează că o strategie proactivă, agresivă informațional, este posibilă și poate genera rezultate dincolo de statisticile medii.
+Sid Sijbrandij, co-fondator GitLab, a documentat public strategia sa contra cancerului (osteosarcom). Când medicii i-au spus că a epuizat standardul de îngrijire și nu existau studii clinice pentru situația lui, a trecut în "Founder Mode" -- a asamblat o echipă de medici și cercetători, a folosit AI pentru a analiza datele medicale, și a explorat sistematic fiecare opțiune de diagnostic și tratament dincolo de protocoalele standard. Povestea completă pe [blogul său](https://sijbrandij.substack.com/p/im-going-founder-mode-on-my-cancer) și pe [sytse.com/cancer](https://sytse.com/cancer/). Nu este cancer RET, dar demonstrează că o strategie proactivă, agresivă informațional, este posibilă și poate genera rezultate dincolo de statisticile medii.
 
 ---
 
