@@ -92,6 +92,21 @@ Idealmente, scegli un centro che ti possa garantire tempi rapidi. Se ti dicono c
 Quando prenoti la biopsia, chiedi: "Verra prelevato abbastanza materiale per il test molecolare NGS?" Questo va pianificato dall'inizio, non scoperto in seguito.
 {{< /callout >}}
 
+### Richiedi tessuto fresco congelato -- non solo FFPE
+
+Per impostazione predefinita, il tessuto bioptico verra conservato in formaldeide e incluso in paraffina (il cosiddetto FFPE). Questo e lo standard, sufficiente per la maggior parte degli esami. Ma alcune opzioni avanzate -- vaccini antitumorali, test farmacologici su organoidi, sequenziamento RNA di alta qualita -- **richiedono tessuto fresco congelato conservato a -80 gradi Celsius**.
+
+Non si puo congelare il tessuto dopo che e gia stato fissato in formaldeide. La decisione va presa **prima** della biopsia, non dopo.
+
+Chiedi al radiologo interventista o al chirurgo: **"Potete anche conservare alcuni frustoli di tessuto fresco congelato a -80 gradi per future analisi avanzate e ricerca?"** Se il centro non puo farlo, chiedi se possono inviare i frustoli a una biobanca che ne sia in grado.
+
+Idealmente, richiedi **4-8 frustoli bioptici** distribuiti tra:
+- **Anatomia patologica** (diagnosi -- obbligatorio, viene sempre fatto)
+- **Test molecolari** (NGS, WES, RNA-seq)
+- **Biobanca con congelamento fresco a -80 gradi** (per opzioni future: vaccini, organoidi, nuovi test)
+
+Questa semplice richiesta, fatta al momento giusto, puo aprire porte terapeutiche che oggi non esistono ancora.
+
 ---
 
 ## Passo 3: I test molecolari e genetici -- il passo piu ignorato
@@ -154,6 +169,46 @@ Questi dovrebbero essere testati **indipendentemente** dal tipo di cancro.
 **NON accettare 21+ giorni di attesa per i test molecolari** senza chiedere quali opzioni piu rapide esistano. I centri specializzati ottengono risultati in 3-10 giorni. Se il laboratorio locale non puo, chiedi dell'invio del campione a un laboratorio piu rapido o della biopsia liquida (dal sangue) come alternativa.
 {{< /callout >}}
 
+### Oltre i pannelli standard: WES, WGS e RNA-seq
+
+Un pannello NGS standard testa 50-500 geni. Questo e solitamente sufficiente -- ma non sempre. Per tumori rari, sottotipi molecolari insoliti, o quando il pannello standard non trova nulla di azionabile, esistono opzioni piu complete:
+
+- **Whole Exome Sequencing (WES):** Testa tutti i geni codificanti proteine (~20.000). Identifica co-mutazioni, candidati neoantigeni per vaccini e difetti di riparazione del DNA (BRCA, FANCL, ATM)
+- **Whole Genome Sequencing (WGS):** Testa l'intero genoma, incluse le regioni non codificanti. L'opzione piu completa -- il 73-89% dei pazienti riceve risultati azionabili. Disponibile tramite programmi no-profit come [Hartwig Medical Foundation OncoAct](https://oncoact.nl/en/) (Paesi Bassi, NSCLC esplicitamente coperto), e programmi accademici come NCT MASTER (Heidelberg, Germania -- WGS + RNA-seq + analisi del metiloma gratuiti)
+- **RNA-seq:** Mostra quali geni sono effettivamente **attivi** nel tuo tumore. Puo rilevare fusioni geniche, meccanismi di resistenza bypass e alterazioni trascrizionali invisibili ai soli test del DNA
+
+Questi test avanzati non sono sempre rimborsati dall'assicurazione sanitaria standard. Chiedi al tuo oncologo se sono coperti o se programmi accademici (spesso gratuiti) accettano il tuo caso.
+
+### Passo 3b: Patologia assistita da AI -- preservare il prezioso tessuto
+
+Una nuova generazione di strumenti AI puo predire i biomarcatori direttamente dalle sezioni bioptiche standard (colorazione H&E), **prima** di tagliare ulteriore tessuto per l'immunoistochimica. Questo e importante perche il tessuto bioptico e limitato -- ogni test aggiuntivo consuma materiale insostituibile.
+
+**Piattaforme validate:**
+- **HEX** (Stanford, Nature Medicine 2026) -- predice 40 proteine e fenotipo immunitario dalle sezioni standard H&E. Open-source e gratuito
+- **Paige Predict** (Tempus, commerciale da gennaio 2026) -- predice 123+ biomarcatori dalle sezioni H&E
+
+Non tutti i centri hanno ancora adottato questi strumenti. Ma se la tua biopsia e piccola e il tessuto e limitato, chiedi: "La patologia assistita da AI puo aiutare a dare la priorita ai test aggiuntivi, per conservare tessuto?"
+
+### Passo 3c: Biopsia liquida -- diagnosi e monitoraggio dal sangue
+
+La biopsia liquida (test ctDNA) rileva frammenti di DNA tumorale che circolano nel sangue. Richiede solo un prelievo di sangue -- nessun ago nel tumore.
+
+**Quando aiuta alla diagnosi:**
+- Quando il tumore si trova in una posizione difficile da biopsiare (polmone profondo, cervello, osso)
+- Quando la biopsia ha prodotto tessuto insufficiente per i test molecolari
+- Come complemento alla biopsia tissutale -- la biopsia liquida puo rilevare mutazioni che il campione tissutale non ha trovato, e viceversa
+
+**Quando aiuta durante il trattamento:**
+- Rileva mutazioni di resistenza **3-6 mesi prima** che l'imaging mostri progressione
+- Conferma la risposta al trattamento a livello molecolare (la clearance del ctDNA alla settimana 8 e il piu forte predittore di esito)
+- Monitora la malattia minima residua dopo trattamento locale (chirurgia, radioterapia, ablazione)
+
+**Piattaforme disponibili:** FoundationOne Liquid CDx (300+ geni, disponibile tramite laboratori partner in molti paesi inclusa la Romania), Guardant360 CDx (74 geni), e piattaforme personalizzate ultrasensibili come Signatera e Haystack MRD per il monitoraggio continuo.
+
+{{< callout type="tip" >}}
+**La biopsia liquida non sostituisce la biopsia tissutale** -- le due sono complementari. Il tessuto fornisce l'istologia (l'aspetto del tumore al microscopio) e materiale sufficiente per test completi. La biopsia liquida fornisce monitoraggio molecolare in tempo reale e rileva cio che il tessuto potrebbe non trovare.
+{{< /callout >}}
+
 ---
 
 ## Passo 4: Stadiazione completa -- non lasciare nulla al caso
@@ -213,6 +268,20 @@ In un buon centro, tutti i medici del comitato hanno accesso a un **fascicolo di
 
 {{< callout type="warning" >}}
 **NON accettare un piano terapeutico deciso da un solo medico.** Chiedi: "Il mio caso verra presentato al comitato oncologico? Quando? Posso sapere cosa e stato deciso?" Se non esiste un comitato oncologico, tienine conto quando scegli dove curarti.
+{{< /callout >}}
+
+### Passo 5b: Strumenti AI gratuiti per l'interpretazione genomica
+
+Quando arrivano i risultati dei test molecolari, diverse piattaforme gratuite e clinicamente validate possono aiutare te e il tuo oncologo a interpretarli:
+
+- **[OncoKB](https://www.oncokb.org/)** (Memorial Sloan Kettering) -- 8.000+ alterazioni classificate per livello di azionabilita (approvato FDA, evidenza clinica, sperimentale). Gratuito per uso clinico
+- **[CIViC](https://civicdb.org/)** (Washington University) -- database di evidenza clinica curato dalla comunita scientifica, che collega mutazioni a trattamenti. Accesso libero
+- **[ClinicalTrials.gov](https://clinicaltrials.gov/)** -- cerca le tue mutazioni specifiche per trovare studi clinici aperti in tutto il mondo
+
+Questi strumenti non sostituiscono il giudizio del tuo oncologo. Lo completano, assicurando che nessun risultato azionabile venga trascurato -- specialmente per mutazioni rare, dove anche oncologi esperti potrebbero non essere a conoscenza di ogni opzione.
+
+{{< callout type="tip" >}}
+**Il giorno in cui ricevi i risultati molecolari:** Inserisci ogni mutazione identificata in OncoKB. Se una mutazione mostra evidenza di "Livello 1" o "Livello 2" per un trattamento che non stai ricevendo, portalo alla prossima visita oncologica.
 {{< /callout >}}
 
 ---

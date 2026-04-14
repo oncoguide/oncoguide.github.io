@@ -92,6 +92,21 @@ Ideally, choose a center that can guarantee fast turnaround times. If you are to
 When scheduling your biopsy, ask: "Will enough material be collected for NGS molecular testing?" This needs to be planned from the start, not discovered later.
 {{< /callout >}}
 
+### Request fresh frozen tissue --not just FFPE
+
+By default, your biopsy tissue will be preserved in formaldehyde and embedded in paraffin (called FFPE). This is standard and sufficient for most tests. But some advanced options -- cancer vaccines, organoid drug testing, high-quality RNA sequencing -- **require fresh frozen tissue stored at -80 degrees Celsius**.
+
+You cannot go back and freeze tissue after it has already been fixed in formaldehyde. The decision must be made **before** the biopsy, not after.
+
+Ask the interventional radiologist or surgeon: **"Can you also store some tissue cores fresh frozen at -80 degrees for future research and advanced testing?"** If the center cannot do this, ask whether they can send cores to a biobank that can.
+
+Ideally, request **4-8 biopsy cores** distributed between:
+- **Pathology** (diagnosis -- mandatory, always done)
+- **Molecular testing** (NGS, WES, RNA-seq)
+- **Fresh frozen biobank at -80 degrees** (for future options: vaccines, organoids, retesting)
+
+This one request, made at the right moment, can open treatment doors that do not yet exist today.
+
 ---
 
 ## Step 3: Molecular and genetic testing --the most overlooked step
@@ -154,6 +169,46 @@ These should be tested **regardless** of what cancer you have.
 **DO NOT accept 21+ days of waiting for molecular testing** without asking what faster options exist. Specialized centers get results in 3-10 days. If the local lab cannot deliver, ask about sending the sample to a faster lab or about liquid biopsy (from blood) as an alternative.
 {{< /callout >}}
 
+### Beyond standard panels: WES, WGS and RNA-seq
+
+A standard NGS panel tests 50-500 genes. This is usually sufficient -- but not always. For rare cancers, unusual molecular subtypes, or when the standard panel finds nothing actionable, more comprehensive options exist:
+
+- **Whole Exome Sequencing (WES):** Tests all protein-coding genes (~20,000). Identifies co-mutations, neoantigen candidates for vaccines, and DNA repair defects (BRCA, FANCL, ATM)
+- **Whole Genome Sequencing (WGS):** Tests the entire genome, including non-coding regions. The most comprehensive option -- 73-89% of patients receive actionable findings. Available through non-profit programs like [Hartwig Medical Foundation OncoAct](https://oncoact.nl/en/) (Netherlands, NSCLC explicitly covered), and academic programs like NCT MASTER (Heidelberg, Germany -- free WGS + RNA-seq + methylome analysis)
+- **RNA-seq:** Shows which genes are actually **active** in your tumor. Can detect gene fusions, bypass resistance mechanisms, and transcriptional changes invisible to DNA-only testing
+
+These advanced tests are not always reimbursed by standard health insurance. Ask your oncologist whether they are covered or whether academic programs (often free) accept your case.
+
+### Step 3b: AI-assisted pathology --preserving precious tissue
+
+A new generation of AI tools can predict biomarkers directly from standard biopsy slides (H&E staining), **before** cutting additional tissue for immunohistochemistry. This matters because biopsy tissue is limited -- every additional test consumes irreplaceable material.
+
+**Validated platforms:**
+- **HEX** (Stanford, Nature Medicine 2026) -- predicts 40 proteins and immune phenotype from standard H&E slides. Open-source and free
+- **Paige Predict** (Tempus, commercial since January 2026) -- predicts 123+ biomarkers from H&E
+
+Not all centers have adopted these tools yet. But if your biopsy is small and tissue is limited, ask: "Can AI-assisted pathology help prioritize which additional tests to run, to conserve tissue?"
+
+### Step 3c: Liquid biopsy --diagnosis and monitoring from blood
+
+A liquid biopsy (ctDNA test) detects tumor DNA fragments circulating in your blood. It requires only a blood draw -- no needle in the tumor.
+
+**When it helps at diagnosis:**
+- When the tumor is in a location difficult to biopsy (deep lung, brain, bone)
+- When the biopsy yielded insufficient tissue for molecular testing
+- As a complement to tissue biopsy -- liquid biopsy can detect mutations the tissue sample missed, and vice versa
+
+**When it helps during treatment:**
+- Detects resistance mutations **3-6 months before** imaging shows progression
+- Confirms treatment response at the molecular level (ctDNA clearance at week 8 is the strongest predictor of outcome)
+- Monitors for minimal residual disease after local treatment (surgery, radiation, ablation)
+
+**Available platforms:** FoundationOne Liquid CDx (300+ genes, available through partner labs in many countries including Romania), Guardant360 CDx (74 genes), and ultra-sensitive personalized platforms like Signatera and Haystack MRD for ongoing monitoring.
+
+{{< callout type="tip" >}}
+**Liquid biopsy does not replace tissue biopsy** -- the two are complementary. Tissue provides histology (what the cancer looks like under the microscope) and enough material for comprehensive testing. Liquid biopsy provides real-time molecular monitoring and catches what tissue may miss.
+{{< /callout >}}
+
 ---
 
 ## Step 4: Complete staging --leave nothing to chance
@@ -213,6 +268,20 @@ In a good center, all doctors on the board have access to a **single digital rec
 
 {{< callout type="warning" >}}
 **DO NOT accept a treatment plan decided by a single doctor.** Ask: "Will my case be presented at the tumor board? When? Can I find out what was decided?" If there is no tumor board, take that into consideration when choosing where to be treated.
+{{< /callout >}}
+
+### Step 5b: Free AI tools for genomic interpretation
+
+When your molecular testing results arrive, several free, clinically validated platforms can help you and your oncologist interpret them:
+
+- **[OncoKB](https://www.oncokb.org/)** (Memorial Sloan Kettering) -- 8,000+ alterations classified by actionability level (FDA-approved, clinical evidence, investigational). Free for clinical use
+- **[CIViC](https://civicdb.org/)** (Washington University) -- crowd-curated clinical evidence database linking mutations to treatments. Open access
+- **[ClinicalTrials.gov](https://clinicaltrials.gov/)** -- search your specific mutations to find open clinical trials worldwide
+
+These tools do not replace your oncologist's judgment. They complement it by ensuring no actionable finding is overlooked -- especially for rare mutations where even experienced oncologists may not be aware of every option.
+
+{{< callout type="tip" >}}
+**On the day you receive molecular results:** Enter each identified mutation into OncoKB. If any mutation shows "Level 1" or "Level 2" evidence for a treatment you are not receiving, bring this to your next oncology appointment.
 {{< /callout >}}
 
 ---

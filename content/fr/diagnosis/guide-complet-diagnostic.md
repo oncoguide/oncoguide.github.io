@@ -92,6 +92,21 @@ Idealement, choisissez un centre qui peut vous garantir des delais rapides. Si o
 Lorsque vous programmez la biopsie, demandez : "Le prelevement sera-t-il suffisant pour un test moleculaire NGS ?" Cela doit etre prevu des le depart, pas decouvert apres coup.
 {{< /callout >}}
 
+### Demandez du tissu frais congele -- pas seulement du FFPE
+
+Par defaut, le tissu de votre biopsie sera conserve dans le formaldehyde et inclus en paraffine (appele FFPE). C'est le standard, suffisant pour la plupart des tests. Mais certaines options avancees -- vaccins anticancereux, tests de sensibilite sur organoides, sequencage ARN de haute qualite -- **necessitent du tissu frais congele conserve a -80 degres Celsius**.
+
+Il est impossible de congeler le tissu apres qu'il a ete fixe dans le formaldehyde. La decision doit etre prise **avant** la biopsie, pas apres.
+
+Demandez au radiologue interventionnel ou au chirurgien : **"Pouvez-vous egalement conserver quelques carottes de tissu frais congele a -80 degres pour des recherches futures et des tests avances ?"** Si le centre ne peut pas le faire, demandez s'il est possible d'envoyer des carottes a une biobanque qui le peut.
+
+Idealement, demandez **4 a 8 carottes de biopsie** reparties entre :
+- **Anatomopathologie** (diagnostic -- obligatoire, toujours realise)
+- **Tests moleculaires** (NGS, WES, ARN-seq)
+- **Biobanque congelee a -80 degres** (pour les options futures : vaccins, organoides, nouveaux tests)
+
+Cette seule demande, faite au bon moment, peut ouvrir des portes therapeutiques qui n'existent pas encore aujourd'hui.
+
 ---
 
 ## Etape 3 : Les tests moleculaires et genetiques -- l'etape la plus negligee
@@ -154,6 +169,46 @@ Ceux-ci devraient etre testes **quel que soit** votre type de cancer.
 **N'acceptez PAS 21 jours ou plus d'attente pour les tests moleculaires** sans demander quelles options plus rapides existent. Les centres specialises obtiennent des resultats en 3 a 10 jours. Si le laboratoire local ne peut pas, renseignez-vous sur l'envoi de l'echantillon a un laboratoire plus rapide ou sur la biopsie liquide (a partir du sang) comme alternative.
 {{< /callout >}}
 
+### Au-dela des panels standards : WES, WGS et ARN-seq
+
+Un panel NGS standard teste 50 a 500 genes. C'est generalement suffisant -- mais pas toujours. Pour les cancers rares, les sous-types moleculaires inhabituels, ou lorsque le panel standard ne trouve rien d'actionnable, des options plus completes existent :
+
+- **Sequencage de l'exome entier (WES) :** Teste tous les genes codant des proteines (~20 000). Identifie les co-mutations, les candidats neoantigenes pour les vaccins et les defauts de reparation de l'ADN (BRCA, FANCL, ATM)
+- **Sequencage du genome entier (WGS) :** Teste l'ensemble du genome, y compris les regions non codantes. L'option la plus complete -- 73 a 89 % des patients recoivent des resultats actionnables. Disponible via des programmes a but non lucratif comme [Hartwig Medical Foundation OncoAct](https://oncoact.nl/en/) (Pays-Bas, CBNPC explicitement couvert), et des programmes academiques comme NCT MASTER (Heidelberg, Allemagne -- WGS + ARN-seq + analyse du methylome gratuits)
+- **ARN-seq :** Montre quels genes sont reellement **actifs** dans votre tumeur. Peut detecter des fusions de genes, des mecanismes de resistance par voie de contournement et des modifications transcriptionnelles invisibles aux tests ADN seuls
+
+Ces tests avances ne sont pas toujours rembourses par l'assurance maladie standard. Demandez a votre oncologue s'ils sont couverts ou si des programmes academiques (souvent gratuits) acceptent votre dossier.
+
+### Etape 3b : Pathologie assistee par IA -- preserver le tissu precieux
+
+Une nouvelle generation d'outils d'IA peut predire des biomarqueurs directement a partir des lames de biopsie standard (coloration H&E), **avant** de couper du tissu supplementaire pour l'immunohistochimie. C'est important car le tissu de biopsie est limite -- chaque test supplementaire consomme du materiel irreplacable.
+
+**Plateformes validees :**
+- **HEX** (Stanford, Nature Medicine 2026) -- predit 40 proteines et le phenotype immunitaire a partir de lames H&E standard. Open-source et gratuit
+- **Paige Predict** (Tempus, commercial depuis janvier 2026) -- predit plus de 123 biomarqueurs a partir de lames H&E
+
+Tous les centres n'ont pas encore adopte ces outils. Mais si votre biopsie est petite et le tissu limite, demandez : "La pathologie assistee par IA peut-elle aider a prioriser les tests supplementaires a realiser, pour economiser le tissu ?"
+
+### Etape 3c : Biopsie liquide -- diagnostic et suivi a partir du sang
+
+La biopsie liquide (test d'ADN tumoral circulant, ou ctDNA) detecte des fragments d'ADN tumoral circulant dans votre sang. Elle ne necessite qu'une prise de sang -- pas d'aiguille dans la tumeur.
+
+**Quand elle aide au diagnostic :**
+- Quand la tumeur est dans un endroit difficile a biopsier (poumon profond, cerveau, os)
+- Quand la biopsie a fourni insuffisamment de tissu pour les tests moleculaires
+- En complement de la biopsie tissulaire -- la biopsie liquide peut detecter des mutations que l'echantillon tissulaire a manquees, et inversement
+
+**Quand elle aide pendant le traitement :**
+- Detecte les mutations de resistance **3 a 6 mois avant** que l'imagerie ne montre une progression
+- Confirme la reponse au traitement au niveau moleculaire (la clairance du ctDNA a la semaine 8 est le meilleur predicteur de resultat)
+- Surveille la maladie residuelle minimale apres un traitement local (chirurgie, radiotherapie, ablation)
+
+**Plateformes disponibles :** FoundationOne Liquid CDx (300+ genes, disponible via des laboratoires partenaires dans de nombreux pays dont la Roumanie), Guardant360 CDx (74 genes), et des plateformes personnalisees ultra-sensibles comme Signatera et Haystack MRD pour le suivi continu.
+
+{{< callout type="tip" >}}
+**La biopsie liquide ne remplace pas la biopsie tissulaire** -- les deux sont complementaires. Le tissu fournit l'histologie (l'apparence du cancer au microscope) et suffisamment de materiel pour des tests complets. La biopsie liquide fournit un suivi moleculaire en temps reel et detecte ce que le tissu peut manquer.
+{{< /callout >}}
+
 ---
 
 ## Etape 4 : Stadification complete -- ne rien laisser au hasard
@@ -213,6 +268,20 @@ Dans un bon centre, tous les medecins de la RCP ont acces a un **dossier numeriq
 
 {{< callout type="warning" >}}
 **N'acceptez PAS un plan de traitement decide par un seul medecin.** Demandez : "Mon dossier sera-t-il presente en RCP ? Quand ? Puis-je connaitre la decision ?" S'il n'y a pas de RCP, tenez-en compte lorsque vous choisissez ou vous faire soigner.
+{{< /callout >}}
+
+### Etape 5b : Outils d'IA gratuits pour l'interpretation genomique
+
+Lorsque les resultats de vos tests moleculaires arrivent, plusieurs plateformes gratuites et validees cliniquement peuvent vous aider, vous et votre oncologue, a les interpreter :
+
+- **[OncoKB](https://www.oncokb.org/)** (Memorial Sloan Kettering) -- 8 000+ alterations classees par niveau d'actionnabilite (approuve FDA, evidence clinique, investigationnel). Gratuit pour usage clinique
+- **[CIViC](https://civicdb.org/)** (Washington University) -- base de donnees d'evidence clinique communautaire reliant les mutations aux traitements. Acces libre
+- **[ClinicalTrials.gov](https://clinicaltrials.gov/)** -- recherchez vos mutations specifiques pour trouver les essais cliniques ouverts dans le monde entier
+
+Ces outils ne remplacent pas le jugement de votre oncologue. Ils le completent en s'assurant qu'aucun resultat actionnable n'est neglige -- en particulier pour les mutations rares ou meme les oncologues experimentes ne connaissent pas forcement chaque option.
+
+{{< callout type="tip" >}}
+**Le jour ou vous recevez les resultats moleculaires :** Entrez chaque mutation identifiee dans OncoKB. Si une mutation affiche un "Level 1" ou "Level 2" d'evidence pour un traitement que vous ne recevez pas, apportez cette information a votre prochain rendez-vous d'oncologie.
 {{< /callout >}}
 
 ---

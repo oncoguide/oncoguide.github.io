@@ -92,6 +92,21 @@ Waehlen Sie idealerweise ein Zentrum, das schnelle Bearbeitungszeiten garantiere
 Wenn Sie die Biopsie terminieren, fragen Sie: "Wird genuegend Material fuer eine molekulare NGS-Testung entnommen?" Dies muss von Anfang an geplant werden, nicht erst nachtraeglich entdeckt.
 {{< /callout >}}
 
+### Frisches Gefriermaterial anfordern -- nicht nur FFPE
+
+Standardmaessig wird Ihr Biopsiegewebe in Formaldehyd fixiert und in Paraffin eingebettet (sogenanntes FFPE). Das ist Standard und fuer die meisten Tests ausreichend. Aber einige fortgeschrittene Optionen -- Krebsimpfstoffe, Organoide fuer Medikamententests, hochwertige RNA-Sequenzierung -- **erfordern frisches Gefriergewebe, gelagert bei -80 Grad Celsius**.
+
+Sie koennen Gewebe nicht nachtraeglich einfrieren, wenn es bereits in Formaldehyd fixiert wurde. Die Entscheidung muss **vor** der Biopsie getroffen werden, nicht danach.
+
+Fragen Sie den interventionellen Radiologen oder Chirurgen: **"Koennen Sie auch einige Gewebeproben frisch bei -80 Grad einfrieren, fuer zukuenftige Forschung und weitergehende Untersuchungen?"** Wenn das Zentrum dies nicht leisten kann, fragen Sie, ob die Proben an eine Biobank geschickt werden koennen.
+
+Idealerweise fordern Sie **4-8 Biopsiezylinder** an, verteilt auf:
+- **Pathologie** (Diagnose -- obligatorisch, wird immer gemacht)
+- **Molekulare Tests** (NGS, WES, RNA-seq)
+- **Frische Gefrierproben bei -80 Grad** (fuer zukuenftige Optionen: Impfstoffe, Organoide, Nachtestung)
+
+Diese eine Bitte, zum richtigen Zeitpunkt gestellt, kann Behandlungstueren oeffnen, die heute noch nicht existieren.
+
 ---
 
 ## Schritt 3: Molekulare und genetische Tests -- der am meisten uebersehene Schritt
@@ -154,6 +169,46 @@ Diese sollten **unabhaengig** davon getestet werden, welchen Krebs Sie haben.
 **Akzeptieren Sie KEINE Wartezeit von 21+ Tagen fuer molekulare Tests**, ohne zu fragen, welche schnelleren Optionen es gibt. Spezialisierte Zentren erhalten Ergebnisse in 3-10 Tagen. Wenn das oertliche Labor das nicht kann, fragen Sie nach der Einsendung der Probe an ein schnelleres Labor oder nach der Fluessigbiopsie (aus dem Blut) als Alternative.
 {{< /callout >}}
 
+### Ueber Standardpanels hinaus: WES, WGS und RNA-seq
+
+Ein Standard-NGS-Panel testet 50-500 Gene. Das ist in der Regel ausreichend -- aber nicht immer. Bei seltenen Krebsarten, ungewoehnlichen molekularen Subtypen oder wenn das Standardpanel nichts Verwertbares findet, gibt es umfassendere Optionen:
+
+- **Whole Exome Sequencing (WES):** Testet alle proteinkodierenden Gene (~20.000). Identifiziert Ko-Mutationen, Neoantigen-Kandidaten fuer Impfstoffe und DNA-Reparaturdefekte (BRCA, FANCL, ATM)
+- **Whole Genome Sequencing (WGS):** Testet das gesamte Genom, einschliesslich nicht-kodierender Regionen. Die umfassendste Option -- 73-89% der Patienten erhalten verwertbare Befunde. Verfuegbar ueber gemeinnuetzige Programme wie die [Hartwig Medical Foundation OncoAct](https://oncoact.nl/en/) (Niederlande, NSCLC explizit abgedeckt) und akademische Programme wie NCT MASTER (Heidelberg, Deutschland -- kostenlose WGS + RNA-seq + Methylomanalyse)
+- **RNA-seq:** Zeigt, welche Gene in Ihrem Tumor tatsaechlich **aktiv** sind. Kann Genfusionen, Bypass-Resistenzmechanismen und transkriptionelle Veraenderungen erkennen, die bei reinen DNA-Tests unsichtbar bleiben
+
+Diese erweiterten Tests werden nicht immer von der Krankenversicherung erstattet. Fragen Sie Ihren Onkologen, ob sie uebernommen werden oder ob akademische Programme (oft kostenlos) Ihren Fall aufnehmen.
+
+### Schritt 3b: KI-gestuetzte Pathologie -- kostbares Gewebe schonen
+
+Eine neue Generation von KI-Tools kann Biomarker direkt aus Standard-Biopsieschnitten (H&E-Faerbung) vorhersagen, **bevor** zusaetzliches Gewebe fuer die Immunhistochemie geschnitten wird. Das ist wichtig, weil Biopsiegewebe begrenzt ist -- jeder zusaetzliche Test verbraucht unersetzliches Material.
+
+**Validierte Plattformen:**
+- **HEX** (Stanford, Nature Medicine 2026) -- sagt 40 Proteine und den Immunphaenotyp aus Standard-H&E-Schnitten vorher. Open Source und kostenlos
+- **Paige Predict** (Tempus, kommerziell seit Januar 2026) -- sagt 123+ Biomarker aus H&E vorher
+
+Noch nicht alle Zentren haben diese Tools eingefuehrt. Aber wenn Ihre Biopsie klein ist und das Gewebe begrenzt, fragen Sie: "Kann KI-gestuetzte Pathologie helfen, die zusaetzlichen Tests zu priorisieren und Gewebe zu schonen?"
+
+### Schritt 3c: Fluessigbiopsie -- Diagnose und Monitoring aus dem Blut
+
+Eine Fluessigbiopsie (ctDNA-Test) weist Tumor-DNA-Fragmente nach, die in Ihrem Blut zirkulieren. Sie erfordert nur eine Blutentnahme -- keine Nadel in den Tumor.
+
+**Wann sie bei der Diagnose hilft:**
+- Wenn der Tumor an einer schwer zugaenglichen Stelle liegt (tiefe Lunge, Gehirn, Knochen)
+- Wenn die Biopsie nicht genuegend Gewebe fuer die molekulare Testung ergeben hat
+- Als Ergaenzung zur Gewebebiopsie -- die Fluessigbiopsie kann Mutationen erkennen, die in der Gewebeprobe fehlen, und umgekehrt
+
+**Wann sie waehrend der Behandlung hilft:**
+- Erkennt Resistenzmutationen **3-6 Monate bevor** die Bildgebung eine Progression zeigt
+- Bestaetigt das Ansprechen auf die Behandlung auf molekularer Ebene (ctDNA-Clearance in Woche 8 ist der staerkste Praediktor fuer das Ergebnis)
+- Ueberwacht minimale Resterkrankung nach lokaler Behandlung (Operation, Bestrahlung, Ablation)
+
+**Verfuegbare Plattformen:** FoundationOne Liquid CDx (300+ Gene, ueber Partnerlabore in vielen Laendern verfuegbar, einschliesslich Rumaenien), Guardant360 CDx (74 Gene) und ultrasensitive personalisierte Plattformen wie Signatera und Haystack MRD fuer die laufende Ueberwachung.
+
+{{< callout type="tip" >}}
+**Die Fluessigbiopsie ersetzt nicht die Gewebebiopsie** -- beide ergaenzen sich. Das Gewebe liefert die Histologie (wie der Krebs unter dem Mikroskop aussieht) und genuegend Material fuer umfassende Tests. Die Fluessigbiopsie liefert molekulares Echtzeit-Monitoring und erfasst, was das Gewebe moeglicherweise verpasst.
+{{< /callout >}}
+
 ---
 
 ## Schritt 4: Vollstaendiges Staging -- nichts dem Zufall ueberlassen
@@ -213,6 +268,20 @@ In einem guten Zentrum haben alle Aerzte der Konferenz Zugriff auf eine **einhei
 
 {{< callout type="warning" >}}
 **Akzeptieren Sie KEINEN Behandlungsplan, der von einem einzelnen Arzt entschieden wurde.** Fragen Sie: "Wird mein Fall in der Tumorkonferenz vorgestellt? Wann? Kann ich erfahren, was beschlossen wurde?" Wenn es keine Tumorkonferenz gibt, beruecksichtigen Sie das bei der Wahl, wo Sie sich behandeln lassen.
+{{< /callout >}}
+
+### Schritt 5b: Kostenlose KI-Tools zur Genominterpretation
+
+Wenn Ihre Ergebnisse der molekularen Tests vorliegen, koennen mehrere kostenlose, klinisch validierte Plattformen Ihnen und Ihrem Onkologen bei der Interpretation helfen:
+
+- **[OncoKB](https://www.oncokb.org/)** (Memorial Sloan Kettering) -- ueber 8.000 Alterationen, klassifiziert nach klinischer Relevanz (FDA-zugelassen, klinische Evidenz, experimentell). Kostenlos fuer den klinischen Einsatz
+- **[CIViC](https://civicdb.org/)** (Washington University) -- gemeinschaftlich kuratierte klinische Evidenzdatenbank, die Mutationen mit Behandlungen verknuepft. Frei zugaenglich
+- **[ClinicalTrials.gov](https://clinicaltrials.gov/)** -- suchen Sie nach Ihren spezifischen Mutationen, um weltweit offene klinische Studien zu finden
+
+Diese Tools ersetzen nicht das Urteil Ihres Onkologen. Sie ergaenzen es, indem sie sicherstellen, dass kein verwertbarer Befund uebersehen wird -- besonders bei seltenen Mutationen, bei denen selbst erfahrene Onkologen moeglicherweise nicht jede Option kennen.
+
+{{< callout type="tip" >}}
+**Am Tag, an dem Sie die molekularen Ergebnisse erhalten:** Geben Sie jede identifizierte Mutation in OncoKB ein. Wenn eine Mutation Evidenz der Stufe "Level 1" oder "Level 2" fuer eine Behandlung zeigt, die Sie nicht erhalten, bringen Sie dies zum naechsten Onkologietermin mit.
 {{< /callout >}}
 
 ---

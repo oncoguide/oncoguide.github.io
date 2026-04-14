@@ -92,6 +92,21 @@ Ideal, alege un centru care îți poate garanta timpi rapizi. Dacă ți se spune
 Când programezi biopsia, întreabă: "Se va preleva suficient material pentru testare moleculară NGS?" Acest lucru trebuie planificat din start, nu descoperit ulterior.
 {{< /callout >}}
 
+### Cere tesut congelat proaspat --nu doar FFPE
+
+Implicit, tesutul din biopsie va fi conservat in formaldehida si inclus in parafina (procedura numita FFPE). Aceasta este metoda standard si suficienta pentru majoritatea testelor. Dar unele optiuni avansate -- vaccinuri anticancer, testare de medicamente pe organoizi, secventiere ARN de inalta calitate -- **necesita tesut proaspat congelat la -80 de grade Celsius**.
+
+Nu poti congela tesutul dupa ce a fost deja fixat in formaldehida. Decizia trebuie luata **inainte** de biopsie, nu dupa.
+
+Intreaba radiologul interventionist sau chirurgul: **"Puteti pastra si cateva fragmente de tesut congelate proaspat la -80 de grade, pentru cercetare si teste avansate viitoare?"** Daca centrul nu poate face acest lucru, intreaba daca pot trimite fragmentele la o biobanca care poate.
+
+Ideal, cere **4-8 fragmente (core-uri) de biopsie** distribuite intre:
+- **Patologie** (diagnostic -- obligatoriu, se face intotdeauna)
+- **Testare moleculara** (NGS, WES, ARN-seq)
+- **Biobanca la -80 de grade** (pentru optiuni viitoare: vaccinuri, organoizi, retestare)
+
+Aceasta singura cerere, facuta in momentul potrivit, poate deschide usi de tratament care inca nu exista astazi.
+
 ---
 
 ## Pasul 3: Testele moleculare și genetice --pasul cel mai ignorat
@@ -154,6 +169,46 @@ Acestea ar trebui testate **indiferent** de ce cancer ai.
 **NU accepta 21+ zile de așteptare pentru teste moleculare** fără să întrebi ce opțiuni mai rapide există. Centre specializate obțin rezultate în 3-10 zile. Dacă laboratorul local nu poate, întreabă despre trimiterea probei la un laborator mai rapid sau despre biopsia lichidă (din sânge) ca alternativă.
 {{< /callout >}}
 
+### Dincolo de panelurile standard: WES, WGS si ARN-seq
+
+Un panel NGS standard testeaza 50-500 de gene. De obicei este suficient -- dar nu intotdeauna. Pentru cancere rare, subtipuri moleculare neobisnuite, sau cand panelul standard nu gaseste nimic actionabil, exista optiuni mai cuprinzatoare:
+
+- **Whole Exome Sequencing (WES):** Testeaza toate genele care codifica proteine (~20.000). Identifica co-mutatii, candidati de neoantigene pentru vaccinuri si defecte de reparare a ADN-ului (BRCA, FANCL, ATM)
+- **Whole Genome Sequencing (WGS):** Testeaza intregul genom, inclusiv regiunile non-codante. Optiunea cea mai cuprinzatoare -- 73-89% din pacienti primesc rezultate actionabile. Disponibil prin programe non-profit precum [Hartwig Medical Foundation OncoAct](https://oncoact.nl/en/) (Olanda, NSCLC acoperit explicit), si programe academice precum NCT MASTER (Heidelberg, Germania -- WGS + ARN-seq + analiza de metilom gratuit)
+- **ARN-seq:** Arata care gene sunt efectiv **active** in tumora ta. Poate detecta fuziuni genice, mecanisme de rezistenta de tip bypass si modificari transcriptionale invizibile pentru testarea doar pe ADN
+
+Aceste teste avansate nu sunt intotdeauna decontate de asigurarea standard de sanatate. Intreaba oncologul daca sunt acoperite sau daca programe academice (adesea gratuite) accepta cazul tau.
+
+### Pasul 3b: Patologie asistata de AI --conservarea tesutului pretios
+
+O noua generatie de instrumente AI poate prezice biomarkeri direct din lamele standard de biopsie (coloratie H&E), **inainte** de a taia tesut suplimentar pentru imunohistochimie. Acest lucru conteaza pentru ca tesutul de biopsie este limitat -- fiecare test suplimentar consuma material de neinlocuit.
+
+**Platforme validate:**
+- **HEX** (Stanford, Nature Medicine 2026) -- prezice 40 de proteine si fenotipul imunitar din lame H&E standard. Open-source si gratuit
+- **Paige Predict** (Tempus, comercial din ianuarie 2026) -- prezice peste 123 de biomarkeri din H&E
+
+Nu toate centrele au adoptat inca aceste instrumente. Dar daca biopsia ta este mica si tesutul limitat, intreaba: "Poate patologia asistata de AI sa ajute la prioritizarea testelor suplimentare, pentru a conserva tesutul?"
+
+### Pasul 3c: Biopsia lichida --diagnostic si monitorizare din sange
+
+Biopsia lichida (test ctDNA) detecteaza fragmente de ADN tumoral circulante in sange. Necesita doar o recoltare de sange -- fara ac in tumora.
+
+**Cand ajuta la diagnostic:**
+- Cand tumora se afla intr-o locatie dificil de biopsiat (plaman profund, creier, os)
+- Cand biopsia a produs tesut insuficient pentru testare moleculara
+- Ca un complement al biopsiei tisulare -- biopsia lichida poate detecta mutatii pe care proba de tesut le-a ratat, si invers
+
+**Cand ajuta in timpul tratamentului:**
+- Detecteaza mutatii de rezistenta cu **3-6 luni inainte** ca imagistica sa arate progresia
+- Confirma raspunsul la tratament la nivel molecular (clearance-ul ctDNA la saptamana 8 este cel mai puternic predictor al rezultatului)
+- Monitorizeaza boala reziduala minima dupa tratament local (chirurgie, radioterapie, ablatie)
+
+**Platforme disponibile:** FoundationOne Liquid CDx (peste 300 de gene, disponibil prin laboratoare partenere in multe tari inclusiv Romania), Guardant360 CDx (74 de gene), si platforme ultra-sensibile personalizate precum Signatera si Haystack MRD pentru monitorizare continua.
+
+{{< callout type="tip" >}}
+**Biopsia lichida nu inlocuieste biopsia tisulara** -- cele doua sunt complementare. Tesutul ofera histologie (cum arata cancerul la microscop) si suficient material pentru testare cuprinzatoare. Biopsia lichida ofera monitorizare moleculara in timp real si capteaza ce tesutul poate rata.
+{{< /callout >}}
+
 ---
 
 ## Pasul 4: Stadializare completă --nu lăsa nimic la întâmplare
@@ -213,6 +268,20 @@ Cifrele vorbesc de la sine:
 
 {{< callout type="warning" >}}
 **NU accepta un plan de tratament decis de un singur medic.** Întreabă: "Cazul meu va fi prezentat în comisia oncologică? Când? Pot afla ce s-a decis?" Dacă nu există comisie oncologică, ia asta în considerare când alegi unde te tratezi.
+{{< /callout >}}
+
+### Pasul 5b: Instrumente AI gratuite pentru interpretarea genomica
+
+Cand sosesc rezultatele testelor moleculare, mai multe platforme gratuite, validate clinic, te pot ajuta pe tine si pe oncologul tau sa le interpretati:
+
+- **[OncoKB](https://www.oncokb.org/)** (Memorial Sloan Kettering) -- peste 8.000 de alterari clasificate pe nivel de actionabilitate (aprobate FDA, evidenta clinica, investigationale). Gratuit pentru uz clinic
+- **[CIViC](https://civicdb.org/)** (Washington University) -- baza de date cu evidenta clinica curatata de comunitate, care leaga mutatii de tratamente. Acces liber
+- **[ClinicalTrials.gov](https://clinicaltrials.gov/)** -- cauta mutatiile tale specifice pentru a gasi studii clinice deschise la nivel mondial
+
+Aceste instrumente nu inlocuiesc rationamentul oncologului tau. Il completeaza, asigurand ca niciun rezultat actionabil nu este trecut cu vederea -- in special pentru mutatii rare unde chiar si oncologii cu experienta pot sa nu cunoasca fiecare optiune.
+
+{{< callout type="tip" >}}
+**In ziua in care primesti rezultatele moleculare:** Introdu fiecare mutatie identificata in OncoKB. Daca vreo mutatie arata evidenta "Level 1" sau "Level 2" pentru un tratament pe care nu il primesti, ridica acest subiect la urmatoarea consultatie oncologica.
 {{< /callout >}}
 
 ---
