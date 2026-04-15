@@ -6,7 +6,7 @@ baseURL: "https://oncoguide.github.io/"
 title: "OncoGuide"
 theme: "PaperMod"
 paginate: 10
-enableRobotsTXT: true
+enableRobotsTXT: false  # use static/robots.txt (includes Disallow: /clinical/)
 buildDrafts: false
 buildFuture: false
 enableEmoji: false
