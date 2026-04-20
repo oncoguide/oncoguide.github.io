@@ -69,8 +69,17 @@ La prueba NGS que confirmo la fusion RET fue solo el comienzo. Existen capas muc
 **RNA-seq** va aun mas lejos: muestra que genes estan efectivamente **activos** en tu tumor, no solo presentes. Puede confirmar el socio de fusion RET (KIF5B, CCDC6, etc.) con certeza y detectar mecanismos de resistencia que no aparecen en el ADN.
 
 {{< callout type="tip" >}}
-**En la practica:** Solicita a tu oncologo una derivacion para WES + RNA-seq del tejido tumoral. Si ya tienes una biopsia almacenada (bloque de parafina, llamado FFPE) en un laboratorio, esto puede ser suficiente. Los laboratorios con experiencia en oncologia molecular estan disponibles en toda Europa. **Nota importante:** Estas pruebas avanzadas no siempre estan cubiertas por los seguros publicos; verifica con tu oncologo si estan cubiertas o requieren pago privado. Tambien existen programas academicos europeos que ofrecen secuenciacion gratuita para pacientes elegibles.
+**En la practica:** Solicita a tu oncologo una derivacion para WES + RNA-seq del tejido tumoral. Si ya tienes una biopsia almacenada (bloque de parafina, llamado FFPE) en un laboratorio, esto puede ser suficiente. Los laboratorios con experiencia en oncologia molecular estan disponibles en toda Europa. **Nota importante:** Estas pruebas avanzadas no siempre estan cubiertas por los seguros publicos; verifica con tu oncologo si estan cubiertas o requieren pago privado. Tambien existen programas academicos europeos que ofrecen secuenciacion gratuita para pacientes elegibles, aunque el acceso internacional normalmente requiere una derivacion transfronteriza o un formulario S2.
 {{< /callout >}}
+
+### Biomarcadores especificos que abren opciones de ensayo
+
+Mas alla de la secuenciacion general, algunos biomarcadores especificos merecen ser probados explicitamente porque abren acceso a clases terapeuticas emergentes:
+
+- **Perdida de MTAP** (metiltioadenosina fosforilasa) -- Un estudio peer-reviewed de 2026 (Aldea et al., *Annals of Oncology*, marzo 2026) documento la perdida de MTAP en **18-35% de los pacientes con CPNM RET fusion-positivo** -- una alta prevalencia que abre la elegibilidad para inhibidores PRMT5, una nueva clase de terapias dirigidas actualmente en ensayos fase 2-3. El estado de MTAP se confirma mejor mediante **IHC en tejido tumoral** (no por biopsia liquida, que no puede detectar fiablemente las deleciones de MTAP). Si tienes una biopsia FFPE almacenada, la IHC de MTAP puede anadirse a coste marginal.
+- **Estado de RB1** (gen supresor tumoral) -- Relevante para entender el riesgo de plasticidad de linaje celular (ver la seccion "Por que ocurre la resistencia" mas abajo). Generalmente se reporta como parte de un panel NGS estandar; vale la pena confirmar que este incluido.
+
+Pregunta a tu oncologo si estos marcadores forman parte del panel ya realizado. Si no, a menudo pueden anadirse a la muestra tisular existente a coste marginal adicional.
 
 ### Pruebas geneticas: no solo el tumor, sino tambien tu
 
@@ -126,10 +135,13 @@ Existen varias plataformas de monitorizacion de ctDNA, con diferentes niveles de
 |---|---|---|---|
 | **Guardant360** | 74 genes, panel fijo | 0.1% VAF | Europa (a traves de laboratorios asociados) |
 | **FoundationOne Liquid CDx** | 300+ genes, panel fijo | 0.1-0.5% VAF | Europa y EE.UU. |
-| **Signatera (Natera)** | 16 variantes personalizadas de tu tumor | 0.01% VAF | UE (marcado CE-IVD) |
+| **Signatera (Natera)** | 16 variantes personalizadas de tu tumor (fijas, de la biopsia inicial) | 0.01% VAF | UE (marcado CE-IVD) |
+| **NeXT Personal (Personalis)** | Hybrid-capture tumor-informed, puede rastrear variantes de resistencia emergentes durante el tratamiento | 1.7 ppm (0.00017%) | EE. UU. + UE via laboratorios asociados |
 | **Haystack MRD (HPH Hamburgo)** | 50 variantes de WGS tumoral | 0.0006% | Alemania, accesible UE |
 
-**La diferencia entre paneles fijos y monitorizacion personalizada es enorme.** Un panel fijo como Guardant360 detecta mutaciones conocidas a un nivel relativamente alto. Una plataforma personalizada (Signatera, Haystack) detecta rastros de enfermedad 100-1000 veces mas pequenos -- esencial para confirmar si la enfermedad ha sido eliminada completamente.
+**La diferencia entre paneles fijos y monitorizacion personalizada es enorme.** Un panel fijo como Guardant360 detecta mutaciones conocidas a un nivel relativamente alto. Una plataforma personalizada (Signatera, NeXT Personal, Haystack) detecta rastros de enfermedad 100-1000 veces mas pequenos -- esencial para confirmar si la enfermedad ha sido eliminada completamente.
+
+**Una distincion adicional importa para los pacientes que ya llevan meses en tratamiento:** la mayoria de las plataformas personalizadas (Signatera, Haystack) rastrean un conjunto fijo de variantes seleccionadas de tu biopsia tumoral inicial. Si aparecen nuevas mutaciones de resistencia durante el tratamiento, esos paneles fijos pueden no detectarlas. NeXT Personal (Personalis) introdujo en abril de 2026 una capacidad "Real-Time Variant Tracker" que utiliza hybrid-capture para detectar **nuevas mutaciones a medida que aparecen durante la terapia** -- util para la deteccion temprana de resistencia emergente. Pregunta a tu laboratorio que enfoque utiliza y si el seguimiento de mutaciones emergentes esta disponible.
 
 ### Cuando hacer la prueba
 
@@ -531,6 +543,14 @@ Dos mecanismos principales:
 - **Activacion de KRAS** (7.1%)
 - **Bypass YAP/HER3/EGFR** (adaptativo, aparece temprano)
 - **Reactivacion de MAPK** (30% de los casos)
+
+**3. Plasticidad de linaje celular -- el tumor cambia de identidad**
+
+Un tercer mecanismo, menos conocido: bajo presion de terapia dirigida sostenida, algunos adenocarcinomas pueden transitar hacia un fenotipo neuroendocrino -- el tumor cambia lo que es, no solo como responde. Este fue un tema importante en AACR 2026 (plenaria de apertura de MSK por Charles Sawyers), documentado en EGFR, ALK y otras clases de terapia dirigida. El mecanismo es agnostico al driver, incluyendo RET.
+
+**La perdida del gen RB1 es el biomarcador predisponente mas fuerte.** Los pacientes con perdida de RB1 al inicio -- o adquirida durante el tratamiento -- enfrentan un mayor riesgo de esta transicion. Datos preclinicos (principalmente de cancer de prostata, cross-domain) sugieren que los inhibidores de FGFR y JAK pueden revertir la plasticidad de linaje celular en tumores RB1-deficientes, pero esto aun no esta validado en CPNM.
+
+**Implicacion clinica:** Si la perdida de RB1 se detecta en tu NGS o ctDNA (ahora o mas tarde), una **rebiopsia en progresion se vuelve esencial** -- no solo cambiar a un TKI RET de proxima generacion. La enfermedad con fenotipo neuroendocrino responde a medicamentos diferentes (regimenes basados en platino/etoposido, no TKI RET). Actuar sobre la progresion imagenologica sin reconfirmar la biologia del tumor arriesga elegir el tratamiento incorrecto siguiente.
 
 ### Inhibidores RET de nueva generacion
 

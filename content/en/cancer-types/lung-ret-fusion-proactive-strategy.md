@@ -69,8 +69,17 @@ The NGS test that confirmed the RET fusion was just the beginning. There are muc
 **RNA-seq** goes even further: it shows which genes are actually **active** in your tumor, not just present. It can confirm the RET fusion partner (KIF5B, CCDC6, etc.) with certainty and detect resistance mechanisms that do not appear at the DNA level.
 
 {{< callout type="tip" >}}
-**In practice:** Ask your oncologist for a referral for WES + RNA-seq on tumor tissue. If you already have a stored biopsy (paraffin block, called FFPE) at a laboratory, that may be sufficient. Laboratories with experience in molecular oncology are available throughout Europe. **Important note:** These advanced tests are not always covered by public health insurance; check with your oncologist whether they are covered or require private payment. There are also European academic programs that offer free sequencing for eligible patients.
+**In practice:** Ask your oncologist for a referral for WES + RNA-seq on tumor tissue. If you already have a stored biopsy (paraffin block, called FFPE) at a laboratory, that may be sufficient. Laboratories with experience in molecular oncology are available throughout Europe. **Important note:** These advanced tests are not always covered by public health insurance; check with your oncologist whether they are covered or require private payment. There are also European academic programs that offer free sequencing for eligible patients, though international access typically requires cross-border referral or an S2 form.
 {{< /callout >}}
+
+### Specific biomarkers that open trial options
+
+Beyond general sequencing, a few specific biomarkers are worth explicitly testing because they gate access to emerging treatment classes:
+
+- **MTAP loss** (methylthioadenosine phosphorylase) -- A peer-reviewed 2026 study (Aldea et al., *Annals of Oncology*, March 2026) documented MTAP loss in **18-35% of RET fusion-positive NSCLC patients** -- a high prevalence that opens eligibility for PRMT5 inhibitors, a new class of targeted therapies currently in phase 2-3 trials. MTAP status is best confirmed by **IHC on tumor tissue** (not by liquid biopsy, which cannot reliably detect MTAP deletions). If you have a stored FFPE biopsy, MTAP IHC can be added at marginal additional cost.
+- **RB1 status** (tumor suppressor gene) -- Relevant for understanding lineage plasticity risk (see the "Resistance mechanisms" section below). Usually reported as part of a standard NGS panel; worth confirming is included.
+
+Ask your oncologist whether these markers are part of the panel already run. If not, they can often be added to the existing tissue sample at marginal additional cost.
 
 ### Genetic testing: not just the tumor, but also you
 
@@ -126,10 +135,13 @@ There are multiple ctDNA monitoring platforms, with different levels of sensitiv
 |---|---|---|---|
 | **Guardant360** | 74 genes, fixed panel | 0.1% VAF | Europe (through partner laboratories) |
 | **FoundationOne Liquid CDx** | 300+ genes, fixed panel | 0.1-0.5% VAF | Europe and USA |
-| **Signatera (Natera)** | 16 personalized variants from your tumor | 0.01% VAF | EU (CE-IVD marked) |
+| **Signatera (Natera)** | 16 personalized variants from your tumor (fixed from initial biopsy) | 0.01% VAF | EU (CE-IVD marked) |
+| **NeXT Personal (Personalis)** | Tumor-informed hybrid-capture, can track emergent resistance variants during treatment | 1.7 ppm (0.00017%) | US + EU via partner laboratories |
 | **Haystack MRD (HPH Hamburg)** | 50 variants from tumor WGS | 0.0006% | Germany, accessible EU-wide |
 
-**The difference between fixed panels and personalized monitoring is enormous.** A fixed panel like Guardant360 detects known mutations at a relatively high level. A personalized platform (Signatera, Haystack) detects traces of disease 100-1000 times smaller -- essential for confirming whether the disease has been completely eliminated.
+**The difference between fixed panels and personalized monitoring is enormous.** A fixed panel like Guardant360 detects known mutations at a relatively high level. A personalized platform (Signatera, NeXT Personal, Haystack) detects traces of disease 100-1000 times smaller -- essential for confirming whether the disease has been completely eliminated.
+
+**A further distinction matters for patients already on treatment months in:** most personalized platforms (Signatera, Haystack) track a fixed set of variants selected from your initial tumor biopsy. If new resistance mutations emerge during treatment, those fixed panels may not see them. NeXT Personal (Personalis) introduced in April 2026 a "Real-Time Variant Tracker" capability that uses hybrid-capture to detect **new mutations as they appear during therapy** -- useful for early detection of emerging resistance. Ask your lab which approach they use and whether emergent-mutation tracking is available.
 
 ### When to test
 
@@ -531,6 +543,14 @@ Two main mechanisms:
 - **KRAS activation** (7.1%)
 - **YAP/HER3/EGFR bypass** (adaptive, appears early)
 - **MAPK reactivation** (30% of cases)
+
+**3. Lineage plasticity -- the tumor changes identity**
+
+A third, less-known mechanism: under sustained targeted therapy, some adenocarcinomas can transition toward a neuroendocrine phenotype -- the tumor changes what it is, not just how it responds. This was a major theme at AACR 2026 (MSK opening plenary by Charles Sawyers), documented across EGFR, ALK, and other targeted therapy classes. It is driver-agnostic, including RET.
+
+**RB1 gene loss is the strongest predisposing biomarker.** Patients with RB1 loss at baseline -- or acquired during treatment -- face a higher risk of this transition. Preclinical data (mostly from prostate cancer, cross-domain) suggests FGFR and JAK inhibitors may reverse lineage plasticity in RB1-deficient tumors, but this is not yet validated in NSCLC.
+
+**Clinical implication:** If RB1 loss is detected on your NGS or ctDNA (now or later), a **rebiopsy at progression becomes essential** -- not just switching to a next-generation TKI. Neuroendocrine-phenotype disease responds to different drugs (platinum/etoposide-based regimens, not RET TKIs). Acting on imaging progression without re-confirming tumor biology risks choosing the wrong next treatment.
 
 ### Next-generation RET inhibitors
 

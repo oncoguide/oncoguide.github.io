@@ -69,8 +69,17 @@ Testul NGS care a confirmat fuziunea RET a fost doar începutul. Există stratur
 **RNA-seq** merge și mai departe: arată care gene sunt efectiv **active** în tumora ta, nu doar prezente. Poate confirma partenerul de fuziune RET (KIF5B, CCDC6, etc.) cu certitudine și detecta mecanisme de rezistență care nu apar pe ADN.
 
 {{< callout type="tip" >}}
-**Practică:** Cere oncologului o trimitere pentru WES + RNA-seq pe țesutul tumoral. Dacă ai deja o biopsie stocată (bloc de parafină, numit FFPE) într-un laborator, acesta poate fi suficient. Laboratoarele cu experiență în oncologie moleculară sunt disponibile în toată Europa. **Notă importantă:** Aceste teste avansate nu sunt întotdeauna decontate de asigurările de stat; verifică cu oncologul dacă sunt acoperite sau necesită plată privată. Există și programe academice europene care oferă secvențiere gratuită pentru pacienți eligibili.
+**Practică:** Cere oncologului o trimitere pentru WES + RNA-seq pe țesutul tumoral. Dacă ai deja o biopsie stocată (bloc de parafină, numit FFPE) într-un laborator, acesta poate fi suficient. Laboratoarele cu experiență în oncologie moleculară sunt disponibile în toată Europa. **Notă importantă:** Aceste teste avansate nu sunt întotdeauna decontate de asigurările de stat; verifică cu oncologul dacă sunt acoperite sau necesită plată privată. Există și programe academice europene care oferă secvențiere gratuită pentru pacienți eligibili, deși accesul internațional necesită de obicei o trimitere transfrontalieră sau un formular S2.
 {{< /callout >}}
+
+### Biomarkeri specifici care deschid opțiuni de trial
+
+Dincolo de secvențierea generală, câțiva biomarkeri specifici merită testați explicit pentru că deschid accesul la clase terapeutice emergente:
+
+- **Pierderea MTAP** (metiltioadenozin fosforilaza) -- Un studiu peer-reviewed din 2026 (Aldea et al., *Annals of Oncology*, martie 2026) a documentat pierderea MTAP la **18-35% dintre pacienții cu NSCLC RET fusion-pozitiv** -- o prevalență mare care deschide eligibilitatea pentru inhibitori PRMT5, o clasă nouă de terapii țintite în faze 2-3 de trial. Statusul MTAP se confirmă cel mai bine prin **IHC pe țesut tumoral** (nu prin biopsie lichidă, care nu poate detecta fiabil deleții MTAP). Dacă ai o biopsie FFPE stocată, IHC pentru MTAP poate fi adăugat la cost marginal.
+- **Statusul RB1** (gena supresor tumoral) -- Relevant pentru înțelegerea riscului de plasticitate de linie celulară (vezi secțiunea "De ce apare rezistența" mai jos). De obicei raportat ca parte din panel-ul NGS standard; merită confirmat că este inclus.
+
+Întreabă oncologul dacă acești markeri fac parte din panel-ul deja rulat. Dacă nu, deseori pot fi adăugați pe aceeași probă FFPE la cost marginal adițional.
 
 ### Testarea genetică: nu doar tumora, ci și tu
 
@@ -126,10 +135,13 @@ Există mai multe platforme de monitoring ctDNA, cu niveluri diferite de sensibi
 |---|---|---|---|
 | **Guardant360** | 74 gene, panel fix | 0.1% VAF | Europa (prin laboratoare partenere) |
 | **FoundationOne Liquid CDx** | 300+ gene, panel fix | 0.1-0.5% VAF | Europa și SUA |
-| **Signatera (Natera)** | 16 variante personalizate din tumora ta | 0.01% VAF | UE (marcaj CE-IVD) |
+| **Signatera (Natera)** | 16 variante personalizate din tumora ta (fixe, din biopsia inițială) | 0.01% VAF | UE (marcaj CE-IVD) |
+| **NeXT Personal (Personalis)** | Hybrid-capture tumor-informed, poate urmări variante de rezistență emergente pe parcursul tratamentului | 1.7 ppm (0.00017%) | SUA + UE prin laboratoare partenere |
 | **Haystack MRD (HPH Hamburg)** | 50 variante din WGS tumoral | 0.0006% | Germania, accesibil UE |
 
-**Diferența dintre paneluri fixe și monitorizare personalizată este enormă.** Un panel fix ca Guardant360 detectează mutații cunoscute la nivel relativ mare. O platformă personalizată (Signatera, Haystack) detectează urme de boală de 100-1000 de ori mai mici -- esențial pentru a confirma dacă boala a fost eliminată complet.
+**Diferența dintre paneluri fixe și monitorizare personalizată este enormă.** Un panel fix ca Guardant360 detectează mutații cunoscute la nivel relativ mare. O platformă personalizată (Signatera, NeXT Personal, Haystack) detectează urme de boală de 100-1000 de ori mai mici -- esențial pentru a confirma dacă boala a fost eliminată complet.
+
+**O distincție suplimentară contează pentru pacienții deja în tratament de luni de zile:** majoritatea platformelor personalizate (Signatera, Haystack) urmăresc un set fix de variante selectate din biopsia ta tumorală inițială. Dacă apar mutații noi de rezistență pe parcursul tratamentului, acele panel-uri fixe ar putea să nu le vadă. NeXT Personal (Personalis) a introdus în aprilie 2026 o capabilitate "Real-Time Variant Tracker" care folosește hybrid-capture pentru a detecta **mutații noi pe măsură ce apar în timpul terapiei** -- util pentru depistarea timpurie a rezistenței emergente. Întreabă laboratorul ce abordare folosește și dacă urmărirea mutațiilor emergente este disponibilă.
 
 ### Când să testezi
 
@@ -531,6 +543,14 @@ Două mecanisme principale:
 - **Activare KRAS** (7.1%)
 - **Bypass YAP/HER3/EGFR** (adaptativ, apare devreme)
 - **Reactivare MAPK** (30% din cazuri)
+
+**3. Plasticitate de linie celulară -- tumora își schimbă identitatea**
+
+Un al treilea mecanism, mai puțin cunoscut: sub presiune de terapie țintită susținută, unele adenocarcinoame pot tranziționa către un fenotip neuroendocrin -- tumora schimbă ce este, nu doar cum răspunde. Aceasta a fost o temă majoră la AACR 2026 (plenara de deschidere MSK susținută de Charles Sawyers), documentată la EGFR, ALK și alte clase de terapie țintită. Mecanismul este driver-agnostic, incluzând RET.
+
+**Pierderea genei RB1 este cel mai puternic biomarker predispozant.** Pacienții cu pierdere RB1 la baseline -- sau dobândită în timpul tratamentului -- se confruntă cu risc mai mare de această tranziție. Date preclinice (în principal din cancer de prostată, cross-domain) sugerează că inhibitorii FGFR și JAK pot inversa plasticitatea de linie celulară în tumori RB1-deficiente, dar acest lucru nu este încă validat în NSCLC.
+
+**Implicație clinică:** Dacă pierderea RB1 este detectată pe NGS sau ctDNA (acum sau mai târziu), o **rebiopsie la progresie devine esențială** -- nu doar schimbarea la un inhibitor RET de nouă generație. Boala cu fenotip neuroendocrin răspunde la medicamente diferite (regimuri bazate pe platină/etopozid, nu TKI RET). A acționa pe baza progresiei imagistice fără a reconfirma biologia tumorii riscă alegerea greșită a tratamentului următor.
 
 ### Inhibitori RET de nouă generație
 
