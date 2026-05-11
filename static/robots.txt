@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /clinical/
+Disallow: /dorin/
 Sitemap: https://oncoguide.github.io/sitemap.xml
