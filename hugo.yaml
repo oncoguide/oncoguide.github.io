@@ -79,6 +79,10 @@ languages:
           name: "Diagnostic"
           url: /ro/diagnosis/
           weight: 10
+        - identifier: monitoring
+          name: "Monitorizare"
+          url: /ro/imaging/
+          weight: 15
         - identifier: cancer-types
           name: "Ghiduri Pacienti"
           url: /ro/cancer-types/
@@ -113,6 +117,10 @@ languages:
           name: "Diagnosi"
           url: /it/diagnosis/
           weight: 10
+        - identifier: monitoring
+          name: "Monitoraggio"
+          url: /it/imaging/
+          weight: 15
         - identifier: cancer-types
           name: "Guide Pazienti"
           url: /it/cancer-types/
@@ -147,6 +155,10 @@ languages:
           name: "Diagnostic"
           url: /fr/diagnosis/
           weight: 10
+        - identifier: monitoring
+          name: "Suivi"
+          url: /fr/imaging/
+          weight: 15
         - identifier: cancer-types
           name: "Guides Patients"
           url: /fr/cancer-types/
@@ -181,6 +193,10 @@ languages:
           name: "Diagnose"
           url: /de/diagnosis/
           weight: 10
+        - identifier: monitoring
+          name: "Verlaufskontrolle"
+          url: /de/imaging/
+          weight: 15
         - identifier: cancer-types
           name: "Patientenleitfaden"
           url: /de/cancer-types/
@@ -215,6 +231,10 @@ languages:
           name: "Diagnostico"
           url: /es/diagnosis/
           weight: 10
+        - identifier: monitoring
+          name: "Seguimiento"
+          url: /es/imaging/
+          weight: 15
         - identifier: cancer-types
           name: "Guias de Pacientes"
           url: /es/cancer-types/

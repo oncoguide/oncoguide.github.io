@@ -7,12 +7,11 @@
 #  - Ranked by PERFORMANCE only (detector gen → dose → FOV/field → AI). Cost never ranks.
 #  - One card per distinct model; identical models across centers merge (multiple `centers`).
 #  - A machine may sit in several regions; each center carries its own `region` (ro|intl).
-#    `regions:` lists the regions it appears in. intl = "Europe + Turkey".
 #  - rank_ro / rank_intl / rank_combined: only on confirmed machines.
 #  - confirmed:false → routed to a separate "not independently verified" list (no rank, no bars).
 #  - Two data points shown per card: radiation (dose_value, mSv) + the modality's headline quality metric.
-#  - dose_value = the scanner's TYPICAL whole-body effective dose; the article callout states the
-#    full range (<1 mSv best total-body → ~14–16 mSv conventional + full diagnostic CT) + tracer-vs-CT caveat.
+#  - AI label (ai: true) ONLY for genuine deep-learning / AI features (source-verified). Classical
+#    iterative recon (Q.Clear/BSREM, QIR, ADMIRE, ASiR, SAFIRE) is NOT AI and gets no label.
 #  - Cost = public framing only; no contact-specific / personal quotes.
 # ════════════════════════════════════════════════════════════════════
 
@@ -30,7 +29,8 @@ petct:
       dose_value: "~0.5–1 mSv"
       fov_class: "fov-lafov"
       fov_value: "194 cm — whole body at once"
-      ai: false
+      ai: true
+      ai_feature: "HYPER DLR"
       cost: "Self-pay ≈ €1,300–1,700"
       cas: "no"
       centers:
@@ -48,7 +48,8 @@ petct:
       dose_value: "~2–4 mSv"
       fov_class: "fov-lafov"
       fov_value: "106 cm — long axial field"
-      ai: false
+      ai: true
+      ai_feature: "OncoFreeze AI"
       cost: "Self-pay ≈ €1,100–2,500 (varies by country)"
       cas: "no"
       centers:
@@ -75,7 +76,7 @@ petct:
       fov_class: "fov-extended"
       fov_value: "32 cm — extended field"
       ai: true
-      ai_feature: "Q.Clear"
+      ai_feature: "Precision DL"
       cost: "Self-pay ≈ €750"
       cas: "no"
       centers:
@@ -92,7 +93,8 @@ petct:
       dose_value: "~7–10 mSv"
       fov_class: "fov-standard"
       fov_value: "22 cm"
-      ai: false
+      ai: true
+      ai_feature: "OncoFreeze AI"
       cost: "≈ 5,500 RON self-pay"
       cas: "yes"
       centers:
@@ -109,8 +111,7 @@ petct:
       dose_value: "~7–10 mSv"
       fov_class: "fov-standard"
       fov_value: "≈ 20 cm"
-      ai: true
-      ai_feature: "Q.Clear"
+      ai: false
       cost: "Self-pay (contact center)"
       cas: "no"
       centers:
@@ -128,7 +129,7 @@ petct:
       fov_class: "fov-standard"
       fov_value: "20 cm"
       ai: true
-      ai_feature: "Q.Clear"
+      ai_feature: "deep-learning recon"
       cost: ""
       cas: "yes"
       centers:
@@ -232,7 +233,8 @@ mri:
       dose_value: "None"
       field_class: "mri-7t"
       field_value: "7T (neuro / MSK only)"
-      ai: false
+      ai: true
+      ai_feature: "Deep Resolve"
       cost: "Academic referral"
       cas: "no"
       centers:
@@ -286,7 +288,8 @@ mri:
       dose_value: "None"
       field_class: "mri-3t"
       field_value: "3T"
-      ai: false
+      ai: true
+      ai_feature: "Deep Resolve"
       cost: ""
       cas: "partial"
       centers:
@@ -320,7 +323,8 @@ mri:
       dose_value: "None"
       field_class: "mri-15t"
       field_value: "1.5T"
-      ai: false
+      ai: true
+      ai_feature: "Deep Resolve"
       cost: ""
       cas: "yes"
       centers:
@@ -337,7 +341,8 @@ mri:
       dose_value: "None"
       field_class: "mri-15t"
       field_value: "1.5T"
-      ai: false
+      ai: true
+      ai_feature: "AIR Recon DL"
       cost: ""
       cas: "yes"
       centers:
@@ -365,8 +370,7 @@ ct:
       dose_value: "~1–4 mSv"
       detector_class: "ct-pcct"
       detector_value: "Photon-counting"
-      ai: true
-      ai_feature: "Quantum iterative recon"
+      ai: false
       cost: "Self-pay (varies by center)"
       cas: ""
       centers:
@@ -388,7 +392,8 @@ ct:
       dose_value: "~4–8 mSv"
       detector_class: "ct-spectral"
       detector_value: "Spectral (dual-layer)"
-      ai: false
+      ai: true
+      ai_feature: "Precise Image"
       cost: ""
       cas: "yes"
       centers:
@@ -456,7 +461,8 @@ ct:
       dose_value: "~4–8 mSv"
       detector_class: "ct-64slice"
       detector_value: "64-slice"
-      ai: false
+      ai: true
+      ai_feature: "TrueFidelity DL"
       cost: ""
       cas: "partial"
       centers:
