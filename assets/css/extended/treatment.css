@@ -1,0 +1,108 @@
+/* treatment.css — visual for the denosumab de-escalation "ladder".
+   Styles a plain Markdown ordered list inside .deesc-ladder so the content stays
+   pure markdown (easy to translate). Theme-aware (PaperMod vars). */
+.deesc-ladder {
+  --dl-accent: #0B7384;
+  --dl-warn: #8A5A00;
+  margin: 1.6rem 0 2rem;
+}
+:root[data-theme="dark"] .deesc-ladder { --dl-accent: #3FB8CC; --dl-warn: #f59e0b; }
+
+.deesc-ladder ol {
+  counter-reset: rung;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.deesc-ladder ol > li {
+  counter-increment: rung;
+  position: relative;
+  margin: 0;
+  padding: 14px 18px 14px 60px;
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--tertiary);
+  border-radius: 8px;
+  line-height: 1.6;
+}
+.deesc-ladder ol > li::before {
+  content: counter(rung);
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--theme);
+  background: var(--primary);   /* primary/theme is the theme's contrast pair → readable in light AND dark */
+  border-radius: 50%;
+  font-variant-numeric: tabular-nums;
+}
+/* connector line between rungs */
+.deesc-ladder ol > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 28px;
+  top: 44px;
+  bottom: -11px;
+  width: 2px;
+  background: var(--border);
+}
+/* Rung 2 = the main, evidence-based transition (Q12) → highlight */
+.deesc-ladder ol > li:nth-child(2) {
+  border-left-color: var(--dl-accent);
+  background: color-mix(in srgb, var(--dl-accent) 13%, var(--entry));
+}
+.deesc-ladder ol > li:nth-child(2)::before { background: var(--dl-accent); }
+/* Rung 4 = conditional stop + bridge → caution tint */
+.deesc-ladder ol > li:nth-child(4) {
+  border-left-color: var(--dl-warn);
+  background: color-mix(in srgb, var(--dl-warn) 13%, var(--entry));
+}
+.deesc-ladder ol > li:nth-child(4)::before { background: var(--dl-warn); }
+
+@media (max-width: 520px) {
+  .deesc-ladder ol > li { padding-left: 52px; }
+}
+
+/* ─── FAQ accordion (expand/collapse questions + answers) ─── */
+.onco-faq { display: flex; flex-direction: column; gap: 8px; margin: 1.4rem 0 2rem; }
+.onco-faq details {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--entry);
+}
+.onco-faq summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 46px 14px 16px;
+  font-weight: 600;
+  color: var(--primary);
+  position: relative;
+  border-radius: 8px;
+}
+.onco-faq summary::-webkit-details-marker { display: none; }
+.onco-faq summary::after {
+  content: "+";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 400;
+  color: var(--secondary);
+}
+.onco-faq summary:hover { color: var(--secondary); }
+.onco-faq details[open] > summary { border-bottom: 1px solid var(--border); border-radius: 8px 8px 0 0; }
+.onco-faq details[open] > summary::after { content: "\2212"; }
+.onco-faq details > :not(summary) { margin-left: 16px; margin-right: 16px; }
+.onco-faq details > :not(summary):first-of-type { margin-top: 12px; }
+.onco-faq details > :not(summary):last-child { margin-bottom: 14px; }

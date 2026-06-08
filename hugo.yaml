@@ -45,6 +45,10 @@ languages:
           name: "Monitoring"
           url: /en/imaging/
           weight: 15
+        - identifier: treatment
+          name: "Treatment"
+          url: /en/treatment/
+          weight: 18
         - identifier: cancer-types
           name: "Patient Guides"
           url: /en/cancer-types/
@@ -83,6 +87,10 @@ languages:
           name: "Monitorizare"
           url: /ro/imaging/
           weight: 15
+        - identifier: treatment
+          name: "Tratament"
+          url: /ro/treatment/
+          weight: 18
         - identifier: cancer-types
           name: "Ghiduri Pacienti"
           url: /ro/cancer-types/
@@ -121,6 +129,10 @@ languages:
           name: "Monitoraggio"
           url: /it/imaging/
           weight: 15
+        - identifier: treatment
+          name: "Trattamento"
+          url: /it/treatment/
+          weight: 18
         - identifier: cancer-types
           name: "Guide Pazienti"
           url: /it/cancer-types/
@@ -159,6 +171,10 @@ languages:
           name: "Suivi"
           url: /fr/imaging/
           weight: 15
+        - identifier: treatment
+          name: "Traitement"
+          url: /fr/treatment/
+          weight: 18
         - identifier: cancer-types
           name: "Guides Patients"
           url: /fr/cancer-types/
@@ -197,6 +213,10 @@ languages:
           name: "Verlaufskontrolle"
           url: /de/imaging/
           weight: 15
+        - identifier: treatment
+          name: "Behandlung"
+          url: /de/treatment/
+          weight: 18
         - identifier: cancer-types
           name: "Patientenleitfaden"
           url: /de/cancer-types/
@@ -235,6 +255,10 @@ languages:
           name: "Seguimiento"
           url: /es/imaging/
           weight: 15
+        - identifier: treatment
+          name: "Tratamiento"
+          url: /es/treatment/
+          weight: 18
         - identifier: cancer-types
           name: "Guias de Pacientes"
           url: /es/cancer-types/
