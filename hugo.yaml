@@ -254,6 +254,9 @@ languages:
 params:
   env: production
   author: "OncoGuide"
+  # Web3Forms access key for the contact form (public by design — routes to nog.opt.3o@icloud.com).
+  # Get it free at https://web3forms.com (enter that email, copy the Access Key shown).
+  web3formsKey: "b619c00c-5bc5-4852-a722-9bc038bc64ec"
   displayFullLangName: true
   ShowReadingTime: true
   ShowShareButtons: true
