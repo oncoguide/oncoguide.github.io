@@ -58,6 +58,10 @@ Die neuesten „Ganzkörper"- und langachsigen Scanner senken die **Tracer**-Dos
 
 Die beiden Balken auf jeder Karte stehen für das Wichtigste: **Strahlung** zeigt die *typische* Ganzkörperdosis des Scanners in mSv (ein **kürzerer** Balken bedeutet **weniger** Strahlung — besser), und **Erfassungsbereich** zeigt, wie viel von Ihrem Körper gleichzeitig abgebildet wird (ein **längerer** Balken ist besser). Der Erfassungsbereich ist keine Spitzfindigkeit — ein Scanner, der Sie auf einen Schlag von Kopf bis Fuß erfasst, kann eine Erkrankung aufspüren, die einer kürzeren Aufnahme entgehen könnte, findet kleinere Herde früher (im Millimeterbereich statt erst bei einem Zentimeter) und ist schneller fertig, sodass Sie weniger lange stillliegen und die Bilder schärfer werden. Mit den **Reitern** wechseln Sie zwischen Rumänien, Europa + Türkei und der Gesamtreihung.
 
+{{< callout type="tip" >}}
+**Vor der Terminvereinbarung:** Die meisten Zentren verlangen aktuelle Blutwerte — Nierenfunktion (Kreatinin) und manchmal Schilddrüse (TSH) — aus den letzten etwa **4 Wochen**, und einige empfehlen zuvor eine **onkologische Beratung**. Fragen Sie das Zentrum bei der Terminvereinbarung, was genau benötigt wird und was im Preis enthalten ist.
+{{< /callout >}}
+
 {{< scanner-rank modality="petct" >}}
 
 **Was Ihnen das Spitzengerät tatsächlich bringt.** Das **Nr. 1, ein „Ganzkörper"-PET-CT** (United Imaging uEXPLORER), besitzt ein **194 cm** großes Aufnahmefenster — es erfasst Sie gleichzeitig von Kopf bis Fuß. Weil es in der Größenordnung von **40-mal mehr Signal** sammelt als ein herkömmlicher Scanner, kann es mit einer winzigen Tracer-Injektion auskommen (Forschungsprotokolle erreichten **Gesamtdosen unter einem Millisievert**, indem sie das CT weglassen) oder Sie in wenigen Minuten abbilden. Für jemanden, der wiederholt untersucht wird, bedeutet das eine dramatisch geringere Lebenszeit-Strahlenbelastung *und* die Möglichkeit, sehr kleine Herde früher zu erkennen ([Spencer et al., *J Nucl Med* 2021](https://pubmed.ncbi.nlm.nih.gov/33008932/); [SNMMI](https://snmmi.org/)).

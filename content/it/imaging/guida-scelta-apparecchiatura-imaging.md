@@ -58,6 +58,10 @@ Gli scanner più recenti "total-body" e a campo assiale esteso riducono drastica
 
 Le due barre su ciascuna scheda indicano gli aspetti che contano di più: **Radiazioni** mostra la dose *tipica* total-body dello scanner in mSv (una barra **più corta** significa **meno** radiazioni — meglio così), mentre **Copertura** mostra quanta parte del corpo riesce ad acquisire in una sola volta (una barra **più lunga** è migliore). La copertura non è un dettaglio tecnico — uno scanner che ti acquisisce dalla testa ai piedi in un'unica passata può cogliere una malattia che un esame più limitato potrebbe non vedere, individua prima lesioni più piccole (millimetri anziché un centimetro) e termina più in fretta, così resti immobile meno a lungo e le immagini risultano più nitide. Usa le **schede** per passare da Romania a Europa + Turchia, fino alla classifica complessiva.
 
+{{< callout type="tip" >}}
+**Prima di prenotare:** la maggior parte dei centri richiede esami del sangue recenti — funzione renale (creatinina) e talvolta tiroide (TSH) — eseguiti entro circa **4 settimane** dall'esame, e alcuni consigliano prima una **visita oncologica**. Chiedi al centro cosa serve esattamente al momento della prenotazione e cosa è incluso nel prezzo.
+{{< /callout >}}
+
 {{< scanner-rank modality="petct" >}}
 
 **Cosa ti offre davvero la macchina al vertice.** La **n. 1, una PET-TC "total-body"** (United Imaging uEXPLORER) ha una finestra di acquisizione di **194 cm** — ti acquisisce dalla testa ai piedi simultaneamente. Poiché raccoglie nell'ordine di **40 volte più segnale** rispetto a uno scanner convenzionale, può usare un'iniezione minima di tracciante (protocolli di ricerca hanno raggiunto dosi totali **sub-millisievert** riducendo la TC) oppure acquisire in pochi minuti. Per chi si sottopone a esami ripetuti, questo si traduce in un carico di radiazioni lungo l'arco della vita nettamente inferiore *e* nella capacità di individuare prima lesioni molto piccole ([Spencer et al., *J Nucl Med* 2021](https://pubmed.ncbi.nlm.nih.gov/33008932/); [SNMMI](https://snmmi.org/)).

@@ -58,6 +58,10 @@ Cele mai noi aparate „total-body" și cu câmp axial lung reduc dramatic doza 
 
 Cele două bare de pe fiecare card reprezintă lucrurile care contează cel mai mult: **Radiația** arată doza *tipică* pe tot corpul, în mSv (o bară **mai scurtă** înseamnă **mai puțină** radiație — mai bine), iar **Acoperirea** arată cât din corp este investigat dintr-o dată (o bară **mai lungă** este mai bună). Acoperirea nu este un detaliu tehnic — un aparat care te cuprinde din cap până în picioare dintr-o singură trecere poate surprinde boala pe care o investigație mai scurtă ar putea-o rata, găsește leziuni mai mici mai devreme (milimetri, nu un centimetru) și se termină mai repede, deci stai nemișcat mai puțin, iar imaginile sunt mai clare. Folosește **taburile** pentru a comuta între România, Europa + Turcia și clasamentul combinat.
 
+{{< callout type="tip" >}}
+**Înainte de programare:** majoritatea centrelor cer analize de sânge recente — funcția rinichilor (creatinină) și uneori tiroida (TSH) — din ultimele aproximativ **4 săptămâni**, iar unele recomandă întâi o **consultație la oncolog**. Întreabă centrul exact ce îți cere la programare și ce este inclus în preț.
+{{< /callout >}}
+
 {{< scanner-rank modality="petct" >}}
 
 **Ce îți oferă, concret, aparatul de top.** **Locul #1, un PET-CT „total-body"** (United Imaging uEXPLORER) are o fereastră de achiziție de **194 cm** — te cuprinde din cap până în picioare simultan. Pentru că strânge de ordinul a **de 40 de ori mai mult semnal** decât un aparat convențional, poate folosi o injecție minusculă de trasor (protocoalele de cercetare au atins doze totale **sub un milisievert** prin renunțarea la CT) sau te poate scana în câteva minute. Pentru cineva investigat în mod repetat, asta înseamnă o povară de radiație pe durata vieții dramatic mai mică *și* capacitatea de a detecta leziuni foarte mici mai devreme ([Spencer et al., *J Nucl Med* 2021](https://pubmed.ncbi.nlm.nih.gov/33008932/); [SNMMI](https://snmmi.org/)).

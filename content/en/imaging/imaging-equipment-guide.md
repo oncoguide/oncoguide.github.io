@@ -58,6 +58,10 @@ The newest "total-body" and long-axial scanners cut the **tracer** dose dramatic
 
 The two bars on each card are the things that matter most: **Radiation** shows the scanner's *typical* whole-body dose in mSv (a **shorter** bar means **less** radiation — better), and **Coverage** shows how much of your body it images at once (a **longer** bar is better). Coverage isn't a technicality — a scanner that captures you from head to toe in one go can catch disease a shorter scan might miss, finds smaller lesions earlier (millimetres rather than a centimetre), and finishes faster, so you hold still less and the images are sharper. Use the **tabs** to switch between Romania, Europe + Turkey, and the combined ranking.
 
+{{< callout type="tip" >}}
+**Before you book:** most centres want a recent blood test — kidney function (creatinine), and sometimes thyroid (TSH) — from within about **4 weeks** of the scan, and some recommend an **oncologist consultation** first. Ask the centre exactly what it needs when you book, and what is included in the price.
+{{< /callout >}}
+
 {{< scanner-rank modality="petct" >}}
 
 **What the top machine actually buys you.** The **#1, a "total-body" PET-CT** (United Imaging uEXPLORER) has a **194 cm** imaging window — it captures you from head to toe simultaneously. Because it collects on the order of **40 times more signal** than a conventional scanner, it can use a tiny tracer injection (research protocols have reached **sub-millisievert** total doses by dropping the CT) or scan you in a few minutes. For someone scanned repeatedly, that is a dramatically lower lifetime radiation burden *and* the ability to detect very small lesions earlier ([Spencer et al., *J Nucl Med* 2021](https://pubmed.ncbi.nlm.nih.gov/33008932/); [SNMMI](https://snmmi.org/)).

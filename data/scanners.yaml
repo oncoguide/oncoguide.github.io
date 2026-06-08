@@ -31,7 +31,7 @@ petct:
       fov_value: "194 cm — whole body at once"
       ai: true
       ai_feature: "HYPER DLR"
-      cost: "Self-pay ≈ €1,300–1,700"
+      cost: "Self-pay ≈ €1,000"
       cas: "no"
       centers:
         - {name: "Policlinico Sant'Orsola (IRCCS)", city: "Bologna", country: "IT", region: "intl"}
@@ -60,7 +60,7 @@ petct:
         - {name: "Netherlands Cancer Institute (NKI-AVL)", city: "Amsterdam", country: "NL", region: "intl"}
         - {name: "Aarhus University Hospital", city: "Aarhus", country: "DK", region: "intl"}
         - {name: "Rigshospitalet", city: "Copenhagen", country: "DK", region: "intl"}
-        - {name: "MedUni Wien / AKH", city: "Vienna", country: "AT", region: "intl"}
+        - {name: "MedUni Wien / AKH", city: "Vienna", country: "AT", region: "intl", cost: "≈ €1,200 + €310 report"}
         - {name: "Royal Infirmary of Edinburgh", city: "Edinburgh", country: "UK", region: "intl"}
         - {name: "Turku PET Centre", city: "Turku", country: "FI", region: "intl"}
 
@@ -77,7 +77,7 @@ petct:
       fov_value: "32 cm — extended field"
       ai: true
       ai_feature: "Precision DL"
-      cost: "Self-pay ≈ €750"
+      cost: "Self-pay ≈ €850 + €150 oncologist consult"
       cas: "no"
       centers:
         - {name: "Anadolu Medical Center", city: "Gebze", country: "TR", region: "intl"}

@@ -165,6 +165,14 @@
   color: var(--secondary);
   margin-left: 4px;
 }
+.scanner-rank .sr-center .sr-center-cost {
+  font-family: var(--sr-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--sr-teal);
+  margin-left: 6px;
+  white-space: nowrap;
+}
 
 /* ─── SPEC GRID + BARS ───────────────────────────────────── */
 .scanner-rank .sr-specs {

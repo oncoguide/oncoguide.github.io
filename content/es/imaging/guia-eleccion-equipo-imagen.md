@@ -58,6 +58,10 @@ Los equipos más nuevos de «cuerpo entero» y de eje axial largo reducen drást
 
 Las dos barras de cada ficha son lo que más importa: **Radiación** muestra la dosis *típica* de cuerpo entero del equipo en mSv (una barra **más corta** significa **menos** radiación, mejor), y **Cobertura** muestra cuánto cuerpo explora a la vez (una barra **más larga** es mejor). La cobertura no es un tecnicismo: un equipo que te capta de la cabeza a los pies de una sola vez puede detectar enfermedad que una exploración más corta dejaría escapar, encuentra antes lesiones más pequeñas (milímetros en lugar de un centímetro) y termina más rápido, así que permaneces menos inmóvil y las imágenes salen más nítidas. Usa las **pestañas** para alternar entre Rumanía, Europa + Turquía y la clasificación combinada.
 
+{{< callout type="tip" >}}
+**Antes de reservar:** la mayoría de los centros piden un análisis de sangre reciente — función renal (creatinina) y a veces tiroides (TSH) — de las últimas **4 semanas** aproximadamente, y algunos recomiendan primero una **consulta con el oncólogo**. Pregunta en el centro qué necesita exactamente al reservar y qué está incluido en el precio.
+{{< /callout >}}
+
 {{< scanner-rank modality="petct" >}}
 
 **Qué te aporta de verdad la mejor máquina.** El **n.º 1, un PET-TC de «cuerpo entero»** (United Imaging uEXPLORER) tiene una ventana de imagen de **194 cm**: te capta de la cabeza a los pies de forma simultánea. Como recoge del orden de **40 veces más señal** que un equipo convencional, puede usar una inyección de trazador mínima (en protocolos de investigación se han alcanzado dosis totales **inferiores al milisievert** prescindiendo de la TC) o explorarte en pocos minutos. Para alguien al que se le hacen pruebas repetidas, eso supone una carga de radiación a lo largo de la vida muchísimo menor *y* la capacidad de detectar antes lesiones muy pequeñas ([Spencer et al., *J Nucl Med* 2021](https://pubmed.ncbi.nlm.nih.gov/33008932/); [SNMMI](https://snmmi.org/)).

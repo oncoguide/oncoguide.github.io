@@ -53,7 +53,7 @@
           </div>
           {{- with $centers }}
           <div class="sr-centers">
-            {{- range . }}<span class="sr-center"><b>{{ .name }}</b> — {{ .city }}<span class="sr-country">{{ .country }}</span></span>{{ end }}
+            {{- range . }}<span class="sr-center"><b>{{ .name }}</b> — {{ .city }}<span class="sr-country">{{ .country }}</span>{{ with .cost }} <span class="sr-center-cost">{{ . }}</span>{{ end }}</span>{{ end }}
           </div>
           {{- end }}
           {{- $specs := slice
