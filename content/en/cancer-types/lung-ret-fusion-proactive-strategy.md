@@ -1,6 +1,7 @@
 ---
 title: "RET Fusion Lung Cancer: Proactive Strategy -- Beyond Standard Treatment"
 date: 2026-04-14
+lastmod: 2026-06-08
 draft: false
 description: "Vaccines, cryoablation, ctDNA, drug repurposing, next-gen RET inhibitors, and the path to NED -- a comprehensive guide for patients and physicians who want more than 'wait and see'."
 tags: ["lung cancer", "RET fusion", "selpercatinib", "cancer vaccines", "cryoablation", "ctDNA", "drug repurposing", "NED", "proactive strategy", "immunotherapy"]
@@ -68,8 +69,17 @@ The NGS test that confirmed the RET fusion was just the beginning. There are muc
 
 **RNA-seq** goes even further: it shows which genes are actually **active** in your tumor, not just present. It can confirm the RET fusion partner (KIF5B, CCDC6, etc.) with certainty and detect resistance mechanisms that do not appear at the DNA level.
 
+**Why the fusion partner is worth confirming:** RET rarely acts alone -- it almost always fuses with a second gene (most often KIF5B or CCDC6), and that pairing is called your *fusion partner*. Knowing **which** partner you have is no longer just a vaccine-design detail. Data presented at ASCO 2026 suggest the partner gene influences how durable the response to a RET inhibitor is (for example, CCDC6-RET has been associated with a longer duration of response than KIF5B-RET in some analyses -- though the difference is modest and not seen consistently across all studies, so no single partner is a verdict). It helps your oncologist anticipate prognosis and plan the next line of treatment -- so it is worth confirming early, not only if a vaccine is on the table.
+
 {{< callout type="tip" >}}
-**In practice:** Ask your oncologist for a referral for WES + RNA-seq on tumor tissue. If you already have a stored biopsy (paraffin block, called FFPE) at a laboratory, that may be sufficient. Laboratories with experience in molecular oncology are available throughout Europe. **Important note:** These advanced tests are not always covered by public health insurance; check with your oncologist whether they are covered or require private payment. There are also European academic programs that offer free sequencing for eligible patients, though international access typically requires cross-border referral or an S2 form.
+**In practice -- ask for one comprehensive bundle, not scattered tests.** Rather than chasing several separate tests at different academic centers, ask your oncologist whether a single **comprehensive genomic profiling (CGP) bundle** can be run on your existing tumor block (FFPE). A good bundle, available from GDPR-compliant laboratories across Europe, combines in one shipment:
+
+- **A broad DNA panel** (500-1000+ genes) -- co-mutations, DNA-repair defects, MTAP/RB1 status
+- **RNA-seq with fusion-partner resolution** -- confirms KIF5B vs CCDC6 vs another partner, not just "RET-positive"
+- **Targeted IHC markers** -- c-MET, MTAP, HER3, TROP2 (these gate access to specific drugs and antibody-drug conjugates discussed later)
+- **A ctDNA baseline** from a blood draw taken around the same time (this part is a blood test, not from the tissue block)
+
+Most of this works on a **stored paraffin block (FFPE)** -- no new biopsy needed. **Important:** these tests are not always covered by public health insurance; ask whether they are reimbursed or require private payment (a combined bundle is often far cheaper than the separate tests it replaces). Some European academic programs also offer sequencing for eligible patients, though cross-border access typically requires a referral or an S2 form.
 {{< /callout >}}
 
 ### Specific biomarkers that open trial options
@@ -77,7 +87,7 @@ The NGS test that confirmed the RET fusion was just the beginning. There are muc
 Beyond general sequencing, a few specific biomarkers are worth explicitly testing because they gate access to emerging treatment classes:
 
 - **MTAP loss** (methylthioadenosine phosphorylase) -- A peer-reviewed 2026 study (Aldea et al., *Annals of Oncology*, March 2026) documented MTAP loss in **18-35% of RET fusion-positive NSCLC patients** -- a high prevalence that opens eligibility for PRMT5 inhibitors, a new class of targeted therapies currently in phase 2-3 trials. MTAP status is best confirmed by **IHC on tumor tissue** (not by liquid biopsy, which cannot reliably detect MTAP deletions). If you have a stored FFPE biopsy, MTAP IHC can be added at marginal additional cost.
-- **RB1 status** (tumor suppressor gene) -- Relevant for understanding lineage plasticity risk (see the "Resistance mechanisms" section below). Usually reported as part of a standard NGS panel; worth confirming is included.
+- **RB1 status** (tumor suppressor gene) -- Relevant for understanding lineage plasticity risk (see the resistance section below). Usually reported as part of a standard NGS panel; worth confirming it is included.
 
 Ask your oncologist whether these markers are part of the panel already run. If not, they can often be added to the existing tissue sample at marginal additional cost.
 
@@ -141,7 +151,11 @@ There are multiple ctDNA monitoring platforms, with different levels of sensitiv
 
 **The difference between fixed panels and personalized monitoring is enormous.** A fixed panel like Guardant360 detects known mutations at a relatively high level. A personalized platform (Signatera, NeXT Personal, Haystack) detects traces of disease 100-1000 times smaller -- essential for confirming whether the disease has been completely eliminated.
 
-**A further distinction matters for patients already on treatment months in:** most personalized platforms (Signatera, Haystack) track a fixed set of variants selected from your initial tumor biopsy. If new resistance mutations emerge during treatment, those fixed panels may not see them. NeXT Personal (Personalis) introduced in April 2026 a "Real-Time Variant Tracker" capability that uses hybrid-capture to detect **new mutations as they appear during therapy** -- useful for early detection of emerging resistance. Ask your lab which approach they use and whether emergent-mutation tracking is available.
+**A further distinction matters for patients already on treatment months in:** most personalized platforms (Signatera, Haystack) track a fixed set of variants selected from your initial tumor biopsy. If new resistance mutations emerge during treatment, those fixed panels may not see them. NeXT Personal (Personalis) launched in January 2026 a "Real-Time Variant Tracker" capability (clinical data presented at AACR 2026) that uses hybrid-capture to detect **new mutations as they appear during therapy** -- useful for early detection of emerging resistance. Ask your lab which approach they use and whether emergent-mutation tracking is available.
+
+{{< callout type="warning" >}}
+**A blood test can be falsely reassuring.** When your medication is controlling the disease well, the tumor sheds very little of its DNA into the blood -- which is itself a good sign, but it also means a blood test has very little to find. In that situation the most important resistance mechanism -- MET amplification -- is caught far more reliably in **tissue** than in blood (in one published comparison, roughly 38% of cases were picked up from tissue versus only 7% from blood). The practical takeaway: an "undetectable ctDNA" result is excellent news, but it does **not** replace a tissue rebiopsy if your imaging or symptoms suggest progression. Ask your oncologist when a repeat tissue sample is worth doing.
+{{< /callout >}}
 
 ### When to test
 
@@ -306,9 +320,9 @@ The simplest concept: a synthetic protein fragment (peptide) from the fusion jun
 - Proven platform on other cancers with genetic fusions -- in the Phase 1 trial on the DNAJB1-PRKACA fusion ([Nature Medicine 2025](https://pubmed.ncbi.nlm.nih.gov/39567754/)): 75% disease control (9 out of 12 patients), 3 patients with no detectable disease, one patient on compassionate use cancer-free for over 4 years. **Note:** these results are from a different cancer type (fibrolamellar carcinoma), not RET+ lung cancer. The platform is modular -- it adapts to any fusion, but RET-specific clinical data do not exist yet
 - The 22-amino acid peptide covers 93-96% of the European population, without requiring specific HLA typing
 - The XS15 adjuvant is specifically designed for immunocompromised patients (relevant, since 52% of selpercatinib patients develop lymphopenia)
-- **Requires fresh frozen tumor tissue (-80C)** for feasibility assessment and vaccine design. Paraffin blocks (FFPE) are not sufficient. This means biopsy planning is essential -- at any future intervention (cryoablation, CT-guided biopsy), explicitly request that tissue cores be preserved in cryopreservation at -80C for Tubingen
+- **Requires fresh frozen tumor tissue (-80C)** for feasibility assessment and vaccine design. Paraffin blocks (FFPE) are **not** sufficient. This is the single biggest practical barrier: if you are in a deep response with no lesion that can safely be biopsied, you cannot currently produce the tissue this vaccine needs. In practice, FusionVAC therefore becomes realistic at a **future oligo-progression**, when a biopsy can both identify the resistance mechanism and bank fresh-frozen cores. The lesson for *now*: at any future intervention (biopsy, cryoablation), explicitly request that extra cores be cryopreserved at -80C
 - Estimated production time of a few weeks at the GMP facility in Tubingen (peptide synthesis, not cell culture)
-- **Access:** Through the German "individual use" procedure (Individueller Heilversuch)
+- **Access:** Through the German "individual use" procedure (Individueller Heilversuch). There is **no** open RET+ lung-cancer trial for it -- the published trial (NCT05937295) is for a different cancer (fibrolamellar liver carcinoma); for RET+ NSCLC the route is this individualized academic pathway, not trial enrollment. Treat any "free / fully covered" claim with caution -- the cost of an individualized Heilversuch is not publicly fixed; confirm directly with the center
 
 {{< callout type="important" >}}
 **For the FusionVAC vaccine, the RET fusion partner must be confirmed** (KIF5B vs CCDC6 vs other). Each fusion partner creates a different junction and requires a different peptide design. Confirmation is done through extended tumor genetic sequencing (WES or RNA-seq, described above).
@@ -391,14 +405,32 @@ Both programs are in Tubingen, but are independent entities: FusionVAC is a rese
 Theoretically, they can be combined: FusionVAC for the primary target (the fusion) + CeGaT for broader coverage. FusionVAC requires fresh frozen tissue, CeGaT accepts FFPE too -- so they can work from different tissue sources.
 {{< /callout >}}
 
-### Vaccines: what is available now vs what is coming
+#### 5. Vaccinating against resistance -- before it appears
 
-| Availability | Options |
+A newer idea, and one especially suited to patients who are doing well on treatment: instead of waiting for a resistance mutation to emerge and then reacting, you **vaccinate against the resistance mutations the tumor is most likely to develop** -- while you are still on your TKI and in deep response.
+
+The proof of concept comes from ALK-positive lung cancer (a close molecular cousin of RET+). At ASCO 2026, the **ARCHER trial** (Phase 1b, Johns Hopkins, Dr. Vincent Lam) tested a peptide vaccine targeting *anticipated* ALK resistance mutations, given **alongside** the patient's ongoing TKI:
+
+- **14 of 15 patients (93%)** mounted a T-cell response against at least one targeted mutation
+- **93% disease control** while continuing TKI therapy
+- **No serious side effects** (no grade 3+ toxicity, no cytokine release syndrome reported)
+
+**Why this matters for RET+:** in principle the same approach can target RET's known resistance mutations (the G810 "solvent-front" family). Crucially, it needs **neither fresh-frozen tissue nor measurable disease** -- exactly the situation of someone in a deep response, for whom the fresh-tissue vaccines above are out of reach. A RET-specific version does not exist yet, and ALK is not RET -- but ARCHER shows the strategy is safe and immunologically active. **What you can do now:** at your next appointment, ask whether any trial is studying on-TKI resistance-mutation vaccines for RET+ lung cancer, and whether your center can flag you if one opens.
+
+### Vaccines: matching the option to your situation
+
+Availability is only half the question. What usually decides which vaccine you can actually pursue is **what each one requires from you** -- the type of tissue you have, whether you have a biopsy-able lesion, or whether a trial is open. This is where many patients lose months. Match your situation to the realistic options:
+
+| If your situation is... | Options that actually fit |
 |---|---|
-| **Available now** (compassionate use/commercial) | FusionVAC (Tubingen), CeGaT CancerNeo (Tubingen), IOZK IO-VAC (Cologne) |
-| **Active clinical trials** | BNT116, mRNA-4359/Mobilize, PDC*lung01, V940 |
-| **1-3 years** | Personalized mRNA vaccines specific to RET, KAIST B-cell AI vaccines |
-| **3-5+ years** | Anti-RET PROTACs, next-gen lipid mRNA |
+| **Only a stored FFPE block, in deep response, no lesion safe to biopsy** | FFPE-compatible neoantigen vaccines (CeGaT CancerNeo); some clinical trials -- but **check eligibility carefully**, as several (e.g. BNT116) exclude driver mutations like RET |
+| **Fresh-frozen tissue available, or a planned biopsy that can bank some** | FusionVAC (Tubingen) -- fresh-frozen mandatory, FFPE not accepted |
+| **Doing well, want to act against resistance pre-emptively** | Resistance-mutation vaccines (ARCHER paradigm, above) -- no fresh tissue or measurable disease needed; RET-specific version not yet available |
+| **At progression, evidence-based options exhausted** | Dendritic-cell vaccines with limited lung data (IOZK IO-VAC) -- a reserve, not a first choice |
+
+**Active clinical trials:** BNT116, mRNA-4359/Mobilize, PDC*lung01, V940 -- note that compassionate-use access outside a trial is often closed, so the route is enrollment at a participating center.
+**On the horizon (1-3 years):** personalized mRNA vaccines specific to RET, KAIST B-cell AI vaccines.
+**Further out (3-5+ years):** anti-RET PROTACs, next-gen lipid mRNA.
 
 ### The combination that amplifies efficacy
 
@@ -432,9 +464,9 @@ ANKTIVA is a biologic drug that activates **NK cells** (natural killers) and **C
 - In the QUILT-3.055 trial (86 refractory NSCLC patients), PD-L1 negative patients had **superior** median survival compared to PD-L1 positive (15.4 vs 13.8 months) -- cold tumors benefited more
 
 **Status:**
-- FDA approved (2024) and EC approved (February 2026) for bladder cancer
-- Approved in Saudi Arabia (January 2026) for metastatic NSCLC -- **the first global approval for lung cancer**
-- Phase 3 trial ResQ201A actively recruiting -- the first Phase 3 trial that **explicitly includes RET+ patients**
+- FDA approved (2024, full approval) and EC **conditionally** approved (February 2026) for bladder cancer (BCG-unresponsive non-muscle-invasive bladder cancer)
+- Approved in Saudi Arabia (January 2026) for metastatic NSCLC after standard therapy -- **the first approval worldwide for lung cancer** (note: this is for NSCLC broadly, regardless of mutation -- it is not RET-specific)
+- Phase 3 trial (ResQ201A) actively recruiting in checkpoint-inhibitor-relapsed NSCLC -- relevant for RET+ patients, whose tumors tend to be immunologically "cold," although the trial is not limited to RET
 
 **Access in the EU:**
 - Off-label (EC-approved drug, use outside indication)
@@ -550,20 +582,22 @@ A third, less-known mechanism: under sustained targeted therapy, some adenocarci
 
 **RB1 gene loss is the strongest predisposing biomarker.** Patients with RB1 loss at baseline -- or acquired during treatment -- face a higher risk of this transition. Preclinical data (mostly from prostate cancer, cross-domain) suggests FGFR and JAK inhibitors may reverse lineage plasticity in RB1-deficient tumors, but this is not yet validated in NSCLC.
 
-**Clinical implication:** If RB1 loss is detected on your NGS or ctDNA (now or later), a **rebiopsy at progression becomes essential** -- not just switching to a next-generation TKI. Neuroendocrine-phenotype disease responds to different drugs (platinum/etoposide-based regimens, not RET TKIs). Acting on imaging progression without re-confirming tumor biology risks choosing the wrong next treatment.
+**Clinical implication:** If RB1 loss is detected on your NGS or ctDNA (now or later), a **rebiopsy at progression becomes essential** -- not just switching to a next-generation TKI. Neuroendocrine-phenotype disease responds to different drugs (platinum/etoposide-based regimens, not RET TKIs). Acting on imaging progression without re-confirming tumor biology risks choosing the wrong next treatment. If a transformed tumor expresses the marker **DLL3** (common in neuroendocrine disease), a targeted option now exists: **tarlatamab** (Imdelltra), a DLL3-directed immunotherapy that received full FDA approval in November 2025 for small-cell lung cancer and is being studied specifically in neuroendocrine-transformed NSCLC (trial NCT06788938). This is another reason the rebiopsy matters -- it can reveal a target that changes the whole treatment plan.
 
 ### Next-generation RET inhibitors
 
 These agents are designed to work **where selpercatinib fails** -- including solvent front mutations.
 
+*A practical note first: the other approved RET inhibitor, **pralsetinib**, shares selpercatinib's main resistance mutations -- so simply switching between the two at progression usually does not help. The next-generation agents below are designed specifically for that setting.*
+
 | Agent | Response rate (ORR) | Mutation coverage | Brain penetration | Status |
 |---|---|---|---|---|
-| **EP0031 (Lunbotinib)** | 69.7% | G810R/S/C | Yes | Phase 2, recruiting at European centers |
+| **EP0031 (Lunbotinib)** | **87.1%** (pre-treated, ASCO 2026) | G810R/S/C | Yes | Phase 2 pivotal data; NDA filed (China) |
 | **Vepafestinib** | 30% (disease control: 80%) | G810 + V804 | Best in class | Phase 1/2 (MARGARET) |
 | **SY-5007** | 69.4% | G810 | Yes | **Phase 3** (the only one with Phase 3 data) |
 | **APS03118** | Preclinical | G810 + V804 + L730 + **Y806** | Yes | Broadest spectrum, Phase 1 |
 
-**EP0031 (Lunbotinib)** is currently the most clinically advanced, with an active trial at European centers (VHIO Barcelona, Gemelli Rome, Christie Manchester, Sarah Cannon London).
+**EP0031 (Lunbotinib)** is currently the most clinically advanced. Pivotal Phase 2 data presented at ASCO 2026 showed, in patients who had already progressed on a first RET inhibitor, an **87% response rate, median progression-free survival of 27.5 months, and no treatment-related deaths** (virtually no one had to stop the drug because of side effects -- just 1.2%); it was also active in the brain (intracranial complete response ~30%). An application for approval has been filed in China, and trials are open at European centers (VHIO Barcelona, Gemelli Rome, Christie Manchester, Sarah Cannon London). This is the strongest second-line RET data reported to date.
 
 ### ADCs (Antibody-Drug Conjugates)
 
@@ -621,11 +655,19 @@ Yes. It is not guaranteed, but the data support it:
 - **LIBRETTO-432:** Selpercatinib has curative potential in early stages
 - **CML (chronic myeloid leukemia) analogy:** 40-60% of patients on imatinib (another TKI) achieve treatment-free remission -- they stop the medication and remain disease-free. RET fusion cancer is not CML, but the model is relevant
 
-**Realistic probability for an integrated strategy (TKI + CLT + vaccines + immunomodulation):**
-- 10-20%: Sustained functional NED (>5 years with no detectable disease)
-- 40-50%: Long-term control (3-4+ years with minimal disease)
-- 30-50%: Treatment does not generate detectable immune response
-- <5%: Net risk (the safety profile of vaccines is excellent)
+**What an integrated strategy (TKI + local therapy + vaccines + immune support) might realistically achieve.** These are not slices of a single pie -- they are different ways of looking at the odds, and they overlap:
+- **10-20%** chance of sustained functional NED (5+ years with no detectable disease)
+- **40-50%** chance of long-term control (3-4+ years with minimal disease)
+- In **30-50%** of people, the added immune therapies may not produce a measurable immune response -- they still have the TKI working underneath
+- **Under 5%** net added risk -- the safety profile of these vaccines is excellent
+
+### Why some disease can survive even when the scans look clean
+
+Here is the hard truth behind "clean scans are not the same as cured": a small number of cancer cells can survive treatment not by mutating, but by **going to sleep**. They stop dividing and lie low -- so a TKI (which works best on dividing cells) barely touches them, and the immune system sees almost nothing to attack. Researchers call these **drug-tolerant persister (DTP) cells**, and they are a likely source of relapse years later.
+
+Underneath, these dormant cells switch on DNA-repair and survival programs (and often switch off a gene called RB1). This is increasingly seen as a **third front** in an eradication strategy -- separate from shrinking the tumor (TKI + local therapy) and from training the immune system (vaccines).
+
+**This is not yet proven, everyday practice -- it is an active area of research.** The emerging idea, highlighted at AACR 2025 (Memorial Sloan Kettering), is to add a drug that specifically hits these sleeping cells during the window just after the best response, when their numbers are lowest. **PARP inhibitors** and other DNA-repair-targeting drugs are the leading candidates being studied (and connect back to any DNA-repair findings, such as FANCL or BRCA, on your sequencing). For now the practical message is simpler: it explains why staying on monitoring -- the Phase 4 plan below -- matters even when everything looks clear.
 
 ### The 4 phases of the eradication strategy
 
@@ -746,8 +788,8 @@ Requires a prescription from the oncologist + documented medical justification.
 | SBRT / Cryoablation | Personalized RET-specific mRNA vaccines | Molecular glues targeting fusions |
 | ctDNA monitoring (Signatera, Haystack) | SY-5007 (anticipated approval) | 3rd generation immunotherapies |
 | Drug repurposing (aspirin, statins) | New ADCs (BL-B01D1, HER3-DXd) | Vaccines targeting B cells + T cells |
-| FusionVAC (compassionate use) | APS03118 (broad spectrum) | Anti-RET cellular therapy (TCR-T) |
-| CeGaT CancerNeo (compassionate use) | ANKTIVA + vaccine combo trials | |
+| FusionVAC (needs fresh-frozen tissue) | APS03118 (broad spectrum) | Anti-RET cellular therapy (TCR-T) |
+| CeGaT CancerNeo (FFPE-compatible) | ANKTIVA + vaccine combo trials | |
 | ANKTIVA (off-label EU) | Tedopi/OSE2101 (after approval) | |
 | IOZK IO-VAC (commercial) | | |
 | Organoids / functional testing | | |

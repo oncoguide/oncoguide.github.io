@@ -1,6 +1,7 @@
 ---
 title: "Cancer pulmonar cu fuziune RET: Strategie proactiva -- dincolo de tratamentul standard"
 date: 2026-04-14
+lastmod: 2026-06-08
 draft: false
 description: "Vaccinuri, crioablatie, ctDNA, drug repurposing, inhibitori RET next-gen si strategia spre NED -- ghid complet pentru pacientii si medicii care vor mai mult decat 'asteptam si vedem'."
 tags: ["cancer pulmonar", "fuziune RET", "selpercatinib", "vaccinuri cancer", "crioablatie", "ctDNA", "drug repurposing", "NED", "strategie proactiva", "imunoterapie"]
@@ -68,8 +69,17 @@ Testul NGS care a confirmat fuziunea RET a fost doar începutul. Există stratur
 
 **RNA-seq** merge și mai departe: arată care gene sunt efectiv **active** în tumora ta, nu doar prezente. Poate confirma partenerul de fuziune RET (KIF5B, CCDC6, etc.) cu certitudine și detecta mecanisme de rezistență care nu apar pe ADN.
 
+**De ce merită confirmat partenerul de fuziune:** RET acționează rareori singur -- aproape întotdeauna fuzionează cu o a doua genă (cel mai frecvent KIF5B sau CCDC6), iar această pereche se numește *partenerul de fuziune*. A ști **care** partener ai nu mai este doar un detaliu pentru designul vaccinului. Date prezentate la ASCO 2026 sugerează că gena partener influențează cât de durabil este răspunsul la un inhibitor RET (de exemplu, CCDC6-RET a fost asociat cu o durată mai lungă a răspunsului decât KIF5B-RET în unele analize -- deși diferența este modestă și nu este observată consecvent în toate studiile, deci niciun partener nu este un verdict). Ajută oncologul să anticipeze prognosticul și să planifice linia următoare de tratament -- așadar merită confirmat devreme, nu doar dacă un vaccin este pe masă.
+
 {{< callout type="tip" >}}
-**Practică:** Cere oncologului o trimitere pentru WES + RNA-seq pe țesutul tumoral. Dacă ai deja o biopsie stocată (bloc de parafină, numit FFPE) într-un laborator, acesta poate fi suficient. Laboratoarele cu experiență în oncologie moleculară sunt disponibile în toată Europa. **Notă importantă:** Aceste teste avansate nu sunt întotdeauna decontate de asigurările de stat; verifică cu oncologul dacă sunt acoperite sau necesită plată privată. Există și programe academice europene care oferă secvențiere gratuită pentru pacienți eligibili, deși accesul internațional necesită de obicei o trimitere transfrontalieră sau un formular S2.
+**În practică -- cere un pachet comprehensiv, nu teste separate.** În loc să cauți mai multe teste individuale la diferite centre academice, întreabă oncologul dacă un singur **pachet de profilare genomică comprehensivă (CGP)** poate fi rulat pe blocul tău tumoral existent (FFPE). Un pachet bun, disponibil de la laboratoare conforme GDPR din întreaga Europă, combină într-o singură expediere:
+
+- **Un panel ADN larg** (500-1000+ gene) -- co-mutații, defecte de reparare ADN, statusul MTAP/RB1
+- **RNA-seq cu rezoluție a partenerului de fuziune** -- confirmă KIF5B vs CCDC6 vs alt partener, nu doar "RET-pozitiv"
+- **Markeri IHC țintit** -- c-MET, MTAP, HER3, TROP2 (aceștia condiționează accesul la medicamente specifice și conjugate anticorp-medicament discutate mai jos)
+- **O baseline ctDNA** dintr-o recoltare de sânge realizată aproximativ în același timp (această parte este un test de sânge, nu din blocul tisular)
+
+Cea mai mare parte funcționează pe un **bloc de parafină stocat (FFPE)** -- nu este necesară o biopsie nouă. **Important:** aceste teste nu sunt întotdeauna decontate de asigurările de sănătate publice; întreabă dacă sunt rambursate sau necesită plată privată (un pachet combinat este adesea mult mai ieftin decât testele separate pe care le înlocuiește). Unele programe academice europene oferă și secvențiere pentru pacienți eligibili, deși accesul transfrontalier necesită de obicei o trimitere sau un formular S2.
 {{< /callout >}}
 
 ### Biomarkeri specifici care deschid opțiuni de trial
@@ -77,7 +87,7 @@ Testul NGS care a confirmat fuziunea RET a fost doar începutul. Există stratur
 Dincolo de secvențierea generală, câțiva biomarkeri specifici merită testați explicit pentru că deschid accesul la clase terapeutice emergente:
 
 - **Pierderea MTAP** (metiltioadenozin fosforilaza) -- Un studiu peer-reviewed din 2026 (Aldea et al., *Annals of Oncology*, martie 2026) a documentat pierderea MTAP la **18-35% dintre pacienții cu NSCLC RET fusion-pozitiv** -- o prevalență mare care deschide eligibilitatea pentru inhibitori PRMT5, o clasă nouă de terapii țintite în faze 2-3 de trial. Statusul MTAP se confirmă cel mai bine prin **IHC pe țesut tumoral** (nu prin biopsie lichidă, care nu poate detecta fiabil deleții MTAP). Dacă ai o biopsie FFPE stocată, IHC pentru MTAP poate fi adăugat la cost marginal.
-- **Statusul RB1** (gena supresor tumoral) -- Relevant pentru înțelegerea riscului de plasticitate de linie celulară (vezi secțiunea "De ce apare rezistența" mai jos). De obicei raportat ca parte din panel-ul NGS standard; merită confirmat că este inclus.
+- **Statusul RB1** (gena supresor tumoral) -- Relevant pentru înțelegerea riscului de plasticitate de linie celulară (vezi secțiunea rezistență de mai jos). De obicei raportat ca parte din panel-ul NGS standard; merită confirmat că este inclus.
 
 Întreabă oncologul dacă acești markeri fac parte din panel-ul deja rulat. Dacă nu, deseori pot fi adăugați pe aceeași probă FFPE la cost marginal adițional.
 
@@ -141,7 +151,11 @@ Există mai multe platforme de monitoring ctDNA, cu niveluri diferite de sensibi
 
 **Diferența dintre paneluri fixe și monitorizare personalizată este enormă.** Un panel fix ca Guardant360 detectează mutații cunoscute la nivel relativ mare. O platformă personalizată (Signatera, NeXT Personal, Haystack) detectează urme de boală de 100-1000 de ori mai mici -- esențial pentru a confirma dacă boala a fost eliminată complet.
 
-**O distincție suplimentară contează pentru pacienții deja în tratament de luni de zile:** majoritatea platformelor personalizate (Signatera, Haystack) urmăresc un set fix de variante selectate din biopsia ta tumorală inițială. Dacă apar mutații noi de rezistență pe parcursul tratamentului, acele panel-uri fixe ar putea să nu le vadă. NeXT Personal (Personalis) a introdus în aprilie 2026 o capabilitate "Real-Time Variant Tracker" care folosește hybrid-capture pentru a detecta **mutații noi pe măsură ce apar în timpul terapiei** -- util pentru depistarea timpurie a rezistenței emergente. Întreabă laboratorul ce abordare folosește și dacă urmărirea mutațiilor emergente este disponibilă.
+**O distincție suplimentară contează pentru pacienții deja în tratament de luni de zile:** majoritatea platformelor personalizate (Signatera, Haystack) urmăresc un set fix de variante selectate din biopsia ta tumorală inițială. Dacă apar mutații noi de rezistență pe parcursul tratamentului, acele panel-uri fixe ar putea să nu le vadă. NeXT Personal (Personalis) a lansat în ianuarie 2026 o capabilitate "Real-Time Variant Tracker" (date clinice prezentate la AACR 2026) care folosește hybrid-capture pentru a detecta **mutații noi pe măsură ce apar în timpul terapiei** -- util pentru depistarea timpurie a rezistenței emergente. Întreabă laboratorul ce abordare folosește și dacă urmărirea mutațiilor emergente este disponibilă.
+
+{{< callout type="warning" >}}
+**Un test de sânge poate fi fals reconfortant.** Atunci când medicamentul controlează bine boala, tumora elimină foarte puțin din ADN-ul ei în sânge -- ceea ce este în sine un semn bun, dar înseamnă și că un test de sânge are foarte puțin de găsit. În acea situație, cel mai important mecanism de rezistență -- amplificarea MET -- este depistat mult mai fiabil din **țesut** decât din sânge (într-o comparație publicată, aproximativ 38% din cazuri au fost detectate din țesut față de doar 7% din sânge). Concluzia practică: un rezultat "ctDNA nedetectabil" este o veste excelentă, dar **nu** înlocuiește o rebiopsie tisulară dacă imagistica sau simptomele sugerează progresie. Întreabă oncologul când ar merita efectuarea unei noi probe de țesut.
+{{< /callout >}}
 
 ### Când să testezi
 
@@ -306,9 +320,9 @@ Cel mai simplu concept: un fragment proteic sintetic (peptida) din joncțiunea f
 - Platformă dovedită pe alte cancere cu fuziuni genetice -- în studiul de fază 1 pe fuziunea DNAJB1-PRKACA ([Nature Medicine 2025](https://pubmed.ncbi.nlm.nih.gov/39567754/)): 75% control al bolii (9 din 12 pacienți), 3 pacienți fără boală detectabilă, un pacient în uz compasional fără cancer de peste 4 ani. **Atenție:** aceste rezultate sunt pe un alt tip de cancer (carcinom fibrolamellar), nu pe cancer pulmonar RET+. Platforma este modulară -- se adaptează la orice fuziune, dar date clinice specifice RET nu există încă
 - Peptida de 22 aminoacizi acoperă 93-96% din populația europeană, fără necesitatea tipizării HLA specifice
 - Adjuvantul XS15 este conceput special pentru pacienți imunocompromiși (relevant, deoarece 52% dintre pacienții pe selpercatinib dezvoltă limfopenie)
-- **Necesită țesut tumoral proaspăt congelat (-80°C)** pentru evaluarea fezabilității și designul vaccinului. Blocurile de parafină (FFPE) nu sunt suficiente. Aceasta înseamnă că planificarea biopsiei este esențială -- la orice intervenție viitoare (crioablație, biopsie ghidată CT), cere explicit păstrarea de cilindri de țesut în criopreservare la -80°C pentru Tübingen
+- **Necesită țesut tumoral proaspăt congelat (-80°C)** pentru evaluarea fezabilității și designul vaccinului. Blocurile de parafină (FFPE) nu sunt suficiente. Acesta este cel mai mare obstacol practic: dacă ești în răspuns profund și nu există nicio leziune care să poată fi biopsiată în siguranță, nu poți produce în prezent țesutul de care are nevoie acest vaccin. În practică, FusionVAC devine realist la o **viitoare oligo-progresie**, când o biopsie poate atât identifica mecanismul de rezistență, cât și conserva cilindri proaspeți congelați. Lecția pentru *acum*: la orice intervenție viitoare (biopsie, crioablație), cere explicit conservarea de cilindri suplimentari prin criopreservare la -80°C
 - Producție estimată la câteva săptămâni la facilitatea GMP din Tübingen (sinteză peptidică, nu cultură celulară)
-- **Acces:** Prin procedura germană de "uz individual" (Individueller Heilversuch)
+- **Acces:** Prin procedura germană de "uz individual" (Individueller Heilversuch). Nu există niciun studiu clinic deschis pentru RET+ pulmonar -- studiul publicat (NCT05937295) este pentru un alt tip de cancer (carcinom hepatic fibrolamellar); pentru NSCLC RET+, calea este acest traseu academic individualizat, nu înscrierea într-un studiu. Tratează orice afirmație de tipul "gratuit / acoperit integral" cu prudență -- costul unui Heilversuch individualizat nu este stabilit public; confirmă direct cu centrul
 
 {{< callout type="important" >}}
 **Pentru vaccinul FusionVAC, partenerul de fuziune RET trebuie confirmat** (KIF5B vs CCDC6 vs altul). Fiecare partener de fuziune creează o joncțiune diferită și necesită un design peptidic diferit. Confirmarea se face prin secvențiere genetică extinsă a tumorii (WES sau RNA-seq, descrise mai sus).
@@ -391,14 +405,32 @@ Ambele programe sunt în Tübingen, dar sunt entități independente: FusionVAC 
 Teoretic, pot fi combinate: FusionVAC pentru ținta principală (fuziunea) + CeGaT pentru acoperire mai largă. FusionVAC necesită țesut proaspăt congelat, CeGaT acceptă și FFPE -- deci pot funcționa și din surse de țesut diferite.
 {{< /callout >}}
 
-### Vaccinuri: ce este disponibil acum vs ce vine
+#### 5. Vaccinare împotriva rezistenței -- înainte să apară
 
-| Disponibilitate | Opțiuni |
+O idee mai nouă, deosebit de potrivită pentru pacienții care răspund bine la tratament: în loc să aștepți ca o mutație de rezistență să apară și să reacționezi, **te vaccinezi împotriva mutațiilor de rezistență pe care tumora este cel mai probabil să le dezvolte** -- în timp ce ești încă sub TKI și în răspuns profund.
+
+Dovada de concept vine din cancerul pulmonar ALK-pozitiv (o rudă moleculară apropiată a RET+). La ASCO 2026, studiul **ARCHER** (Faza 1b, Johns Hopkins, Dr. Vincent Lam) a testat un vaccin peptidic care țintește *mutații de rezistență anticipate* ale ALK, administrat **în paralel** cu TKI-ul în curs al pacienților:
+
+- **14 din 15 pacienți (93%)** au dezvoltat un răspuns al celulelor T împotriva cel puțin unei mutații țintite
+- **93% control al bolii** continuând terapia TKI
+- **Niciun efect secundar sever** (nicio toxicitate de gradul 3+, nicio sindrom de eliberare de citokine raportată)
+
+**De ce contează pentru RET+:** în principiu, aceeași abordare poate ținti mutațiile de rezistență cunoscute ale RET (familia "front solvent" G810). Esențial, nu necesită **nici țesut proaspăt congelat, nici boală măsurabilă** -- exact situația cuiva în răspuns profund, pentru care vaccinurile cu țesut proaspăt de mai sus sunt inaccesibile. O versiune specifică RET nu există încă, iar ALK nu este RET -- dar ARCHER arată că strategia este sigură și activă imunologic. **Ce poți face acum:** la următoarea consultație, întreabă dacă există vreun studiu care evaluează vaccinuri împotriva mutațiilor de rezistență în timp ce pacientul este pe TKI, pentru cancerul pulmonar RET+, și dacă centrul tău poate să te notifice dacă unul se deschide.
+
+### Vaccinuri: potrivirea opțiunii cu situația ta
+
+Disponibilitatea este doar jumătate din întrebare. Ceea ce decide de obicei ce vaccin poți urmări efectiv este **ce îți cere fiecare** -- tipul de țesut disponibil, dacă ai o leziune care poate fi biopsiată sau dacă un studiu este deschis. Aici mulți pacienți pierd luni întregi. Potrivește-ți situația cu opțiunile realiste:
+
+| Dacă situația ta este... | Opțiunile care se potrivesc efectiv |
 |---|---|
-| **Disponibil acum** (uz compasional/comercial) | FusionVAC (Tübingen), CeGaT CancerNeo (Tübingen), IOZK IO-VAC (Köln) |
-| **Studii clinice active** | BNT116, mRNA-4359/Mobilize, PDC*lung01, V940 |
-| **1-3 ani** | Vaccinuri mRNA personalizate specifice RET, KAIST B-cell AI vaccines |
-| **3-5+ ani** | PROTACuri anti-RET, lipide mRNA next-gen |
+| **Doar un bloc FFPE stocat, în răspuns profund, fără leziune sigur de biopsiat** | Vaccinuri neoantigenice compatibile FFPE (CeGaT CancerNeo); unele studii clinice -- dar **verifică eligibilitatea cu atenție**, deoarece mai multe (ex. BNT116) exclud mutațiile driver ca RET |
+| **Țesut proaspăt congelat disponibil sau o biopsie planificată care poate conserva** | FusionVAC (Tübingen) -- țesut proaspăt congelat obligatoriu, FFPE nu este acceptat |
+| **Răspuns bun, dorești să acționezi preventiv împotriva rezistenței** | Vaccinuri împotriva mutațiilor de rezistență (paradigma ARCHER, mai sus) -- nu necesită țesut proaspăt sau boală măsurabilă; versiunea specifică RET nu există încă |
+| **La progresie, opțiunile bazate pe dovezi epuizate** | Vaccinuri cu celule dendritice cu date limitate în cancer pulmonar (IOZK IO-VAC) -- o rezervă, nu o primă alegere |
+
+**Studii clinice active:** BNT116, mRNA-4359/Mobilize, PDC*lung01, V940 -- notează că accesul prin uz compasional în afara unui studiu este adesea închis, deci calea este înscrierea la un centru participant.
+**La orizont (1-3 ani):** vaccinuri mRNA personalizate specifice RET, KAIST B-cell AI vaccines.
+**Mai departe (3-5+ ani):** PROTACuri anti-RET, lipide mRNA next-gen.
 
 ### Combinația care amplifică eficacitatea
 
@@ -432,9 +464,9 @@ ANKTIVA este un medicament biologic care activează **celulele NK** (ucigașe na
 - În studiul QUILT-3.055 (86 pacienți NSCLC refractari), pacienții cu PD-L1 negativ au avut supraviețuire mediană **superioară** celor cu PD-L1 pozitiv (15.4 vs 13.8 luni) -- tumorile reci au beneficiat mai mult
 
 **Status:**
-- Aprobat FDA (2024) și EC (februarie 2026) pentru cancer de vezică
-- Aprobat în Arabia Saudită (ianuarie 2026) pentru NSCLC metastatic -- **prima aprobare globală pentru cancer pulmonar**
-- Studiul de fază 3 ResQ201A recrutează activ -- primul studiu de fază 3 care **include explicit pacienți RET+**
+- Aprobat FDA (2024, aprobare completă) și EC **condiționat** aprobat (februarie 2026) pentru cancer de vezică (carcinom urotelial non-musculo-invaziv refractar la BCG)
+- Aprobat în Arabia Saudită (ianuarie 2026) pentru NSCLC metastatic după terapia standard -- **prima aprobare mondială pentru cancer pulmonar** (notă: aceasta este pentru NSCLC în general, indiferent de mutație -- nu este specifică RET)
+- Studiul de fază 3 (ResQ201A) recrutează activ în NSCLC recăzut după inhibitor de checkpoint -- relevant pentru pacienții RET+, ale căror tumori tind să fie "reci" imunologic, deși studiul nu se limitează la RET
 
 **Acces în UE:**
 - Off-label (medicament aprobat EC, utilizare în afara indicației)
@@ -550,20 +582,22 @@ Un al treilea mecanism, mai puțin cunoscut: sub presiune de terapie țintită s
 
 **Pierderea genei RB1 este cel mai puternic biomarker predispozant.** Pacienții cu pierdere RB1 la baseline -- sau dobândită în timpul tratamentului -- se confruntă cu risc mai mare de această tranziție. Date preclinice (în principal din cancer de prostată, cross-domain) sugerează că inhibitorii FGFR și JAK pot inversa plasticitatea de linie celulară în tumori RB1-deficiente, dar acest lucru nu este încă validat în NSCLC.
 
-**Implicație clinică:** Dacă pierderea RB1 este detectată pe NGS sau ctDNA (acum sau mai târziu), o **rebiopsie la progresie devine esențială** -- nu doar schimbarea la un inhibitor RET de nouă generație. Boala cu fenotip neuroendocrin răspunde la medicamente diferite (regimuri bazate pe platină/etopozid, nu TKI RET). A acționa pe baza progresiei imagistice fără a reconfirma biologia tumorii riscă alegerea greșită a tratamentului următor.
+**Implicație clinică:** Dacă pierderea RB1 este detectată pe NGS sau ctDNA (acum sau mai târziu), o **rebiopsie la progresie devine esențială** -- nu doar schimbarea la un inhibitor RET de nouă generație. Boala cu fenotip neuroendocrin răspunde la medicamente diferite (regimuri bazate pe platină/etopozid, nu TKI RET). A acționa pe baza progresiei imagistice fără a reconfirma biologia tumorii riscă alegerea greșită a tratamentului următor. Dacă o tumoră transformată exprimă markerul **DLL3** (frecvent în boala neuroendocrină), există acum o opțiune țintită: **tarlatamab** (Imdelltra), o imunoterapie direcționată împotriva DLL3 care a primit aprobare completă FDA în noiembrie 2025 pentru cancerul pulmonar cu celule mici și este studiată specific în NSCLC transformat neuroendocrin (studiu NCT06788938). Acesta este un motiv în plus pentru care rebiopsie contează -- poate revela o țintă care schimbă întregul plan de tratament.
 
 ### Inhibitori RET de nouă generație
 
 Acești agenți sunt proiectați să funcționeze **acolo unde selpercatinib eșuează** -- incluzând mutațiile de front solvent.
 
+*O notă practică înainte: celălalt inhibitor RET aprobat, **pralsetinib**, împarte principalele mutații de rezistență ale selpercatinib -- simpla trecere de la unul la altul la progresie nu ajută de obicei. Agenții de nouă generație de mai jos sunt proiectați specific pentru această situație.*
+
 | Agent | Rată răspuns (ORR) | Acoperire mutații | Penetrare cerebrală | Status |
 |---|---|---|---|---|
-| **EP0031 (Lunbotinib)** | 69.7% | G810R/S/C | Da | Faza 2, recrutare la centre europene |
+| **EP0031 (Lunbotinib)** | **87.1%** (pre-tratați, ASCO 2026) | G810R/S/C | Da | Date pivotale Faza 2; cerere AМ depusă (China) |
 | **Vepafestinib** | 30% (control boală: 80%) | G810 + V804 | Cea mai bună din clasă | Faza 1/2 (MARGARET) |
 | **SY-5007** | 69.4% | G810 | Da | **Faza 3** (singurul cu date de faza 3) |
 | **APS03118** | Preclinic | G810 + V804 + L730 + **Y806** | Da | Cel mai larg spectru, Faza 1 |
 
-**EP0031 (Lunbotinib)** este în prezent cel mai avansat din punct de vedere clinic, cu studiu activ la centre europene (VHIO Barcelona, Gemelli Roma, Christie Manchester, Sarah Cannon Londra).
+**EP0031 (Lunbotinib)** este în prezent cel mai avansat din punct de vedere clinic. Datele pivotale de Faza 2 prezentate la ASCO 2026 au arătat, la pacienții care progreseseră deja pe un prim inhibitor RET, o **rată de răspuns de 87%, supraviețuire fără progresie mediană de 27.5 luni, și nicio moarte legată de tratament** (practic nimeni nu a trebuit să oprească medicamentul din cauza efectelor secundare -- doar 1.2%); a fost activ și în creier (răspuns complet intracranial ~30%). O cerere de aprobare a fost depusă în China, iar studiile sunt deschise la centre europene (VHIO Barcelona, Gemelli Roma, Christie Manchester, Sarah Cannon Londra). Acestea sunt cele mai puternice date de linie a doua RET raportate până în prezent.
 
 ### ADC-uri (Antibody-Drug Conjugates)
 
@@ -621,11 +655,19 @@ Da. Nu este garantat, dar datele susțin:
 - **LIBRETTO-432:** Selpercatinib are potențial curativ în stadii incipiente
 - **Analogia CML (leucemie mieloidă cronică):** 40-60% dintre pacienții pe imatinib (un alt TKI) ating remisiune fără tratament -- opresc medicamentul și rămân fără boală. Cancerul cu fuziune RET nu este CML, dar modelul este relevant
 
-**Probabilitate realistă pentru o strategie integrată (TKI + CLT + vaccinuri + imunomodulare):**
-- 10-20%: NED funcțional susținut (>5 ani fără boală detectabilă)
-- 40-50%: Control pe termen lung (3-4+ ani cu boală minimă)
-- 30-50%: Tratamentul nu generează răspuns imun detectabil
-- <5%: Risc net (profilul de siguranță al vaccinurilor este excelent)
+**Ce poate realiza realist o strategie integrată (TKI + terapie locală + vaccinuri + suport imunitar).** Acestea nu sunt felii ale unei singure plăcinte -- sunt moduri diferite de a privi probabilitățile, și se suprapun:
+- **10-20%** șanse de NED funcțional susținut (5+ ani fără boală detectabilă)
+- **40-50%** șanse de control pe termen lung (3-4+ ani cu boală minimă)
+- La **30-50%** dintre pacienți, terapiile imunitare adăugate pot să nu producă un răspuns imun măsurabil -- TKI-ul funcționează oricum pe dedesubt
+- **Sub 5%** risc net adăugat -- profilul de siguranță al acestor vaccinuri este excelent
+
+### De ce o parte din boală poate supraviețui chiar și atunci când scanările par curate
+
+Iată adevărul dificil din spatele ideii că "scanări curate nu înseamnă vindecare": un număr mic de celule canceroase pot supraviețui tratamentului nu prin mutații, ci **adormind**. Opresc să se dividă și se ascund -- astfel un TKI (care funcționează cel mai bine pe celulele în diviziune) abia le atinge, iar sistemul imunitar nu are aproape nimic de atacat. Cercetătorii le numesc **celule persistente tolerante la medicamente (DTP)**, și reprezintă o sursă probabilă de recidivă ani mai târziu.
+
+Pe dedesubt, aceste celule dormante activează programe de reparare ADN și supraviețuire (și deseori dezactivează o genă numită RB1). Aceasta este văzută tot mai mult ca un **al treilea front** într-o strategie de eradicare -- separat de reducerea tumorii (TKI + terapie locală) și de antrenarea sistemului imunitar (vaccinuri).
+
+**Aceasta nu este o practică dovedită de zi cu zi -- este un domeniu activ de cercetare.** Ideea emergentă, evidențiată la AACR 2025 (Memorial Sloan Kettering), este de a adăuga un medicament care să lovească specific aceste celule adormite în fereastra imediat după cel mai bun răspuns, când numărul lor este cel mai mic. **Inhibitorii PARP** și alte medicamente care vizează repararea ADN-ului sunt principalii candidați studiați (și se conectează cu orice constatări de reparare ADN, precum FANCL sau BRCA, din secvențierea ta). Deocamdată mesajul practic este mai simplu: explică de ce rămânerea sub monitorizare -- planul de Faza 4 de mai jos -- contează chiar și când totul pare curat.
 
 ### Cele 4 faze ale strategiei de eradicare
 
@@ -746,8 +788,8 @@ Necesită prescripție de la oncolog + justificare medicală documentată.
 | SBRT / Crioablație | Vaccinuri mRNA personalizate specifice RET | Glue moleculare anti-fuziuni |
 | ctDNA monitoring (Signatera, Haystack) | SY-5007 (aprobare anticipată) | Imunoterapii de generația 3 |
 | Drug repurposing (aspirină, statine) | ADC-uri noi (BL-B01D1, HER3-DXd) | Vaccinuri care țintesc celule B + T |
-| FusionVAC (uz compasional) | APS03118 (spectru larg) | Terapie celulară anti-RET (TCR-T) |
-| CeGaT CancerNeo (uz compasional) | ANKTIVA + vaccin combo trials | |
+| FusionVAC (necesită țesut proaspăt congelat) | APS03118 (spectru larg) | Terapie celulară anti-RET (TCR-T) |
+| CeGaT CancerNeo (compatibil FFPE) | ANKTIVA + vaccin combo trials | |
 | ANKTIVA (off-label UE) | Tedopi/OSE2101 (după aprobare) | |
 | IOZK IO-VAC (comercial) | | |
 | Organoide / teste funcționale | | |

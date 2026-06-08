@@ -1,6 +1,7 @@
 ---
 title: "Cancer pulmonar con fusion RET: Estrategia proactiva -- mas alla del tratamiento estandar"
 date: 2026-04-14
+lastmod: 2026-06-08
 draft: false
 description: "Vacunas, crioablacion, ctDNA, reposicionamiento de farmacos, inhibidores RET de nueva generacion y la estrategia hacia NED -- guia completa para pacientes y medicos que buscan mas que 'esperamos y vemos'."
 tags: ["cancer pulmonar", "fusion RET", "selpercatinib", "vacunas cancer", "crioablacion", "ctDNA", "reposicionamiento de farmacos", "NED", "estrategia proactiva", "inmunoterapia"]
@@ -68,8 +69,17 @@ La prueba NGS que confirmo la fusion RET fue solo el comienzo. Existen capas muc
 
 **RNA-seq** va aun mas lejos: muestra que genes estan efectivamente **activos** en tu tumor, no solo presentes. Puede confirmar el socio de fusion RET (KIF5B, CCDC6, etc.) con certeza y detectar mecanismos de resistencia que no aparecen en el ADN.
 
+**Por que merece la pena confirmar el socio de fusion:** RET casi nunca actua solo -- casi siempre se fusiona con un segundo gen (con mayor frecuencia KIF5B o CCDC6), y esa combinacion se llama tu *socio de fusion*. Saber **cual** socio tienes ya no es solo un detalle de diseno para vacunas. Datos presentados en ASCO 2026 sugieren que el gen socio influye en la durabilidad de la respuesta a un inhibidor RET (por ejemplo, CCDC6-RET se ha asociado a una mayor duracion de la respuesta que KIF5B-RET en algunos analisis -- aunque la diferencia es modesta y no se observa de forma consistente en todos los estudios, de modo que ningun socio es un veredicto). Ayuda a tu oncologo a anticipar el pronostico y planificar la siguiente linea de tratamiento -- por lo que vale la pena confirmarlo pronto, no solo si una vacuna esta sobre la mesa.
+
 {{< callout type="tip" >}}
-**En la practica:** Solicita a tu oncologo una derivacion para WES + RNA-seq del tejido tumoral. Si ya tienes una biopsia almacenada (bloque de parafina, llamado FFPE) en un laboratorio, esto puede ser suficiente. Los laboratorios con experiencia en oncologia molecular estan disponibles en toda Europa. **Nota importante:** Estas pruebas avanzadas no siempre estan cubiertas por los seguros publicos; verifica con tu oncologo si estan cubiertas o requieren pago privado. Tambien existen programas academicos europeos que ofrecen secuenciacion gratuita para pacientes elegibles, aunque el acceso internacional normalmente requiere una derivacion transfronteriza o un formulario S2.
+**En la practica -- pide un unico paquete completo, no pruebas dispersas.** En lugar de perseguir varias pruebas separadas en distintos centros academicos, pregunta a tu oncologo si se puede realizar un unico **paquete de perfilado genomico completo (CGP)** sobre tu bloque tumoral existente (FFPE). Un buen paquete, disponible en laboratorios con certificacion RGPD en toda Europa, combina en un solo envio:
+
+- **Un panel de ADN amplio** (500-1000+ genes) -- co-mutaciones, defectos en la reparacion del ADN, estado de MTAP/RB1
+- **RNA-seq con resolucion del socio de fusion** -- confirma KIF5B frente a CCDC6 frente a otro socio, no solo "RET positivo"
+- **Marcadores IHC dirigidos** -- c-MET, MTAP, HER3, TROP2 (estos condicionan el acceso a farmacos especificos y a conjugados anticuerpo-farmaco discutidos mas adelante)
+- **Una linea de base de ctDNA** de una extraccion de sangre realizada en el mismo periodo (esta parte es una analisis de sangre, no del bloque de tejido)
+
+La mayor parte funciona con un **bloque de parafina almacenado (FFPE)** -- sin necesidad de nueva biopsia. **Importante:** estas pruebas no siempre estan cubiertas por el seguro publico; verifica si estan reembolsadas o requieren pago privado (un paquete combinado suele ser mucho mas economico que las pruebas por separado que sustituye). Algunos programas academicos europeos tambien ofrecen secuenciacion para pacientes elegibles, aunque el acceso transfronterizo normalmente requiere derivacion o formulario S2.
 {{< /callout >}}
 
 ### Biomarcadores especificos que abren opciones de ensayo
@@ -77,7 +87,7 @@ La prueba NGS que confirmo la fusion RET fue solo el comienzo. Existen capas muc
 Mas alla de la secuenciacion general, algunos biomarcadores especificos merecen ser probados explicitamente porque abren acceso a clases terapeuticas emergentes:
 
 - **Perdida de MTAP** (metiltioadenosina fosforilasa) -- Un estudio peer-reviewed de 2026 (Aldea et al., *Annals of Oncology*, marzo 2026) documento la perdida de MTAP en **18-35% de los pacientes con CPNM RET fusion-positivo** -- una alta prevalencia que abre la elegibilidad para inhibidores PRMT5, una nueva clase de terapias dirigidas actualmente en ensayos fase 2-3. El estado de MTAP se confirma mejor mediante **IHC en tejido tumoral** (no por biopsia liquida, que no puede detectar fiablemente las deleciones de MTAP). Si tienes una biopsia FFPE almacenada, la IHC de MTAP puede anadirse a coste marginal.
-- **Estado de RB1** (gen supresor tumoral) -- Relevante para entender el riesgo de plasticidad de linaje celular (ver la seccion "Por que ocurre la resistencia" mas abajo). Generalmente se reporta como parte de un panel NGS estandar; vale la pena confirmar que este incluido.
+- **Estado de RB1** (gen supresor tumoral) -- Relevante para entender el riesgo de plasticidad de linaje celular (ver la seccion de resistencia mas abajo). Generalmente se reporta como parte de un panel NGS estandar; vale la pena confirmar que este incluido.
 
 Pregunta a tu oncologo si estos marcadores forman parte del panel ya realizado. Si no, a menudo pueden anadirse a la muestra tisular existente a coste marginal adicional.
 
@@ -141,7 +151,11 @@ Existen varias plataformas de monitorizacion de ctDNA, con diferentes niveles de
 
 **La diferencia entre paneles fijos y monitorizacion personalizada es enorme.** Un panel fijo como Guardant360 detecta mutaciones conocidas a un nivel relativamente alto. Una plataforma personalizada (Signatera, NeXT Personal, Haystack) detecta rastros de enfermedad 100-1000 veces mas pequenos -- esencial para confirmar si la enfermedad ha sido eliminada completamente.
 
-**Una distincion adicional importa para los pacientes que ya llevan meses en tratamiento:** la mayoria de las plataformas personalizadas (Signatera, Haystack) rastrean un conjunto fijo de variantes seleccionadas de tu biopsia tumoral inicial. Si aparecen nuevas mutaciones de resistencia durante el tratamiento, esos paneles fijos pueden no detectarlas. NeXT Personal (Personalis) introdujo en abril de 2026 una capacidad "Real-Time Variant Tracker" que utiliza hybrid-capture para detectar **nuevas mutaciones a medida que aparecen durante la terapia** -- util para la deteccion temprana de resistencia emergente. Pregunta a tu laboratorio que enfoque utiliza y si el seguimiento de mutaciones emergentes esta disponible.
+**Una distincion adicional importa para los pacientes que ya llevan meses en tratamiento:** la mayoria de las plataformas personalizadas (Signatera, Haystack) rastrean un conjunto fijo de variantes seleccionadas de tu biopsia tumoral inicial. Si aparecen nuevas mutaciones de resistencia durante el tratamiento, esos paneles fijos pueden no detectarlas. NeXT Personal (Personalis) lanzo en enero de 2026 una capacidad "Real-Time Variant Tracker" (datos clinicos presentados en AACR 2026) que utiliza hybrid-capture para detectar **nuevas mutaciones a medida que aparecen durante la terapia** -- util para la deteccion temprana de resistencia emergente. Pregunta a tu laboratorio que enfoque utiliza y si el seguimiento de mutaciones emergentes esta disponible.
+
+{{< callout type="warning" >}}
+**Un analisis de sangre puede dar una falsa sensacion de tranquilidad.** Cuando el medicamento controla bien la enfermedad, el tumor libera muy poco ADN en la sangre -- lo que en si mismo es una buena senal, pero tambien significa que la prueba de sangre tiene muy poco que detectar. En esa situacion, el mecanismo de resistencia mas importante -- la amplificacion de MET -- se detecta con mucha mayor fiabilidad en **tejido** que en sangre (en una comparacion publicada, se detecta en aproximadamente el 38% de los casos en tejido frente a solo el 7% en sangre). La conclusion practica: un resultado de "ctDNA indetectable" es una excelente noticia, pero **no** reemplaza una rebiopsia en tejido si las imagenes o los sintomas sugieren progresion. Pregunta a tu oncologo cuando merece la pena repetir una muestra de tejido.
+{{< /callout >}}
 
 ### Cuando hacer la prueba
 
@@ -306,9 +320,9 @@ El concepto mas simple: un fragmento proteico sintetico (peptido) de la union de
 - Plataforma demostrada en otros canceres con fusiones geneticas -- en el estudio de fase 1 sobre la fusion DNAJB1-PRKACA ([Nature Medicine 2025](https://pubmed.ncbi.nlm.nih.gov/39567754/)): 75% de control de la enfermedad (9 de 12 pacientes), 3 pacientes sin enfermedad detectable, un paciente en uso compasivo sin cancer durante mas de 4 anos. **Atencion:** estos resultados son en otro tipo de cancer (carcinoma fibrolamelar), no en cancer pulmonar RET+. La plataforma es modular -- se adapta a cualquier fusion, pero datos clinicos especificos para RET aun no existen
 - El peptido de 22 aminoacidos cubre el 93-96% de la poblacion europea, sin necesidad de tipificacion HLA especifica
 - El adyuvante XS15 esta disenado especialmente para pacientes inmunodeprimidos (relevante, ya que el 52% de los pacientes con selpercatinib desarrollan linfopenia)
-- **Requiere tejido tumoral fresco congelado (-80 grados C)** para la evaluacion de viabilidad y el diseno de la vacuna. Los bloques de parafina (FFPE) no son suficientes. Esto significa que la planificacion de la biopsia es esencial -- en cualquier intervencion futura (crioablacion, biopsia guiada por TC), solicita explicitamente la conservacion de cilindros de tejido en criopreservacion a -80 grados C para Tubinga
+- **Requiere tejido tumoral fresco congelado (-80 grados C)** para la evaluacion de viabilidad y el diseno de la vacuna. Los bloques de parafina (FFPE) **no** son suficientes. Esta es la mayor barrera practica: si estas en respuesta profunda sin ninguna lesion que pueda biopsiarse con seguridad, actualmente no puedes obtener el tejido que esta vacuna necesita. En la practica, FusionVAC se convierte por tanto en una opcion realista en una **futura oligo-progresion**, cuando una biopsia pueda a la vez identificar el mecanismo de resistencia y preservar cilindros en frio. La leccion para *ahora*: en cualquier intervencion futura (biopsia, crioablacion), solicita explicitamente que se criopreserven cilindros adicionales a -80 grados C
 - Produccion estimada en pocas semanas en la instalacion GMP de Tubinga (sintesis peptidica, no cultivo celular)
-- **Acceso:** Mediante el procedimiento aleman de "uso individual" (Individueller Heilversuch)
+- **Acceso:** Mediante el procedimiento aleman de "uso individual" (Individueller Heilversuch). No existe ningun ensayo clinico abierto para RET+ en cancer de pulmon -- el ensayo publicado (NCT05937295) es para un cancer diferente (carcinoma fibrolamelar de higado); para RET+ CPNM la via es esta ruta academica individualizada, no la inscripcion en un ensayo. Trata con cautela cualquier afirmacion de "gratuito / completamente cubierto" -- el coste de un Heilversuch individualizado no es publicamente fijo; confirma directamente con el centro
 
 {{< callout type="important" >}}
 **Para la vacuna FusionVAC, el socio de fusion RET debe estar confirmado** (KIF5B vs CCDC6 vs otro). Cada socio de fusion crea una union diferente y necesita un diseno peptidico diferente. La confirmacion se realiza mediante secuenciacion genetica extendida del tumor (WES o RNA-seq, descritas arriba).
@@ -391,14 +405,32 @@ Ambos programas estan en Tubinga, pero son entidades independientes: FusionVAC e
 Teoricamente, pueden combinarse: FusionVAC para la diana principal (la fusion) + CeGaT para cobertura mas amplia. FusionVAC requiere tejido fresco congelado, CeGaT acepta tambien FFPE -- por lo tanto pueden funcionar con fuentes de tejido diferentes.
 {{< /callout >}}
 
-### Vacunas: que esta disponible ahora vs que viene
+#### 5. Vacunarse contra la resistencia -- antes de que aparezca
 
-| Disponibilidad | Opciones |
+Una idea mas reciente, y especialmente adecuada para los pacientes que responden bien al tratamiento: en lugar de esperar a que aparezca una mutacion de resistencia y luego reaccionar, te **vacunas contra las mutaciones de resistencia que el tumor tiene mas probabilidades de desarrollar** -- mientras sigues con tu TKI y en respuesta profunda.
+
+La prueba de concepto proviene del cancer de pulmon ALK-positivo (un primo molecular cercano al RET+). En ASCO 2026, el ensayo **ARCHER** (Fase 1b, Johns Hopkins, Dr. Vincent Lam) probo una vacuna peptidica dirigida a mutaciones de resistencia de ALK *anticipadas*, administrada **junto con** el TKI en curso del paciente:
+
+- **14 de 15 pacientes (93%)** generaron una respuesta de celulas T contra al menos una mutacion diana
+- **93% de control de la enfermedad** mientras continuaban la terapia con TKI
+- **Sin efectos secundarios graves** (sin toxicidad de grado 3+ ni sindrome de liberacion de citocinas comunicado)
+
+**Por que importa para RET+:** en principio, el mismo enfoque puede dirigirse a las mutaciones de resistencia conocidas de RET (la familia G810 de "solvent front"). Crucialmente, no necesita **ni tejido fresco congelado ni enfermedad medible** -- exactamente la situacion de alguien en respuesta profunda para quien las vacunas con tejido fresco descritas antes estan fuera de alcance. Aun no existe una version especifica para RET, y ALK no es RET -- pero ARCHER demuestra que la estrategia es segura e inmunologicamente activa. **Lo que puedes hacer ahora:** en tu proxima consulta, pregunta si algun ensayo estudia vacunas contra mutaciones de resistencia administradas durante el TKI para cancer de pulmon RET+, y si tu centro puede avisarte si se abre alguno.
+
+### Vacunas: adaptando la opcion a tu situacion
+
+La disponibilidad es solo la mitad de la ecuacion. Lo que generalmente decide que vacuna puedes seguir en la practica es **lo que cada una requiere de ti** -- el tipo de tejido que tienes, si hay una lesion accesible para biopsia, o si hay un ensayo abierto. Aqui es donde muchos pacientes pierden meses. Relaciona tu situacion con las opciones realistas:
+
+| Si tu situacion es... | Opciones que realmente encajan |
 |---|---|
-| **Disponible ahora** (uso compasivo/comercial) | FusionVAC (Tubinga), CeGaT CancerNeo (Tubinga), IOZK IO-VAC (Colonia) |
-| **Ensayos clinicos activos** | BNT116, mRNA-4359/Mobilize, PDC*lung01, V940 |
-| **1-3 anos** | Vacunas de ARNm personalizadas especificas para RET, vacunas de celulas B con IA KAIST |
-| **3-5+ anos** | PROTACes anti-RET, lipidos de ARNm de nueva generacion |
+| **Solo un bloque FFPE almacenado, en respuesta profunda, sin lesion segura para biopsia** | Vacunas neoantigenicas compatibles con FFPE (CeGaT CancerNeo); algunos ensayos clinicos -- pero **verifica la elegibilidad con cuidado**, ya que varios (ej. BNT116) excluyen mutaciones conductoras como RET |
+| **Tejido fresco congelado disponible, o una biopsia planificada que pueda conservar material** | FusionVAC (Tubinga) -- tejido fresco congelado obligatorio, FFPE no aceptado |
+| **Evolucion favorable, quieres actuar preventivamente contra la resistencia** | Vacunas contra mutaciones de resistencia (paradigma ARCHER, arriba) -- no se necesita tejido fresco ni enfermedad medible; version especifica para RET aun no disponible |
+| **En progresion, opciones basadas en evidencia agotadas** | Vacunas con celulas dendriticas con datos limitados en pulmon (IOZK IO-VAC) -- una reserva, no una primera opcion |
+
+**Ensayos clinicos activos:** BNT116, mRNA-4359/Mobilize, PDC*lung01, V940 -- ten en cuenta que el acceso de uso compasivo fuera de un ensayo suele estar cerrado, de modo que la via es la inscripcion en un centro participante.
+**En el horizonte (1-3 anos):** vacunas de ARNm personalizadas especificas para RET, vacunas de celulas B con IA KAIST.
+**Mas adelante (3-5+ anos):** PROTACes anti-RET, lipidos de ARNm de nueva generacion.
 
 ### La combinacion que amplifica la eficacia
 
@@ -432,9 +464,9 @@ ANKTIVA es un medicamento biologico que activa las **celulas NK** (asesinas natu
 - En el estudio QUILT-3.055 (86 pacientes con CPNM refractarios), los pacientes con PD-L1 negativo tuvieron una supervivencia mediana **superior** a los con PD-L1 positivo (15.4 vs 13.8 meses) -- los tumores frios se beneficiaron mas
 
 **Estado actual:**
-- Aprobado por la FDA (2024) y la CE (febrero 2026) para cancer de vejiga
-- Aprobado en Arabia Saudi (enero 2026) para CPNM metastasico -- **primera aprobacion global para cancer pulmonar**
-- El estudio de fase 3 ResQ201A esta en reclutamiento activo -- el primer estudio de fase 3 que **incluye explicitamente pacientes RET+**
+- Aprobado por la FDA (2024, aprobacion completa) y aprobado **condicionalmente** por la CE (febrero de 2026) para cancer de vejiga (cancer de vejiga no musculo-invasivo refractario a BCG)
+- Aprobado en Arabia Saudi (enero de 2026) para CPNM metastasico despues de terapia estandar -- **la primera aprobacion mundial para cancer de pulmon** (nota: es para CPNM en general, con independencia de la mutacion -- no es especifico para RET)
+- Ensayo de Fase 3 (ResQ201A) en reclutamiento activo en CPNM recaido tras inhibidores de checkpoint -- relevante para pacientes RET+, cuyos tumores tienden a ser inmunologicamente "frios", aunque el ensayo no esta limitado a RET
 
 **Acceso en la UE:**
 - Off-label (medicamento aprobado por la CE, uso fuera de indicacion)
@@ -550,20 +582,22 @@ Un tercer mecanismo, menos conocido: bajo presion de terapia dirigida sostenida,
 
 **La perdida del gen RB1 es el biomarcador predisponente mas fuerte.** Los pacientes con perdida de RB1 al inicio -- o adquirida durante el tratamiento -- enfrentan un mayor riesgo de esta transicion. Datos preclinicos (principalmente de cancer de prostata, cross-domain) sugieren que los inhibidores de FGFR y JAK pueden revertir la plasticidad de linaje celular en tumores RB1-deficientes, pero esto aun no esta validado en CPNM.
 
-**Implicacion clinica:** Si la perdida de RB1 se detecta en tu NGS o ctDNA (ahora o mas tarde), una **rebiopsia en progresion se vuelve esencial** -- no solo cambiar a un TKI RET de proxima generacion. La enfermedad con fenotipo neuroendocrino responde a medicamentos diferentes (regimenes basados en platino/etoposido, no TKI RET). Actuar sobre la progresion imagenologica sin reconfirmar la biologia del tumor arriesga elegir el tratamiento incorrecto siguiente.
+**Implicacion clinica:** Si la perdida de RB1 se detecta en tu NGS o ctDNA (ahora o mas tarde), una **rebiopsia en progresion se vuelve esencial** -- no solo cambiar a un TKI RET de proxima generacion. La enfermedad con fenotipo neuroendocrino responde a medicamentos diferentes (regimenes basados en platino/etoposido, no TKI RET). Actuar sobre la progresion imagenologica sin reconfirmar la biologia del tumor arriesga elegir el tratamiento incorrecto siguiente. Si el tumor transformado expresa el marcador **DLL3** (frecuente en la enfermedad neuroendocrina), existe ya una opcion dirigida: **tarlatamab** (Imdelltra), una inmunoterapia dirigida contra DLL3 que recibio aprobacion completa de la FDA en noviembre de 2025 para el cancer de pulmon de celulas pequenas y esta siendo estudiada especificamente en CPNM con transformacion neuroendocrina (ensayo NCT06788938). Este es otro motivo por el que la rebiopsia importa -- puede revelar una diana que cambia por completo el plan de tratamiento.
 
 ### Inhibidores RET de nueva generacion
 
 Estos agentes estan disenados para funcionar **donde selpercatinib falla** -- incluyendo las mutaciones de front solvent.
 
+*Una nota practica antes de continuar: el otro inhibidor RET aprobado, **pralsetinib**, comparte las principales mutaciones de resistencia de selpercatinib -- por lo que simplemente cambiar de uno al otro en la progresion habitualmente no ayuda. Los agentes de nueva generacion que se describen a continuacion estan disenados especificamente para esa situacion.*
+
 | Agente | Tasa de respuesta (ORR) | Cobertura de mutaciones | Penetracion cerebral | Estado |
 |---|---|---|---|---|
-| **EP0031 (Lunbotinib)** | 69.7% | G810R/S/C | Si | Fase 2, reclutamiento en centros europeos |
+| **EP0031 (Lunbotinib)** | **87.1%** (pretratados, ASCO 2026) | G810R/S/C | Si | Datos pivotales Fase 2; solicitud de aprobacion presentada (China) |
 | **Vepafestinib** | 30% (control de enfermedad: 80%) | G810 + V804 | La mejor de su clase | Fase 1/2 (MARGARET) |
 | **SY-5007** | 69.4% | G810 | Si | **Fase 3** (el unico con datos de fase 3) |
 | **APS03118** | Preclinico | G810 + V804 + L730 + **Y806** | Si | El espectro mas amplio, Fase 1 |
 
-**EP0031 (Lunbotinib)** es actualmente el mas avanzado desde el punto de vista clinico, con un estudio activo en centros europeos (VHIO Barcelona, Gemelli Roma, Christie Manchester, Sarah Cannon Londres).
+**EP0031 (Lunbotinib)** es actualmente el mas avanzado desde el punto de vista clinico. Los datos pivotales de Fase 2 presentados en ASCO 2026 mostraron, en pacientes que ya habian progresado con un primer inhibidor RET, una **tasa de respuesta del 87%, una supervivencia libre de progresion mediana de 27.5 meses, y cero muertes relacionadas con el tratamiento** (practicamente nadie tuvo que abandonar el farmaco por efectos secundarios -- solo un 1.2%); tambien fue activo en el cerebro (respuesta completa intracraneal ~30%). Se ha presentado una solicitud de aprobacion en China, y los ensayos estan abiertos en centros europeos (VHIO Barcelona, Gemelli Roma, Christie Manchester, Sarah Cannon Londres). Son los datos mas solidos reportados hasta la fecha para RET en segunda linea.
 
 ### ADC (Conjugados anticuerpo-farmaco)
 
@@ -621,11 +655,19 @@ Si. No esta garantizado, pero los datos lo respaldan:
 - **LIBRETTO-432:** Selpercatinib tiene potencial curativo en estadios tempranos
 - **Analogia con LMC (leucemia mieloide cronica):** 40-60% de los pacientes con imatinib (otro TKI) alcanzan remision sin tratamiento -- suspenden el medicamento y permanecen sin enfermedad. El cancer con fusion RET no es LMC, pero el modelo es relevante
 
-**Probabilidad realista para una estrategia integrada (TKI + CLT + vacunas + inmunomodulacion):**
-- 10-20%: NED funcional sostenido (>5 anos sin enfermedad detectable)
-- 40-50%: Control a largo plazo (3-4+ anos con enfermedad minima)
-- 30-50%: El tratamiento no genera respuesta inmune detectable
-- <5%: Riesgo neto (el perfil de seguridad de las vacunas es excelente)
+**Lo que una estrategia integrada (TKI + terapia local + vacunas + apoyo inmunitario) podria lograr de forma realista.** Estas no son porciones de un mismo pastel -- son formas distintas de ver las probabilidades, y se solapan:
+- **10-20%** de posibilidades de NED funcional sostenido (5+ anos sin enfermedad detectable)
+- **40-50%** de posibilidades de control a largo plazo (3-4+ anos con enfermedad minima)
+- En **30-50%** de los pacientes, las inmunoterapias anadidas pueden no generar una respuesta inmune medible -- aun asi tienen el TKI actuando por debajo
+- **Menos del 5%** de riesgo neto adicional -- el perfil de seguridad de estas vacunas es excelente
+
+### Por que algunas celulas cancerosas pueden sobrevivir aunque las imagenes parezcan limpias
+
+Esta es la verdad dificil que hay detras de "las imagenes limpias no son lo mismo que la curacion": un numero reducido de celulas cancerosas puede sobrevivir al tratamiento no mediante mutaciones, sino **entrando en un estado de reposo**. Dejan de dividirse y permanecen agazapadas -- de modo que un TKI (que actua mejor sobre las celulas que se dividen) apenas las toca, y el sistema inmunitario tiene casi nada que atacar. Los investigadores las llaman **celulas persistentes tolerantes al farmaco** (*drug-tolerant persister* o DTP), y son probablemente una fuente de recaida anos despues.
+
+En su interior, estas celulas dormidas activan programas de reparacion del ADN y de supervivencia (y a menudo desactivan un gen llamado RB1). Esto se considera cada vez mas un **tercer frente** en una estrategia de erradicacion -- separado de reducir el tumor (TKI + terapia local) y de entrenar al sistema inmunitario (vacunas).
+
+**Esto no es aun practica clinica consolidada -- es un area de investigacion activa.** La idea emergente, destacada en AACR 2025 (Memorial Sloan Kettering), es anadir un farmaco que ataque especificamente estas celulas dormidas durante la ventana justo despues de la mejor respuesta, cuando su numero es menor. Los **inhibidores PARP** y otros farmacos que se dirigen a la reparacion del ADN son los principales candidatos estudiados (y conectan con cualquier hallazgo de reparacion del ADN, como FANCL o BRCA, en tu secuenciacion). Por ahora, el mensaje practico es mas sencillo: explica por que mantener la monitorizacion -- el Plan de Fase 4 mas abajo -- importa incluso cuando todo parece despejado.
 
 ### Las 4 fases de la estrategia de erradicacion
 
@@ -746,8 +788,8 @@ Requiere prescripcion del oncologo + justificacion medica documentada.
 | SBRT / Crioablacion | Vacunas de ARNm personalizadas especificas para RET | Pegamentos moleculares anti-fusiones |
 | Monitorizacion ctDNA (Signatera, Haystack) | SY-5007 (aprobacion anticipada) | Inmunoterapias de 3a generacion |
 | Reposicionamiento de farmacos (aspirina, estatinas) | Nuevos ADC (BL-B01D1, HER3-DXd) | Vacunas que se dirigen a celulas B + T |
-| FusionVAC (uso compasivo) | APS03118 (espectro amplio) | Terapia celular anti-RET (TCR-T) |
-| CeGaT CancerNeo (uso compasivo) | Ensayos combinados ANKTIVA + vacuna | |
+| FusionVAC (requiere tejido fresco congelado) | APS03118 (espectro amplio) | Terapia celular anti-RET (TCR-T) |
+| CeGaT CancerNeo (compatible con FFPE) | Ensayos combinados ANKTIVA + vacuna | |
 | ANKTIVA (off-label UE) | Tedopi/OSE2101 (tras aprobacion) | |
 | IOZK IO-VAC (comercial) | | |
 | Organoides / pruebas funcionales | | |
