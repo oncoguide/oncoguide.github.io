@@ -3,13 +3,14 @@ title: "Contact"
 layout: "page"
 translationKey: "contact"
 summary: "Reach out with questions, suggestions, or to collaborate"
+ShowToc: false
 ---
 
 ## We'd love to hear from you
 
 OncoGuide is a project created by a patient, for patients. Every message matters to us.
 
-You can write to us at: **[nog.opt.3o@icloud.com](mailto:nog.opt.3o@icloud.com)**
+{{< contact-form >}}
 
 ---
 
@@ -17,7 +18,7 @@ You can write to us at: **[nog.opt.3o@icloud.com](mailto:nog.opt.3o@icloud.com)*
 
 Have a question about the content on this site? Want to tell us what was helpful or what could be improved?
 
-We'd love to hear from you. Write to us anytime at the address above.
+We'd love to hear from you — just fill in the form above.
 
 ---
 

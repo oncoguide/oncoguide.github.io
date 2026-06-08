@@ -1,0 +1,24 @@
+{{- /* Contact form → emails nog.opt.3o@icloud.com via FormSubmit.co (no backend needed
+       for a static site). Labels are localized via i18n. NOTE: FormSubmit requires a
+       one-time activation — the first submission triggers a confirmation email to the
+       address; click its link once and the form is live thereafter. */ -}}
+<form class="onco-contact-form" action="https://formsubmit.co/nog.opt.3o@icloud.com" method="POST">
+  <input type="hidden" name="_subject" value="OncoGuide — contact form">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_captcha" value="true">
+  <input type="hidden" name="_next" value="https://oncoguide.github.io/">
+  <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" class="onco-cf-honey">
+  <label class="onco-cf-field">
+    <span>{{ i18n "contactFormName" }}</span>
+    <input type="text" name="name" required>
+  </label>
+  <label class="onco-cf-field">
+    <span>{{ i18n "contactFormEmail" }}</span>
+    <input type="email" name="email" required>
+  </label>
+  <label class="onco-cf-field">
+    <span>{{ i18n "contactFormMessage" }}</span>
+    <textarea name="message" rows="6" required></textarea>
+  </label>
+  <button type="submit" class="onco-cf-submit">{{ i18n "contactFormSend" }}</button>
+</form>

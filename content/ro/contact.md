@@ -3,13 +3,14 @@ title: "Contact"
 layout: "page"
 translationKey: "contact"
 summary: "Scrie-ne pentru întrebări, sugestii sau colaborare"
+ShowToc: false
 ---
 
 ## Ne bucurăm să auzim de la tine
 
 OncoGuide este un proiect creat de un pacient, pentru pacienți. Fiecare mesaj contează pentru noi.
 
-Poți să ne scrii la: **[nog.opt.3o@icloud.com](mailto:nog.opt.3o@icloud.com)**
+{{< contact-form >}}
 
 ---
 
@@ -17,7 +18,7 @@ Poți să ne scrii la: **[nog.opt.3o@icloud.com](mailto:nog.opt.3o@icloud.com)**
 
 Ai o întrebare despre conținutul de pe site? Vrei să ne spui ce ți-a fost util sau ce ar putea fi mai bine?
 
-Ne-ar face plăcere să te ascultăm. Scrie-ne oricând la adresa de mai sus.
+Ne-ar face plăcere să te ascultăm — completează formularul de mai sus.
 
 ---
 

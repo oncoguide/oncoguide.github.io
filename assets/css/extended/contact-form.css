@@ -1,0 +1,52 @@
+/* Contact form — scoped, theme-aware (PaperMod vars). Paired with shortcodes/contact-form.html */
+.onco-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 640px;
+  margin: 1.6rem 0 2rem;
+  padding: 22px;
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: var(--radius, 8px);
+}
+.onco-contact-form .onco-cf-field { display: flex; flex-direction: column; gap: 6px; }
+.onco-contact-form .onco-cf-field > span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.onco-contact-form input[type="text"],
+.onco-contact-form input[type="email"],
+.onco-contact-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--primary);
+  background: var(--theme);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+.onco-contact-form textarea { resize: vertical; min-height: 120px; }
+.onco-contact-form input:focus,
+.onco-contact-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+.onco-contact-form .onco-cf-submit {
+  align-self: flex-start;
+  padding: 11px 26px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--theme);
+  background: var(--primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.onco-contact-form .onco-cf-submit:hover { opacity: .85; }
+/* spam honeypot — hidden from humans */
+.onco-contact-form .onco-cf-honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

@@ -25,6 +25,12 @@ scannerRankRegionCombined: "Combiné"
 scannerRankRegionRo: "Roumanie"
 scannerRankRegionIntl: "Europe + Turquie"
 
+# Formulaire de contact
+contactFormName: "Votre nom"
+contactFormEmail: "Votre e-mail"
+contactFormMessage: "Votre message"
+contactFormSend: "Envoyer"
+
 newsletterCTA: "Restez informé — abonnez-vous pour de nouveaux articles"
 
 # Sections de la page d'accueil

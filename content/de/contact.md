@@ -3,13 +3,14 @@ title: "Kontakt"
 layout: "page"
 translationKey: "contact"
 summary: "Schreiben Sie uns bei Fragen, Vorschlägen oder zur Zusammenarbeit"
+ShowToc: false
 ---
 
 ## Wir freuen uns, von Ihnen zu hören
 
 OncoGuide ist ein Projekt, das von einem Patienten für Patienten erstellt wurde. Jede Nachricht ist uns wichtig.
 
-Sie können uns schreiben an: **[nog.opt.3o@icloud.com](mailto:nog.opt.3o@icloud.com)**
+{{< contact-form >}}
 
 ---
 
@@ -17,7 +18,7 @@ Sie können uns schreiben an: **[nog.opt.3o@icloud.com](mailto:nog.opt.3o@icloud
 
 Haben Sie eine Frage zu den Inhalten auf dieser Seite? Möchten Sie uns sagen, was Ihnen geholfen hat oder was verbessert werden könnte?
 
-Wir würden uns freuen, von Ihnen zu hören. Schreiben Sie uns jederzeit an die oben genannte Adresse.
+Wir würden uns freuen, von Ihnen zu hören — füllen Sie einfach das Formular oben aus.
 
 ---
 
