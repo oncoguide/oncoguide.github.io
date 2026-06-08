@@ -10,6 +10,21 @@ calloutImportant: "Important"
 calloutTip: "Sfat"
 calloutWarning: "Atenție"
 
+# Carduri clasament aparate
+scannerRankDose: "Radiație"
+scannerRankDetector: "Detector"
+scannerRankField: "Câmp"
+scannerRankFov: "Acoperire"
+scannerRankAi: "AI"
+scannerRankCasFree: "Gratuit (CAS)"
+scannerRankCasPartial: "Parțial prin CAS"
+scannerRankSelfPay: "Plată privată"
+scannerRankUnverifiedTitle: "Raportate și — model neconfirmat independent"
+scannerRankUnverifiedFlag: "neconfirmat"
+scannerRankRegionCombined: "Combinat"
+scannerRankRegionRo: "România"
+scannerRankRegionIntl: "Europa + Turcia"
+
 newsletterCTA: "Rămâi informat — abonează-te pentru articole noi"
 
 # Secțiuni pagina principală

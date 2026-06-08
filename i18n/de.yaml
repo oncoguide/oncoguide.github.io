@@ -10,6 +10,21 @@ calloutImportant: "Wichtig"
 calloutTip: "Tipp"
 calloutWarning: "Warnung"
 
+# Geräte-Ranking-Karten
+scannerRankDose: "Strahlung"
+scannerRankDetector: "Detektor"
+scannerRankField: "Feldstärke"
+scannerRankFov: "Abdeckung"
+scannerRankAi: "KI"
+scannerRankCasFree: "Kostenlos (CAS, RO)"
+scannerRankCasPartial: "Teilweise über CAS"
+scannerRankSelfPay: "Selbstzahler"
+scannerRankUnverifiedTitle: "Ebenfalls gemeldet — Gerätemodell nicht unabhängig bestätigt"
+scannerRankUnverifiedFlag: "unbestätigt"
+scannerRankRegionCombined: "Kombiniert"
+scannerRankRegionRo: "Rumänien"
+scannerRankRegionIntl: "Europa + Türkei"
+
 newsletterCTA: "Bleiben Sie informiert — abonnieren Sie neue Artikel"
 
 # Homepage-Bereiche

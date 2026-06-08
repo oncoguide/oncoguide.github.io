@@ -1,0 +1,290 @@
+/* ════════════════════════════════════════════════════════════════════
+   scanner-ranking.css — ranked scanner cards for the imaging-equipment guide
+   Scoped under .scanner-rank so it cannot collide with PaperMod.
+   Theme-aware: surfaces/text/borders use PaperMod vars (--entry/--primary/
+   --secondary/--border) → auto light+dark. Spec-bar gradients + AI badge are
+   fixed brand accents that read on both backgrounds.
+   Spec-bar level classes (rad-*, fov-*, tof-*, sens-*, mri-*, ct-*) are ported
+   verbatim from .private/.../imagistica.html so the data maps 1:1.
+   ════════════════════════════════════════════════════════════════════ */
+
+.scanner-rank {
+  /* gradient ramp — copied from imagistica.html design system */
+  --sr-grad-ultra:     linear-gradient(90deg, #0D6E3C, #15A85F);
+  --sr-grad-excellent: linear-gradient(90deg, #1A7A30, #22c55e);
+  --sr-grad-good:      linear-gradient(90deg, #4a7c00, #84cc16);
+  --sr-grad-mid:       linear-gradient(90deg, #8A5A00, #eab308);
+  --sr-grad-mid-warm:  linear-gradient(90deg, #b54200, #f97316);
+  --sr-grad-low:       linear-gradient(90deg, #9b1c1c, #dc2626);
+  --sr-grad-neutral:   linear-gradient(90deg, #8A9BAD, #c8d4de);
+
+  --sr-arterial: #C8102E;   /* rank 1 */
+  --sr-teal:     #0B7384;   /* rank 2 / institutional */
+  --sr-electric: #5B2EFF;   /* AI */
+  --sr-ok:       #0D6E3C;
+  --sr-warn:     #8A5A00;
+
+  --sr-mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+
+  margin: 1.6rem 0 2rem;
+}
+:root[data-theme="dark"] .scanner-rank,
+:root[data-theme="dark"] .scanner-rank-tabs {
+  --sr-teal: #3FB8CC;   /* lighter teal for dark surfaces */
+  --sr-ok:   #22c55e;   /* lighter green — keeps CAS chip ≥4.5:1 contrast */
+  --sr-warn: #f59e0b;   /* lighter amber — keeps "partly CAS" chip legible */
+}
+
+/* ranking-basis caption */
+.scanner-rank .sr-basis {
+  font-family: var(--sr-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--secondary);
+  border-left: 3px solid var(--sr-teal);
+  padding: 6px 12px;
+  margin-bottom: 14px;
+  background: color-mix(in srgb, var(--sr-teal) 8%, transparent);
+  border-radius: 4px;
+}
+
+/* ─── REGION TABS (CSS-only radio) ───────────────────────── */
+.scanner-rank-tabs { margin: 1.6rem 0 2rem; --sr-teal: #0B7384; --sr-electric: #5B2EFF; }
+.scanner-rank-tabs > .sr-tabradio { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+.scanner-rank-tabs .sr-tabbar { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px; border-bottom: 2px solid var(--border); }
+.scanner-rank-tabs .sr-tabbar label {
+  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 9px 15px;
+  cursor: pointer;
+  color: var(--secondary);
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 7px 7px 0 0;
+  margin-bottom: -2px;
+  transition: color .12s, background .12s;
+}
+.scanner-rank-tabs .sr-tabbar label:hover { color: var(--primary); background: color-mix(in srgb, var(--primary) 5%, transparent); }
+.scanner-rank-tabs .sr-panel { display: none; }
+.scanner-rank-tabs[data-notabs] .sr-panel { display: block; }
+/* input order = combined, ro, intl → maps to panel/label order (generic, any modality) */
+.scanner-rank-tabs > .sr-tabradio:nth-of-type(1):checked ~ .sr-panels > .sr-panel:nth-of-type(1),
+.scanner-rank-tabs > .sr-tabradio:nth-of-type(2):checked ~ .sr-panels > .sr-panel:nth-of-type(2),
+.scanner-rank-tabs > .sr-tabradio:nth-of-type(3):checked ~ .sr-panels > .sr-panel:nth-of-type(3) { display: block; }
+.scanner-rank-tabs > .sr-tabradio:nth-of-type(1):checked ~ .sr-tabbar label:nth-of-type(1),
+.scanner-rank-tabs > .sr-tabradio:nth-of-type(2):checked ~ .sr-tabbar label:nth-of-type(2),
+.scanner-rank-tabs > .sr-tabradio:nth-of-type(3):checked ~ .sr-tabbar label:nth-of-type(3) {
+  color: var(--primary);
+  background: var(--entry);
+  border-color: var(--border);
+  border-bottom-color: var(--entry);
+  box-shadow: inset 0 3px 0 0 var(--sr-teal);   /* accent so the active tab pops in dark mode too */
+}
+.scanner-rank-tabs > .sr-tabradio:focus-visible ~ .sr-tabbar label { outline: 2px solid var(--sr-electric); outline-offset: 2px; }
+.scanner-rank-tabs .sr-panel.scanner-rank { margin: 0; }
+
+/* ─── CARD STACK ─────────────────────────────────────────── */
+.scanner-rank .sr-stack { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+.scanner-rank .sr-card {
+  position: relative;
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--tertiary);
+  border-radius: 8px;
+  padding: 16px 18px;
+  transition: box-shadow .15s;
+}
+.scanner-rank .sr-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.10); z-index: 1; }
+.scanner-rank .sr-card[data-rank="1"] { border-left-color: var(--sr-arterial); }
+.scanner-rank .sr-card[data-rank="2"] { border-left-color: var(--sr-teal); }
+.scanner-rank .sr-card[data-rank="3"] { border-left-color: var(--secondary); }
+
+/* ─── CARD TOP ───────────────────────────────────────────── */
+.scanner-rank .sr-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.scanner-rank .sr-top-left { display: flex; align-items: flex-start; gap: 14px; }
+
+.scanner-rank .sr-rank {
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--secondary);
+  min-width: 30px;
+  padding-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.scanner-rank .sr-card[data-rank="1"] .sr-rank { color: var(--sr-arterial); }
+.scanner-rank .sr-card[data-rank="2"] .sr-rank { color: var(--sr-teal); }
+.scanner-rank .sr-card[data-rank="3"] .sr-rank { color: var(--primary); }
+
+.scanner-rank .sr-mfr {
+  font-family: var(--sr-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 2px;
+}
+.scanner-rank .sr-model {
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 3px;
+  color: var(--primary);
+}
+.scanner-rank .sr-tier { font-size: 0.8rem; color: var(--secondary); }
+
+/* ─── AI BADGE ───────────────────────────────────────────── */
+.scanner-rank .sr-badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
+.scanner-rank .sr-ai {
+  background: linear-gradient(135deg, #5B2EFF, #7C3AED);
+  color: #fff;
+  font-family: var(--sr-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(91,46,255,.35);
+  white-space: nowrap;
+}
+.scanner-rank .sr-ai::before { content: "✦ "; }
+
+/* ─── CENTERS ────────────────────────────────────────────── */
+.scanner-rank .sr-centers { display: flex; flex-direction: column; gap: 2px; margin: 10px 0 12px; }
+.scanner-rank .sr-center { font-size: 0.86rem; color: var(--content); }
+.scanner-rank .sr-center b { color: var(--sr-teal); font-weight: 600; }
+.scanner-rank .sr-center .sr-country {
+  font-family: var(--sr-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-left: 4px;
+}
+
+/* ─── SPEC GRID + BARS ───────────────────────────────────── */
+.scanner-rank .sr-specs {
+  display: grid;
+  gap: 7px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--primary) 4%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  margin-bottom: 12px;
+}
+.scanner-rank .sr-spec { display: grid; grid-template-columns: 92px 1fr auto; gap: 10px; align-items: center; }
+.scanner-rank .sr-spec-label {
+  font-family: var(--sr-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+.scanner-rank .sr-spec-val { font-size: 0.78rem; color: var(--primary); font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+
+.scanner-rank .sr-bar { display: block; width: 100%; height: 6px; border-radius: 999px; background: var(--tertiary); position: relative; overflow: hidden; }
+.scanner-rank .sr-bar .sr-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; }
+
+/* radiation — small green bar = low dose = good */
+.scanner-rank .rad-zero      .sr-fill { width: 4%;  background: var(--sr-grad-neutral); }
+.scanner-rank .rad-ultra-low .sr-fill { width: 8%;  background: var(--sr-grad-ultra); }
+.scanner-rank .rad-low       .sr-fill { width: 18%; background: var(--sr-grad-excellent); }
+.scanner-rank .rad-mid-low   .sr-fill { width: 40%; background: var(--sr-grad-good); }
+.scanner-rank .rad-mid       .sr-fill { width: 65%; background: var(--sr-grad-mid); }
+.scanner-rank .rad-high      .sr-fill { width: 85%; background: var(--sr-grad-mid-warm); }
+.scanner-rank .rad-very-high .sr-fill { width: 100%; background: var(--sr-grad-low); }
+/* PET field of view — bigger = better */
+.scanner-rank .fov-lafov    .sr-fill { width: 100%; background: var(--sr-grad-ultra); }
+.scanner-rank .fov-extended .sr-fill { width: 35%;  background: var(--sr-grad-good); }
+.scanner-rank .fov-standard .sr-fill { width: 22%;  background: var(--sr-grad-mid); }
+.scanner-rank .fov-narrow   .sr-fill { width: 13%;  background: var(--sr-grad-mid-warm); }
+/* time-of-flight */
+.scanner-rank .tof-ultra .sr-fill { width: 95%; background: var(--sr-grad-ultra); }
+.scanner-rank .tof-good  .sr-fill { width: 65%; background: var(--sr-grad-good); }
+.scanner-rank .tof-mid   .sr-fill { width: 40%; background: var(--sr-grad-mid); }
+.scanner-rank .tof-none  .sr-fill { width: 8%;  background: var(--sr-grad-neutral); }
+/* sensitivity */
+.scanner-rank .sens-ultra .sr-fill { width: 95%; background: var(--sr-grad-ultra); }
+.scanner-rank .sens-good  .sr-fill { width: 45%; background: var(--sr-grad-good); }
+.scanner-rank .sens-mid   .sr-fill { width: 25%; background: var(--sr-grad-mid); }
+.scanner-rank .sens-low   .sr-fill { width: 12%; background: var(--sr-grad-mid-warm); }
+/* MRI field strength */
+.scanner-rank .mri-7t  .sr-fill { width: 100%; background: var(--sr-grad-ultra); }
+.scanner-rank .mri-5t  .sr-fill { width: 75%;  background: var(--sr-grad-excellent); }
+.scanner-rank .mri-3t  .sr-fill { width: 45%;  background: var(--sr-grad-good); }
+.scanner-rank .mri-15t .sr-fill { width: 22%;  background: var(--sr-grad-mid); }
+.scanner-rank .mri-low .sr-fill { width: 10%;  background: var(--sr-grad-mid-warm); }
+/* CT detector */
+.scanner-rank .ct-pcct     .sr-fill { width: 100%; background: var(--sr-grad-ultra); }
+.scanner-rank .ct-spectral .sr-fill { width: 70%;  background: var(--sr-grad-excellent); }
+.scanner-rank .ct-dual     .sr-fill { width: 55%;  background: var(--sr-grad-good); }
+.scanner-rank .ct-128slice .sr-fill { width: 38%;  background: var(--sr-grad-mid); }
+.scanner-rank .ct-64slice  .sr-fill { width: 25%;  background: var(--sr-grad-mid); }
+.scanner-rank .ct-16slice  .sr-fill { width: 12%;  background: var(--sr-grad-mid-warm); }
+
+/* ─── FOOTER (cost + CAS) ────────────────────────────────── */
+.scanner-rank .sr-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-family: var(--sr-mono);
+  font-size: 0.72rem;
+  color: var(--secondary);
+}
+.scanner-rank .sr-cost b { color: var(--content); font-weight: 600; }
+.scanner-rank .sr-cas {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+.scanner-rank .sr-cas-yes  { color: var(--sr-ok);   background: color-mix(in srgb, var(--sr-ok) 14%, transparent);   border-color: color-mix(in srgb, var(--sr-ok) 30%, transparent); }
+.scanner-rank .sr-cas-part { color: var(--sr-warn); background: color-mix(in srgb, var(--sr-warn) 16%, transparent); border-color: color-mix(in srgb, var(--sr-warn) 30%, transparent); }
+.scanner-rank .sr-cas-no   { color: var(--secondary); background: color-mix(in srgb, var(--secondary) 12%, transparent); border-color: var(--border); }
+
+/* ─── UNVERIFIED GROUP ───────────────────────────────────── */
+.scanner-rank .sr-unverified {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border: 1px dashed var(--border);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--primary) 3%, transparent);
+}
+.scanner-rank .sr-unverified-title {
+  font-family: var(--sr-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 8px;
+}
+.scanner-rank .sr-unverified ul { margin: 0; padding-left: 18px; }
+.scanner-rank .sr-unverified li { font-size: 0.84rem; color: var(--content); margin: 3px 0; }
+.scanner-rank .sr-unverified .sr-flag {
+  font-family: var(--sr-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--sr-warn);
+  margin-left: 6px;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .scanner-rank .sr-spec { grid-template-columns: 78px 1fr; }
+  .scanner-rank .sr-spec-val { grid-column: 2; text-align: left; }
+  .scanner-rank .sr-badges { justify-content: flex-start; width: 100%; }
+}

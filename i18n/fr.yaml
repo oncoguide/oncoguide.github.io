@@ -10,6 +10,21 @@ calloutImportant: "Important"
 calloutTip: "Conseil"
 calloutWarning: "Attention"
 
+# Fiches de classement des appareils
+scannerRankDose: "Rayonnement"
+scannerRankDetector: "Détecteur"
+scannerRankField: "Champ"
+scannerRankFov: "Couverture"
+scannerRankAi: "IA"
+scannerRankCasFree: "Gratuit (CAS, RO)"
+scannerRankCasPartial: "Partiel via CAS"
+scannerRankSelfPay: "À votre charge"
+scannerRankUnverifiedTitle: "Également signalés — modèle non vérifié de façon indépendante"
+scannerRankUnverifiedFlag: "non vérifié"
+scannerRankRegionCombined: "Combiné"
+scannerRankRegionRo: "Roumanie"
+scannerRankRegionIntl: "Europe + Turquie"
+
 newsletterCTA: "Restez informé — abonnez-vous pour de nouveaux articles"
 
 # Sections de la page d'accueil

@@ -1,6 +1,6 @@
 ---
-title: "Imaging Centers"
-description: "Cancer imaging guide: PET-CT, CT, MRI — where to go, what to expect"
+title: "Monitoring"
+description: "Imaging for cancer monitoring: how to choose the PET-CT, MRI and CT scanner that gives you the least radiation and the best image."
 translationKey: "section-imaging"
 weight: 4
 ---

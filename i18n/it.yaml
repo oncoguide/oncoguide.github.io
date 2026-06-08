@@ -10,6 +10,21 @@ calloutImportant: "Importante"
 calloutTip: "Suggerimento"
 calloutWarning: "Attenzione"
 
+# Schede classifica apparecchiature
+scannerRankDose: "Radiazioni"
+scannerRankDetector: "Rivelatore"
+scannerRankField: "Campo"
+scannerRankFov: "Copertura"
+scannerRankAi: "AI"
+scannerRankCasFree: "Gratuito (CAS, RO)"
+scannerRankCasPartial: "Parziale via CAS"
+scannerRankSelfPay: "A pagamento"
+scannerRankUnverifiedTitle: "Segnalati anche — modello non verificato in modo indipendente"
+scannerRankUnverifiedFlag: "non verificato"
+scannerRankRegionCombined: "Combinato"
+scannerRankRegionRo: "Romania"
+scannerRankRegionIntl: "Europa + Turchia"
+
 newsletterCTA: "Resta informato — iscriviti per nuovi articoli"
 
 # Sezioni della homepage

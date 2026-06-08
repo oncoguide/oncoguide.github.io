@@ -41,6 +41,10 @@ languages:
           name: "Diagnosis"
           url: /en/diagnosis/
           weight: 10
+        - identifier: monitoring
+          name: "Monitoring"
+          url: /en/imaging/
+          weight: 15
         - identifier: cancer-types
           name: "Patient Guides"
           url: /en/cancer-types/

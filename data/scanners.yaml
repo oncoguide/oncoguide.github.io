@@ -1,0 +1,490 @@
+# ════════════════════════════════════════════════════════════════════
+# scanners.yaml — single source of truth for the imaging-equipment guide.
+# Rendered by layouts/shortcodes/scanner-rank.html into ranked cards.
+# Language-neutral: numbers/models/centers live here once → all 6 languages.
+#
+# RULES (see plan atomic-toasting-mist.md):
+#  - Ranked by PERFORMANCE only (detector gen → dose → FOV/field → AI). Cost never ranks.
+#  - One card per distinct model; identical models across centers merge (multiple `centers`).
+#  - A machine may sit in several regions; each center carries its own `region` (ro|intl).
+#    `regions:` lists the regions it appears in. intl = "Europe + Turkey".
+#  - rank_ro / rank_intl / rank_combined: only on confirmed machines.
+#  - confirmed:false → routed to a separate "not independently verified" list (no rank, no bars).
+#  - Two data points shown per card: radiation (dose_value, mSv) + the modality's headline quality metric.
+#  - dose_value = the scanner's TYPICAL whole-body effective dose; the article callout states the
+#    full range (<1 mSv best total-body → ~14–16 mSv conventional + full diagnostic CT) + tracer-vs-CT caveat.
+#  - Cost = public framing only; no contact-specific / personal quotes.
+# ════════════════════════════════════════════════════════════════════
+
+petct:
+  ranking_basis: "Ranked by body coverage, detector generation, radiation dose and AI reconstruction — not by price."
+  machines:
+    - model: "uEXPLORER (total-body PET-CT)"
+      manufacturer: "United Imaging"
+      tier: "Total-body PET — 194 cm"
+      confirmed: true
+      regions: ["intl"]
+      rank_intl: 1
+      rank_combined: 1
+      dose_class: "rad-ultra-low"
+      dose_value: "~0.5–1 mSv"
+      fov_class: "fov-lafov"
+      fov_value: "194 cm — whole body at once"
+      ai: false
+      cost: "Self-pay ≈ €1,300–1,700"
+      cas: "no"
+      centers:
+        - {name: "Policlinico Sant'Orsola (IRCCS)", city: "Bologna", country: "IT", region: "intl"}
+        - {name: "Ospedale San Pietro Fatebenefratelli", city: "Rome", country: "IT", region: "intl"}
+
+    - model: "Biograph Vision Quadra"
+      manufacturer: "Siemens Healthineers"
+      tier: "Long-axial-FOV PET — 106 cm"
+      confirmed: true
+      regions: ["intl"]
+      rank_intl: 2
+      rank_combined: 2
+      dose_class: "rad-low"
+      dose_value: "~2–4 mSv"
+      fov_class: "fov-lafov"
+      fov_value: "106 cm — long axial field"
+      ai: false
+      cost: "Self-pay ≈ €1,100–2,500 (varies by country)"
+      cas: "no"
+      centers:
+        - {name: "Inselspital Bern", city: "Bern", country: "CH", region: "intl"}
+        - {name: "St Thomas' / King's College London", city: "London", country: "UK", region: "intl"}
+        - {name: "University Hospital Tübingen", city: "Tübingen", country: "DE", region: "intl"}
+        - {name: "UMCG", city: "Groningen", country: "NL", region: "intl"}
+        - {name: "Netherlands Cancer Institute (NKI-AVL)", city: "Amsterdam", country: "NL", region: "intl"}
+        - {name: "Aarhus University Hospital", city: "Aarhus", country: "DK", region: "intl"}
+        - {name: "Rigshospitalet", city: "Copenhagen", country: "DK", region: "intl"}
+        - {name: "MedUni Wien / AKH", city: "Vienna", country: "AT", region: "intl"}
+        - {name: "Royal Infirmary of Edinburgh", city: "Edinburgh", country: "UK", region: "intl"}
+        - {name: "Turku PET Centre", city: "Turku", country: "FI", region: "intl"}
+
+    - model: "Omni Legend"
+      manufacturer: "GE HealthCare"
+      tier: "Extended-FOV digital PET — 32 cm"
+      confirmed: true
+      regions: ["intl"]
+      rank_intl: 3
+      rank_combined: 3
+      dose_class: "rad-mid-low"
+      dose_value: "~4–7 mSv"
+      fov_class: "fov-extended"
+      fov_value: "32 cm — extended field"
+      ai: true
+      ai_feature: "Q.Clear"
+      cost: "Self-pay ≈ €750"
+      cas: "no"
+      centers:
+        - {name: "Anadolu Medical Center", city: "Gebze", country: "TR", region: "intl"}
+
+    - model: "Biograph Horizon 3R"
+      manufacturer: "Siemens Healthineers"
+      tier: "Digital PET — best time-of-flight in Romania"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 1
+      rank_combined: 4
+      dose_class: "rad-mid"
+      dose_value: "~7–10 mSv"
+      fov_class: "fov-standard"
+      fov_value: "22 cm"
+      ai: false
+      cost: "≈ 5,500 RON self-pay"
+      cas: "yes"
+      centers:
+        - {name: "SANADOR Oncology Center", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "Discovery IQ Gen 2 (digital SiPM)"
+      manufacturer: "GE HealthCare"
+      tier: "Digital SiPM PET"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 2
+      rank_combined: 5
+      dose_class: "rad-mid"
+      dose_value: "~7–10 mSv"
+      fov_class: "fov-standard"
+      fov_value: "≈ 20 cm"
+      ai: true
+      ai_feature: "Q.Clear"
+      cost: "Self-pay (contact center)"
+      cas: "no"
+      centers:
+        - {name: "Regina Maria — Pallady Oncology Hub", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "Discovery MI Gen 2"
+      manufacturer: "GE HealthCare"
+      tier: "Digital SiPM PET"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 3
+      rank_combined: 6
+      dose_class: "rad-mid"
+      dose_value: "~7–10 mSv"
+      fov_class: "fov-standard"
+      fov_value: "20 cm"
+      ai: true
+      ai_feature: "Q.Clear"
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Fundeni Oncology Institute (IOB)", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "Discovery MI-DR"
+      manufacturer: "GE HealthCare"
+      tier: "Digital PET, extended field"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 4
+      rank_combined: 7
+      dose_class: "rad-mid"
+      dose_value: "~7–10 mSv"
+      fov_class: "fov-extended"
+      fov_value: "25 cm"
+      ai: false
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Carol Davila University Emergency Hospital", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "Discovery IQ Gen 2"
+      manufacturer: "GE HealthCare"
+      tier: "Digital PET"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 5
+      rank_combined: 8
+      dose_class: "rad-mid"
+      dose_value: "~7–10 mSv"
+      fov_class: "fov-standard"
+      fov_value: "20 cm"
+      ai: false
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Neolife", city: "Iași", country: "RO", region: "ro"}
+
+    - model: "Discovery IQ (3-ring)"
+      manufacturer: "GE HealthCare"
+      tier: "Digital PET, narrow field"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 6
+      rank_combined: 9
+      dose_class: "rad-mid"
+      dose_value: "~7–10 mSv"
+      fov_class: "fov-narrow"
+      fov_value: "15.6 cm"
+      ai: false
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Neolife Enayati Medical City", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "Discovery 610 HD"
+      manufacturer: "GE HealthCare"
+      tier: "Older non-TOF PET"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 7
+      rank_combined: 10
+      dose_class: "rad-high"
+      dose_value: "~8–12 mSv"
+      fov_class: "fov-narrow"
+      fov_value: "15.7 cm"
+      ai: false
+      cost: "≈ 5,100 RON self-pay"
+      cas: "yes"
+      centers:
+        - {name: "Neolife", city: "Bucharest (Băneasa)", country: "RO", region: "ro"}
+
+    # ── reported, model not independently verified ──
+    - model: "PET-CT (model not publicly disclosed)"
+      confirmed: false
+      regions: ["ro"]
+      centers:
+        - {name: "Affidea Excellence Center, Fundeni", city: "Bucharest", country: "RO", region: "ro"}
+        - {name: "Victor Babeș Hospital (new 2024)", city: "Timișoara", country: "RO", region: "ro"}
+        - {name: "Oncology Institute (IOCN)", city: "Cluj-Napoca", country: "RO", region: "ro"}
+        - {name: "Regional Oncology Institute (IRO)", city: "Iași", country: "RO", region: "ro"}
+    - model: "PET-CT for specialised tracers (FAPI / research)"
+      confirmed: false
+      regions: ["intl"]
+      centers:
+        - {name: "University Hospital Heidelberg", city: "Heidelberg", country: "DE", region: "intl"}
+        - {name: "University Hospital Essen (WTZ)", city: "Essen", country: "DE", region: "intl"}
+
+mri:
+  ranking_basis: "Ranked by magnetic field strength and AI reconstruction. MRI uses no ionizing radiation."
+  machines:
+    - model: "MAGNETOM Terra.X (7T)"
+      manufacturer: "Siemens Healthineers"
+      tier: "Clinical 7T — brain & knee only"
+      confirmed: true
+      regions: ["intl"]
+      rank_intl: 1
+      rank_combined: 1
+      dose_class: "rad-zero"
+      dose_value: "None"
+      field_class: "mri-7t"
+      field_value: "7T (neuro / MSK only)"
+      ai: false
+      cost: "Academic referral"
+      cas: "no"
+      centers:
+        - {name: "Otto-von-Guericke University", city: "Magdeburg", country: "DE", region: "intl"}
+        - {name: "Paris Brain Institute (ICM)", city: "Paris", country: "FR", region: "intl"}
+
+    - model: "MAGNETOM Cima.X (3T)"
+      manufacturer: "Siemens Healthineers"
+      tier: "Highest-gradient clinical 3T"
+      confirmed: true
+      regions: ["intl"]
+      rank_intl: 2
+      rank_combined: 2
+      dose_class: "rad-zero"
+      dose_value: "None"
+      field_class: "mri-3t"
+      field_value: "3T — record gradients"
+      ai: true
+      ai_feature: "Deep Resolve"
+      cost: "Self-pay (contact center)"
+      cas: "no"
+      centers:
+        - {name: "University Medical Center Freiburg", city: "Freiburg", country: "DE", region: "intl"}
+
+    - model: "SIGNA Hero (3T)"
+      manufacturer: "GE HealthCare"
+      tier: "Newest 3T in Romania"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 1
+      rank_combined: 3
+      dose_class: "rad-zero"
+      dose_value: "None"
+      field_class: "mri-3t"
+      field_value: "3T"
+      ai: true
+      ai_feature: "AIR Recon DL"
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Regional Oncology Institute (IRO)", city: "Iași", country: "RO", region: "ro"}
+
+    - model: "MAGNETOM Vida (3T)"
+      manufacturer: "Siemens Healthineers"
+      tier: "Premium 3T"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 2
+      rank_combined: 4
+      dose_class: "rad-zero"
+      dose_value: "None"
+      field_class: "mri-3t"
+      field_value: "3T"
+      ai: false
+      cost: ""
+      cas: "partial"
+      centers:
+        - {name: "Provita Nord Imaging Center", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "MAGNETOM Skyra (3T)"
+      manufacturer: "Siemens Healthineers"
+      tier: "Wide-bore 3T"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 3
+      rank_combined: 5
+      dose_class: "rad-zero"
+      dose_value: "None"
+      field_class: "mri-3t"
+      field_value: "3T — 70 cm bore"
+      ai: false
+      cost: ""
+      cas: "partial"
+      centers:
+        - {name: "Provita Medical Group (Nord)", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "MAGNETOM Altea (1.5T)"
+      manufacturer: "Siemens Healthineers"
+      tier: "Best 1.5T in Romania"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 4
+      rank_combined: 6
+      dose_class: "rad-zero"
+      dose_value: "None"
+      field_class: "mri-15t"
+      field_value: "1.5T"
+      ai: false
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Affidea (Hiperdia)", city: "Cluj-Napoca", country: "RO", region: "ro"}
+
+    - model: "SIGNA Explorer (1.5T)"
+      manufacturer: "GE HealthCare"
+      tier: "Standard 1.5T"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 5
+      rank_combined: 7
+      dose_class: "rad-zero"
+      dose_value: "None"
+      field_class: "mri-15t"
+      field_value: "1.5T"
+      ai: false
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Neolife", city: "Bucharest (Băneasa)", country: "RO", region: "ro"}
+
+    # ── reported, model not independently verified ──
+    - model: "Wide-bore 3T MRI (model not publicly disclosed)"
+      confirmed: false
+      regions: ["intl"]
+      centers:
+        - {name: "Anadolu Medical Center", city: "Gebze", country: "TR", region: "intl"}
+
+ct:
+  ranking_basis: "Ranked by detector technology (photon-counting > spectral > dual-source > conventional) and radiation dose."
+  machines:
+    - model: "NAEOTOM Alpha (photon-counting CT)"
+      manufacturer: "Siemens Healthineers"
+      tier: "Photon-counting — the newest CT detector"
+      confirmed: true
+      regions: ["ro", "intl"]
+      rank_ro: 1
+      rank_intl: 1
+      rank_combined: 1
+      dose_class: "rad-low"
+      dose_value: "~1–4 mSv"
+      detector_class: "ct-pcct"
+      detector_value: "Photon-counting"
+      ai: true
+      ai_feature: "Quantum iterative recon"
+      cost: "Self-pay (varies by center)"
+      cas: ""
+      centers:
+        - {name: "Cardiomed Medical Center", city: "Târgu Mureș", country: "RO", region: "ro"}
+        - {name: "University Hospital Zürich (world-first, 2021)", city: "Zürich", country: "CH", region: "intl"}
+        - {name: "Erasmus MC", city: "Rotterdam", country: "NL", region: "intl"}
+        - {name: "University Hospital Augsburg", city: "Augsburg", country: "DE", region: "intl"}
+        - {name: "CHU Lille", city: "Lille", country: "FR", region: "intl"}
+        - {name: "Royal Infirmary of Edinburgh", city: "Edinburgh", country: "UK", region: "intl"}
+
+    - model: "Spectral CT 7500"
+      manufacturer: "Philips"
+      tier: "Dual-layer spectral CT"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 2
+      rank_combined: 2
+      dose_class: "rad-mid"
+      dose_value: "~4–8 mSv"
+      detector_class: "ct-spectral"
+      detector_value: "Spectral (dual-layer)"
+      ai: false
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Carol Davila University Emergency Hospital", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "SOMATOM Force"
+      manufacturer: "Siemens Healthineers"
+      tier: "Dual-source CT"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 3
+      rank_combined: 3
+      dose_class: "rad-low"
+      dose_value: "~3–6 mSv"
+      detector_class: "ct-dual"
+      detector_value: "Dual-source"
+      ai: false
+      cost: ""
+      cas: "partial"
+      centers:
+        - {name: "Ponderas Academic Hospital (Regina Maria)", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "Discovery 750 HD"
+      manufacturer: "GE HealthCare"
+      tier: "Dual-energy CT"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 4
+      rank_combined: 4
+      dose_class: "rad-mid"
+      dose_value: "~5–8 mSv"
+      detector_class: "ct-dual"
+      detector_value: "Dual-energy (Gemstone)"
+      ai: false
+      cost: ""
+      cas: "yes"
+      centers:
+        - {name: "Fundeni Oncology Institute (IOB)", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "SOMATOM Perspective"
+      manufacturer: "Siemens Healthineers"
+      tier: "128-slice CT"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 5
+      rank_combined: 5
+      dose_class: "rad-mid"
+      dose_value: "~3–7 mSv"
+      detector_class: "ct-128slice"
+      detector_value: "128-slice"
+      ai: false
+      cost: ""
+      cas: "partial"
+      centers:
+        - {name: "Provita Medical Group (Nord)", city: "Bucharest", country: "RO", region: "ro"}
+
+    - model: "Revolution EVO"
+      manufacturer: "GE HealthCare"
+      tier: "64-slice CT"
+      confirmed: true
+      regions: ["ro"]
+      rank_ro: 6
+      rank_combined: 6
+      dose_class: "rad-mid"
+      dose_value: "~4–8 mSv"
+      detector_class: "ct-64slice"
+      detector_value: "64-slice"
+      ai: false
+      cost: ""
+      cas: "partial"
+      centers:
+        - {name: "Affidea (SEMA Parc)", city: "Bucharest", country: "RO", region: "ro"}
+
+    # ── reported, model not independently verified ──
+    - model: "CT built into the PET-CT (standalone model not disclosed)"
+      confirmed: false
+      regions: ["intl"]
+      centers:
+        - {name: "Anadolu Medical Center", city: "Gebze", country: "TR", region: "intl"}
+
+petmr:
+  ranking_basis: "Simultaneous PET + MRI — a niche modality at a small number of academic centers. No CT dose."
+  machines:
+    - model: "Biograph mMR (simultaneous PET/MR, 3T)"
+      manufacturer: "Siemens Healthineers"
+      tier: "Simultaneous PET + MRI"
+      confirmed: true
+      regions: ["intl"]
+      rank_intl: 1
+      rank_combined: 1
+      dose_class: "rad-mid-low"
+      dose_value: "~3–6 mSv (no CT)"
+      field_class: "mri-3t"
+      field_value: "3T, simultaneous"
+      ai: false
+      cost: "Academic / self-pay"
+      cas: "no"
+      centers:
+        - {name: "University Hospital Essen (WTZ)", city: "Essen", country: "DE", region: "intl"}

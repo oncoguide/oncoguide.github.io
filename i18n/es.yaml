@@ -10,6 +10,21 @@ calloutImportant: "Importante"
 calloutTip: "Consejo"
 calloutWarning: "Advertencia"
 
+# Tarjetas de clasificación de equipos
+scannerRankDose: "Radiación"
+scannerRankDetector: "Detector"
+scannerRankField: "Campo"
+scannerRankFov: "Cobertura"
+scannerRankAi: "IA"
+scannerRankCasFree: "Gratis (CAS, RO)"
+scannerRankCasPartial: "Parcial vía CAS"
+scannerRankSelfPay: "Pago privado"
+scannerRankUnverifiedTitle: "También reportados — modelo no verificado de forma independiente"
+scannerRankUnverifiedFlag: "no verificado"
+scannerRankRegionCombined: "Combinado"
+scannerRankRegionRo: "Rumanía"
+scannerRankRegionIntl: "Europa + Turquía"
+
 newsletterCTA: "Mantente informado — suscríbete para nuevos artículos"
 
 # Secciones de la página principal

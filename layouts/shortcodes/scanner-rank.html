@@ -1,0 +1,101 @@
+{{- /* scanner-rank: ranked scanner cards from data/scanners.yaml.
+       Usage: {{< scanner-rank modality="petct" >}}           → tabbed Combined / Romania / Europe+Turkey
+              {{< scanner-rank modality="petmr" tabs="false" >}} → single Combined list, no tabs
+       Two data points per card: radiation (mSv) + the modality's headline quality metric.
+       A machine can belong to several regions (centers carry their own region);
+       ranked per region via rank_ro / rank_intl / rank_combined.
+       Unconfirmed-model machines render in a separate "not verified" list (no bars). */ -}}
+{{- $modality := .Get "modality" -}}
+{{- $tabs := ne (.Get "tabs") "false" -}}
+{{- $data := index site.Data.scanners $modality -}}
+{{- if $data -}}
+{{- $machines := $data.machines -}}
+{{- $regions := slice
+      (dict "key" "combined" "rank" "rank_combined" "label" (i18n "scannerRankRegionCombined"))
+      (dict "key" "ro"       "rank" "rank_ro"       "label" (i18n "scannerRankRegionRo"))
+      (dict "key" "intl"     "rank" "rank_intl"     "label" (i18n "scannerRankRegionIntl")) -}}
+{{- if not $tabs }}{{ $regions = first 1 $regions }}{{ end -}}
+<div class="scanner-rank-tabs"{{ if not $tabs }} data-notabs="1"{{ end }}>
+  {{- if $tabs }}
+  {{- range $i, $r := $regions }}<input class="sr-tabradio" type="radio" name="srt-{{ $modality }}" id="srt-{{ $modality }}-{{ $r.key }}"{{ if eq $i 0 }} checked{{ end }} aria-label="{{ $r.label }}">{{ end }}
+  <div class="sr-tabbar" role="tablist">
+    {{- range $regions }}<label for="srt-{{ $modality }}-{{ .key }}">{{ .label }}</label>{{ end }}
+  </div>
+  {{- end }}
+  <div class="sr-panels">
+  {{- range $regions }}
+    {{- $region := .key -}}
+    {{- $rankkey := .rank -}}
+    {{- $scope := $machines -}}
+    {{- if ne $region "combined" }}{{ $scope = where $machines "regions" "intersect" (slice $region) }}{{ end -}}
+    {{- $confirmed := sort (where $scope "confirmed" true) $rankkey -}}
+    {{- $unverified := where $scope "confirmed" false -}}
+    <div class="sr-panel scanner-rank" data-region="{{ $region }}">
+    {{- if $confirmed }}
+      <ol class="sr-stack">
+      {{- range $confirmed }}
+        {{- $rank := index . $rankkey -}}
+        {{- $centers := .centers -}}
+        {{- if ne $region "combined" }}{{ $centers = where .centers "region" $region }}{{ end -}}
+        <li class="sr-card" data-rank="{{ $rank }}">
+          <div class="sr-top">
+            <div class="sr-top-left">
+              <span class="sr-rank">{{ $rank }}</span>
+              <div>
+                {{- with .manufacturer }}<div class="sr-mfr">{{ . }}</div>{{ end }}
+                <h4 class="sr-model">{{ .model }}</h4>
+                {{- with .tier }}<div class="sr-tier">{{ . }}</div>{{ end }}
+              </div>
+            </div>
+            <div class="sr-badges">
+              {{- if .ai }}<span class="sr-ai">{{ i18n "scannerRankAi" }}{{ with .ai_feature }} · {{ . }}{{ end }}</span>{{ end }}
+            </div>
+          </div>
+          {{- with $centers }}
+          <div class="sr-centers">
+            {{- range . }}<span class="sr-center"><b>{{ .name }}</b> — {{ .city }}<span class="sr-country">{{ .country }}</span></span>{{ end }}
+          </div>
+          {{- end }}
+          {{- $specs := slice
+              (dict "label" (i18n "scannerRankDose")     "class" .dose_class     "val" .dose_value)
+              (dict "label" (i18n "scannerRankDetector") "class" .detector_class "val" .detector_value)
+              (dict "label" (i18n "scannerRankField")    "class" .field_class    "val" .field_value)
+              (dict "label" (i18n "scannerRankFov")      "class" .fov_class      "val" .fov_value) -}}
+          <div class="sr-specs">
+            {{- range $specs }}{{ if .class }}
+            <div class="sr-spec">
+              <span class="sr-spec-label">{{ .label }}</span>
+              <span class="sr-bar {{ .class }}"><span class="sr-fill"></span></span>
+              <span class="sr-spec-val">{{ .val }}</span>
+            </div>
+            {{- end }}{{ end }}
+          </div>
+          {{- if or .cost .cas }}
+          <div class="sr-foot">
+            {{- with .cost }}<span class="sr-cost"><b>{{ . }}</b></span>{{ end }}
+            {{- if eq .cas "yes" }}<span class="sr-cas sr-cas-yes">{{ i18n "scannerRankCasFree" }}</span>
+            {{- else if eq .cas "partial" }}<span class="sr-cas sr-cas-part">{{ i18n "scannerRankCasPartial" }}</span>
+            {{- else if eq .cas "no" }}<span class="sr-cas sr-cas-no">{{ i18n "scannerRankSelfPay" }}</span>{{ end }}
+          </div>
+          {{- end }}
+        </li>
+      {{- end }}
+      </ol>
+    {{- end }}
+    {{- if $unverified }}
+      <div class="sr-unverified">
+        <div class="sr-unverified-title">{{ i18n "scannerRankUnverifiedTitle" }}</div>
+        <ul>
+        {{- range $unverified }}
+          {{- $uc := .centers -}}
+          {{- if ne $region "combined" }}{{ $uc = where .centers "region" $region }}{{ end -}}
+          <li>{{ .model }}{{ with $uc }} — {{ range $i, $c := . }}{{ if $i }}; {{ end }}{{ $c.name }}, {{ $c.country }}{{ end }}{{ end }}<span class="sr-flag">{{ i18n "scannerRankUnverifiedFlag" }}</span></li>
+        {{- end }}
+        </ul>
+      </div>
+    {{- end }}
+    </div>
+  {{- end }}
+  </div>
+</div>
+{{- end -}}

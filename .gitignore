@@ -89,5 +89,6 @@ yarn-error.log*
 
 # Research agent
 agents/research/config.json
-data/
+data/*
+!data/scanners.yaml
 logs/

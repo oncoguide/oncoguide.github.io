@@ -10,6 +10,21 @@ calloutImportant: "Important"
 calloutTip: "Tip"
 calloutWarning: "Warning"
 
+# Scanner ranking cards
+scannerRankDose: "Radiation"
+scannerRankDetector: "Detector"
+scannerRankField: "Field"
+scannerRankFov: "Coverage"
+scannerRankAi: "AI"
+scannerRankCasFree: "Free (CAS, RO)"
+scannerRankCasPartial: "Partly via CAS"
+scannerRankSelfPay: "Self-pay"
+scannerRankUnverifiedTitle: "Also reported — scanner model not independently verified"
+scannerRankUnverifiedFlag: "unverified"
+scannerRankRegionCombined: "Combined"
+scannerRankRegionRo: "Romania"
+scannerRankRegionIntl: "Europe + Turkey"
+
 newsletterCTA: "Stay informed — subscribe for new articles"
 
 # Homepage sections
