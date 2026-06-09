@@ -24,6 +24,10 @@ scannerRankUnverifiedFlag: "non verificato"
 scannerRankRegionCombined: "Combinato"
 scannerRankRegionRo: "Romania"
 scannerRankRegionIntl: "Europa + Turchia"
+scannerRankModalityPetct: "PET-TC"
+scannerRankModalityMri: "RMN"
+scannerRankModalityCt: "TC"
+scannerRankModalityPetmr: "PET-RM"
 
 # Modulo di contatto
 contactFormName: "Il tuo nome"

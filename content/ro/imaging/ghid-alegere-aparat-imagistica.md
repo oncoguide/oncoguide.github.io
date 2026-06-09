@@ -9,7 +9,7 @@ translationKey: "imaging-equipment-guide"
 weight: 1
 author: "OncoGuide"
 hiddenInHomeList: false
-ShowToc: true
+ShowToc: false
 TocOpen: false
 ---
 
@@ -39,6 +39,10 @@ Ierarhizăm aparatele după **beneficiul pentru pacient**, nu după cifrele de p
 {{< /callout >}}
 
 ---
+
+{{< modality-tabs >}}
+
+{{< mtab id="petct" >}}
 
 ## PET-CT — vezi unde este activ cancerul
 
@@ -70,7 +74,9 @@ Cele două bare de pe fiecare card reprezintă lucrurile care contează cel mai 
 
 **Și cel mai bun din România?** Cel mai puternic PET-CT din România — Siemens Biograph Horizon 3R de la Centrul de Oncologie SANADOR din București, care are cel mai bun time-of-flight din țară — este un aparat excelent, pe deplin capabil. Dar se situează la o **acoperire standard de ~22 cm** și pe o **treaptă standard de radiație**, așa că ajunge *sub* aparatele total-body, cu câmp axial lung și cu câmp extins din străinătate — aproximativ pe **locul #4** din lista combinată. Este foarte bun pentru monitorizarea de rutină, dar nu este opțiunea cu cea mai mică doză și cea mai mare sensibilitate care există. Exact acest decalaj îl cântărești când decizi dacă o anumită investigație merită deplasarea — o decizie de luat *împreună cu oncologul tău*, fiindcă momentul și stadiul tratamentului contează la fel de mult ca aparatul.
 
----
+{{< /mtab >}}
+
+{{< mtab id="mri" >}}
 
 ## RMN — detaliu fără pic de radiație
 
@@ -86,7 +92,9 @@ La RMN, indicatorul-cheie de calitate este **intensitatea câmpului magnetic**, 
 
 **Ce îți oferă aparatul de top — și unde se situează România.** Lăsând deoparte 7T-ul aprobat doar pentru creier/genunchi, treapta relevantă pentru stadializarea oncologică *pe corp* este un **3T premium cu reconstrucție AI** — iar aici vestea este bună: **cel mai bun RMN din România este un 3T nou-nouț cu reconstrucție AI**, autentic din aceeași clasă cu cele mai bune aparate 3T din Europa. Pentru un RMN oncologic de rutină nu este neapărat nevoie să pleci din țară; trebuie doar să te asiguri că ești programat pe un aparat de **3T (nu de 1,5T)**, ideal unul cu reconstrucție AI.
 
----
+{{< /mtab >}}
+
+{{< mtab id="ct" >}}
 
 ## CT — calul de povară, unde disciplina dozei contează cel mai mult
 
@@ -102,13 +110,18 @@ Aparatele CT standard, spectrale și dual-source sunt răspândite în spitalele
 
 Remarcabil este că **cel mai bun CT din acest ghid — photon-counting — este disponibil în România**: Siemens NAEOTOM Alpha de la centrul Cardiomed din Târgu Mureș, pe *aceeași platformă* ca prima instalare din lume, de la Zürich. Așadar, pentru un pacient care are nevoie de cel mai avansat CT, cu cea mai mică doză, treapta de top este accesibilă în interiorul țării — în timp ce restul centrelor puternice din România oferă aparate spectrale, dual-source și dual-energy, foarte capabile pentru urmărirea de rutină.
 
----
+{{< /mtab >}}
+
+{{< mtab id="petmr" >}}
 
 ## O notă despre PET-RMN
 
 Un număr restrâns de centre academice din Europa au aparate **PET/RMN simultan**, care captează PET și RMN în același timp. Sunt un instrument **de nișă** — cele mai utile la copii (evitarea radiației CT), în tumorile cerebrale, cancerul de prostată și leziunile ambigue ale țesuturilor moi — și livrează **mai puțină radiație decât PET-CT**, fiindcă nu există componentă CT ([sondaj EANM PET/RMN 2023](https://link.springer.com/article/10.1007/s00259-023-06308-y)). Pentru stadializarea de rutină pulmonară sau pe tot corpul nu sunt alegerea standard, iar astăzi nu există niciunul în România sau Turcia. Nu trebuie să cauți tu unul — dacă un PET/RMN simultan ar putea ajuta în cazul tău specific, oncologul îl va aduce în discuție.
 
 {{< scanner-rank modality="petmr" tabs="false" >}}
+
+{{< /mtab >}}
+{{< /modality-tabs >}}
 
 ---
 

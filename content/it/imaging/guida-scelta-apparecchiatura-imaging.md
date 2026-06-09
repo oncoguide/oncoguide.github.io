@@ -9,7 +9,7 @@ translationKey: "imaging-equipment-guide"
 weight: 1
 author: "OncoGuide"
 hiddenInHomeList: false
-ShowToc: true
+ShowToc: false
 TocOpen: false
 ---
 
@@ -39,6 +39,10 @@ Classifichiamo le apparecchiature in base al **beneficio per il paziente**, non 
 {{< /callout >}}
 
 ---
+
+{{< modality-tabs >}}
+
+{{< mtab id="petct" >}}
 
 ## PET-TC — vedere dove il tumore è attivo
 
@@ -70,7 +74,9 @@ Il **livello successivo, uno scanner a campo assiale esteso (long-axial-FOV)** (
 
 **E la migliore in Romania?** La PET-TC più valida della Romania — la Siemens Biograph Horizon 3R presso il SANADOR Oncology Center di Bucarest, che vanta il miglior time-of-flight del Paese — è un'apparecchiatura eccellente e pienamente all'altezza. Ma si attesta su una **copertura standard di ~22 cm** e su un **livello di radiazioni standard**, quindi si colloca *al di sotto* degli scanner total-body, a campo assiale esteso ed esteso disponibili all'estero — all'incirca al **4° posto** della classifica complessiva. È ottima per il monitoraggio di routine, ma non è l'opzione a dose più bassa e sensibilità più elevata oggi esistente. È proprio questo divario che soppesi quando decidi se valga la pena viaggiare per un determinato esame — una decisione da prendere *insieme al tuo oncologo*, perché la tempistica e la fase del tuo trattamento contano quanto la macchina.
 
----
+{{< /mtab >}}
+
+{{< mtab id="mri" >}}
 
 ## RMN — il dettaglio senza alcuna radiazione
 
@@ -86,7 +92,9 @@ Per la RMN, l'indicatore di qualità principale è l'**intensità del campo magn
 
 **Cosa ti offre la macchina al vertice — e dove si colloca la Romania.** Mettendo da parte il 7T riservato a encefalo e ginocchio, il livello rilevante per la stadiazione oncologica del *corpo* è un **3T premium con ricostruzione AI** — e qui la notizia è buona: **la migliore RMN della Romania è un 3T nuovissimo con ricostruzione AI**, autenticamente nella stessa categoria dei migliori scanner 3T d'Europa. Per una RMN oncologica di routine non è necessario andare all'estero; devi solo assicurarti di essere prenotato su una macchina **3T (non 1,5T)**, idealmente dotata di ricostruzione AI.
 
----
+{{< /mtab >}}
+
+{{< mtab id="ct" >}}
 
 ## TC — il cavallo da lavoro, dove la disciplina sulla dose conta di più
 
@@ -102,13 +110,18 @@ Gli scanner TC standard, spettrali e a doppia sorgente sono diffusissimi negli o
 
 Da notare: **la migliore TC in assoluto di questa guida — la photon-counting — è disponibile in Romania**: la Siemens NAEOTOM Alpha presso il centro Cardiomed di Târgu Mureș, sulla *stessa piattaforma* della prima installazione al mondo a Zurigo. Così, per un paziente che ha bisogno della TC più avanzata e a dose più bassa, il livello di vertice è raggiungibile all'interno del Paese — mentre gli altri ottimi centri rumeni offrono macchine spettrali, a doppia sorgente e dual-energy, più che capaci per il follow-up di routine.
 
----
+{{< /mtab >}}
+
+{{< mtab id="petmr" >}}
 
 ## Una nota sulla PET-RM
 
 Una manciata di centri accademici in Europa dispone di scanner **PET/RM simultanea**, che acquisiscono PET e RMN nello stesso momento. Sono uno strumento di **nicchia** — più utile nei bambini (per evitare le radiazioni della TC), nei tumori cerebrali, nel tumore della prostata e nei reperti dei tessuti molli di dubbia interpretazione — e comportano **meno radiazioni della PET-TC** perché manca la componente TC ([indagine EANM su PET/RM 2023](https://link.springer.com/article/10.1007/s00259-023-06308-y)). Per la stadiazione di routine del polmone o total-body non sono la scelta standard, e oggi in Romania o in Turchia non ne esistono. Non devi cercarne uno a tutti i costi — se nel tuo caso specifico una PET/RM simultanea potesse essere utile, sarà il tuo oncologo a proporla.
 
 {{< scanner-rank modality="petmr" tabs="false" >}}
+
+{{< /mtab >}}
+{{< /modality-tabs >}}
 
 ---
 

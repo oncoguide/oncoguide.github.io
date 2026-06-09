@@ -1,0 +1,7 @@
+{{- /* mtab: one modality panel inside {{< modality-tabs >}}.
+       .Inner = the modality's markdown prose + nested callout/scanner-rank shortcodes
+       (rendered to HTML first by Hugo, then passed through markdownify under
+       markup.goldmark.renderer.unsafe). Same pattern as callout.html. */ -}}
+<div class="modality-panel" data-modality="{{ .Get "id" }}">
+{{ .Inner | markdownify }}
+</div>

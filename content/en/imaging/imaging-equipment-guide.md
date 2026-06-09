@@ -9,7 +9,7 @@ translationKey: "imaging-equipment-guide"
 weight: 1
 author: "OncoGuide"
 hiddenInHomeList: false
-ShowToc: true
+ShowToc: false
 TocOpen: false
 ---
 
@@ -39,6 +39,10 @@ We rank machines by **patient benefit**, not by spec-sheet bragging rights. Four
 {{< /callout >}}
 
 ---
+
+{{< modality-tabs >}}
+
+{{< mtab id="petct" >}}
 
 ## PET-CT — seeing where the cancer is active
 
@@ -70,7 +74,9 @@ The **next tier, a long-axial-FOV scanner** (Siemens Biograph Vision Quadra, **1
 
 **And the best in Romania?** Romania's strongest PET-CT — the Siemens Biograph Horizon 3R at the SANADOR Oncology Center in Bucharest, which has the country's best time-of-flight — is an excellent, fully capable machine. But it sits at a **standard ~22 cm coverage** and a **standard radiation tier**, so it lands *below* the total-body, long-axial and extended-field scanners abroad — roughly the **#4 spot** on the combined list. It is very good for routine monitoring, but it is not the lowest-dose, highest-sensitivity option that exists. That gap is exactly what you weigh when you decide whether a particular scan is worth travelling for — a decision to make *with your oncologist*, since timing and your treatment stage matter as much as the machine.
 
----
+{{< /mtab >}}
+
+{{< mtab id="mri" >}}
 
 ## MRI — detail without any radiation
 
@@ -86,7 +92,9 @@ For MRI, the headline quality metric is **field strength**, measured in tesla (T
 
 **What the top machine buys you — and where Romania stands.** Setting the brain/knee-only 7T aside, the meaningful tier for *body* cancer staging is a **premium 3T with AI reconstruction** — and here the news is good: **Romania's best MRI is a brand-new 3T with AI reconstruction**, genuinely in the same class as the best 3T scanners across Europe. For routine cancer MRI you do not necessarily need to leave the country; you need to make sure you are booked on a **3T (not a 1.5T)** machine, ideally one with AI reconstruction.
 
----
+{{< /mtab >}}
+
+{{< mtab id="ct" >}}
 
 ## CT — the workhorse, where dose discipline matters most
 
@@ -102,13 +110,18 @@ Standard, spectral and dual-source CT scanners are widespread across European ho
 
 Notably, **the single best CT in this guide — photon-counting — is available in Romania**: the Siemens NAEOTOM Alpha at the Cardiomed centre in Târgu Mureș, on the *same platform* as the world-first installation in Zürich. So for a patient who needs the most advanced, lowest-dose CT, the top tier is reachable inside the country — while the rest of Romania's strong centres offer spectral, dual-source and dual-energy machines that are very capable for routine follow-up.
 
----
+{{< /mtab >}}
+
+{{< mtab id="petmr" >}}
 
 ## A note on PET-MR
 
 A handful of academic centres in Europe run **simultaneous PET/MR** scanners, which capture PET and MRI at the same time. They are a **niche** tool — most useful for children (avoiding CT radiation), brain tumours, prostate cancer, and ambiguous soft-tissue findings — and they deliver **less radiation than PET-CT** because there is no CT component ([EANM PET/MR survey 2023](https://link.springer.com/article/10.1007/s00259-023-06308-y)). For routine lung or whole-body staging they are not the standard choice, and there are none in Romania or Turkey today. You don't need to seek one out — if simultaneous PET/MR could help in your specific case, your oncologist will raise it.
 
 {{< scanner-rank modality="petmr" tabs="false" >}}
+
+{{< /mtab >}}
+{{< /modality-tabs >}}
 
 ---
 

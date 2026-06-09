@@ -9,7 +9,7 @@ translationKey: "imaging-equipment-guide"
 weight: 1
 author: "OncoGuide"
 hiddenInHomeList: false
-ShowToc: true
+ShowToc: false
 TocOpen: false
 ---
 
@@ -39,6 +39,10 @@ Nous classons les appareils selon le **bénéfice pour le patient**, et non selo
 {{< /callout >}}
 
 ---
+
+{{< modality-tabs >}}
+
+{{< mtab id="petct" >}}
 
 ## TEP-TDM — voir où le cancer est actif
 
@@ -70,7 +74,9 @@ Le **niveau suivant, un appareil à champ de vue axial long** (Siemens Biograph 
 
 **Et le meilleur en Roumanie ?** Le TEP-TDM le plus performant de Roumanie — le Siemens Biograph Horizon 3R du SANADOR Oncology Center à Bucarest, qui offre le meilleur temps de vol du pays — est un excellent appareil, pleinement à la hauteur. Mais il se situe à une **couverture standard de ~22 cm** et dans une **catégorie de dose standard** ; il se classe donc *en dessous* des appareils corps entier, à champ axial long et à champ étendu disponibles à l'étranger — soit à peu près à la **4ᵉ place** du classement combiné. Il est très bon pour le suivi de routine, mais ce n'est pas l'option existante la moins irradiante et la plus sensible. C'est précisément cet écart que vous mettez en balance lorsque vous décidez si un examen donné vaut la peine d'un déplacement — une décision à prendre *avec votre oncologue*, car le moment choisi et le stade de votre traitement comptent autant que l'appareil.
 
----
+{{< /mtab >}}
+
+{{< mtab id="mri" >}}
 
 ## IRM — le détail sans le moindre rayonnement
 
@@ -86,7 +92,9 @@ Pour l'IRM, le critère de qualité phare est l'**intensité du champ magnétiqu
 
 **Ce que l'appareil de tête vous apporte — et où se situe la Roumanie.** En laissant de côté le 7 T réservé au cerveau et au genou, le niveau pertinent pour le bilan d'extension d'un cancer *du corps* est un **3 T haut de gamme avec reconstruction par IA** — et là, la nouvelle est bonne : **la meilleure IRM de Roumanie est un 3 T flambant neuf avec reconstruction par IA**, véritablement dans la même catégorie que les meilleurs appareils 3 T d'Europe. Pour une IRM oncologique de routine, vous n'avez pas nécessairement à quitter le pays ; il vous faut vous assurer d'être programmé sur un appareil **3 T (et non 1,5 T)**, idéalement doté d'une reconstruction par IA.
 
----
+{{< /mtab >}}
+
+{{< mtab id="ct" >}}
 
 ## TDM (scanner) — le pilier du suivi, là où la maîtrise de la dose compte le plus
 
@@ -102,13 +110,18 @@ Les scanners standard, spectraux et à double source sont répandus dans les hô
 
 Fait notable, **le meilleur scanner de tout ce guide — celui à comptage de photons — est disponible en Roumanie** : le Siemens NAEOTOM Alpha du centre Cardiomed à Târgu Mureș, sur la *même plateforme* que la toute première installation mondiale à Zürich. Ainsi, pour un patient qui a besoin du scanner le plus avancé et le moins irradiant, le niveau supérieur est accessible à l'intérieur du pays — tandis que les autres centres roumains de référence proposent des appareils spectraux, à double source et à double énergie, parfaitement adaptés au suivi de routine.
 
----
+{{< /mtab >}}
+
+{{< mtab id="petmr" >}}
 
 ## Un mot sur la TEP-IRM
 
 Une poignée de centres universitaires en Europe exploitent des appareils de **TEP/IRM simultanée**, qui acquièrent la TEP et l'IRM en même temps. C'est un outil de **niche** — surtout utile chez l'enfant (pour éviter le rayonnement du scanner), pour les tumeurs cérébrales, le cancer de la prostate et les découvertes ambiguës des tissus mous — et il délivre **moins de rayonnement qu'un TEP-TDM**, puisqu'il n'y a pas de composante TDM ([enquête EANM sur la TEP/IRM 2023](https://link.springer.com/article/10.1007/s00259-023-06308-y)). Pour un bilan d'extension de routine du poumon ou du corps entier, ce n'est pas le choix de référence, et il n'en existe aujourd'hui ni en Roumanie ni en Turquie. Inutile d'en chercher un par vous-même — si une TEP/IRM simultanée pouvait être utile dans votre situation précise, votre oncologue vous en parlera.
 
 {{< scanner-rank modality="petmr" tabs="false" >}}
+
+{{< /mtab >}}
+{{< /modality-tabs >}}
 
 ---
 

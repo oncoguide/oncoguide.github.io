@@ -24,6 +24,10 @@ scannerRankUnverifiedFlag: "neconfirmat"
 scannerRankRegionCombined: "Combinat"
 scannerRankRegionRo: "România"
 scannerRankRegionIntl: "Europa + Turcia"
+scannerRankModalityPetct: "PET-CT"
+scannerRankModalityMri: "RMN"
+scannerRankModalityCt: "CT"
+scannerRankModalityPetmr: "PET-RMN"
 
 # Formular de contact
 contactFormName: "Numele tău"

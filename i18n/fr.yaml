@@ -24,6 +24,10 @@ scannerRankUnverifiedFlag: "non vérifié"
 scannerRankRegionCombined: "Combiné"
 scannerRankRegionRo: "Roumanie"
 scannerRankRegionIntl: "Europe + Turquie"
+scannerRankModalityPetct: "TEP-TDM"
+scannerRankModalityMri: "IRM"
+scannerRankModalityCt: "TDM"
+scannerRankModalityPetmr: "TEP-IRM"
 
 # Formulaire de contact
 contactFormName: "Votre nom"

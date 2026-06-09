@@ -1,0 +1,16 @@
+{{- /* modality-tabs: CSS-only top-level tabs (PET-CT / MRI / CT / PET-MR) for the
+       imaging-equipment guide. Mirrors the modality rail in .private/.../imagistica.html.
+       Wraps {{< mtab id="..." >}} inner panels. Tab labels via i18n (native per language).
+       DOM order (radios → rail → panels) is required for the CSS sibling combinator. */ -}}
+{{- $tabs := slice
+      (dict "id" "petct" "label" (i18n "scannerRankModalityPetct"))
+      (dict "id" "mri"   "label" (i18n "scannerRankModalityMri"))
+      (dict "id" "ct"    "label" (i18n "scannerRankModalityCt"))
+      (dict "id" "petmr" "label" (i18n "scannerRankModalityPetmr")) -}}
+<div class="modality-wrap">
+  {{- range $i, $t := $tabs }}<input class="mt-radio" type="radio" name="modality-tabs" id="mt-{{ $t.id }}"{{ if eq $i 0 }} checked{{ end }} aria-label="{{ $t.label }}">{{ end }}
+  <div class="mt-rail" role="tablist">
+    {{- range $tabs }}<label for="mt-{{ .id }}">{{ .label }}</label>{{ end }}
+  </div>
+  <div class="mt-panels">{{ .Inner }}</div>
+</div>

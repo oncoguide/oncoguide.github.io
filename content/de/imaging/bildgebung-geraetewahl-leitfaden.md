@@ -9,7 +9,7 @@ translationKey: "imaging-equipment-guide"
 weight: 1
 author: "OncoGuide"
 hiddenInHomeList: false
-ShowToc: true
+ShowToc: false
 TocOpen: false
 ---
 
@@ -39,6 +39,10 @@ Wir reihen Geräte nach dem **Nutzen für die Patientin und den Patienten**, nic
 {{< /callout >}}
 
 ---
+
+{{< modality-tabs >}}
+
+{{< mtab id="petct" >}}
 
 ## PET-CT — sehen, wo der Krebs aktiv ist
 
@@ -70,7 +74,9 @@ Die **nächste Stufe, ein Scanner mit langem axialem Sichtfeld** (Siemens Biogra
 
 **Und das beste Gerät in Rumänien?** Rumäniens stärkstes PET-CT — das Siemens Biograph Horizon 3R im SANADOR Oncology Center in Bukarest, das landesweit die beste Time-of-Flight-Technik besitzt — ist ein hervorragendes, voll leistungsfähiges Gerät. Es liegt jedoch bei einem **standardmäßigen Erfassungsbereich von ~22 cm** und einer **standardmäßigen Strahlungsstufe** und landet damit *unterhalb* der Ganzkörper-, langachsigen und erweiterten Sichtfeld-Scanner im Ausland — etwa auf **Platz Nr. 4** der Gesamtliste. Für die routinemäßige Verlaufskontrolle ist es sehr gut geeignet, doch es ist nicht die strahlungsärmste, empfindlichste Option, die es gibt. Genau diese Lücke wägen Sie ab, wenn Sie entscheiden, ob sich für eine bestimmte Untersuchung eine Reise lohnt — eine Entscheidung, die Sie *gemeinsam mit Ihrer Onkologin oder Ihrem Onkologen* treffen, denn der Zeitpunkt und Ihr Behandlungsstadium zählen ebenso sehr wie das Gerät.
 
----
+{{< /mtab >}}
+
+{{< mtab id="mri" >}}
 
 ## MRT — Detailreichtum ganz ohne Strahlung
 
@@ -86,7 +92,9 @@ Beim MRT ist die wichtigste Qualitätskennzahl die **Feldstärke**, gemessen in 
 
 **Was Ihnen das Spitzengerät bringt — und wo Rumänien steht.** Lässt man das nur für Gehirn und Knie zugelassene 7T beiseite, ist die maßgebliche Stufe für die *Körper*-Tumorstadienbestimmung ein **Premium-3T mit KI-Rekonstruktion** — und hier sind die Nachrichten gut: **Rumäniens bestes MRT ist ein brandneues 3T mit KI-Rekonstruktion**, das wirklich in derselben Klasse spielt wie die besten 3T-Scanner in ganz Europa. Für ein routinemäßiges Krebs-MRT müssen Sie das Land nicht zwangsläufig verlassen; Sie müssen nur sicherstellen, dass Sie auf einem **3T- (nicht einem 1,5T-)** Gerät untersucht werden, idealerweise auf einem mit KI-Rekonstruktion.
 
----
+{{< /mtab >}}
+
+{{< mtab id="ct" >}}
 
 ## CT — das Arbeitstier, bei dem Dosisdisziplin am meisten zählt
 
@@ -102,13 +110,18 @@ Standard-, spektrale und Dual-Source-CT-Scanner sind in europäischen Krankenhä
 
 Bemerkenswert: **Das beste CT dieses Leitfadens überhaupt — die Photonenzählung — ist in Rumänien verfügbar**: das Siemens NAEOTOM Alpha im Cardiomed-Zentrum in Târgu Mureș, auf *derselben Plattform* wie die weltweit erste Installation in Zürich. Wer also das fortschrittlichste, strahlungsärmste CT benötigt, erreicht die Spitzenklasse im eigenen Land — während die übrigen starken Zentren Rumäniens spektrale, Dual-Source- und Dual-Energy-Geräte anbieten, die für die routinemäßige Nachsorge sehr leistungsfähig sind.
 
----
+{{< /mtab >}}
+
+{{< mtab id="petmr" >}}
 
 ## Eine Anmerkung zum PET-MR
 
 Eine Handvoll akademischer Zentren in Europa betreibt **simultane PET/MR**-Scanner, die PET und MRT zur selben Zeit aufnehmen. Sie sind ein **Nischenwerkzeug** — am nützlichsten bei Kindern (um CT-Strahlung zu vermeiden), Hirntumoren, Prostatakrebs und unklaren Weichgewebsbefunden — und sie liefern **weniger Strahlung als ein PET-CT**, weil kein CT-Anteil enthalten ist ([EANM-PET/MR-Erhebung 2023](https://link.springer.com/article/10.1007/s00259-023-06308-y)). Für die routinemäßige Lungen- oder Ganzkörper-Stadienbestimmung sind sie nicht die Standardwahl, und in Rumänien oder der Türkei gibt es heute keinen. Sie müssen nicht eigens danach suchen — falls ein simultanes PET/MR in Ihrem konkreten Fall helfen könnte, wird Ihre Onkologin oder Ihr Onkologe es ansprechen.
 
 {{< scanner-rank modality="petmr" tabs="false" >}}
+
+{{< /mtab >}}
+{{< /modality-tabs >}}
 
 ---
 
