@@ -1,0 +1,201 @@
+/* Donation flows (DONATIONS.md T2). Uses PaperMod CSS variables throughout so
+   dark mode works without overrides. WCAG AA: no text below 1rem, contrast via
+   theme variables, visible focus states. */
+
+/* --- Landing: the three path cards (rendered from markdown links) --- */
+.donate-landing .donate-paths {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.donate-landing .donate-paths li {
+  margin: 0;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--entry);
+}
+
+.donate-landing .donate-paths li > a:first-child {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  box-shadow: none;
+}
+
+/* --- Bank data block --- */
+.donate-bank-block {
+  margin: 32px 0;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--code-block-bg);
+}
+
+.donate-bank-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+}
+
+.donate-bank-table th[scope="row"] {
+  text-align: left;
+  white-space: nowrap;
+  padding: 8px 16px 8px 0;
+  vertical-align: top;
+}
+
+.donate-bank-table td {
+  padding: 8px 0;
+  word-break: break-word;
+}
+
+.donate-bank-table code {
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+}
+
+.donate-copy-btn {
+  margin-left: 10px;
+  padding: 4px 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--theme);
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.donate-copy-btn:hover,
+.donate-copy-btn:focus-visible {
+  border-color: var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.donate-copy-btn.copied {
+  border-color: var(--primary);
+  font-weight: 700;
+}
+
+/* --- Generator pages (T4-T6): step machine skeleton --- */
+.donate-steps {
+  counter-reset: donate-step;
+  margin: 24px 0;
+}
+
+.donate-step {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--entry);
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+
+.donate-step[hidden] {
+  display: none;
+}
+
+.donate-step h2::before {
+  counter-increment: donate-step;
+  content: counter(donate-step) ". ";
+}
+
+.donate-field {
+  display: block;
+  margin: 14px 0;
+}
+
+.donate-field > span {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.donate-field input[type="text"],
+.donate-field input[type="number"],
+.donate-field select {
+  width: 100%;
+  max-width: 480px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  color: var(--primary);
+  background: var(--theme);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.donate-field input:focus-visible,
+.donate-field select:focus-visible,
+.donate-nav button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.donate-field .donate-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.donate-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.donate-nav button,
+.donate-generate-btn {
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--theme);
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.donate-nav button[disabled],
+.donate-generate-btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Signature canvas frame */
+.donate-signature-frame {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--theme);
+  max-width: 480px;
+  touch-action: none;
+}
+
+/* Gate banner (registru163_active: false) */
+.donate-gate-banner {
+  padding: 16px 20px;
+  margin: 20px 0;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+  background: var(--code-block-bg);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .donate-bank-table th[scope="row"] {
+    display: block;
+    padding-bottom: 0;
+  }
+  .donate-bank-table td {
+    display: block;
+    padding-top: 2px;
+  }
+}

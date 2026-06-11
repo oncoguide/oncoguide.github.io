@@ -73,3 +73,10 @@ footerDisclaimer: "Nur zu Bildungszwecken. Keine medizinische Beratung. Konsulti
 footerAbout: "Über uns"
 footerContact: "Kontakt"
 footerArchives: "Archiv"
+
+# Donate page (DONATIONS.md T2)
+donateBankTitle: "Direkte Spende per Banküberweisung"
+donateBankName: "Empfänger"
+donateBankBank: "Bank"
+donateCopy: "Kopieren"
+donateCopyIban: "IBAN kopieren"

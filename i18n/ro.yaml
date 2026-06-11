@@ -73,3 +73,10 @@ footerDisclaimer: "Informații educaționale. Nu constituie sfat medical. Consul
 footerAbout: "Despre noi"
 footerContact: "Contact"
 footerArchives: "Arhivă"
+
+# Donate page (DONATIONS.md T2)
+donateBankTitle: "Donație directă prin transfer bancar"
+donateBankName: "Beneficiar"
+donateBankBank: "Banca"
+donateCopy: "Copiază"
+donateCopyIban: "Copiază IBAN"

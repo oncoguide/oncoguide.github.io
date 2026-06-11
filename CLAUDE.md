@@ -19,6 +19,7 @@ founder, and financing documents live in `.private/` (gitignored — NEVER commi
 - `VISION.md` — Project vision and operating principles. READ THIS FIRST every session. Every decision must serve the patient.
 - `CLAUDE.md` — This file: conventions, structure, skills.
 - `decisions/log.yaml` — Decision capture log. Append after significant interactions.
+- `DONATIONS.md` — Donate page architecture + review-gated implementation plan (source of truth for the donation flows).
 - `hugo.yaml` — Central Hugo configuration (languages, menus, params).
 - `.github/workflows/deploy.yml` — GitHub Actions CI/CD.
 - `prompt/research/` — Local research notes / source material that inform article content (gitignored, local only). Check for relevant files BEFORE writing article content. Do NOT invent medical data.
@@ -97,7 +98,12 @@ assets/css/extended/             — Custom CSS (custom.css, print.css)
 layouts/shortcodes/              — Custom shortcodes (disclaimer, action-box, callout)
 layouts/partials/                — extend_head.html, extend_footer.html
 i18n/                            — Custom i18n strings (en, ro, it, fr, de, es)
-data/                            — Hugo data files (e.g., scanners.yaml)
+data/                            — Hugo data files (scanners.yaml, association.yaml, fiscal.yaml)
+                                   NOTE: data/* is gitignored EXCEPT the 3 above (explicit !exceptions)
+DONATIONS.md                     — Donate page architecture (review-gated; see Key Files)
+package.json                     — Node tooling for donation scripts (pdf-lib devDependency)
+static/donate/                   — Donation flow assets (vendored pdf-lib, ANAF templates, flow JS)
+scripts/audit-contract-template.mjs — Anonymity audit (runs in pre-commit; name from .private/)
 static/                          — robots.txt, llms.txt, favicon.svg, images
 scripts/                         — Helper scripts (staticrypt encryption, git hooks)
 .github/workflows/               — GitHub Actions deploy workflow (deploy.yml)
@@ -156,6 +162,8 @@ When modifying files in the left column, also update the files in the right colu
 |---|---|
 | Any skill in `.claude/skills/` | This file ("Claude Skills" section) |
 | `hugo.yaml` (languages, menus) | This file ("File Structure") |
+| `data/association.yaml` or `data/fiscal.yaml` | Review `static/donate/js/field-maps.js` + the donation flows (DONATIONS.md S13) |
+| ANAF templates in `static/donate/templates/` | Re-run the fill-test (DONATIONS.md S7.3) and update DONATIONS.md App. A |
 
 ## Session Start Checklist
 

@@ -73,3 +73,10 @@ footerDisclaimer: "Informations éducatives uniquement. Ne constitue pas un avis
 footerAbout: "À propos"
 footerContact: "Contact"
 footerArchives: "Archives"
+
+# Donate page (DONATIONS.md T2)
+donateBankTitle: "Don direct par virement bancaire"
+donateBankName: "Bénéficiaire"
+donateBankBank: "Banque"
+donateCopy: "Copier"
+donateCopyIban: "Copier IBAN"

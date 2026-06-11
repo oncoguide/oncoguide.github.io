@@ -720,3 +720,14 @@ decisions:
       - "Freeze pipeline in place, slim CLAUDE.md, keep code -- reversible but leaves 159MB + complexity"
       - "Leave everything untouched -- defers the cleanup, CLAUDE.md stays mostly stale pipeline docs"
     outcome: "Removed from repo (recoverable via git history): agents/ (whole pipeline incl. SPEC.md, IMPLEMENTATION_PROMPT.md, modules, tests), docs/ (architecture.md + superpowers SDD artifacts), topics/registry.yaml, archetypes/master-guide-template.md. Removed local pipeline skills (/research, /monthly-review, /new-topic); kept content/review skills (/oncologist, /patient-advocate, /seo, /frontend, /ux, /publish). Rewrote CLAUDE.md around content + association. Simplified pre-commit hook to keep only the personal-data/email scan (dropped dependency-map rules). Deleted stale PLAN.md. Disabled superpowers plugin in .claude/settings.json. Added association financing docs in .private/finantare/ (donatii/sponsorizari/redirectionari + contract templates)."
+
+  - id: 73
+    date: "2026-06-11"
+    category: "design"
+    summary: "Donate page architecture designed and review-gated (DONATIONS.md, PASS 9.4/10)"
+    context: "Public Donate/Doneaza page for the association, modeled on daruiesteviata.ro flows (company sponsorship/F177 + individual F230 3.5%), adapted to the static GitHub Pages site. Architecture written in DONATIONS.md (repo root) and hardened through 6 review rounds by fresh independent agents (scores 7.6 -> 8.7 -> 8.6 -> 8.9 -> 9.0 -> 9.4 PASS, gate >9.2). Each round's findings were independently verified (ANAF PDFs downloaded and inspected, fiscal rules checked against OUG 115/2023 sources, Hugo mechanics tested)."
+    alternatives_considered:
+      - "Serverless backend storing signed forms (daruiesteviata model) -- rejected: makes the association a CNP data controller; GDPR liability for a volunteer NGO"
+      - "Third-party e-sign SaaS -- rejected: recurring cost, donor PII at a third party, fidelity risk on ANAF forms"
+      - "In-browser signature on Form 230 -- rejected in v6: drawing on the ANAF PDF violates the fidelity constraint; 230 is printed and signed by hand"
+    outcome: "Static client-side architecture: pdf-lib fills the original ANAF AcroForms (verified no-XFA, values-only, never flatten), sponsorship contract is our own AcroForm template signed in-browser, documents delivered via the supporter's own email, archive in .private/finantare/arhiva/ + private Drive, tax flows gated behind registru163_active flag until Form 163 registration. Anonymity: representative name only in the generated PDF, enforced by a pre-commit audit script. Next: expand S14 task plan, Gemini review per task (>9.1), then implement with fresh-Fable review per task (>9.3)."

@@ -34,4 +34,23 @@ if [ -n "$STAGED_TEXT" ]; then
     exit 1
 fi
 
+# --- Anonymity audit (DONATIONS.md S12) ---
+# Checks the contract template + full tracked tree for the representative's name.
+# Name comes from the gitignored .private/finantare/.audit-name, never from the repo.
+if command -v node >/dev/null 2>&1; then
+    if [ -f ".private/finantare/.audit-name" ]; then
+        if ! REPRESENTATIVE_NAME="$(cat .private/finantare/.audit-name)" node scripts/audit-contract-template.mjs; then
+            echo ""
+            echo "================================================"
+            echo "  SECURITY: anonymity audit failed (see above)"
+            echo "================================================"
+            exit 1
+        fi
+    else
+        echo "WARNING: .private/finantare/.audit-name missing -- anonymity audit skipped."
+    fi
+else
+    echo "WARNING: node not found -- anonymity audit skipped."
+fi
+
 exit 0

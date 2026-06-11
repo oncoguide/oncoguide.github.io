@@ -1,0 +1,57 @@
+{{- define "main" }}
+{{- /* Donate landing (DONATIONS.md T2). Renders the page content, then the
+       direct-donation block from site.Data.association -- the data lives in ONE
+       place (data/association.yaml), never hard-coded in markdown. */ -}}
+<header class="page-header">
+  {{- partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{- if .Description }}
+  <div class="post-description">{{ .Description | markdownify }}</div>
+  {{- end }}
+</header>
+
+<article class="post-single donate-landing">
+  <div class="post-content">
+    {{ .Content }}
+
+    {{- $a := site.Data.association }}
+    <section class="donate-bank-block" aria-labelledby="donate-bank-title">
+      <h2 id="donate-bank-title">{{ i18n "donateBankTitle" }}</h2>
+      <table class="donate-bank-table">
+        <tbody>
+          <tr><th scope="row">{{ i18n "donateBankName" }}</th><td>{{ $a.name }}</td></tr>
+          <tr><th scope="row">CIF</th><td>{{ $a.cif }}</td></tr>
+          <tr>
+            <th scope="row">IBAN</th>
+            <td>
+              <code id="donate-iban">{{ $a.iban }}</code>
+              <button type="button" class="donate-copy-btn" data-copy-target="donate-iban"
+                      aria-label="{{ i18n "donateCopyIban" }}">{{ i18n "donateCopy" }}</button>
+            </td>
+          </tr>
+          <tr><th scope="row">{{ i18n "donateBankBank" }}</th><td>{{ $a.bank }}</td></tr>
+          <tr><th scope="row">BIC / SWIFT</th><td>{{ $a.bic }}</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</article>
+
+<script>
+  (function () {
+    var btn = document.querySelector('.donate-copy-btn');
+    if (!btn || !navigator.clipboard) { if (btn) btn.hidden = true; return; }
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.getAttribute('data-copy-target'));
+      navigator.clipboard.writeText(el.textContent.trim()).then(function () {
+        btn.classList.add('copied');
+        btn.textContent = btn.getAttribute('data-copied-label') || 'OK';
+        setTimeout(function () {
+          btn.classList.remove('copied');
+          btn.textContent = {{ i18n "donateCopy" | jsonify }};
+        }, 2000);
+      });
+    });
+  })();
+</script>
+{{- end }}

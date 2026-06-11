@@ -91,4 +91,6 @@ yarn-error.log*
 agents/research/config.json
 data/*
 !data/scanners.yaml
+!data/association.yaml
+!data/fiscal.yaml
 logs/

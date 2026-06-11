@@ -1,0 +1,17 @@
+# Fiscal config for the donation flows (DONATIONS.md S9.2, S10).
+# Rules live HERE, not hard-coded in JS, so the accountant can correct them by config.
+flags:
+  registru163_active: false   # master switch for the tax-benefit paths
+  eligibility:
+    form177_profit_tax: true
+    form177_micro: false   # presumed NO per OUG 115/2023 (S8.1) -- ACCOUNTANT: confirm
+    form177_imca: false    # verified NO (Art. 42 not applicable at IMCA level)
+# ACCOUNTANT QUESTIONS (T6 go-live): (1) micro + F177 post-OUG 115/2023?
+# (2) does 25 June hold for fiscal 2026, or revert to 25 March 2027 (OUG 153/2020 lapse)?
+deadlines:
+  form230_next: "2027-05-25"  # next 3.5% window (2026 income)
+  form177_next: "2027-06-25"  # next F177 window; 2026-06-25 unreachable pre-registration
+ceilings:
+  sponsorship_turnover_pct: 0.0075   # 0.75% of turnover
+  sponsorship_profit_tax_pct: 0.20   # 20% of profit tax
+  individual_redirect_pct: 0.035     # 3.5%

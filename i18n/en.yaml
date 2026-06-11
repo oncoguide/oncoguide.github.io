@@ -73,3 +73,10 @@ footerDisclaimer: "Educational information only. Not medical advice. Always cons
 footerAbout: "About"
 footerContact: "Contact"
 footerArchives: "Archives"
+
+# Donate page (DONATIONS.md T2)
+donateBankTitle: "Direct donation by bank transfer"
+donateBankName: "Beneficiary"
+donateBankBank: "Bank"
+donateCopy: "Copy"
+donateCopyIban: "Copy IBAN"

@@ -53,6 +53,10 @@ languages:
           name: "Patient Guides"
           url: /en/cancer-types/
           weight: 20
+        - identifier: donate
+          name: "Donate"
+          url: /en/donate/
+          weight: 28
         - identifier: contact
           name: "Contact"
           url: /en/contact/
@@ -95,6 +99,10 @@ languages:
           name: "Ghiduri Pacienti"
           url: /ro/cancer-types/
           weight: 20
+        - identifier: donate
+          name: "Doneaza"
+          url: /ro/donate/
+          weight: 28
         - identifier: contact
           name: "Contact"
           url: /ro/contact/
@@ -137,6 +145,10 @@ languages:
           name: "Guide Pazienti"
           url: /it/cancer-types/
           weight: 20
+        - identifier: donate
+          name: "Dona"
+          url: /it/donate/
+          weight: 28
         - identifier: contact
           name: "Contatto"
           url: /it/contact/
@@ -179,6 +191,10 @@ languages:
           name: "Guides Patients"
           url: /fr/cancer-types/
           weight: 20
+        - identifier: donate
+          name: "Faire un don"
+          url: /fr/donate/
+          weight: 28
         - identifier: contact
           name: "Contact"
           url: /fr/contact/
@@ -221,6 +237,10 @@ languages:
           name: "Patientenleitfaden"
           url: /de/cancer-types/
           weight: 20
+        - identifier: donate
+          name: "Spenden"
+          url: /de/donate/
+          weight: 28
         - identifier: contact
           name: "Kontakt"
           url: /de/contact/
@@ -263,6 +283,10 @@ languages:
           name: "Guias de Pacientes"
           url: /es/cancer-types/
           weight: 20
+        - identifier: donate
+          name: "Donar"
+          url: /es/donate/
+          weight: 28
         - identifier: contact
           name: "Contacto"
           url: /es/contact/

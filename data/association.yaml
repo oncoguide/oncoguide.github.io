@@ -1,0 +1,13 @@
+# Asociatia OncoGuide -- public registry identifiers (single source of truth for the site).
+# ONLY public data belongs here. NO founder/representative names (see DONATIONS.md D4).
+name: "Asociatia OncoGuide"
+legal_form: "Persoana juridica fara scop patrimonial (OG nr. 26/2000)"
+cif: "54791907"
+registry_no: "72 / 22.05.2026"
+registry_court: "Judecatoria Sectorului 2 Bucuresti"
+address: "Str. Fecioarei nr. 15, Corp C1, et. 1, ap. 1, Sector 2, Bucuresti, 020103"
+iban: "RO91 RNCB 0280 1861 0767 0001"
+bank: "Banca Comerciala Romana (BCR)"
+bic: "RNCBROBU"
+email: "nog.opt.3o@icloud.com" # nosec -- anonymous relay, already public in about.md
+registru163_no: ""   # filled after Form 163 approval; gates the tax paths (DONATIONS.md S10)

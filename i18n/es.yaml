@@ -73,3 +73,10 @@ footerDisclaimer: "Solo información educativa. No constituye asesoramiento méd
 footerAbout: "Acerca de"
 footerContact: "Contacto"
 footerArchives: "Archivo"
+
+# Donate page (DONATIONS.md T2)
+donateBankTitle: "Donación directa por transferencia bancaria"
+donateBankName: "Beneficiario"
+donateBankBank: "Banco"
+donateCopy: "Copiar"
+donateCopyIban: "Copiar IBAN"
