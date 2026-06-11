@@ -710,3 +710,13 @@ decisions:
       - "Keep featured + curated list -- redundant with only 2 articles"
       - "Show both guides in a flat list -- still premature, menu does the job"
     outcome: "Homepage shows only hero/mission block. Navigation via menu. Will reconsider article listings when 5+ guides are published."
+
+  - id: 72
+    date: "2026-06-11"
+    category: "process"
+    summary: "Research pipeline retired -- project pivots to hand-curated content + registered non-profit (Asociatia OncoGuide)"
+    context: "OncoGuide registered as a Romanian non-profit (Registrul Asociatiilor si Fundatiilor nr. 72/22.05.2026, CIF 54791907). Project focus shifted from AI-generated guides to hand-curated patient content + association administration. The agents/research pipeline (48 tracked files, 214 tests, 159MB) had not been touched since 2026-03-19; every commit since was hand-written content. User decided to remove it from the repo."
+    alternatives_considered:
+      - "Freeze pipeline in place, slim CLAUDE.md, keep code -- reversible but leaves 159MB + complexity"
+      - "Leave everything untouched -- defers the cleanup, CLAUDE.md stays mostly stale pipeline docs"
+    outcome: "Removed from repo (recoverable via git history): agents/ (whole pipeline incl. SPEC.md, IMPLEMENTATION_PROMPT.md, modules, tests), docs/ (architecture.md + superpowers SDD artifacts), topics/registry.yaml, archetypes/master-guide-template.md. Removed local pipeline skills (/research, /monthly-review, /new-topic); kept content/review skills (/oncologist, /patient-advocate, /seo, /frontend, /ux, /publish). Rewrote CLAUDE.md around content + association. Simplified pre-commit hook to keep only the personal-data/email scan (dropped dependency-map rules). Deleted stale PLAN.md. Disabled superpowers plugin in .claude/settings.json. Added association financing docs in .private/finantare/ (donatii/sponsorizari/redirectionari + contract templates)."

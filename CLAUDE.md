@@ -7,32 +7,22 @@ URL: https://oncoguide.github.io
 Primary authoring language: Romanian. 6 languages total (en, ro, it, fr, de, es).
 Author is anonymous — a cancer patient writing for other patients.
 
+Content is **hand-curated**. (An AI research pipeline lived in `agents/research/` until June 2026;
+it produced the first guides and was then retired — see `decisions/log.yaml` id 72. If you ever need
+it, it is recoverable from git history.)
+
+The blog is operated by **Asociația OncoGuide**, a registered Romanian non-profit. Its legal,
+founder, and financing documents live in `.private/` (gitignored — NEVER commit; contains personal data).
+
 ## Key Files
 
-- `vision.md` — Project vision and operating principles. READ THIS BEFORE ANYTHING ELSE every session.
-- `agents/research/SPEC.md` — Research agent specification v6 (lifecycle pipeline, 16 sections, validation, monitoring). READ THIS for any pipeline work.
-- `agents/research/IMPLEMENTATION_PROMPT.md` — Prompt and milestone plan for implementation agent.
-- `PLAN.md` — Implementation plan with progress checkboxes (gitignored, local only).
-- `prompt/research/` — Research findings for articles (gitignored, local only). READ relevant research files BEFORE writing any article content.
-- `decisions/log.yaml` — Decision capture log. Update after significant interactions.
+- `VISION.md` — Project vision and operating principles. READ THIS FIRST every session. Every decision must serve the patient.
+- `CLAUDE.md` — This file: conventions, structure, skills.
+- `decisions/log.yaml` — Decision capture log. Append after significant interactions.
 - `hugo.yaml` — Central Hugo configuration (languages, menus, params).
 - `.github/workflows/deploy.yml` — GitHub Actions CI/CD.
-
-## Research Directory (prompt/research/)
-
-This directory contains research findings, medical data, and source references used to write articles.
-It is gitignored (local only) to keep the public repo clean.
-
-**Agent rule:** Before writing or translating any article, ALWAYS check `prompt/research/` for relevant
-research files. These contain verified data, statistics, sources, and conclusions that MUST inform
-the article content. Do NOT invent medical data — use what is documented in research files.
-
-Current research files:
-- `diagnostic-pathway.md` — Complete diagnostic protocol: molecular testing by cancer type, timelines, tumor board data
-- `anadolu-experience.md` — Real patient experience at Anadolu Medical Center vs Romania (anonymized, for comparative examples)
-- `content-strategy.md` — Editorial decisions: "avoid worst mistakes" philosophy, red flags pattern, patient advocacy tone
-- `ret-fusion-reference-guide.md` — RET fusion NSCLC reference guide (earlier version, for comparison with generated guide)
-- `ret-cancer-news-agent-report-2026-03-10.html` — Cancer News Agent HTML report for RET fusion (2026-03-10); use as reference for treatment data, clinical trial results, drug approvals, and patient-relevant summaries when writing/verifying RET fusion articles
+- `prompt/research/` — Local research notes / source material that inform article content (gitignored, local only). Check for relevant files BEFORE writing article content. Do NOT invent medical data.
+- `.private/` — Association legal/admin/financing docs (gitignored, local only, personal data).
 
 ## Content Conventions
 
@@ -43,7 +33,7 @@ Current research files:
 - **Tone:** Warm, empathic, from a patient who has been through it. NOT clinical/cold.
 - **Medical terms:** Explain immediately upon first use, in plain language.
 - **Paragraphs:** Max 4 lines. Short, scannable.
-- **Anonymity:** NEVER reference specific personal details about the author. Numele real al autorului NU apare nicaieri — nici in cod, nici in continut, nici in git commits, nici pe GitHub.
+- **Anonymity:** NEVER reference specific personal details about the author. Numele real al autorului NU apare nicaieri — nici in cod, nici in continut, nici in git commits, nici pe GitHub. Founders' real names live ONLY in `.private/` (gitignored).
 - **No commercial content:** No ads, no affiliate links, no product endorsements.
 - **No special symbols:** NO emojis, NO typographic quotes, NO em-dashes. Use standard quotes (""), double hyphens (--), and bold text (**NU:**) instead.
 
@@ -58,16 +48,13 @@ Current research files:
 ## Archetypes
 
 - `archetypes/article.md` — Standard article template with all required fields
-- `archetypes/master-guide-template.md` — Patient Master Guide per molecular subtype / final diagnosis (16 sections, v6 lifecycle)
+- `archetypes/default.md` — Hugo default archetype
 
 ## Content Architecture
 
 **Published content types:**
 - `guide` — Standalone articles (e.g., complete diagnosis guide)
 - `subtype` — Patient Master Guide per molecular subtype (e.g., lung-ret-fusion, breast-her2)
-
-**Research-only (not published directly):**
-- `research-source` — Cancer type master guides (e.g., lung-cancer-master, breast-cancer-master). These aggregate research across all subtypes and serve as input data for subtype guides. They are generated by the research agent into `data/guides/` but never turned into articles.
 
 **Why no generic "cancer type guide"?** Patients search for their specific diagnosis (e.g., "RET fusion lung cancer"), not generic overviews. A generic "lung cancer guide" would be too broad to be actionable. Each molecular subtype has completely different treatment, prognosis, and side effects.
 
@@ -105,14 +92,15 @@ content/{en,ro,it,fr,de,es}/    — Content per language
   treatment-access/              — Treatment access & patient rights
   imaging/                       — Imaging centers & guides
   clinical-trials/               — Clinical trials guides
-archetypes/                      — Hugo archetypes (article.md, cancer-type-guide.md)
+archetypes/                      — Hugo archetypes (article.md, default.md)
 assets/css/extended/             — Custom CSS (custom.css, print.css)
 layouts/shortcodes/              — Custom shortcodes (disclaimer, action-box, callout)
 layouts/partials/                — extend_head.html, extend_footer.html
 i18n/                            — Custom i18n strings (en, ro, it, fr, de, es)
+data/                            — Hugo data files (e.g., scanners.yaml)
 static/                          — robots.txt, llms.txt, favicon.svg, images
+scripts/                         — Helper scripts (staticrypt encryption, git hooks)
 .github/workflows/               — GitHub Actions deploy workflow (deploy.yml)
-decisions/                       — Decision capture log (log.yaml)
 hugo.yaml                        — Central config: languages, menus, params, homeInfoParams
 ```
 
@@ -137,175 +125,20 @@ Categories: `technical`, `design`, `content`, `learning`, `process`
 - NEVER commit files containing: passwords, API keys, tokens, personal emails, private data
 - ALWAYS grep staged files for sensitive patterns before every commit
 - ALWAYS review `git diff` before committing
-- The author's personal email must NEVER appear in any committed file
+- The author's personal email and the founders' real names must NEVER appear in any committed file
 - Only the anonymous iCloud relay email may appear in content
 - Use **GitHub Secrets** (`${{ secrets.X }}`) for any sensitive values needed in CI/CD
 - Use **environment variables** for any sensitive values needed at build time
 - If a value is sensitive, use a placeholder in code and document how to set the env var
 - Check `.gitignore` covers sensitive patterns before first push
-- The `.claude/` folder is gitignored — agent memory may contain personal data
-
-## Research Agent
-
-Python research agent in `agents/research/`, adapted from cancer-news-agent.
-Searches 5 backends, enriches with Claude, generates master guide markdown per topic.
-
-### Setup (env variables -- no config.json needed)
-
-```bash
-# In ~/.zshenv (persistent across sessions):
-export ANTHROPIC_API_KEY="sk-ant-..."
-export SERPER_API_KEY="..."
-export PUBMED_EMAIL="nog.opt.3o@icloud.com"
-# Optional: export OPENFDA_API_KEY="..."
-```
-
-### CLI Commands
-
-```bash
-cd agents/research
-source .venv/bin/activate  # Python venv with all deps
-
-python run_research.py --init                              # Initialize database
-python run_research.py --topic "topic-id"                  # Full research pipeline
-python run_research.py --topic "topic-id" --dry-run        # Discovery + extraction, no search/DB
-python run_research.py --topic "topic-id" --generate-from-data          # Generate guide from existing findings (skip discovery/search)
-python run_research.py --topic "topic-id" --generate-from-data --dry-run  # Preview findings distribution + cost estimate
-python run_research.py --topic "topic-id" --force-phase 6  # Force re-run of a specific phase (ignores checkpoint)
-python run_research.py --update-all --since 30d            # Update all published topics
-python run_research.py --list-topics                       # List topics from registry
-python run_research.py --seed --topic "topic-id"           # Import seed data from existing DBs (v6, title_english fallback)
-python run_research.py --reclassify --topic "topic-id"     # Batch classify lifecycle_stage with Haiku (v6)
-```
-
-### Structure
-
-```
-agents/research/
-  run_research.py              — CLI entry point + orchestrator
-  modules/
-    __init__.py
-    utils.py                   — Hashing, logging, text helpers
-    database.py                — SQLite wrapper (WAL mode, simplified schema)
-    cost_tracker.py            — Track API costs, enforce $5 budget cap
-    discovery.py               — Iterative oncologist <-> advocate loop (Sonnet); all 3 AI calls use tool_choice (no JSON parsing)
-    keyword_extractor.py       — Methodologist: extract queries from discovery (Sonnet); uses tool_choice
-    validation.py              — Post-generation oncologist + advocate review (Sonnet); refine_guide() adds language check (Haiku) + auto-correction before final output
-    skill_improver.py          — Write learnings back to skill files
-    enrichment.py              — Claude: classify relevant/irrelevant + score 1-10 + authority 1-5 (Haiku); uses tool_choice; accepts optional CostTracker
-    gap_analyzer.py            — Identify weak sections, generate round 2 queries (Haiku); accepts optional CostTracker for both AI calls
-    pre_search.py              — Phase 0: template + Haiku queries, search, enrich, format context for discovery
-    cross_verify.py            — Compare discovery claims vs real findings (Haiku)
-    guide_generator.py         — Claude: generate master guide markdown (Haiku for 12 sections, Sonnet for 4 critical, + executive summary)
-    searcher_serper.py         — Serper.dev Google search
-    searcher_pubmed.py         — PubMed/NCBI Entrez
-    searcher_clinicaltrials.py — ClinicalTrials.gov API v2
-    searcher_openfda.py        — FDA adverse events, labels, enforcement
-    searcher_civic.py          — CIViC genomics GraphQL
-    query_expander.py          — (deprecated, kept for reference)
-    query_debate.py            — (deprecated, replaced by discovery.py)
-  config.example.json          — Template (copy to config.json, fill API keys)
-  config.json                  — Actual config (gitignored)
-  requirements.txt             — Python dependencies
-  tests/                       — 214 unit + integration tests
-data/
-  research.db                  — SQLite database (gitignored)
-  guides/                      — Master guide markdown per topic (gitignored)
-  backups/                     — DB backups (gitignored)
-topics/
-  registry.yaml                — Topic definitions (diagnosis only, committed to git)
-```
-
-### Data Flow (v6)
-
-**Full pipeline** (`--topic`):
-
-0. Health check: DB accessible, topic exists, disk space > 100MB
-1. Pre-search: 22 template queries (zero AI, includes FDA label/DailyMed) + ~20 Haiku complement queries, search all 5 backends, enrich with Haiku, top 50 findings formatted as context for discovery
-2. Discovery loop (Sonnet): oncologist (grounded with pre-search findings) <-> advocate iterate using Q1-Q8 lifecycle structure until all Q1-Q8 score >= 8.5/10. Abort if knowledge_map < 3 keys.
-3. Keyword extraction (Sonnet): methodologist extracts lifecycle-tagged queries (Q1-Q9) from conversation with per-stage minimums. Abort if < 80 queries.
-4. Search round 1: 5 backends execute queries + enrichment (Haiku, now outputs lifecycle_stage per finding). Abort if < 20 findings.
-5. Gap analysis + search round 2 (Haiku): fill weak lifecycle stages (thresholds per Q1-Q8). Pipeline gates (G0-G3) check at each phase -- G3 hard-stops at < 20 findings.
-6. Cross-verification (Haiku): compare discovery knowledge map claims vs real findings (VERIFIED/CONTRADICTED/UNVERIFIED)
-7. Guide generation (Haiku + Sonnet): v6.1 smart pipeline:
-   a. Section assignment: `_assign_findings_to_sections()` -- Q3 findings routed via Haiku AI to 7 categories (dosing, side-effects, interactions, monitoring, emergency, daily-life, access); non-Q3 assigned by lifecycle prefix. Q9 -> Section 16 (guidelines).
-   b. Smart grouping: `_group_findings_by_topic()` -- sections with >= 50 findings clustered by Haiku AI into 8-12 topic groups (fallback: authority-tier grouping). Lowered from 500 to ensure frontier tech gets own Tier 1.
-   c. Tiered formatting: `_format_grouped_findings()` -- Tier 1 (top 15-20 per group): full detail with URL + authority; Tier 2: summary only; respects 180K token budget (Tier 1 exempt).
-   d. Expert skills: oncologist + advocate skill context loaded into system prompts. Anti-hallucination rules injected into every section.
-   e. Section generation: 4 critical sections (mistakes, side-effects, emergency-signs, resistance) use Sonnet, 12 non-critical use Haiku. Section 15 (questions) generated from prior section text, not findings. Section 16 uses Q9 findings.
-   f. Post-generation: `verify_section_citations()` per section catches phantom citations, ungrounded numbers, uncited statistics.
-   g. Retry: `TokenBudgetExceeded` triggers one retry with halved budget (90K tokens). Failed critical sections flag guide as UNSAFE.
-8. Validation (Sonnet): oncologist + advocate review guide, targeted search if gaps found
-9. Human review checklist: generates `data/guides/{topic-id}-review.md` with safety concerns, accuracy issues, cross-verification discrepancies, section scores, and reviewer questions
-10. Skill self-improvement: learnings written back to skill files
-11. Output: `data/guides/{topic-id}.md` + `data/guides/{topic-id}-review.md`
-12. Pipeline dashboard: post-run summary with per-phase timing, cost, findings, guide size
-
-**Data-first pipeline** (`--generate-from-data`): For topics with >= 200 existing findings, skips phases 1-3 (discovery/search) and runs: gap analysis -> mini-discovery (1 Sonnet call, cross-domain clinical insights from top 50 findings, ~$0.05) -> guide generation -> validation. Used for RET Fusion (3473 seeded findings).
-
-**Checkpoint/resume**: Each phase saves state to `pipeline_state` table. On re-run, pipeline resumes from last completed phase. Use `--force-phase N` to re-run a specific phase.
-
-### Topic Workflow
-
-Each topic in `topics/registry.yaml` follows this pipeline:
-
-| Status | Meaning | Who | Action |
-|--------|---------|-----|--------|
-| `planned` | Topic defined (diagnosis only) | Agent/User | `/new-topic` to add |
-| `researching` | Research agent running | Agent | `python run_research.py --topic "id"` |
-| `guide_ready` | Master guide + review checklist generated | User | Read guide + checklist, verify critical numbers, check all items |
-| `drafting` | Article being written from guide | Agent/User | Write RO first, then translate 5 langs |
-| `review` | Article ready for review | Agent/User | `/oncologist`, `/patient-advocate`, `/seo` |
-| `published` | Live on site | Agent | `/publish` checklist, git push |
-
-**Transitions:**
-- `planned -> researching`: Run `/research` skill or CLI directly
-- `researching -> guide_ready`: Automatic after successful guide generation (lung-ret-fusion: guide_ready as of 2026-03-17, v5 benchmark run -- see review checklist for 5 safety concerns requiring human correction before drafting)
-- `guide_ready -> drafting`: Manual -- user reads guide + review checklist (`{topic-id}-review.md`), verifies all items, then changes status
-- `drafting -> review`: All 6 language versions complete
-- `review -> published`: `/publish` checklist passes, pushed to GitHub
-- `published -> researching`: Monthly update via `/monthly-review` or `--update-all --since 30d`
-
-**Rules:**
-- Status updates are made in `topics/registry.yaml` (committed to git)
-- Only move forward when the previous stage is genuinely complete
-- `last_researched` field is updated automatically by the research agent
-- Master guides (`data/guides/`) are gitignored -- local only
-- For subtypes: parent research-source should be researched before subtypes
-- `research-source` topics (cancer type masters) stop at `guide_ready` -- they are never drafted/published
-- Only `guide` and `subtype` topics proceed through drafting -> review -> published
-
-### Backup Strategy
-
-Research data is local-only (gitignored). Backup prevents data loss:
-
-| What | Where | Frequency | How |
-|------|-------|-----------|-----|
-| `data/research.db` | `data/backups/research-YYYYMMDD.db` | Before each research run | Automatic (database.py `backup()`) |
-| `data/guides/*.md` | `data/backups/guides/` | After each guide generation | `cp data/guides/*.md data/backups/guides/` |
-| `data/backups/` | Time Machine (macOS) | Continuous | Automatic (system-level) |
-
-**Rotation:** Keep last 10 DB backups. Older backups are deleted automatically by `database.py`.
-**Recovery:** Copy backup file over `data/research.db`, or re-run research (idempotent, dedup prevents duplicates).
-**Note:** `topics/registry.yaml` is committed to git -- no separate backup needed.
-
-### Rules
-
-- Code copied and adapted from cancer-news-agent -- no shared dependencies
-- Research DB in `data/research.db`, gitignored
-- Master guides in `data/guides/`, gitignored
-- Topic registry in `topics/registry.yaml`, committed to git
-- Update agent runs monthly, compares with published content
-- cancer-news-agent is NEVER modified from onco-blog
+- `.claude/` and `.private/` are gitignored — they may contain personal data
+- A pre-commit hook (`scripts/hooks/pre-commit`) scans staged files for email addresses. Activated via `git config core.hooksPath scripts/hooks`.
 
 ## Claude Skills
 
-Skills specializate in `.claude/skills/`:
+Skills specializate in `.claude/skills/` (gitignored, local-only):
 
-### Agenti de lucru
-- `/research` — Run research agent for a specific topic, generating a master guide from Serper + PubMed data
-- `/monthly-review` — Run monthly content review to identify published articles needing updates based on new medical data
-- `/new-topic` — Add a new topic to the registry and prepare directory structure for research and content
+### Workflow
 - `/publish` — Run pre-publication checklist for an article -- SEO, disclaimers, translations, shortcodes, internal links
 
 ### Expertiza (persona + action checklist)
@@ -317,32 +150,17 @@ Skills specializate in `.claude/skills/`:
 
 ## Dependency Map (keep in sync)
 
-When modifying files in the left column, you MUST also update the files in the right column in the SAME commit. A commit that changes pipeline code without updating dependent docs/skills is INCOMPLETE.
+When modifying files in the left column, also update the files in the right column in the SAME commit.
 
 | When you modify... | Also update... |
 |---|---|
-| `run_research.py` (phases, flow, CLI args) | This file ("Data Flow" + "CLI Commands") + `.claude/skills/research.md` |
-| `discovery.py` (prompts, params, rounds) | `.claude/skills/oncologist.md` (Learnings section) |
-| `validation.py` (prompts, output format) | `.claude/skills/oncologist.md` + `.claude/skills/patient-advocate.md` |
-| `guide_generator.py` (sections, models) | This file ("Content Architecture") + `archetypes/master-guide-template.md` + `docs/architecture.md` |
-| `cross_verify.py` (prompts, thresholds) | This file ("Data Flow") + `guide_generator.py` (if report format changes) |
-| `enrichment.py` (output fields) | This file ("Data Flow") + `database.py` (schema if new column) |
-| `topics/registry.yaml` (fields, statuses) | This file ("Topic Workflow") |
 | Any skill in `.claude/skills/` | This file ("Claude Skills" section) |
 | `hugo.yaml` (languages, menus) | This file ("File Structure") |
-| Any NEW module in `agents/research/modules/` | This file ("Structure") + `.claude/skills/research.md` |
-
-**Enforcement:** Automated via git pre-commit hook (`scripts/hooks/pre-commit`). The hook BLOCKS commits that modify pipeline files without including dependent docs/skills. No escape hatch -- medical project, docs must stay in sync. If a code change is trivial (typo, comment), make a minimal update in the dependent file to confirm you checked it.
-
-**Setup (one-time, already configured):** `git config core.hooksPath scripts/hooks`
 
 ## Session Start Checklist
 
-0. Read `vision.md` — understand WHY before anything else. Every decision must serve the patient.
-1. Read `agents/research/SPEC.md` sections 2+4 — lifecycle framework (Q1-Q9), the core logic
-2. Read `CLAUDE.md` (this file) — refresh conventions
-3. Read `decisions/log.yaml` — understand prior context
-4. If modifying pipeline code: read `agents/research/SPEC.md` fully + check **Dependency Map** above
-5. If writing content: read relevant files from `prompt/research/`
-6. If implementing v6: read `agents/research/IMPLEMENTATION_PROMPT.md` for milestones
-6. Continue implementation from where the last session left off
+1. Read `VISION.md` — understand WHY before anything else. Every decision must serve the patient.
+2. Read `CLAUDE.md` (this file) — refresh conventions.
+3. Read `decisions/log.yaml` — understand prior context.
+4. If writing content: read relevant files from `prompt/research/`.
+5. If working on association admin/financing: read `.private/README.md` (fact-sheet) + `.private/finantare/`.
