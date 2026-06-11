@@ -1,0 +1,78 @@
+{{- define "main" }}
+{{- /* Donation generator shell (DONATIONS.md T4). Renders the markdown body, the registru-163
+       gate banner, and a (currently hidden) generator container that the lazy-loaded flow script
+       (donate-companies.js / donate-individuals.js, T5/T6) populates. While
+       fiscal.flags.registru163_active is false the container stays hidden, so there is no
+       user-visible change yet. The data bridge exposes ONLY public association data + config +
+       the public web3forms key. */ -}}
+{{- $fiscal := site.Data.fiscal }}
+{{- $active := $fiscal.flags.registru163_active }}
+{{- $flowMap := dict "donate-companies" "companies" "donate-individuals" "individuals" }}
+{{- $flow := index $flowMap .Params.translationKey }}
+<header class="page-header">
+  {{- partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{- if .Description }}
+  <div class="post-description">{{ .Description | markdownify }}</div>
+  {{- end }}
+</header>
+
+<article class="post-single donate-generator">
+  <div class="post-content">
+    {{ .Content }}
+
+    {{- if not $active }}
+    <p class="donate-gate" role="note">{{ i18n "donateGateClosed" }}</p>
+    {{- end }}
+
+    {{- /* Flow scripts render the multi-step UI into this container. Hidden until the gate is
+           open AND a flow script activates it (T5/T6). */ -}}
+    <div id="donate-generator" class="donate-generator-app"
+         data-flow="{{ $flow }}" data-active="{{ $active }}" hidden>
+      <div data-step-live aria-live="polite" class="sr-only"></div>
+    </div>
+  </div>
+</article>
+
+<script>
+  // Public data bridge (no PII): association identifiers, fiscal config, public web3forms key.
+  window.oncoDonate = {
+    assoc: {{ site.Data.association | jsonify }},
+    fiscal: {{ site.Data.fiscal | jsonify }},
+    web3formsKey: {{ site.Params.web3formsKey | jsonify }},
+    locale: {{ site.Language.Lang | jsonify }},
+    base: {{ "/donate/js/" | relURL | jsonify }}
+  };
+</script>
+<script>
+  // Lazy bootstrap (DONATIONS.md T4): load the engine on first interaction with the generator,
+  // and pdf-lib only when a flow asks for it. Nothing loads while the container is hidden.
+  (function () {
+    var gen = document.getElementById('donate-generator');
+    if (!gen || !gen.getAttribute('data-flow')) return;
+    var base = window.oncoDonate.base, cache = {};
+    function load(src) {
+      if (cache[src]) return cache[src];
+      cache[src] = new Promise(function (res, rej) {
+        var s = document.createElement('script');
+        s.src = base + src; s.async = true;
+        s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+      return cache[src];
+    }
+    window.oncoLoad = load; // flows call window.oncoLoad('pdf-lib.min.js') before generating
+    var booted = false;
+    function boot() {
+      if (booted) return; booted = true;
+      Promise.all([load('i18n.js'), load('field-maps.js'), load('donate-common.js')])
+        .then(function () { return load('donate-' + gen.getAttribute('data-flow') + '.js'); })
+        .then(function () { if (window.oncoInitFlow) window.oncoInitFlow(gen); })
+        .catch(function () { /* flow not present yet (pre-T5/T6) -- page stays static */ });
+    }
+    ['pointerdown', 'focusin', 'keydown'].forEach(function (ev) {
+      gen.addEventListener(ev, boot);
+    });
+  })();
+</script>
+{{- end }}

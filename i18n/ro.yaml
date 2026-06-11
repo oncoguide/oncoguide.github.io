@@ -81,3 +81,5 @@ donateBankBank: "Banca"
 donateCopy: "Copiază"
 donateCopyIban: "Copiază IBAN"
 donateCopied: "Copiat"
+# Generator gate (DONATIONS.md T4/S10) -- shown while registru163_active is false
+donateGateClosed: "Indisponibil în acest ciclu, până la înscrierea Asociației OncoGuide în Registrul entităților nonprofit (ANAF). Până atunci poți susține proiectul printr-o donație directă prin transfer bancar."

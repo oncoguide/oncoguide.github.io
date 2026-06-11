@@ -914,7 +914,7 @@ two templates matches the recorded values; `hugo` build still clean.
 fill-test reproducible by re-running the script; Appendix A updated if any provisional meaning
 changed; no pushbutton set anywhere.
 ### T4. Document engine + generator shell (no user-visible change until T5)
-Gemini score: 10 (PASS on re-review after revision, 2026-06-11) | Implementation Fable score: --
+Gemini score: 10 (PASS on re-review after revision, 2026-06-11) | Implementation: DONE 2026-06-11 (commit pending push) -- engine verified end-to-end in Node (donate-common.js fillAnafForm fills 230 + 177 correctly incl. OncoGuide overlay + donor CNP/year + sustinere checkbox; validCNP/validCUI/validIBAN correct; NeedAppearances reload-asserted); build clean; generator page renders gate banner + hidden container + data bridge. Implements D6 overlay (page.drawText) in addition to setText. Fable implementation review >9.3 PENDING.
 
 **Create:**
 1. `layouts/donate-generator/single.html` -- renders the markdown body, then: the deadline/gate
