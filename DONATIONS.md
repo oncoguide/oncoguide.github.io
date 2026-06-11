@@ -23,7 +23,8 @@ typographic quotes; use double hyphens and standard quotes).
 | Architecture v5 (S1-S13 + App. A, B) | fresh Fable agent | > 9.2 | 9.0 | FAIL -- revised as v6 | 2026-06-11 |
 | Architecture v6 (S1-S13 + App. A, B) | fresh Fable agent | > 9.2 | **9.4** | **PASS** | 2026-06-11 |
 | Task plan (S14, each task) | Gemini CLI | > 9.1 | T1:9.5 T2:9.2 T3:9.9 T4:10 T5:10 T6:9.8 T7:10 | **ALL PASS** | 2026-06-11 |
-| Implementation | fresh Fable agent | > 9.3 | T1+T2: 9.5 | T1+T2 PASS (commits 4313d7f + 66093a2 on feat/donate-page); T3-T7 pending | 2026-06-11 |
+| Architecture v7 correction (S7 + App. A) | fresh Fable agent | > 9.2 | -- | PENDING RE-REVIEW -- T3 implementation proved the ANAF beneficiary/entity sections have NO fillable fields; OncoGuide data is pre-filled by positioned TEXT OVERLAY on the unchanged original form (as the .private precompletate do). See D6 + the v7 changelog. | 2026-06-11 |
+| Implementation | fresh Fable agent | > 9.3 | T1+T2: 9.5 | T1+T2 PASS (4313d7f + 66093a2). T3 IN PROGRESS: pdf-lib vendored, ANAF originals downloaded + SHA-pinned, fill-test.mjs PASS, field-maps.js with verified fields + overlay coords done; generators (T4-T7) pending. | 2026-06-11 |
 
 v1 -> v2 changelog (from the v1 review, score 7.6): rebased the document engine on the
 **verified** fact that ANAF Forms 177 and 230 are plain AcroForms (no XFA, no validation
@@ -97,6 +98,23 @@ landing is unchanged and still presents all three paths. This only removes conte
 pages (strictly less surface, no new risk) and does not alter any reviewed S7-S13 engine or
 generator decision. See D5 (Section 2) and Section 5.1.
 
+v6 -> v7 correction (2026-06-11, decision D6; discovered during T3 implementation, PENDING a
+fresh-Fable re-review of S7 + Appendix A): the T3 fill-test empirically proved that Appendix A's
+provisional field meanings were wrong and, more importantly, that **the ANAF beneficiary/entity
+sections have NO fillable AcroForm fields**. On Form 230 only `year` + donor `CNP` (+ their
+page-2 mirrors) are fillable text fields; `TextField4[0/1]` are the tax-office "Nr.
+inregistrare/Data" boxes and `TextField2[1]` is the proxy code (all left blank). On Form 177 the
+company's own section I is fillable, but the beneficiary block (where OncoGuide goes) is not.
+OncoGuide's CIF/denumire/IBAN (and the donor's name/address) therefore cannot be set via
+`setText` -- they are pre-filled by a **positioned text overlay** on the unchanged original page,
+exactly how the `.private` precompletate were produced (verified: identical 595.276x841.890 page
+geometry, so overlay coordinates transfer). This honors the owner's hard rule (D6): use the
+standard ANAF form, never change its fields/format, only add values -- in real fields where they
+exist, as a text layer at the form's own positions where they do not. The verified field/checkbox
+inventory and overlay coordinates are in Appendix A and `static/donate/js/field-maps.js`. This
+changes the document engine (T4 must add overlay drawing) and the 230/177 generators (T5/T6
+collect only what maps to a destination; the rest is hand-completed after printing).
+
 ---
 
 ## 1. Goal and Scope
@@ -135,6 +153,7 @@ during implementation without explicit instruction.
 | D3 | Signature | **Simple electronic signature drawn/typed in the browser, embedded ONLY in the sponsorship contract (our document), as a convenience draft. ANAF forms are NEVER signed in the browser** -- the supporter signs the printed Form 230 by hand. | See the qualification below: for the company contract presented to ANAF, the intended legally robust route is print + wet signature (or qualified e-signature) by both parties. The in-browser signature does not by itself guarantee legal sufficiency for that path. |
 | D4 | Anonymity | **Representative legal name appears only inside the generated contract PDF, never on the page or in git.** | The contract template leaves the association signature block blank for offline countersignature. Public association identifiers (name, CIF, IBAN, sediu) may appear -- they are public registry data and required on the documents. |
 | D5 | Non-RO landing scope (added 2026-06-11) | **Non-Romanian landing pages show ONLY the direct-donation (bank transfer) path -- no 20% / 3.5% tax mechanisms, no links to the generators.** | The RO tax mechanisms apply only to Romanian taxpayers; other languages get a clean donation-only page (modeled on daruiesteviata.ro's general support page). Only the RO landing presents all three paths. See Section 5.1. |
+| D6 | ANAF fill mechanism (added 2026-06-11) | **Use the standard ANAF PDFs unchanged; pre-fill values only. Where the form has a real AcroForm field (year, donor CNP on 230; the company's own section on 177), set it; where it has none (OncoGuide's beneficiary/entity block; donor name/address), add a positioned TEXT OVERLAY at the form's own position.** Never rename, move, resize, restyle, or flatten a field. | Verified in T3: the beneficiary/entity sections have no fillable fields. Overlay is exactly how the `.private` precompletate were made and keeps the official layout intact. See the v7 changelog, Section 7, and Appendix A. |
 
 **D3 qualification (important).** Romanian law gives a simple electronic signature full effect
 only under narrow conditions; for documents presented to authorities or third parties a
@@ -335,8 +354,17 @@ pin it). Output: PNG data URL -> `embedPng` -> drawn into the contract's signatu
 
 ### 7.2 Two document kinds, two strategies
 
-- **Official ANAF forms (177, 230):** original PDF is sacred. Set values on the existing named
-  AcroForm fields only (7.3). No new drawing, no flatten.
+- **Official ANAF forms (177, 230):** original PDF is sacred. Pre-fill values only, two
+  mechanisms on the SAME unchanged page (D6, verified in T3): (1) `setText`/`check` on the real
+  AcroForm fields that exist (Form 230: year, donor CNP + page-2 mirrors, the option/consent
+  checkboxes; Form 177: the company's own section I + the "point 1 non-profit beneficiary"
+  checkbox); (2) a positioned **text overlay** (`page.drawText`) for the values the form has no
+  field for -- OncoGuide's beneficiary/entity block (CIF, denumire, IBAN, the 3,5% on 230) and,
+  if collected, the donor's name/address. Overlay coordinates and field names are in
+  `static/donate/js/field-maps.js` (Appendix A). No field is renamed, moved, resized, restyled,
+  or flattened; the overlay only adds a text layer at the form's own positions -- identical to how
+  the `.private` precompletate were produced. OncoGuide's constant data has no diacritics, so a
+  standard Helvetica overlay renders it correctly.
 - **Sponsorship contract (our document):** we own the template. Author it once as a fillable
   PDF (AcroForm) per language, bundle it, set fields + embed signature. The association
   signature block is a blank field, filled offline at countersignature (D4). This keeps the
@@ -1101,6 +1129,38 @@ met.
 Verified on 2026-06-11 by downloading the blank originals from anaf.ro and inspecting them with
 pdf-lib. Re-run this inspection if ANAF publishes a new revision.
 
+> **VERIFIED CORRECTION (T3, 2026-06-11) -- supersedes the provisional per-form tables further
+> below.** The fill-test (`scripts/fill-test.mjs`) + per-checkbox test + `pdftotext` against the
+> `.private` precompletate established the REAL field meanings. Several earlier provisional
+> guesses were wrong (e.g. 230 `TextField4[*]` are the tax-office "Nr. inregistrare/Data" boxes,
+> NOT the donor name; 177 `TextField3[0..9]` are the COMPANY's own address line, NOT a beneficiary
+> table). The authoritative map is `static/donate/js/field-maps.js`. Summary:
+>
+> **Form 230 (OPANAF 103/2025) -- 7 text fields, 8 checkboxes, page H = 841.89.**
+> Fillable text fields we use: `TextField13[0]` = **Anul (year)**, `TextField2[0]` = **donor CNP**
+> (maxLen 13), plus their page-2 mirrors `1.form1[0].#subform[0].TextField13[0]` and
+> `1.form1[0].#subform[0].TextField2[0]`. Left blank: `TextField4[0]` (Nr. inregistrare, organ
+> fiscal), `TextField4[1]` (Data, organ fiscal), `TextField2[1]` (cod fiscal imputernicit, sect.
+> III). Checkboxes: `#field[43]` = "2. Sustinerea unei entitati nonprofit" (**always check**;
+> mirror `1...#field[11]`), `#field[46]` = "Optiune 2 ani" (optional; mirror `1...#field[14]`),
+> `CheckBox1[0]` = data-sharing consent (optional; mirror `1...CheckBox1[0]`), `#field[40]` =
+> "1. Bursa privata" (unused). NO fillable fields for the entity (OncoGuide) block or the donor's
+> name/address -> overlay. Entity overlay (page 0, x, y = 841.89 - yMax): CIF (244.8, 396.99),
+> denumire (180.5, 375.39), IBAN (102.2, 352.35), "3,5" (123.8, 330.27).
+>
+> **Form 177 (OPANAF 3562/2024) -- 21 text fields, 7 checkboxes.** The COMPANY's own section I is
+> fillable: `TextField7[0]`=year, `cif_nr[0]`=RO attr char (maxLen 1), `cif_nr[1]`=company CIF,
+> `TextField2[0]`=company name, `TextField8[0]`=judet, `TextField3[0..6]`=localitate/strada/numar/
+> bloc/scara/ap/cod postal, `TextField3[7..9]`=telefon/fax/email, `TextField8[2..4]`=the three
+> sums. Checkbox `#field[2]` = "1. Sponsorizare catre entitati ... fara scop lucrativ" (**always
+> check**). The beneficiary (OncoGuide) block has NO fields -> overlay (page 0, x, y = 841.89 -
+> yMax): denumire (120.96, 310.11), CIF (126.72, 286.11), strada (63.36, 263.55), numar
+> (355.2, 263.55), bloc (411.84, 263.55), etaj (512.64, 263.55), ap (552.0, 263.55), localitate
+> (71.04, 239.07), judet (351.36, 239.07), cod postal (510.24, 239.07), IBAN (250.56, 215.27).
+> The beneficiary `Suma de redirectionat` (company's amount) overlays on the IBAN line; its x is
+> finalized in T6. Overlay text values come from `data/association.yaml` (note: `address_parts`
+> was added there for the 177 cell-split address).
+
 **Common facts (both forms):** plain AcroForm; `/AcroForm` present; **no `/XFA`**; **no
 `NeedsRendering`**; **no client-generated 2D validation barcode**. pdf-lib `setText` / `check`
 work. Field names use LiveCycle-style hierarchical paths (`form1[0].#subform[0]....`).
@@ -1115,7 +1175,7 @@ object streams, so searching the saved bytes for `NeedAppearances` -- or even fo
 returns false. This is expected, not a defect. Assert the flag by reloading and calling
 `getForm().acroForm.dict.has(PDFName.of('NeedAppearances'))` (7.3.5).
 
-### Form 230 -- OPANAF 103/2025 (individuals, 3.5%)
+### Form 230 -- OPANAF 103/2025 (individuals, 3.5%) [PROVISIONAL -- superseded by the VERIFIED CORRECTION box above]
 7 text fields, 8 checkboxes. Page 1 holds the 5 base text fields; page 2 carries a PARTIAL
 mirror (prefix `1.`) of only 2 of them. The mirror pairs are exactly: `TextField2[0]` (CNP) ->
 `1.form1[0].#subform[0].TextField2[0]`, and `TextField13[0]` ->

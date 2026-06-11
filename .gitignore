@@ -94,3 +94,8 @@ data/*
 !data/association.yaml
 !data/fiscal.yaml
 logs/
+
+# Donation flow: throwaway PDF-inspection scripts (DONATIONS.md T3 discovery; not deliverables)
+# and npm deps (pdf-lib is vendored into static/donate/js for the browser).
+scripts/dev/
+node_modules/

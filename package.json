@@ -4,9 +4,10 @@
   "description": "Node tooling for the donation document flows (audit, fill-test). Not part of the Hugo site.",
   "type": "module",
   "scripts": {
-    "audit": "node scripts/audit-contract-template.mjs"
+    "audit": "node scripts/audit-contract-template.mjs",
+    "fill-test": "node scripts/fill-test.mjs"
   },
   "devDependencies": {
-    "pdf-lib": "^1.17.1"
+    "pdf-lib": "1.17.1"
   }
 }

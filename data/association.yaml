@@ -6,6 +6,18 @@ cif: "54791907"
 registry_no: "72 / 22.05.2026"
 registry_court: "Judecatoria Sectorului 2 Bucuresti"
 address: "Str. Fecioarei nr. 15, Corp C1, et. 1, ap. 1, Sector 2, Bucuresti, 020103"
+# Structured components of the address above, needed to overlay OncoGuide into the ANAF Form 177
+# beneficiary cells (DONATIONS.md App. A / field-maps.js f177.overlay). Public data; no PII.
+address_parts:
+  strada: "Fecioarei"
+  numar: "15"
+  bloc: "C1"
+  scara: ""
+  etaj: "1"
+  ap: "1"
+  localitate: "Bucuresti"
+  judet: "Sector 2"
+  cod_postal: "020103"
 iban: "RO91 RNCB 0280 1861 0767 0001"
 bank: "Banca Comerciala Romana (BCR)"
 bic: "RNCBROBU"
