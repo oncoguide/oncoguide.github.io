@@ -2,7 +2,7 @@
 title: "Sponsorizare pentru firme: redirecționează până la 20% din impozit"
 translationKey: "donate-companies"
 type: "donate-generator"
-description: "Firma ta poate redirectiona pana la 20% din impozitul pe profit catre OncoGuide. Contract generat automat, formular 177 precompletat. Ghid pas cu pas."
+description: "Firma ta poate redirecționa până la 20% din impozitul pe profit către OncoGuide. Contract generat automat, formular 177 precompletat. Ghid pas cu pas."
 summary: "Sponsorizare și redirecționare prin formularul 177, explicate pas cu pas"
 ShowToc: true
 ---

@@ -23,7 +23,7 @@ typographic quotes; use double hyphens and standard quotes).
 | Architecture v5 (S1-S13 + App. A, B) | fresh Fable agent | > 9.2 | 9.0 | FAIL -- revised as v6 | 2026-06-11 |
 | Architecture v6 (S1-S13 + App. A, B) | fresh Fable agent | > 9.2 | **9.4** | **PASS** | 2026-06-11 |
 | Task plan (S14, each task) | Gemini CLI | > 9.1 | T1:9.5 T2:9.2 T3:9.9 T4:10 T5:10 T6:9.8 T7:10 | **ALL PASS** | 2026-06-11 |
-| Implementation | fresh Fable agent | > 9.3 | -- | not started | -- |
+| Implementation | fresh Fable agent | > 9.3 | T1+T2: 9.5 | T1+T2 PASS (commits 4313d7f + 66093a2 on feat/donate-page); T3-T7 pending | 2026-06-11 |
 
 v1 -> v2 changelog (from the v1 review, score 7.6): rebased the document engine on the
 **verified** fact that ANAF Forms 177 and 230 are plain AcroForms (no XFA, no validation
@@ -729,7 +729,7 @@ reviewed by a fresh Fable agent (> 9.3/10).
 > implementation needs fresh-Fable > 9.3.
 
 ### T1. Data + config foundation
-Gemini score: 9.5 (PASS, 2026-06-11; noted defects fixed in-place) | Implementation Fable score: --
+Gemini score: 9.5 (PASS, 2026-06-11; noted defects fixed in-place) | Implementation Fable score: 9.5 (PASS, 2026-06-11, round 2 -- round 1 was 8.4 with 4 blocking fixes applied)
 
 **Create:**
 1. `data/association.yaml` -- exactly the Section 9.1 block (including `email:` and empty
@@ -787,7 +787,7 @@ warning only); staged-file commit dry-run passes the hook.
 (menu item appears but `/donate/` 404s until T2 -- acceptable on the feature branch, NOT
 acceptable to merge to main until T2 lands; do T1+T2 in one PR).
 ### T2. Landing + privacy + stubs (same PR as T1)
-Gemini score: 9.2 (PASS, 2026-06-11; noted defects fixed in-place) | Implementation Fable score: --
+Gemini score: 9.2 (PASS, 2026-06-11; noted defects fixed in-place) | Implementation Fable score: 9.5 (PASS, 2026-06-11, reviewed together with T1)
 
 **Create:**
 1. `content/{en,ro,it,fr,de,es}/donate/_index.md` -- front matter: `title` (localized),

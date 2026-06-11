@@ -3,7 +3,7 @@ title: "Confidențialitatea donatorilor"
 translationKey: "donate-privacy"
 layout: "page"
 slug: "confidentialitatea-donatorilor"
-description: "Cum sunt protejate datele tale cand sustii OncoGuide: procesare exclusiv in browser, fara stocare pe servere, copie trimisa doar cu acordul tau explicit."
+description: "Cum sunt protejate datele tale când susții OncoGuide: procesare exclusiv în browser, fără stocare pe servere, copie trimisă doar cu acordul tău explicit."
 ShowToc: true
 ---
 
