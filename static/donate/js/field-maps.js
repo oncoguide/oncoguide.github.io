@@ -21,6 +21,9 @@
 (function (root) {
   'use strict';
 
+  // Page height for the OVERLAY pages only (form page 0/1 = A4, 595.276 x 841.890).
+  // Note: pages 3+ of both PDFs are US Letter (612 x 792); never reuse PAGE_H there. All overlay
+  // entries below target page 0, so PAGE_H is correct for every entry in this file.
   var PAGE_H = 841.89;
 
   var FIELD_MAPS = {
@@ -109,6 +112,7 @@
         { page: 0, x: 63.36,  y: PAGE_H - 578.343, size: 9, src: 'assoc.address_parts.strada' }, // Strada
         { page: 0, x: 355.20, y: PAGE_H - 578.343, size: 9, src: 'assoc.address_parts.numar' },
         { page: 0, x: 411.84, y: PAGE_H - 578.343, size: 9, src: 'assoc.address_parts.bloc' },
+        { page: 0, x: 465.0,  y: PAGE_H - 578.343, size: 9, src: 'assoc.address_parts.scara' }, // empty for OncoGuide -> draws nothing; entry kept so the map matches the form
         { page: 0, x: 512.64, y: PAGE_H - 578.343, size: 9, src: 'assoc.address_parts.etaj' },
         { page: 0, x: 552.00, y: PAGE_H - 578.343, size: 9, src: 'assoc.address_parts.ap' },
         { page: 0, x: 71.04,  y: PAGE_H - 602.823, size: 9, src: 'assoc.address_parts.localitate' },

@@ -23,7 +23,7 @@ typographic quotes; use double hyphens and standard quotes).
 | Architecture v5 (S1-S13 + App. A, B) | fresh Fable agent | > 9.2 | 9.0 | FAIL -- revised as v6 | 2026-06-11 |
 | Architecture v6 (S1-S13 + App. A, B) | fresh Fable agent | > 9.2 | **9.4** | **PASS** | 2026-06-11 |
 | Task plan (S14, each task) | Gemini CLI | > 9.1 | T1:9.5 T2:9.2 T3:9.9 T4:10 T5:10 T6:9.8 T7:10 | **ALL PASS** | 2026-06-11 |
-| Architecture v7 correction (S7 + App. A) | fresh Fable agent | > 9.2 | -- | PENDING RE-REVIEW -- T3 implementation proved the ANAF beneficiary/entity sections have NO fillable fields; OncoGuide data is pre-filled by positioned TEXT OVERLAY on the unchanged original form (as the .private precompletate do). See D6 + the v7 changelog. | 2026-06-11 |
+| Architecture v7 correction (S7 + App. A) | fresh Fable agent | > 9.2 | **9.4** | **PASS** -- T3 fill-test proved the ANAF beneficiary/entity sections have NO fillable fields; OncoGuide data pre-filled by positioned TEXT OVERLAY on the unchanged original (verified: 0/66 + 0/101 fields moved, coords match precompletate to the decimal, overlay text is pure ASCII). 4 non-blocking polish items (scara entry, 230 page-2 policy, 177 amount row, PAGE_H scope) noted. See D6. | 2026-06-11 |
 | Implementation | fresh Fable agent | > 9.3 | T1+T2: 9.5 | T1+T2 PASS (4313d7f + 66093a2). T3 IN PROGRESS: pdf-lib vendored, ANAF originals downloaded + SHA-pinned, fill-test.mjs PASS, field-maps.js with verified fields + overlay coords done; generators (T4-T7) pending. | 2026-06-11 |
 
 v1 -> v2 changelog (from the v1 review, score 7.6): rebased the document engine on the
