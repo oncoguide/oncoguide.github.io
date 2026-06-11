@@ -2,7 +2,7 @@
 title: "Redirect 3.5% of your income tax (Romanian employees)"
 translationKey: "donate-individuals"
 layout: "page"
-description: "This tax mechanism applies to employees paying income tax in Romania: they can redirect 3.5% of their already-paid tax to OncoGuide via Form 230, at zero p"
+description: "Romanian employees can redirect 3.5% of their already-paid income tax to OncoGuide via Form 230, at zero personal cost. Guide on the Romanian page."
 ShowToc: false
 ---
 

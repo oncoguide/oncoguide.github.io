@@ -2,11 +2,11 @@
 title: "Redirezione del 3,5% (dipendenti rumeni)"
 translationKey: "donate-individuals"
 layout: "page"
-description: "Questo meccanismo fiscale riguarda i dipendenti che pagano l'imposta sul reddito in Romania: possono redirigere il 3,5% dell'imposta gia' versata a OncoGui"
+description: "I dipendenti rumeni possono redirigere il 3,5% dell'imposta sul reddito già versata a OncoGuide tramite il modulo 230, a costo zero. Guida in rumeno."
 ShowToc: false
 ---
 
-Questo meccanismo fiscale riguarda i dipendenti che pagano l'imposta sul reddito in Romania: possono redirigere il 3,5% dell'imposta gia' versata a OncoGuide tramite il modulo 230, a costo zero.
+Questo meccanismo fiscale riguarda i dipendenti che pagano l'imposta sul reddito in Romania: possono redirigere il 3,5% dell'imposta già versata a OncoGuide tramite il modulo 230, a costo zero.
 
 La guida passo passo e la precompilazione automatica del modulo sono disponibili sulla pagina in rumeno:
 

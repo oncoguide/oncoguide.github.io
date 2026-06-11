@@ -33,7 +33,7 @@ Romanian employees can redirect **3.5% of their already-paid income tax** via Fo
 </ul>
 
 {{< callout type="important" >}}
-**Status of the tax mechanisms:** deductible sponsorships and the 3.5% redirection become available once Asociatia OncoGuide is listed in the Romanian tax authority's non-profit registry (in progress). Direct donations are possible right now.
+**Status of the tax mechanisms:** deductible sponsorships and the 3.5% redirection become available once Asociatia OncoGuide is listed in the non-profit registry of the Romanian tax authority ([ANAF](https://www.anaf.ro/)) -- registration in progress. Direct donations are possible right now. Both mechanisms are set out in the [Romanian sponsorship law, Legea 32/1994](https://legislatie.just.ro/Public/DetaliiDocument/4399).
 {{< /callout >}}
 
 ## Direct donation by bank transfer

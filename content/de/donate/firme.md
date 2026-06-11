@@ -1,19 +1,19 @@
 ---
-title: "Sponsoring fuer Firmen (rumaenische Steuerzahler)"
+title: "Sponsoring für Firmen (rumänische Steuerzahler)"
 translationKey: "donate-companies"
 layout: "page"
-description: "Dieser Steuermechanismus gilt fuer Firmen mit Gewinnsteuer in Rumaenien: sie koennen bis zu 20% ihrer Steuer ueber einen Sponsoringvertrag an OncoGuide uml"
+description: "Rumänische Firmen mit Gewinnsteuer können bis zu 20% davon über einen Sponsoringvertrag an OncoGuide umleiten. Die Anleitung gibt es auf der rumänischen Seite."
 ShowToc: false
 ---
 
-Dieser Steuermechanismus gilt fuer Firmen mit Gewinnsteuer in Rumaenien: sie koennen bis zu 20% ihrer Steuer ueber einen Sponsoringvertrag an OncoGuide umleiten.
+Dieser Steuermechanismus gilt für Firmen mit Gewinnsteuer in Rumänien: Sie können bis zu 20% ihrer Steuer über einen Sponsoringvertrag an OncoGuide umleiten.
 
-Die Schritt-fuer-Schritt-Anleitung und der automatische Vertragsgenerator sind auf der rumaenischen Seite verfuegbar:
+Die Schritt-für-Schritt-Anleitung und der automatische Vertragsgenerator sind auf der rumänischen Seite verfügbar:
 
-- [Rumaenische Firmenseite oeffnen]({{< relref path="/donate/firme" lang="ro" >}})
+- [Rumänische Firmenseite öffnen]({{< relref path="/donate/firme" lang="ro" >}})
 
-Keine rumaenische Firma? Du kannst uns trotzdem mit einer Direktspende unterstuetzen, aus jedem Land:
+Keine rumänische Firma? Sie können uns trotzdem mit einer Direktspende unterstützen, aus jedem Land:
 
-- [Zurueck zur Spendenseite]({{< relref "/donate" >}})
+- [Zurück zur Spendenseite]({{< relref "/donate" >}})
 
 {{< disclaimer >}}{{< /disclaimer >}}

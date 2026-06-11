@@ -9,6 +9,20 @@
 # data lives only in the gitignored .private/ folder. Nothing personal may leak
 # into the public repo.
 
+# --- Identity guard ---
+# This repo must always commit under the anonymous association identity
+# (it will be transferred to the non-profit). Never a personal identity.
+EXPECTED_EMAIL="nog.opt.3o@icloud.com"  # nosec -- public relay address
+EXPECTED_NAME="oncoguide-admin"
+ACTUAL_EMAIL="$(git config user.email)"
+ACTUAL_NAME="$(git config user.name)"
+if [ "$ACTUAL_EMAIL" != "$EXPECTED_EMAIL" ] || [ "$ACTUAL_NAME" != "$EXPECTED_NAME" ]; then
+    echo "ERROR: commits must use $EXPECTED_NAME <$EXPECTED_EMAIL>"
+    echo "       current: $ACTUAL_NAME <$ACTUAL_EMAIL>"
+    echo "       fix: git config user.name $EXPECTED_NAME && git config user.email $EXPECTED_EMAIL"
+    exit 1
+fi
+
 STAGED=$(git diff --cached --name-only 2>/dev/null)
 if [ -z "$STAGED" ]; then
     exit 0

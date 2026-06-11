@@ -38,14 +38,14 @@ Salariații pot redirecționa **3,5% din impozitul pe venit** deja plătit, prin
 </ul>
 
 {{< callout type="important" >}}
-**Statusul mecanismelor fiscale:** sponsorizările deductibile și redirecționarea de 3,5% devin disponibile după înscrierea Asociației OncoGuide în Registrul entităților nonprofit ANAF (în curs). Donațiile directe sunt posibile oricând, de pe acum. Paginile dedicate explică fiecare mecanism pas cu pas.
+**Statusul mecanismelor fiscale:** sponsorizările deductibile și redirecționarea de 3,5% devin disponibile după înscrierea Asociației OncoGuide în Registrul entităților nonprofit [ANAF](https://www.anaf.ro/) (în curs). Donațiile directe sunt posibile oricând, de pe acum. Paginile dedicate explică fiecare mecanism pas cu pas.
 {{< /callout >}}
 
-## Donație directă prin transfer bancar
+## Donație directă prin transfer bancar {#donatie-directa-prin-transfer-bancar}
 
 Cea mai simplă cale, disponibilă oricui -- persoană sau firmă, din România sau din străinătate. Datele contului sunt mai jos; tabelul de sub această secțiune se completează automat cu datele oficiale ale asociației.
 
-**De știut:** donația simplă nu îți oferă beneficii fiscale. Dacă ești firmă sau salariat în România, variantele de mai sus te costă efectiv zero, pentru că redirecționezi bani deja datorați statului.
+**De știut:** donația simplă nu îți oferă beneficii fiscale. Dacă ești firmă sau salariat în România, variantele de mai sus te costă efectiv zero, pentru că redirecționezi bani deja datorați statului (mecanism prevăzut de [Legea 32/1994 privind sponsorizarea](https://legislatie.just.ro/Public/DetaliiDocument/4399)).
 
 ## Unde se duc banii
 

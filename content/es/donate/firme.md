@@ -2,18 +2,18 @@
 title: "Patrocinio para empresas (contribuyentes rumanos)"
 translationKey: "donate-companies"
 layout: "page"
-description: "Este mecanismo fiscal aplica a las empresas que pagan impuesto sobre beneficios en Rumania: pueden redirigir hasta el 20% de su impuesto a OncoGuide median"
+description: "Las empresas rumanas sujetas al impuesto sobre beneficios pueden redirigir hasta el 20% a OncoGuide mediante un contrato de patrocinio. Guía en rumano."
 ShowToc: false
 ---
 
-Este mecanismo fiscal aplica a las empresas que pagan impuesto sobre beneficios en Rumania: pueden redirigir hasta el 20% de su impuesto a OncoGuide mediante un contrato de patrocinio.
+Este mecanismo fiscal aplica a las empresas que pagan impuesto sobre beneficios en Rumanía: pueden redirigir hasta el 20% de su impuesto a OncoGuide mediante un contrato de patrocinio.
 
-La guia paso a paso y el generador automatico del contrato estan disponibles en la pagina en rumano:
+La guía paso a paso y el generador automático del contrato están disponibles en la página en rumano:
 
-- [Abrir la pagina rumana para empresas]({{< relref path="/donate/firme" lang="ro" >}})
+- [Abrir la página rumana para empresas]({{< relref path="/donate/firme" lang="ro" >}})
 
-No eres una empresa rumana? Puedes apoyarnos con una donacion directa, disponible desde cualquier pais:
+¿No eres una empresa rumana? Puedes apoyarnos con una donación directa, disponible desde cualquier país:
 
-- [Volver a la pagina de donaciones]({{< relref "/donate" >}})
+- [Volver a la página de donaciones]({{< relref "/donate" >}})
 
 {{< disclaimer >}}{{< /disclaimer >}}

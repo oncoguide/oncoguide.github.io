@@ -23,13 +23,13 @@ Dopo la generazione di un documento, offriamo l'opzione di inviarci una copia vi
 - parte **dal tuo client di posta**, direttamente all'indirizzo dell'associazione -- il documento non passa per nessun altro servizio;
 - rende l'associazione titolare, ai sensi del GDPR, dei dati contenuti nella copia ricevuta.
 
-Le copie ricevute sono conservate nell'archivio privato dell'associazione, esclusivamente per la contabilita' delle donazioni e i relativi obblighi legali. Non sono condivise con nessuno.
+Le copie ricevute sono conservate nell'archivio privato dell'associazione, esclusivamente per la contabilità delle donazioni e i relativi obblighi legali. Non sono condivise con nessuno.
 
 ## La notifica senza dati personali
 
-Solo quando invii una copia, la pagina puo' mandare una notifica tecnica minima all'associazione: tipo di documento, lingua della pagina e momento della generazione. **Questa notifica non contiene alcun dato personale** -- niente nomi, importi o CNP.
+Solo quando invii una copia, la pagina può mandare una notifica tecnica minima all'associazione: tipo di documento, lingua della pagina e momento della generazione. **Questa notifica non contiene alcun dato personale** -- niente nomi, importi o CNP.
 
-La notifica passa per web3forms (lo stesso servizio del nostro modulo di contatto), su server negli USA, che puo' conservare il messaggio fino a circa 30 giorni, con log cancellati periodicamente (circa ogni 2 mesi), secondo la loro documentazione. Poiche' il messaggio non contiene dati personali, questo trasferimento non riguarda i tuoi dati.
+La notifica passa per web3forms (lo stesso servizio del nostro modulo di contatto), su server negli USA, che può conservare il messaggio fino a circa 30 giorni, con log cancellati periodicamente (circa ogni 2 mesi), secondo la loro documentazione. Poiché il messaggio non contiene dati personali, questo trasferimento non riguarda i tuoi dati.
 
 ## I tuoi diritti
 

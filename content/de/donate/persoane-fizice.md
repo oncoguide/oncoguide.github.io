@@ -1,19 +1,19 @@
 ---
-title: "3,5% der Einkommensteuer umleiten (rumaenische Angestellte)"
+title: "3,5% der Einkommensteuer umleiten (rumänische Angestellte)"
 translationKey: "donate-individuals"
 layout: "page"
-description: "Dieser Steuermechanismus gilt fuer Angestellte mit Einkommensteuer in Rumaenien: sie koennen 3,5% der bereits gezahlten Steuer per Formular 230 an OncoGuid"
+description: "Rumänische Angestellte können 3,5% der bereits gezahlten Einkommensteuer per Formular 230 an OncoGuide umleiten, ohne Kosten. Anleitung auf Rumänisch."
 ShowToc: false
 ---
 
-Dieser Steuermechanismus gilt fuer Angestellte mit Einkommensteuer in Rumaenien: sie koennen 3,5% der bereits gezahlten Steuer per Formular 230 an OncoGuide umleiten, ohne Kosten.
+Dieser Steuermechanismus gilt für Angestellte mit Einkommensteuer in Rumänien: Sie können 3,5% der bereits gezahlten Steuer per Formular 230 an OncoGuide umleiten, ohne Kosten.
 
-Die Schritt-fuer-Schritt-Anleitung und das automatische Vorbefuellen des Formulars sind auf der rumaenischen Seite verfuegbar:
+Die Schritt-für-Schritt-Anleitung und das automatische Vorbefüllen des Formulars sind auf der rumänischen Seite verfügbar:
 
-- [Rumaenische Seite fuer Privatpersonen oeffnen]({{< relref path="/donate/persoane-fizice" lang="ro" >}})
+- [Rumänische Seite für Privatpersonen öffnen]({{< relref path="/donate/persoane-fizice" lang="ro" >}})
 
-Kein rumaenischer Steuerzahler? Du kannst uns trotzdem mit einer Direktspende unterstuetzen:
+Kein rumänischer Steuerzahler? Sie können uns trotzdem mit einer Direktspende unterstützen:
 
-- [Zurueck zur Spendenseite]({{< relref "/donate" >}})
+- [Zurück zur Spendenseite]({{< relref "/donate" >}})
 
 {{< disclaimer >}}{{< /disclaimer >}}

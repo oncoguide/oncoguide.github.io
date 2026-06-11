@@ -2,7 +2,7 @@
 title: "Sponsorship for companies (Romanian taxpayers)"
 translationKey: "donate-companies"
 layout: "page"
-description: "This tax mechanism applies to companies paying profit tax in Romania: they can redirect up to 20% of their profit tax to OncoGuide through a sponsorship co"
+description: "Romanian companies paying profit tax can redirect up to 20% of it to OncoGuide via a sponsorship contract. Step-by-step guide on the Romanian page."
 ShowToc: false
 ---
 

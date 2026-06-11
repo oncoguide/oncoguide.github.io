@@ -2,7 +2,7 @@
 title: "Sponsorizzazione per aziende (contribuenti rumeni)"
 translationKey: "donate-companies"
 layout: "page"
-description: "Questo meccanismo fiscale riguarda le aziende che pagano l'imposta sugli utili in Romania: possono redirigere fino al 20% dell'imposta a OncoGuide tramite "
+description: "Le aziende rumene soggette all'imposta sugli utili possono redirigerne fino al 20% a OncoGuide con un contratto di sponsorizzazione. Guida in rumeno."
 ShowToc: false
 ---
 
