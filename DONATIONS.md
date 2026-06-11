@@ -90,6 +90,13 @@ pushbutton + `setImage` (App. B); consent checkbox placement aligned to step 5 (
 moved to T1, generator layout to T4, accountant checklist (incl. the OUG 153/2020 deadline
 question) to T6 (S14).
 
+Post-T2 owner refinement (2026-06-11, decision D5): the five non-Romanian landing pages were
+reduced to direct-donation-only (removed the "Romanian taxpayers: two options" section, the tax
+status callout, and the generator links from en/it/fr/de/es `donate/_index.md`). The Romanian
+landing is unchanged and still presents all three paths. This only removes content from non-RO
+pages (strictly less surface, no new risk) and does not alter any reviewed S7-S13 engine or
+generator decision. See D5 (Section 2) and Section 5.1.
+
 ---
 
 ## 1. Goal and Scope
@@ -127,6 +134,7 @@ during implementation without explicit instruction.
 | D2 | Source of truth | **Email to association -> archived in `.private/finantare/arhiva/` + a private Google Drive folder.** | `registru-donatii.md` is the manual index. No PII in git, ever. |
 | D3 | Signature | **Simple electronic signature drawn/typed in the browser, embedded ONLY in the sponsorship contract (our document), as a convenience draft. ANAF forms are NEVER signed in the browser** -- the supporter signs the printed Form 230 by hand. | See the qualification below: for the company contract presented to ANAF, the intended legally robust route is print + wet signature (or qualified e-signature) by both parties. The in-browser signature does not by itself guarantee legal sufficiency for that path. |
 | D4 | Anonymity | **Representative legal name appears only inside the generated contract PDF, never on the page or in git.** | The contract template leaves the association signature block blank for offline countersignature. Public association identifiers (name, CIF, IBAN, sediu) may appear -- they are public registry data and required on the documents. |
+| D5 | Non-RO landing scope (added 2026-06-11) | **Non-Romanian landing pages show ONLY the direct-donation (bank transfer) path -- no 20% / 3.5% tax mechanisms, no links to the generators.** | The RO tax mechanisms apply only to Romanian taxpayers; other languages get a clean donation-only page (modeled on daruiesteviata.ro's general support page). Only the RO landing presents all three paths. See Section 5.1. |
 
 **D3 qualification (important).** Romanian law gives a simple electronic signature full effect
 only under narrow conditions; for documents presented to authorities or third parties a
@@ -246,9 +254,14 @@ internal links must then use `GetPage`/`relref` by logical path, never hard-code
 (or equivalent data attributes). The flow scripts read `window.oncoDonate`; they never fetch
 YAML at runtime and never duplicate association data as JS literals.
 
-The landing page exists in all 6 languages for menu consistency and SEO. In non-Romanian
-languages it presents the universal direct-donation path prominently and explains that the
-3.5% / 20% tax mechanisms apply to Romanian taxpayers.
+The landing page exists in all 6 languages for menu consistency and SEO. **In non-Romanian
+languages it presents ONLY the universal direct-donation path (bank transfer).** The Romanian
+tax mechanisms (company sponsorship 20% / individual redirect 3.5%) are NOT shown or linked on
+the non-RO landing pages -- those mechanisms apply only to Romanian taxpayers, and the owner
+chose a clean donation-only page for other languages (D5, modeled on daruiesteviata.ro's
+general "support us" page). Only the Romanian landing shows the three paths. The localized
+generator stubs still exist (so the language switcher on the Romanian generator pages never
+breaks), but they are not promoted from the non-RO landing.
 
 **Non-Romanian visitor behavior on the generator routes (defined, not deferred).** Because
 `hugo.yaml` uses `defaultContentLanguageInSubdir: true` and per-language `contentDir`, a missing
