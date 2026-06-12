@@ -724,7 +724,7 @@ static/donate/templates/form-230-original.pdf          # blank ANAF original (Ap
 static/donate/templates/form-177-original.pdf          # blank ANAF original (App. A)
 static/donate/templates/sponsorship-contract-ro.pdf    # our AcroForm template (RO; App. B)
 scripts/audit-contract-template.mjs                    # anonymity audit, wired into pre-commit (S12)
-static/donate/js/pdf-lib.min.js        # vendored, pinned (version + SHA-256)
+static/donate/js/pdf-lib.min.js        # vendored pdf-lib 1.17.1, SHA-256 0f9a5cad07941f0826586c94e089d89b918c46e5c17cf2d5a3c6f666e3bc694f
 static/donate/js/signature.js          # canvas signature helper
 static/donate/js/field-maps.js         # ANAF field name -> meaning (names only; no PII)
 static/donate/js/i18n.js               # JS UI strings per locale
@@ -938,7 +938,7 @@ Gemini score: 10 (PASS on re-review after revision, 2026-06-11) | Implementation
    13 digits + checksum, CUI format, IBAN mod-97, maxLength from field-maps), `downloadPdf
    (bytes, filename)` via Blob/objectURL (7.5), `buildMailto(subject, shortBody)` under 300
    chars (7.5), `sendPing(type, locale)` -- POST to web3forms with ONLY
-   `{access_key, subject, type, locale, timestamp}` fired exclusively inside the send-copy
+   `{access_key, subject, type, locale}` (no client timestamp -- S11) fired exclusively inside the send-copy
    click handler (11), and the GDPR consent gate (12: send-copy controls stay disabled until
    the consent checkbox is checked).
 3. `static/donate/js/i18n.js` -- UI strings keyed per locale; RO complete now, other locales

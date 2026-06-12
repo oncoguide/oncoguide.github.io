@@ -36,13 +36,17 @@
 
 <script>
   // Public data bridge (no PII): association identifiers, fiscal config, public web3forms key.
-  window.oncoDonate = {
-    assoc: {{ site.Data.association | jsonify }},
-    fiscal: {{ site.Data.fiscal | jsonify }},
-    web3formsKey: {{ site.Params.web3formsKey | jsonify }},
-    locale: {{ site.Language.Lang | jsonify }},
-    base: {{ "/donate/js/" | relURL | jsonify }}
-  };
+  // MUST be one dict piped through `jsonify | safeJS` (spec S5.1): without safeJS, Hugo's
+  // JS-context auto-escaping double-encodes each value into a quoted string, which silently
+  // kills the whole generator (base gets literal quotes -> every script load 404s). Caught by
+  // the T4-T6 implementation review; regression-guarded by scripts/dev/bridge-check.mjs.
+  window.oncoDonate = {{ dict
+    "assoc" site.Data.association
+    "fiscal" site.Data.fiscal
+    "web3formsKey" site.Params.web3formsKey
+    "locale" site.Language.Lang
+    "base" ("/donate/js/" | relURL)
+    | jsonify | safeJS }};
 </script>
 <script>
   // Lazy bootstrap (DONATIONS.md T4, trigger fixed after the T5/T6 verification round): the

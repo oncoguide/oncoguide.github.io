@@ -1,6 +1,10 @@
 /* field-maps.js -- DONATIONS.md T3. VERIFIED 2026-06-11 against the blank ANAF originals and
  * the .private precompletate (same page geometry: 595.276 x 841.890).
  *
+ * Vendored engine: pdf-lib 1.17.1 (static/donate/js/pdf-lib.min.js,
+ * SHA-256 0f9a5cad07941f0826586c94e089d89b918c46e5c17cf2d5a3c6f666e3bc694f) -- same exact
+ * version pinned in package.json for the Node-side scripts (audit, fill-test, template build).
+ *
  * IMPORTANT FINDING (corrects Appendix A): ANAF Forms 230 and 177 are plain AcroForms, but the
  * BENEFICIARY/ENTITY sections (where OncoGuide's data goes) have NO fillable fields -- they are
  * comb-cell pushbuttons / plain print regions. So pre-filling OncoGuide's data is done by a
