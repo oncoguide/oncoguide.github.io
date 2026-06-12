@@ -31,6 +31,16 @@ When you send a copy (and only then), the page may send a minimal technical noti
 
 The notification goes through web3forms (the service also used by our contact form), which runs on US-based servers and may keep the message for up to about 30 days, with server logs purged periodically (about every 2 months), per their documentation. Since the message contains no personal data, this transfer does not involve your data.
 
+## Form 230 sent by post -- we file it with ANAF for you
+
+If you choose the simplest route -- mailing us the signed paper original of Form 230 -- the association takes it from there, per the official procedure ([ANAF Order 103/2025](https://legislatie.just.ro/Public/DetaliiDocumentAfis/293937)):
+
+- we transmit to ANAF, electronically, the centralizing statement with the form's data (name, personal identification number, amount) by the legal deadline of 25 May -- the association's legal obligation as beneficiary entity;
+- we keep the paper original, to present it to the tax authority on request, for as long as the law requires;
+- your data is used **exclusively** for this filing and the legally required records: it is not entered into other systems, not shared with anyone besides ANAF, and not used for any other purpose.
+
+Legal basis: the beneficiary entity's legal obligation under the ANAF procedure, triggered by your choice to send us the form. For any question about your form, write to us via the [contact page]({{< relref "/contact" >}}).
+
 ## Your rights
 
 For any request about your data (access, rectification, deletion of a sent copy), write to us via the [contact page]({{< relref "/contact" >}}). We answer every message.

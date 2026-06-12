@@ -31,6 +31,16 @@ Tot la trimiterea copiei (și doar atunci), pagina poate trimite o notificare te
 
 Notificarea trece prin serviciul web3forms (folosit și de formularul nostru de contact), care rulează pe servere din SUA și poate păstra mesajul până la aproximativ 30 de zile, cu jurnale de server șterse periodic (aproximativ la 2 luni), conform documentației lor. Deoarece mesajul nu conține date personale, acest transfer nu implică datele tale.
 
+## Formularul 230 trimis prin poștă -- depunem noi la ANAF
+
+Dacă alegi varianta cea mai simplă -- ne trimiți prin poștă originalul semnat al formularului 230 -- asociația îl preia de acolo, conform procedurii oficiale ([Ordinul ANAF 103/2025](https://legislatie.just.ro/Public/DetaliiDocumentAfis/293937)):
+
+- transmitem la ANAF, electronic, situația centralizatoare cu datele din formular (nume, CNP, sumă) până la termenul legal de 25 mai -- obligația legală a asociației ca entitate beneficiară;
+- păstrăm originalul pe hârtie, pentru a-l prezenta organului fiscal la cerere, atât timp cât cere legea;
+- datele tale sunt folosite **exclusiv** pentru această depunere și pentru evidența cerută de lege: nu sunt introduse în alte sisteme, nu sunt partajate cu nimeni în afara ANAF, nu sunt folosite în niciun alt scop.
+
+Temeiul prelucrării: obligația legală a entității beneficiare din procedura ANAF, declanșată de alegerea ta de a ne trimite formularul. Pentru orice întrebare despre formularul tău, scrie-ne prin [pagina de contact]({{< relref "/contact" >}}).
+
 ## Drepturile tale
 
 Pentru orice solicitare legată de datele tale (acces, rectificare, ștergere a copiei trimise), scrie-ne prin [pagina de contact]({{< relref "/contact" >}}). Răspundem la fiecare mesaj.
@@ -43,5 +53,6 @@ Pentru orice solicitare legată de datele tale (acces, rectificare, ștergere a 
 | Documentele generate (contract, formular 230) | Descărcate pe dispozitivul tău |
 | Copia către asociație | Doar cu bifa ta explicită, din emailul tău, către arhiva privată a asociației |
 | Notificarea tehnică | Fără date personale; web3forms (SUA), ștearsă periodic |
+| Formularul 230 trimis prin poștă | Datele transmise la ANAF prin situația centralizatoare; originalul păstrat de asociație conform legii |
 
 {{< disclaimer >}}{{< /disclaimer >}}

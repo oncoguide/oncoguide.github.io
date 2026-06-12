@@ -31,6 +31,16 @@ Solo al enviar una copia, la página puede mandar una notificación técnica mí
 
 La notificación pasa por web3forms (el mismo servicio de nuestro formulario de contacto), en servidores de EE. UU., que puede conservar el mensaje hasta unos 30 días, con registros purgados periódicamente (cada 2 meses aproximadamente), según su documentación. Como el mensaje no contiene datos personales, esta transferencia no afecta a tus datos.
 
+## El formulario 230 enviado por correo postal -- lo presentamos nosotros ante la ANAF
+
+Si eliges la vía más sencilla -- enviarnos por correo el original firmado del formulario 230 -- la asociación se encarga desde ahí, según el procedimiento oficial ([Orden ANAF 103/2025](https://legislatie.just.ro/Public/DetaliiDocumentAfis/293937)):
+
+- transmitimos a la ANAF, por vía electrónica, el estado centralizador con los datos del formulario (nombre, número de identificación personal, importe) antes del plazo legal del 25 de mayo -- obligación legal de la asociación como entidad beneficiaria;
+- conservamos el original en papel, para presentarlo a la autoridad fiscal si lo solicita, durante el tiempo que exija la ley;
+- tus datos se usan **exclusivamente** para esta presentación y los registros exigidos por la ley: no entran en otros sistemas, no se comparten con nadie más que la ANAF y no se usan para ningún otro fin.
+
+Base jurídica: la obligación legal de la entidad beneficiaria según el procedimiento ANAF, activada por tu decisión de enviarnos el formulario. Para cualquier pregunta sobre tu formulario, escríbenos desde la [página de contacto]({{< relref "/contact" >}}).
+
 ## Tus derechos
 
 Para cualquier solicitud sobre tus datos (acceso, rectificación, supresión de una copia enviada), escríbenos desde la [página de contacto]({{< relref "/contact" >}}). Respondemos a cada mensaje.

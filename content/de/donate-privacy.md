@@ -31,6 +31,16 @@ Nur beim Senden einer Kopie kann die Seite eine minimale technische Benachrichti
 
 Die Benachrichtigung läuft über web3forms (denselben Dienst wie unser Kontaktformular) auf US-Servern; die Nachricht kann dort bis zu etwa 30 Tage gespeichert werden, Server-Logs werden periodisch gelöscht (etwa alle 2 Monate), laut deren Dokumentation. Da die Nachricht keine personenbezogenen Daten enthält, betrifft dieser Transfer Ihre Daten nicht.
 
+## Das per Post gesandte Formular 230 -- wir reichen es bei der ANAF ein
+
+Wenn Sie den einfachsten Weg wählen -- uns das unterschriebene Papier-Original des Formulars 230 per Post zu senden -- übernimmt der Verein ab dort, gemäß dem offiziellen Verfahren ([ANAF-Verordnung 103/2025](https://legislatie.just.ro/Public/DetaliiDocumentAfis/293937)):
+
+- wir übermitteln der ANAF elektronisch die Sammelaufstellung mit den Formulardaten (Name, persönliche Identifikationsnummer, Betrag) bis zur gesetzlichen Frist am 25. Mai -- die gesetzliche Pflicht des Vereins als begünstigte Einrichtung;
+- wir bewahren das Papier-Original auf, um es der Steuerbehörde auf Verlangen vorzulegen, solange das Gesetz es verlangt;
+- Ihre Daten werden **ausschließlich** für diese Einreichung und die gesetzlich vorgeschriebenen Aufzeichnungen verwendet: sie gelangen in keine anderen Systeme, werden mit niemandem außer der ANAF geteilt und dienen keinem anderen Zweck.
+
+Rechtsgrundlage: die gesetzliche Pflicht der begünstigten Einrichtung nach dem ANAF-Verfahren, ausgelöst durch Ihre Entscheidung, uns das Formular zu senden. Bei Fragen zu Ihrem Formular schreiben Sie uns über die [Kontaktseite]({{< relref "/contact" >}}).
+
 ## Ihre Rechte
 
 Für jede Anfrage zu Ihren Daten (Auskunft, Berichtigung, Löschung einer gesendeten Kopie) schreiben Sie uns über die [Kontaktseite]({{< relref "/contact" >}}). Wir beantworten jede Nachricht.

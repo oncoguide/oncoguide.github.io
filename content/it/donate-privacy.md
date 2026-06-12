@@ -31,6 +31,16 @@ Solo quando invii una copia, la pagina può mandare una notifica tecnica minima 
 
 La notifica passa per web3forms (lo stesso servizio del nostro modulo di contatto), su server negli USA, che può conservare il messaggio fino a circa 30 giorni, con log cancellati periodicamente (circa ogni 2 mesi), secondo la loro documentazione. Poiché il messaggio non contiene dati personali, questo trasferimento non riguarda i tuoi dati.
 
+## Il modulo 230 inviato per posta -- lo depositiamo noi all'ANAF
+
+Se scegli la via più semplice -- inviarci per posta l'originale firmato del modulo 230 -- l'associazione se ne occupa da lì, secondo la procedura ufficiale ([Ordine ANAF 103/2025](https://legislatie.just.ro/Public/DetaliiDocumentAfis/293937)):
+
+- trasmettiamo all'ANAF, per via elettronica, il prospetto riepilogativo con i dati del modulo (nome, codice numerico personale, importo) entro il termine legale del 25 maggio -- obbligo legale dell'associazione come ente beneficiario;
+- conserviamo l'originale cartaceo, per presentarlo all'autorità fiscale su richiesta, per il tempo richiesto dalla legge;
+- i tuoi dati sono usati **esclusivamente** per questo deposito e per i registri richiesti dalla legge: non entrano in altri sistemi, non sono condivisi con nessuno oltre all'ANAF, non sono usati per altri scopi.
+
+Base giuridica: l'obbligo legale dell'ente beneficiario previsto dalla procedura ANAF, attivato dalla tua scelta di inviarci il modulo. Per qualsiasi domanda sul tuo modulo, scrivici dalla [pagina contatti]({{< relref "/contact" >}}).
+
 ## I tuoi diritti
 
 Per qualsiasi richiesta sui tuoi dati (accesso, rettifica, cancellazione della copia inviata), scrivici dalla [pagina contatti]({{< relref "/contact" >}}). Rispondiamo a ogni messaggio.

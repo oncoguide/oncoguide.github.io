@@ -154,6 +154,7 @@ during implementation without explicit instruction.
 | D4 | Anonymity | **Representative legal name appears only inside the generated contract PDF, never on the page or in git.** | The contract template leaves the association signature block blank for offline countersignature. Public association identifiers (name, CIF, IBAN, sediu) may appear -- they are public registry data and required on the documents. |
 | D5 | Non-RO landing scope (added 2026-06-11) | **Non-Romanian landing pages show ONLY the direct-donation (bank transfer) path -- no 20% / 3.5% tax mechanisms, no links to the generators.** | The RO tax mechanisms apply only to Romanian taxpayers; other languages get a clean donation-only page (modeled on daruiesteviata.ro's general support page). Only the RO landing presents all three paths. See Section 5.1. |
 | D6 | ANAF fill mechanism (added 2026-06-11) | **Use the standard ANAF PDFs unchanged; pre-fill values only. Where the form has a real AcroForm field (year, donor CNP on 230; the company's own section on 177), set it; where it has none (OncoGuide's beneficiary/entity block; donor name/address), add a positioned TEXT OVERLAY at the form's own position.** Never rename, move, resize, restyle, or flatten a field. | Verified in T3: the beneficiary/entity sections have no fillable fields. Overlay is exactly how the `.private` precompletate were made and keeps the official layout intact. See the v7 changelog, Section 7, and Appendix A. |
+| D7 | Centralized 230 submission (added 2026-06-12) | **The donor's simplest route is now: sign the printed 230 and MAIL the paper original to the association; the association files the data with ANAF via the electronic "Situatie centralizatoare" (own SPV) by 25 May and keeps the originals for fiscal-authority inspection.** Verified against OPANAF 103/2025 art. 4.7-4.8: signed paper original required; transmission "sub sanctiunea decaderii"; the donor has nothing else to do. | Activates the paper half of Future option B WITHOUT any server: collection is by post; the only electronic step is the association's own SPV filing. The association knowingly becomes controller of CNP-bearing paper forms -- privacy pages updated in all 6 languages (purpose, legal basis, retention); ops procedure in `.private/finantare/procedura-230-centralizator.md`. HARD internal deadline: centralizator filed by 15 May each year (10-day margin; a missed 25 May forfeits EVERY mailed-in donor's redirection). Self-submission routes remain documented as the alternative. |
 
 **D3 qualification (important).** Romanian law gives a simple electronic signature full effect
 only under narrow conditions; for documents presented to authorities or third parties a
@@ -1082,13 +1083,14 @@ page) and checked off; both flows work end-to-end; site live and deployable with
 
 ## 16. Non-Goals (v1) and Future Options
 
-Non-goals now: server-side storage, accounts, online card payments, automatic / centralized
-ANAF submission (the daruiesteviata "we submit your 230 for you" model).
+Non-goals now: server-side storage, accounts, online card payments.
 
-Future option B (only if volume justifies it and after Form 163): a serverless backend
-(e.g. Cloudflare Workers + private storage) that holds signed forms and submits a centralized
-Form 230 borderou. This makes the association a personal-data controller (including CNP) with
-full GDPR and security obligations; defer until clearly warranted.
+**Update 2026-06-12 (D7):** the "we submit your 230 for you" model is NO LONGER fully deferred --
+its PAPER form is live: donors mail the signed original to the association, which files the
+electronic Situatie centralizatoare via its own SPV (OPANAF 103/2025) and archives the
+originals. What remains a non-goal is the SERVERLESS-BACKEND variant of Future option B
+(online collection of signed forms into hosted storage); that stays deferred until volume
+clearly warrants the added GDPR/security surface.
 
 Deferred XFA fallback (not needed today): the current Forms 177 and 230 are AcroForms, so pdf-lib
 fills them directly. If a future ANAF revision ships an XFA "smart PDF" that pdf-lib cannot fill,

@@ -64,7 +64,7 @@ Fiecare ghid publicat trece prin revizuiri periodice -- aproximativ lunar -- ca 
 {{< action-box >}}
 1. Vrei să ajuți acum, simplu: fă un transfer către IBAN-ul de mai jos (butonul Copiază te ajută).
 2. Ești firmă: citește [pagina pentru firme]({{< relref "/donate/firme" >}}) -- contractul se generează automat.
-3. Ești salariat: citește [pagina pentru persoane fizice]({{< relref "/donate/persoane-fizice" >}}) -- formularul 230 se precompletează automat.
+3. Ești salariat: citește [pagina pentru persoane fizice]({{< relref "/donate/persoane-fizice" >}}) -- formularul 230 se precompletează automat, iar depunerea la ANAF o facem noi.
 4. Ai un diagnostic pe care ai vrea să-l acoperim: [scrie-ne]({{< relref "/contact" >}}) și facem tot posibilul să-l urmărim pe site.
 5. Ai întrebări: scrie-ne prin [pagina de contact]({{< relref "/contact" >}}).
 {{< /action-box >}}
