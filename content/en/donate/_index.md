@@ -21,9 +21,18 @@ Asociatia OncoGuide has a single statutory purpose: closing the gap between medi
 
 For transparency: the association keeps a record of received donations, and our donor privacy policy is public: [donor privacy]({{< relref "/donate-privacy" >}}).
 
+## How OncoGuide stays up to date
+
+We use the latest state-of-the-art AI research tools to track everything new and relevant for each diagnosis we cover: therapies, clinical trials, and practice-changing evidence, explained in plain language.
+
+Every published guide gets a periodic review -- roughly monthly -- so it stays current: if something new appears in the meantime, we want it on the site, not just in the journals.
+
+**Do you have a specific diagnosis?** We are expanding coverage diagnosis by diagnosis. If you would like access to the kind of information OncoGuide offers for your exact diagnosis, send us a message via the [contact form]({{< relref "/contact" >}}). We will do our best to start tracking it on the site.
+
 {{< action-box >}}
 1. Make a transfer to the IBAN below (the Copy button helps).
-2. Questions: write to us via the [contact page]({{< relref "/contact" >}}).
+2. Have a specific diagnosis you want covered: [write to us]({{< relref "/contact" >}}) and we will do our best to track it on the site.
+3. Questions: write to us via the [contact page]({{< relref "/contact" >}}).
 {{< /action-box >}}
 
 {{< disclaimer >}}{{< /disclaimer >}}

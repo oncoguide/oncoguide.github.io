@@ -21,9 +21,18 @@ Asociatia OncoGuide hat einen einzigen satzungsgemäßen Zweck: die Lücke zwisc
 
 Transparenz: der Verein führt ein Register der erhaltenen Spenden, und unsere Datenschutzrichtlinie für Spender ist öffentlich: [Spender-Datenschutz]({{< relref "/donate-privacy" >}}).
 
+## Wie OncoGuide aktuell bleibt
+
+Wir nutzen die neuesten KI-Recherchewerkzeuge, um für jede abgedeckte Diagnose alles Neue und Relevante zu verfolgen: Therapien, klinische Studien und praxisverändernde Evidenz, verständlich erklärt.
+
+Jeder veröffentlichte Leitfaden wird regelmäßig überprüft -- etwa monatlich -- damit er aktuell bleibt: Wenn zwischenzeitlich etwas Neues erscheint, soll es auf der Website stehen, nicht nur in der Fachliteratur.
+
+**Haben Sie eine bestimmte Diagnose?** Wir erweitern die Abdeckung Diagnose für Diagnose. Wenn Sie sich die Art von Informationen wünschen, die OncoGuide für Ihre genaue Diagnose bietet, schreiben Sie uns über das [Kontaktformular]({{< relref "/contact" >}}). Wir tun unser Bestes, diese Diagnose auf der Website zu verfolgen.
+
 {{< action-box >}}
 1. Überweisen Sie an die IBAN unten (der Kopieren-Button hilft).
-2. Fragen: schreiben Sie uns über die [Kontaktseite]({{< relref "/contact" >}}).
+2. Sie haben eine Diagnose, die abgedeckt werden soll: [schreiben Sie uns]({{< relref "/contact" >}}) und wir tun unser Bestes, sie auf der Website zu verfolgen.
+3. Fragen: schreiben Sie uns über die [Kontaktseite]({{< relref "/contact" >}}).
 {{< /action-box >}}
 
 {{< disclaimer >}}{{< /disclaimer >}}

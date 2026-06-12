@@ -53,11 +53,20 @@ Asociația OncoGuide are un singur scop, prevăzut în statut: reducerea decalaj
 
 Pentru transparență: evidența donațiilor primite este păstrată de asociație, iar politica noastră de confidențialitate pentru donatori este publică: [confidențialitatea donatorilor]({{< relref "/donate-privacy" >}}).
 
+## Cum rămâne OncoGuide la zi
+
+Folosim cele mai noi instrumente AI de cercetare ca să urmărim tot ce apare nou și relevant pentru fiecare diagnostic acoperit: terapii, trialuri clinice și studii care schimbă practica, explicate pe înțelesul tuturor.
+
+Fiecare ghid publicat trece prin revizuiri periodice -- aproximativ lunar -- ca să rămână actual: dacă apare ceva nou între timp, vrem să fie și pe site, nu doar în literatura medicală.
+
+**Ai un diagnostic anume?** Extindem acoperirea diagnostic cu diagnostic. Dacă ți-ar folosi genul de informații de pe OncoGuide pentru diagnosticul tău exact, trimite-ne un mesaj prin [formularul de contact]({{< relref "/contact" >}}) și facem tot posibilul să începem să-l urmărim pe site.
+
 {{< action-box >}}
 1. Vrei să ajuți acum, simplu: fă un transfer către IBAN-ul de mai jos (butonul Copiază te ajută).
 2. Ești firmă: citește [pagina pentru firme]({{< relref "/donate/firme" >}}) -- contractul se generează automat.
 3. Ești salariat: citește [pagina pentru persoane fizice]({{< relref "/donate/persoane-fizice" >}}) -- formularul 230 se precompletează automat.
-4. Ai întrebări: scrie-ne prin [pagina de contact]({{< relref "/contact" >}}).
+4. Ai un diagnostic pe care ai vrea să-l acoperim: [scrie-ne]({{< relref "/contact" >}}) și facem tot posibilul să-l urmărim pe site.
+5. Ai întrebări: scrie-ne prin [pagina de contact]({{< relref "/contact" >}}).
 {{< /action-box >}}
 
 {{< disclaimer >}}{{< /disclaimer >}}

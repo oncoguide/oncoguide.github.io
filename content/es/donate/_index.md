@@ -21,9 +21,18 @@ Asociatia OncoGuide tiene un único fin estatutario: reducir la brecha entre el 
 
 Por transparencia: la asociación lleva un registro de las donaciones recibidas y nuestra política de privacidad para donantes es pública: [privacidad de los donantes]({{< relref "/donate-privacy" >}}).
 
+## Cómo se mantiene al día OncoGuide
+
+Usamos las herramientas de investigación con IA más avanzadas para seguir todo lo nuevo y relevante de cada diagnóstico cubierto: terapias, ensayos clínicos y evidencia que cambia la práctica, explicados con claridad.
+
+Cada guía publicada pasa por revisiones periódicas -- aproximadamente mensuales -- para mantenerse actual: si aparece algo nuevo entre tanto, queremos que esté en el sitio, no solo en la literatura médica.
+
+**¿Tienes un diagnóstico específico?** Estamos ampliando la cobertura diagnóstico a diagnóstico. Si te gustaría acceder al tipo de información que OncoGuide ofrece para tu diagnóstico exacto, escríbenos mediante el [formulario de contacto]({{< relref "/contact" >}}). Haremos todo lo posible por empezar a seguirlo en el sitio.
+
 {{< action-box >}}
 1. Haz una transferencia al IBAN de abajo (el botón Copiar te ayuda).
-2. Preguntas: escríbenos desde la [página de contacto]({{< relref "/contact" >}}).
+2. Tienes un diagnóstico que te gustaría ver cubierto: [escríbenos]({{< relref "/contact" >}}) y haremos todo lo posible por seguirlo en el sitio.
+3. Preguntas: escríbenos desde la [página de contacto]({{< relref "/contact" >}}).
 {{< /action-box >}}
 
 {{< disclaimer >}}{{< /disclaimer >}}
