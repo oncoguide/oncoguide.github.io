@@ -740,3 +740,13 @@ decisions:
     alternatives_considered:
       - "Keep the flag off until the T5/T6 generators ship -- rejected: dishonest (the legal condition is met; manual contracts from .private templates work today) and would waste the 25.06 F177 window"
     outcome: "fiscal.yaml: registru163_active true, form177_next 2026-06-25. association.yaml: registru163_no filled. RO donate pages: status callouts updated (registered 11.06.2026; F177 deadline urgency on the companies page; 230 next window 25.05.2027). .private/finantare docs updated (PASUL 0 done, donor fact-sheet registry row filled, F177 urgency noted). Generators still being implemented (T5/T6); pages honestly say automation activates in days and offer the manual email route meanwhile."
+
+  - id: 75
+    date: "2026-06-12"
+    category: "technical"
+    summary: "Donation generators implemented end-to-end (T3-T7) -- both tax flows live on the static site"
+    context: "Completed the DONATIONS.md plan: T3 ANAF field map (fill-test PROVED the beneficiary/entity sections have no fillable fields -> decision D6: pre-fill via positioned text overlay on the unchanged official form, exactly like the association's own precompletate; architecture correction re-reviewed 9.4 PASS), T4 document engine + generator shell, T5 Form 230 generator, T6 company generator + reproducible sponsorship-contract template, T7 final pass. Implementation reviews: round 1 FAILED 7.8 on one silent killer -- the Hugo data bridge was double-encoded (jsonify without safeJS), so the generator never booted on the BUILT site while every stubbed harness passed; fixed and regression-guarded by scripts/bridge-check.mjs (tracked), which the round-2 reviewer proof-fired by reintroducing the bug. Round 2: 9.4 PASS (T4 9.4 / T5 9.3 / T6 9.4)."
+    alternatives_considered:
+      - "Trust harness coverage without inspecting the built HTML -- rejected after round 1: the worst bug lived exactly in the gap between stubbed tests and the rendered page"
+      - "Collect donor name/address in the 230 flow for a nicer filename -- rejected: the ANAF form has no fields for them; data minimization wins, donor handwrites after printing"
+    outcome: "Both generators live behind registru163_active=true: /ro/donate/persoane-fizice (230: CNP+year+mirrors+checkboxes via fields, OncoGuide block via overlay, no in-browser signature, paper-first instructions) and /ro/donate/firme (regime guard from config, ceiling calculator, contract with in-browser signature draft + blank association block for countersignature, pre-filled F177 with amount overlay). Anonymity audit green (1 template checked); 0/66 + 0/101 ANAF widgets altered; key lesson recorded: always verify the BUILT artifact, not only unit harnesses."

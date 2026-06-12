@@ -148,8 +148,9 @@
       '&body=' + encodeURIComponent(b);
   }
 
-  // Opt-in, no-PII ping. ONLY {type, locale, timestamp}. Caller fires it inside the send-copy
-  // click handler, never automatically on generate (Section 11).
+  // Opt-in, no-PII ping. ONLY {type, locale} (+ web3forms' empty botcheck honeypot; no client
+  // timestamp -- receipt time is server-side, S11). Caller fires it inside the send-copy click
+  // handler, never automatically on generate (Section 11).
   function sendPing(type, locale) {
     var key = (root.oncoDonate || {}).web3formsKey;
     if (!key) return Promise.resolve();

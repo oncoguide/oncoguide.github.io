@@ -104,6 +104,9 @@ DONATIONS.md                     — Donate page architecture (review-gated; see
 package.json                     — Node tooling for donation scripts (pdf-lib devDependency)
 static/donate/                   — Donation flow assets (vendored pdf-lib, ANAF templates, flow JS)
 scripts/audit-contract-template.mjs — Anonymity audit (runs in pre-commit; name from .private/)
+scripts/bridge-check.mjs         — Regression guard: donate data bridge in BUILT html (run after hugo)
+scripts/fill-test.mjs            — ANAF AcroForm fill-test (re-run on any new ANAF form revision)
+scripts/make-contract-template.mjs — Rebuilds sponsorship-contract-ro.pdf (reproducible; audit-gated)
 static/                          — robots.txt, llms.txt, favicon.svg, images
 scripts/                         — Helper scripts (staticrypt encryption, git hooks)
 .github/workflows/               — GitHub Actions deploy workflow (deploy.yml)
@@ -162,7 +165,7 @@ When modifying files in the left column, also update the files in the right colu
 |---|---|
 | Any skill in `.claude/skills/` | This file ("Claude Skills" section) |
 | `hugo.yaml` (languages, menus) | This file ("File Structure") |
-| `data/association.yaml` or `data/fiscal.yaml` | Review `static/donate/js/field-maps.js` + the donation flows (DONATIONS.md S13) |
+| `data/association.yaml` or `data/fiscal.yaml` | Review `static/donate/js/field-maps.js` + the donation flows (DONATIONS.md S13); if deadlines changed, also refresh the dated strings in `static/donate/js/i18n.js` and the RO donate pages |
 | ANAF templates in `static/donate/templates/` | Re-run the fill-test (DONATIONS.md S7.3) and update DONATIONS.md App. A |
 
 ## Session Start Checklist

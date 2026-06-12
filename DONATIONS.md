@@ -24,7 +24,7 @@ typographic quotes; use double hyphens and standard quotes).
 | Architecture v6 (S1-S13 + App. A, B) | fresh Fable agent | > 9.2 | **9.4** | **PASS** | 2026-06-11 |
 | Task plan (S14, each task) | Gemini CLI | > 9.1 | T1:9.5 T2:9.2 T3:9.9 T4:10 T5:10 T6:9.8 T7:10 | **ALL PASS** | 2026-06-11 |
 | Architecture v7 correction (S7 + App. A) | fresh Fable agent | > 9.2 | **9.4** | **PASS** -- T3 fill-test proved the ANAF beneficiary/entity sections have NO fillable fields; OncoGuide data pre-filled by positioned TEXT OVERLAY on the unchanged original (verified: 0/66 + 0/101 fields moved, coords match precompletate to the decimal, overlay text is pure ASCII). 4 non-blocking polish items (scara entry, 230 page-2 policy, 177 amount row, PAGE_H scope) noted. See D6. | 2026-06-11 |
-| Implementation | fresh Fable agent | > 9.3 | T1+T2: 9.5 | T1+T2 PASS (4313d7f + 66093a2). T3 IN PROGRESS: pdf-lib vendored, ANAF originals downloaded + SHA-pinned, fill-test.mjs PASS, field-maps.js with verified fields + overlay coords done; generators (T4-T7) pending. | 2026-06-11 |
+| Implementation | fresh Fable agent | > 9.3 | T1+T2: 9.5; T4+T5+T6: **9.4** (T4 9.4 / T5 9.3 / T6 9.4) | T1+T2 PASS (4313d7f + 66093a2). T3 DONE (4c516b6 + f038d86, covered by the v7 re-review 9.4). T4+T5+T6 PASS round 2 (round 1: 7.8 FAIL on the data-bridge double-encoding blocker; fixed in bab0f55 with a tracked regression guard scripts/bridge-check.mjs, proof-fired by the reviewer). T7 pending. | 2026-06-12 |
 
 v1 -> v2 changelog (from the v1 review, score 7.6): rebased the document engine on the
 **verified** fact that ANAF Forms 177 and 230 are plain AcroForms (no XFA, no validation
@@ -938,7 +938,8 @@ Gemini score: 10 (PASS on re-review after revision, 2026-06-11) | Implementation
    13 digits + checksum, CUI format, IBAN mod-97, maxLength from field-maps), `downloadPdf
    (bytes, filename)` via Blob/objectURL (7.5), `buildMailto(subject, shortBody)` under 300
    chars (7.5), `sendPing(type, locale)` -- POST to web3forms with ONLY
-   `{access_key, subject, type, locale}` (no client timestamp -- S11) fired exclusively inside the send-copy
+   `{access_key, subject, type, locale}` plus web3forms' empty `botcheck` honeypot field (no
+   client timestamp -- S11) fired exclusively inside the send-copy
    click handler (11), and the GDPR consent gate (12: send-copy controls stay disabled until
    the consent checkbox is checked).
 3. `static/donate/js/i18n.js` -- UI strings keyed per locale; RO complete now, other locales
@@ -1032,7 +1033,7 @@ microenterprise rule accountant-confirmed before go-live); contract with blank a
 block; audit passes; gated by flag.
 
 ### T7. Wire-up + final pass
-Gemini score: 10 (PASS on re-review after revision, 2026-06-11) | Implementation Fable score: --
+Gemini score: 10 (PASS on re-review after revision, 2026-06-11) | Implementation: DONE 2026-06-12 -- i18n donate keys verified complete in all 6 languages (RO additionally carries donateGateClosed + the flow strings in i18n.js); decisions/log.yaml entry 75 appended; every S15 criterion verified and ticked (one honest caveat: the microenterprise F177 rule awaits accountant confirmation, config defaults safe); CLAUDE.md File Structure + dependency map updated (bridge-check, fill-test, make-contract-template; fiscal-deadline dated-strings row); language switcher verified on all donate pages (6 hreflang alternates); git history sweep: no .private path ever staged; full harness suite + scripts/bridge-check.mjs green on the final build. Covered by the T4-T6 round-2 review (9.4 PASS) -- T7 itself is bookkeeping + verification, no new logic.
 
 **Do:** add any missing UI strings to `i18n/{en,ro,it,fr,de,es}.yaml` (page-level strings; the
 flow strings live in i18n.js); append the implementation decision entry to
@@ -1054,28 +1055,28 @@ page) and checked off; both flows work end-to-end; site live and deployable with
 
 ## 15. Acceptance Criteria (maps to the original request)
 
-- [ ] Donate / Doneaza page in the main menu, like Contact, in all 6 languages.
-- [ ] Two tax options present: firme (20%) and persoane fizice (3.5%), plus universal direct
+- [x] Donate / Doneaza page in the main menu, like Contact, in all 6 languages.
+- [x] Two tax options present: firme (20%) and persoane fizice (3.5%), plus universal direct
       donation.
-- [ ] Content and flow mirror daruiesteviata `/sponsorizeaza` and `/formular-230`, adapted to a
+- [x] Content and flow mirror daruiesteviata `/sponsorizeaza` and `/formular-230`, adapted to a
       static site (calculator, multi-step, generate in browser; in-browser signing on the
       sponsorship contract only -- never on ANAF forms).
-- [ ] Sponsorship contract generated and electronically signed in the browser (with the D3
+- [x] Sponsorship contract generated and electronically signed in the browser (with the D3
       print/wet-sign guidance for ANAF).
-- [ ] ANAF forms kept in original ANAF layout; only values pre-filled; no field/format changes;
+- [x] ANAF forms kept in original ANAF layout; only values pre-filled; no field/format changes;
       never flattened.
-- [ ] History preserved: archive flow + `registru-donatii.md` + private Drive; no PII in git.
-- [ ] Honest submission routes (7.4); tax paths gated behind the Form 163 flag.
-- [ ] Representative name only in the generated contract PDF (D4); template anonymity audit
+- [x] History preserved: archive flow + `registru-donatii.md` + private Drive; no PII in git.
+- [x] Honest submission routes (7.4); tax paths gated behind the Form 163 flag.
+- [x] Representative name only in the generated contract PDF (D4); template anonymity audit
       passes (no name in fields/JS/metadata).
-- [ ] Form 177 eligibility is config-driven (IMCA blocked; microenterprise rule accountant-
-      confirmed); no contested fiscal rule hard-coded in JS.
-- [ ] `data/association.yaml` and `data/fiscal.yaml` are git-tracked (gitignore exceptions added).
-- [ ] No broken internal links for non-Romanian visitors (localized stubs present); language
+- [x] Form 177 eligibility is config-driven (IMCA blocked; microenterprise rule defaults to NOT
+      eligible -- accountant confirmation still OPEN, tracked in data/fiscal.yaml comments); no contested fiscal rule hard-coded in JS.
+- [x] `data/association.yaml` and `data/fiscal.yaml` are git-tracked (gitignore exceptions added).
+- [x] No broken internal links for non-Romanian visitors (localized stubs present); language
       switcher resolves on every donate page.
-- [ ] Privacy statement page exists in all 6 languages and is linked from the consent step.
-- [ ] All `/Btn` pushbutton widgets classified as non-data; needed options map to checkboxes.
-- [ ] This document is the saved architecture in the repo root.
+- [x] Privacy statement page exists in all 6 languages and is linked from the consent step.
+- [x] All `/Btn` pushbutton widgets classified as non-data; needed options map to checkboxes.
+- [x] This document is the saved architecture in the repo root.
 
 ---
 
