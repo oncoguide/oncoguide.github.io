@@ -34,7 +34,15 @@
   padding: 20px 24px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--code-block-bg);
+  /* var(--entry), NOT var(--code-block-bg): PaperMod's code-block bg is near-black in BOTH
+     themes, which made the value cells unreadable in light mode (dark text on dark card).
+     --entry adapts: light card in light mode, dark card in dark mode. */
+  background: var(--entry);
+}
+
+.donate-bank-table th[scope="row"],
+.donate-bank-table td {
+  color: var(--content); /* explicit, adapts to theme -- never rely on inherited color here */
 }
 
 .donate-bank-table {
@@ -185,7 +193,8 @@
   border: 1px solid var(--border);
   border-left: 4px solid var(--primary);
   border-radius: var(--radius);
-  background: var(--code-block-bg);
+  background: var(--entry); /* adaptive card bg (same fix as .donate-bank-block) */
+  color: var(--content);
   font-weight: 600;
 }
 
