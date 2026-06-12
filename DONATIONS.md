@@ -1069,8 +1069,8 @@ page) and checked off; both flows work end-to-end; site live and deployable with
 - [x] Honest submission routes (7.4); tax paths gated behind the Form 163 flag.
 - [x] Representative name only in the generated contract PDF (D4); template anonymity audit
       passes (no name in fields/JS/metadata).
-- [x] Form 177 eligibility is config-driven (IMCA blocked; microenterprise rule defaults to NOT
-      eligible -- accountant confirmation still OPEN, tracked in data/fiscal.yaml comments); no contested fiscal rule hard-coded in JS.
+- [x] Form 177 eligibility is config-driven (IMCA blocked; microenterprise exclusion SETTLED by
+      the owner on 2026-06-12 per OUG 115/2023 and stated plainly on the public firme page); no contested fiscal rule hard-coded in JS.
 - [x] `data/association.yaml` and `data/fiscal.yaml` are git-tracked (gitignore exceptions added).
 - [x] No broken internal links for non-Romanian visitors (localized stubs present); language
       switcher resolves on every donate page.
