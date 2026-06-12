@@ -149,7 +149,7 @@ Skills specializate in `.claude/skills/` (gitignored, local-only):
 
 ### Workflow
 - `/publish` — Run pre-publication checklist for an article -- SEO, disclaimers, translations, shortcodes, internal links
-- `/monthly-review` — Monthly freshness review of published medical guides (PubMed/ESMO/FDA/EMA/trials since last review, triage, proposed updates). Backs the PUBLIC "roughly monthly review" promise on the donate pages -- keep cadence and copy in sync. State in `prompt/research/reviews/` (local)
+- `/monthly-review` — Monthly freshness review of published medical guides (PubMed/ESMO/FDA/EMA/trials since last review, judgment-based triage, proposed updates). Editing principles: high bar (default no-change), integrate never patch, supersede never stack, full-article coherence pass after any edit, anti-noise circuit breaker (3 point edits -> full editorial pass). Backs the PUBLIC "roughly monthly review" promise on the donate pages -- keep cadence and copy in sync. State in `prompt/research/reviews/` (local)
 
 ### Expertiza (persona + action checklist)
 - `/frontend` — Review frontend code for responsive design, accessibility (WCAG AA), performance, and dark mode compatibility
