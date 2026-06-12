@@ -45,11 +45,17 @@
   };
 </script>
 <script>
-  // Lazy bootstrap (DONATIONS.md T4): load the engine on first interaction with the generator,
-  // and pdf-lib only when a flow asks for it. Nothing loads while the container is hidden.
+  // Lazy bootstrap (DONATIONS.md T4, trigger fixed after the T5/T6 verification round): the
+  // container is hidden and empty until a flow renders into it, so interaction listeners must
+  // NOT sit on the container itself (a hidden element can never receive events). Instead, when
+  // the gate is open we boot on the reader's first interaction anywhere on the page (pointer,
+  // key, focus, scroll) with a short idle fallback, so keyboard and screen-reader users are
+  // covered too. Only the small flow JS loads here; pdf-lib (~520KB) still loads only when the
+  // user reaches the generate step (flows call window.oncoLoad('pdf-lib.min.js')).
   (function () {
     var gen = document.getElementById('donate-generator');
     if (!gen || !gen.getAttribute('data-flow')) return;
+    if (gen.getAttribute('data-active') !== 'true') return; // gate closed: load nothing
     var base = window.oncoDonate.base, cache = {};
     function load(src) {
       if (cache[src]) return cache[src];
@@ -62,17 +68,24 @@
       return cache[src];
     }
     window.oncoLoad = load; // flows call window.oncoLoad('pdf-lib.min.js') before generating
-    var booted = false;
+    var booted = false, timer = setTimeout(boot, 2500); // idle fallback
     function boot() {
       if (booted) return; booted = true;
+      clearTimeout(timer);
+      ['pointerdown', 'keydown', 'focusin'].forEach(function (ev) {
+        document.removeEventListener(ev, boot, true);
+      });
+      window.removeEventListener('scroll', boot);
       Promise.all([load('i18n.js'), load('field-maps.js'), load('donate-common.js')])
+        .then(function () { return load('signature.js'); })
         .then(function () { return load('donate-' + gen.getAttribute('data-flow') + '.js'); })
         .then(function () { if (window.oncoInitFlow) window.oncoInitFlow(gen); })
-        .catch(function () { /* flow not present yet (pre-T5/T6) -- page stays static */ });
+        .catch(function () { /* flow not present yet -- page stays static */ });
     }
-    ['pointerdown', 'focusin', 'keydown'].forEach(function (ev) {
-      gen.addEventListener(ev, boot);
+    ['pointerdown', 'keydown', 'focusin'].forEach(function (ev) {
+      document.addEventListener(ev, boot, true);
     });
+    window.addEventListener('scroll', boot, { passive: true, once: true });
   })();
 </script>
 {{- end }}

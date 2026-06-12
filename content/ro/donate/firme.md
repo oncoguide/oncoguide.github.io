@@ -10,7 +10,9 @@ ShowToc: true
 Dacă firma ta plătește impozit pe profit în România, poți susține OncoGuide cu bani care altfel merg la stat. Legea sponsorizării îți permite să redirecționezi până la **20% din impozitul pe profit** (în limita a 0,75% din cifra de afaceri) către o organizație non-profit. Nu te costă nimic în plus.
 
 {{< callout type="important" >}}
-**Asociația OncoGuide este înscrisă în Registrul entităților nonprofit ANAF din 11.06.2026**, deci firma ta poate semna de acum un contract de sponsorizare deductibil. **Termen aproape:** dacă vrei să redirecționezi din impozitul pe profit aferent anului 2025, formularul 177 se depune până pe **25 iunie 2026**. Generatorul automat de mai jos se activează în zilele acestea; până atunci ne poți [scrie direct]({{< relref "/contact" >}}) și îți trimitem contractul și formularul precompletate pe email.
+**Asociația OncoGuide este înscrisă în Registrul entităților nonprofit ANAF din 11.06.2026**, iar **generatorul de mai jos este activ**: calculezi plafonul, descarci contractul de sponsorizare și, pentru varianta de redirecționare, formularul 177 precompletat.
+
+**Termen aproape:** dacă vrei să redirecționezi din impozitul pe profit aferent anului 2025, formularul 177 se depune până pe **25 iunie 2026**. Orice întrebare ne poți [scrie direct]({{< relref "/contact" >}}).
 {{< /callout >}}
 
 ## Cum funcționează, pe scurt
@@ -26,15 +28,16 @@ Există două variante, ambele bazate pe un contract de sponsorizare:
 - 0,75% din cifra de afaceri;
 - 20% din impozitul pe profit.
 
-## Ce va face pagina aceasta pentru tine
+## Ce face pagina aceasta pentru tine
 
-Când generatorul se activează, fluxul va fi:
+Generatorul de mai jos te conduce pas cu pas:
 
-1. **Calculezi plafonul.** Introduci cifra de afaceri și impozitul pe profit; calculatorul îți arată suma maximă pe care o poți redirecționa.
-2. **Completezi datele firmei.** Denumire, CUI, sediu, reprezentant -- doar partea firmei; datele asociației sunt deja completate.
-3. **Semnezi în browser.** Contractul de sponsorizare se generează automat, cu semnătura ta electronică simplă. Pentru depunerea la ANAF, varianta robustă juridic rămâne printarea și semnarea olografă de ambele părți -- pagina îți explică exact pașii.
-4. **Descarci documentele.** Contractul plus, pentru varianta B, formularul 177 precompletat cu datele asociației -- în formatul oficial ANAF, nemodificat.
-5. **Ne trimiți o copie** (opțional), ca să știm să urmărim încasarea.
+1. **Alegi regimul fiscal al firmei.** Impozit pe profit, microîntreprindere sau IMCA -- de el depinde ce variantă îți este disponibilă, iar pagina îți spune cinstit ce beneficiu fiscal ai (sau nu ai).
+2. **Calculezi plafonul.** Introduci cifra de afaceri și impozitul pe profit; calculatorul îți arată suma maximă pe care o poți sponsoriza cu credit fiscal.
+3. **Completezi datele firmei.** Denumire, CUI, sediu, reprezentant -- doar partea firmei; datele asociației sunt deja completate automat.
+4. **Semnezi în browser.** Contractul de sponsorizare se generează cu semnătura ta electronică simplă, ca variantă de lucru. Pentru depunerea la ANAF, varianta robustă juridic rămâne printarea și semnarea olografă de ambele părți -- pagina îți explică exact pașii.
+5. **Descarci documentele.** Contractul plus, pentru varianta B, formularul 177 precompletat -- în formatul oficial ANAF, nemodificat, doar cu valorile completate.
+6. **Ne trimiți o copie** (opțional, doar cu acordul tău explicit), ca asociația să contrasemneze contractul și să urmărim încasarea.
 
 ## Termene de reținut
 
@@ -53,9 +56,10 @@ Detaliile complete, cu surse oficiale: [Legea 32/1994 privind sponsorizarea](htt
 Toate datele introduse în generator rămân în browserul tău -- nu le stocăm și nu le transmitem nicăieri. Detalii: [confidențialitatea donatorilor]({{< relref "/donate-privacy" >}}).
 
 {{< action-box >}}
-1. Verifică cu contabilul plafonul disponibil al firmei (0,75% din CA vs 20% din impozit).
-2. Revino aici după activarea generatorului -- sau [scrie-ne]({{< relref "/contact" >}}) și te anunțăm noi.
-3. Vrei să ajuți acum: [donația directă]({{< relref "/donate" >}}) este deja disponibilă.
+1. Calculează plafonul firmei în generatorul de mai jos (0,75% din CA vs 20% din impozit) și alege suma.
+2. Descarcă contractul de sponsorizare și, pentru varianta B, formularul 177 precompletat.
+3. Printează contractul în 2 exemplare, semnează-l olograf și trimite-ne o copie pentru contrasemnare; formularul 177 se depune prin SPV-ul firmei până pe 25 iunie 2026.
+4. Ai întrebări sau un caz special: [scrie-ne]({{< relref "/contact" >}}). Preferi simplitatea: [donația directă]({{< relref "/donate" >}}) rămâne mereu disponibilă.
 {{< /action-box >}}
 
 {{< disclaimer >}}{{< /disclaimer >}}

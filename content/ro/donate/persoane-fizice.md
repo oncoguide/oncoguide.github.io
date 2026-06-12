@@ -10,7 +10,9 @@ ShowToc: true
 Dacă ești salariat în România, statul îți permite să decizi unde merge **3,5% din impozitul pe venit pe care l-ai plătit deja**. Nu te costă nimic: banii sunt oricum reținuți din salariu; tu doar alegi ca o parte din ei să susțină informarea pacienților cu cancer, în loc să rămână în bugetul general.
 
 {{< callout type="important" >}}
-**Asociația OncoGuide este înscrisă în Registrul entităților nonprofit ANAF din 11.06.2026**, deci redirecționarea de 3,5% către OncoGuide este acum posibilă. De știut: termenul pentru veniturile din 2025 a trecut (25 mai 2026); următoarea fereastră este pentru veniturile din 2026, cu depunere până pe **25 mai 2027**. Precompletarea automată a formularului se activează în zilele acestea; între timp, orice întrebare ne poți [scrie direct]({{< relref "/contact" >}}).
+**Asociația OncoGuide este înscrisă în Registrul entităților nonprofit ANAF din 11.06.2026**, iar **generatorul de mai jos este activ**: completezi datele, descarci formularul 230 precompletat și îl depui.
+
+Ca să fim cinstiți cu tine: termenul pentru veniturile din 2025 a trecut (25 mai 2026); următoarea fereastră este pentru veniturile din 2026, cu depunere până pe **25 mai 2027** -- dar poți pregăti și chiar depune formularul de pe acum. Orice întrebare ne poți [scrie direct]({{< relref "/contact" >}}).
 {{< /callout >}}
 
 ## Cine poate redirecționa
@@ -18,15 +20,16 @@ Dacă ești salariat în România, statul îți permite să decizi unde merge **
 - **Salariații** și persoanele cu venituri asimilate salariilor -- prin **formularul 230**.
 - **PFA / activități independente** folosesc Declarația Unică (D212), nu formularul 230.
 
-## Ce va face pagina aceasta pentru tine
+## Ce face pagina aceasta pentru tine
 
-Când generatorul se activează, fluxul va fi:
+Generatorul de mai jos te conduce pas cu pas:
 
-1. **Completezi datele tale.** Nume, prenume, CNP -- exact câmpurile cerute de formularul oficial, nimic în plus. Datele asociației sunt deja completate.
-2. **Alegi perioada.** Poți redirecționa pentru un an sau poți bifa opțiunea pentru doi ani.
+1. **Completezi datele tale.** CNP-ul și anul veniturilor -- exact câmpurile completabile din formularul oficial, nimic în plus. Datele asociației sunt deja completate automat.
+2. **Alegi opțiunile.** Poți redirecționa pentru un an sau poți bifa opțiunea pentru doi ani. Tot aici alegi dacă ești de acord ca ANAF să ne comunice datele tale -- o bifă opțională de pe formular.
 3. **Descarci formularul 230 precompletat** -- formatul oficial ANAF, nemodificat, doar cu valorile completate.
-4. **Îl printezi, îl semnezi de mână și îl depui**: la administrația financiară de care aparții, prin poștă cu confirmare de primire, sau încărcat în propriul cont SPV. Pagina îți va arăta exact pașii pentru fiecare variantă.
-5. **Ne trimiți o copie** (opțional), ca să putem urmări virarea.
+4. **Scrii de mână ce nu are câmpuri.** Formularul oficial nu are câmpuri completabile pentru nume, prenume, inițiala tatălui și adresă -- le completezi de mână după printare. Pagina îți arată exact lista.
+5. **Îl semnezi de mână și îl depui**: la administrația financiară de care aparții, prin poștă cu confirmare de primire, sau încărcat în propriul cont SPV.
+6. **Ne trimiți o copie** (opțional, doar cu acordul tău explicit), ca să putem urmări virarea.
 
 După depunere, ANAF virează suma către asociație în aproximativ 90 de zile.
 
@@ -43,9 +46,10 @@ Important de știut: redirecționarea nu îți afectează cu nimic salariul, dec
 CNP-ul și datele tale rămân în browserul tău -- precompletarea se face local, pe dispozitivul tău, nu pe serverele noastre. Noi primim datele tale doar dacă alegi să ne trimiți o copie. Detalii: [confidențialitatea donatorilor]({{< relref "/donate-privacy" >}}).
 
 {{< action-box >}}
-1. Verifică dacă ești eligibil: ai venituri din salarii? Formularul 230 e pentru tine.
-2. Revino aici după activarea generatorului -- sau [scrie-ne]({{< relref "/contact" >}}) și te anunțăm noi.
-3. Vrei să ajuți acum: [donația directă]({{< relref "/donate" >}}) este deja disponibilă.
+1. Verifică dacă ești eligibil: ai venituri din salarii? Formularul 230 e pentru tine. PFA folosește D212.
+2. Completează datele în generatorul de mai jos și descarcă formularul 230 precompletat.
+3. Printează-l, scrie de mână numele și adresa, semnează-l și depune-l -- apoi, dacă vrei, trimite-ne o copie.
+4. Preferi altă cale de a ajuta: [donația directă]({{< relref "/donate" >}}) rămâne mereu disponibilă.
 {{< /action-box >}}
 
 {{< disclaimer >}}{{< /disclaimer >}}

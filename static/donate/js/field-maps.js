@@ -65,10 +65,13 @@
       // Boxes with no field that the SUPPORTER completes by hand after printing (8.2):
       manualAfterPrint: ['Nume', 'Prenume', 'Initiala tatalui', 'Strada/Numar/Bloc/Scara/Etaj/Ap',
                          'Judet/Sector', 'Localitate', 'Cod postal', 'Semnatura contribuabil'],
-      // Page 2 carries a copy; its entity block (if submitted) needs the same overlay at page-2
-      // coordinates -- VERIFY in T4 whether page 2 must also carry the entity block (the CNP/year
-      // mirror fields above are already handled).
-      verifyTodo: ['page-2 entity-block overlay coordinates']
+      // Page-2 policy (RESOLVED 2026-06-12, matches the association's validated .private
+      // precompletat): page 2 is the "Anexa" -- used ONLY when redirecting to ADDITIONAL
+      // beneficiaries. With OncoGuide as the single beneficiary the annex stays empty, so NO
+      // entity-block overlay is drawn on page 2 (the reference precompletat does the same).
+      // The CNP/year/checkbox mirror FIELDS above are identification carried by the form
+      // itself and are filled; the annex simply is not submitted.
+      verifyTodo: []
     },
 
     // ===================== FORM 177 (companies, profit-tax redirection) =====================
@@ -118,13 +121,21 @@
         { page: 0, x: 71.04,  y: PAGE_H - 602.823, size: 9, src: 'assoc.address_parts.localitate' },
         { page: 0, x: 351.36, y: PAGE_H - 602.823, size: 9, src: 'assoc.address_parts.judet' },
         { page: 0, x: 510.24, y: PAGE_H - 602.823, size: 9, src: 'assoc.address_parts.cod_postal' },
-        { page: 0, x: 250.56, y: PAGE_H - 626.616, size: 9, src: 'assoc.iban' }                  // Cont bancar (IBAN)
-        // "Suma de redirectionat" (beneficiary amount) is overlaid from the company's chosen
-        // amount; x verified in T6 (right side of the IBAN line, y = PAGE_H - 626.616).
+        { page: 0, x: 250.56, y: PAGE_H - 626.616, size: 8, src: 'assoc.iban' },                 // Cont bancar (IBAN) -- size 8: at 9 the spaced IBAN grazes the "Suma de redirectionat" label by ~3pt (verified)
+        // Per-fill values (src 'values.*' resolves against the fillAnafForm values argument --
+        // T6 engine extension). Cell rects verified on the blank original (pushbutton visual
+        // cells on the point-1 row, same baseline as the IBAN value, y = PAGE_H - 626.616):
+        // "Suma de redirectionat (lei)" cell x 478.9..565.0; "Contract nr. /data" cell
+        // x 89.5..168.7. Verified by test fill + pdftotext -layout/-bbox (T6).
+        { page: 0, x: 482.0,  y: PAGE_H - 626.616, size: 9, src: 'values.sumaRedirectionata' },  // Suma de redirectionat (lei)
+        { page: 0, x: 92.0,   y: PAGE_H - 626.616, size: 9, src: 'values.contractNrData' }       // Contract nr. /data ("din dd.mm.yyyy")
       ],
-      manualAfterPrint: ['Suma de redirectionat (in dreptul beneficiarului OncoGuide)',
-                         'Semnatura reprezentant legal firma'],
-      verifyTodo: ['beneficiary amount overlay x', 'subform[4] page-2 codes if used']
+      manualAfterPrint: ['Semnatura reprezentant legal firma'],
+      verifyTodo: [
+        // RESOLVED in T6: 'beneficiary amount overlay x' -> values.sumaRedirectionata at x 482.0
+        // and 'Contract nr./data' -> values.contractNrData at x 92.0 (both verified by fill test).
+        'subform[4] page-2 codes if used'
+      ]
     }
   };
 

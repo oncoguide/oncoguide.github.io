@@ -17,9 +17,10 @@
 
   var TEMPLATE_BASE = '/donate/templates/';
 
-  // ---- resolve an overlay "src" path like 'assoc.cif' / 'assoc.address_parts.strada' ----
-  function resolveSrc(src) {
-    var ctx = { assoc: (root.oncoDonate || {}).assoc || {} };
+  // ---- resolve an overlay "src" path like 'assoc.cif' / 'assoc.address_parts.strada' /
+  // 'values.sumaRedirectionata' (T6: per-fill values join the constant association data) ----
+  function resolveSrc(src, values) {
+    var ctx = { assoc: (root.oncoDonate || {}).assoc || {}, values: values || {} };
     return src.split('.').reduce(function (o, k) { return o == null ? undefined : o[k]; }, ctx);
   }
 
@@ -56,7 +57,7 @@
     // 3) overlay (OncoGuide beneficiary/entity block + any positioned values)
     var font = await doc.embedFont(L.StandardFonts.Helvetica);
     (map.overlay || []).forEach(function (o) {
-      var text = o.text != null ? o.text : resolveSrc(o.src);
+      var text = o.text != null ? o.text : resolveSrc(o.src, values);
       if (text == null || text === '') return;
       doc.getPage(o.page).drawText(String(text), {
         x: o.x, y: o.y, size: o.size || 9, font: font, color: L.rgb(0, 0, 0)
@@ -81,7 +82,11 @@
     Object.keys(values).forEach(function (name) {
       var v = values[name];
       if (v == null || v === '') return;
-      try { form.getTextField(name).setText(String(v)); } catch (e) { /* checkbox handled below */ }
+      try { form.getTextField(name).setText(String(v)); }
+      catch (e) {
+        // Not a text field: contract checkboxes (T6 art5_a / art5_b) take a boolean true.
+        try { if (v === true) form.getCheckBox(name).check(); } catch (e2) { /* unknown key */ }
+      }
     });
     if (signaturePngDataUrl) {
       var png = await doc.embedPng(signaturePngDataUrl);
