@@ -587,10 +587,10 @@ representative field filled offline.
 
 ```yaml
 flags:
-  registru163_active: false   # master switch for the tax-benefit paths
+  registru163_active: true    # ON since 2026-06-12 (ANAF approval 11.06.2026; see Section 10)
 deadlines:
   form230_next: "2027-05-25"  # next 3.5% filing window (2026 income)
-  form177_next: "2027-06-25"  # next F177 window; 2026-06-25 is unreachable for a not-yet-registered NGO
+  form177_next: "2026-06-25"  # NOW REACHABLE post-registration: F177 for 2025 profit tax
 ceilings:
   sponsorship_turnover_pct: 0.0075   # 0.75% of turnover
   sponsorship_profit_tax_pct: 0.20   # 20% of profit tax
@@ -601,8 +601,15 @@ ceilings:
 
 ## 10. Feature Flag and Fiscal Calendar Gating
 
+> **STATUS UPDATE (2026-06-12): registration DONE.** ANAF approved the Registrul entitatilor
+> nonprofit application on **11.06.2026** (decision on request INTERNT-1145502724-2026).
+> `registru163_active` was flipped to `true` and `association.yaml registru163_no` filled on
+> 2026-06-12. Consequence: the F177 window for 2025 profit tax (deadline **25.06.2026**) became
+> reachable -- `fiscal.yaml form177_next` was moved to 2026-06-25. The gating mechanics below
+> remain as designed (and as the kill switch if the registration ever lapses).
+
 The deductible mechanisms require OncoGuide in the ANAF Registrul entitatilor nonprofit
-(Form 163), which is **not yet done**. Until then, building live tax flows would be dishonest.
+(Form 163). At design time this was not yet done; gating kept the build honest.
 
 Gating logic:
 

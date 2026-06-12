@@ -731,3 +731,12 @@ decisions:
       - "Third-party e-sign SaaS -- rejected: recurring cost, donor PII at a third party, fidelity risk on ANAF forms"
       - "In-browser signature on Form 230 -- rejected in v6: drawing on the ANAF PDF violates the fidelity constraint; 230 is printed and signed by hand"
     outcome: "Static client-side architecture: pdf-lib fills the original ANAF AcroForms (verified no-XFA, values-only, never flatten), sponsorship contract is our own AcroForm template signed in-browser, documents delivered via the supporter's own email, archive in .private/finantare/arhiva/ + private Drive, tax flows gated behind registru163_active flag until Form 163 registration. Anonymity: representative name only in the generated PDF, enforced by a pre-commit audit script. Next: expand S14 task plan, Gemini review per task (>9.1), then implement with fresh-Fable review per task (>9.3)."
+
+  - id: 74
+    date: "2026-06-12"
+    category: "process"
+    summary: "Registrul entitatilor nonprofit APPROVED (11.06.2026) -- tax-benefit donation paths switched ON"
+    context: "ANAF approved the Form 163 application (request INTERNT-1145502724-2026, registered and decided 11.06.2026). This was the legal gate for deductible sponsorships (companies, 20% of profit tax) and the 3.5% redirection (employees, Form 230). Per the DONATIONS.md S10 design, activation is config-only: registru163_active flipped to true, association.yaml registru163_no filled. Key consequence: the Form 177 window for 2025 profit tax (deadline 25.06.2026) became reachable -- companies can sign a deductible sponsorship contract from 11.06.2026 and file F177 via their SPV until 25 June."
+    alternatives_considered:
+      - "Keep the flag off until the T5/T6 generators ship -- rejected: dishonest (the legal condition is met; manual contracts from .private templates work today) and would waste the 25.06 F177 window"
+    outcome: "fiscal.yaml: registru163_active true, form177_next 2026-06-25. association.yaml: registru163_no filled. RO donate pages: status callouts updated (registered 11.06.2026; F177 deadline urgency on the companies page; 230 next window 25.05.2027). .private/finantare docs updated (PASUL 0 done, donor fact-sheet registry row filled, F177 urgency noted). Generators still being implemented (T5/T6); pages honestly say automation activates in days and offer the manual email route meanwhile."

@@ -10,7 +10,7 @@ ShowToc: true
 Dacă ești salariat în România, statul îți permite să decizi unde merge **3,5% din impozitul pe venit pe care l-ai plătit deja**. Nu te costă nimic: banii sunt oricum reținuți din salariu; tu doar alegi ca o parte din ei să susțină informarea pacienților cu cancer, în loc să rămână în bugetul general.
 
 {{< callout type="important" >}}
-**În pregătire:** precompletarea automată a formularului 230 se activează după înscrierea Asociației OncoGuide în Registrul entităților nonprofit ANAF (condiție legală pentru redirecționare). Până atunci, această pagină explică mecanismul, iar pentru orice întrebare ne poți [scrie direct]({{< relref "/contact" >}}).
+**Asociația OncoGuide este înscrisă în Registrul entităților nonprofit ANAF din 11.06.2026**, deci redirecționarea de 3,5% către OncoGuide este acum posibilă. De știut: termenul pentru veniturile din 2025 a trecut (25 mai 2026); următoarea fereastră este pentru veniturile din 2026, cu depunere până pe **25 mai 2027**. Precompletarea automată a formularului se activează în zilele acestea; între timp, orice întrebare ne poți [scrie direct]({{< relref "/contact" >}}).
 {{< /callout >}}
 
 ## Cine poate redirecționa

@@ -10,7 +10,7 @@ ShowToc: true
 Dacă firma ta plătește impozit pe profit în România, poți susține OncoGuide cu bani care altfel merg la stat. Legea sponsorizării îți permite să redirecționezi până la **20% din impozitul pe profit** (în limita a 0,75% din cifra de afaceri) către o organizație non-profit. Nu te costă nimic în plus.
 
 {{< callout type="important" >}}
-**În pregătire:** generatorul automat de contract și formularul 177 precompletat se activează după înscrierea Asociației OncoGuide în Registrul entităților nonprofit ANAF (condiție legală pentru sponsorizări deductibile). Până atunci, această pagină explică mecanismul, iar pentru orice întrebare ne poți [scrie direct]({{< relref "/contact" >}}).
+**Asociația OncoGuide este înscrisă în Registrul entităților nonprofit ANAF din 11.06.2026**, deci firma ta poate semna de acum un contract de sponsorizare deductibil. **Termen aproape:** dacă vrei să redirecționezi din impozitul pe profit aferent anului 2025, formularul 177 se depune până pe **25 iunie 2026**. Generatorul automat de mai jos se activează în zilele acestea; până atunci ne poți [scrie direct]({{< relref "/contact" >}}) și îți trimitem contractul și formularul precompletate pe email.
 {{< /callout >}}
 
 ## Cum funcționează, pe scurt

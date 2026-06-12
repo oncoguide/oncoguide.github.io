@@ -38,7 +38,7 @@ Salariații pot redirecționa **3,5% din impozitul pe venit** deja plătit, prin
 </ul>
 
 {{< callout type="important" >}}
-**Statusul mecanismelor fiscale:** sponsorizările deductibile și redirecționarea de 3,5% devin disponibile după înscrierea Asociației OncoGuide în Registrul entităților nonprofit [ANAF](https://www.anaf.ro/) (în curs). Donațiile directe sunt posibile oricând, de pe acum. Paginile dedicate explică fiecare mecanism pas cu pas.
+**Vești bune:** Asociația OncoGuide este înscrisă în Registrul entităților nonprofit [ANAF](https://www.anaf.ro/) din 11.06.2026, deci sponsorizările deductibile și redirecționarea de 3,5% sunt acum posibile. **Pentru firme, termenul este aproape:** formularul 177 pentru impozitul pe profit aferent anului 2025 se depune până pe **25 iunie 2026**. Paginile dedicate explică fiecare mecanism pas cu pas.
 {{< /callout >}}
 
 ## Donație directă prin transfer bancar {#donatie-directa-prin-transfer-bancar}

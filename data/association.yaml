@@ -22,4 +22,7 @@ iban: "RO91 RNCB 0280 1861 0767 0001"
 bank: "Banca Comerciala Romana (BCR)"
 bic: "RNCBROBU"
 email: "nog.opt.3o@icloud.com" # nosec -- anonymous relay, already public in about.md
-registru163_no: ""   # filled after Form 163 approval; gates the tax paths (DONATIONS.md S10)
+# Registrul entitatilor nonprofit (deduceri fiscale): APPROVED by ANAF decision dated 11.06.2026,
+# on request INTERNT-1145502724-2026 (registered same day). Verify/printscreen the public registry
+# entry on anaf.ro for the donor dossier (proof required at contract signing, DONATIONS.md S8.1).
+registru163_no: "inscrisa din 11.06.2026 (decizie ANAF, cerere INTERNT-1145502724-2026)"
