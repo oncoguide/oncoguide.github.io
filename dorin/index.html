@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<title>Decizii Active — Dorin Solomon</title>
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --bg-soft: #ffffff;
+    --bg-tint: #f0f4f9;
+    --fg: #1a202c;
+    --fg-soft: #4a5568;
+    --muted: #718096;
+    --border: #e2e8f0;
+    --border-soft: #edf2f7;
+
+    --accent: #2563eb;
+    --accent-soft: #dbeafe;
+    --accent-deep: #1e40af;
+
+    --ok: #059669;
+    --ok-soft: #d1fae5;
+    --warn: #d97706;
+    --warn-soft: #fef3c7;
+    --alert: #dc2626;
+    --alert-soft: #fee2e2;
+
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 12px 22px -8px rgba(30, 64, 175, 0.18), 0 4px 8px -4px rgba(15, 23, 42, 0.06);
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Inter", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    margin: 0;
+    line-height: 1.6;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 36px 28px 80px; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #ffffff 0%, #eef2ff 50%, #e0e9ff 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 38px 42px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-md);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; top: -50%; right: -8%; width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.10), transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ""; position: absolute; bottom: -40%; left: -5%; width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
+    pointer-events: none;
+  }
+  .hero .crumb { display: inline-block; padding: 4px 12px; background: rgba(37,99,235,0.1); color: var(--accent-deep); border-radius: 999px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  .hero h1 { margin: 0 0 10px; font-size: 34px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; }
+  .hero .lead { font-size: 16.5px; color: var(--fg-soft); max-width: 720px; line-height: 1.6; margin: 0; }
+  .hero .meta-strip { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; font-size: 13px; color: var(--muted); }
+  .hero .meta-strip span { display: inline-flex; align-items: center; gap: 6px; }
+  .hero .meta-strip strong { color: var(--fg); font-weight: 600; }
+
+  /* THIS MONTH strip */
+  .now-strip {
+    background: linear-gradient(135deg, #fffaf0 0%, #fff7ed 100%);
+    border: 1px solid #fcd34d;
+    border-left: 5px solid var(--warn);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    margin-bottom: 34px;
+    box-shadow: var(--shadow-sm);
+  }
+  .now-strip .now-head {
+    font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--warn); margin: 0 0 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .now-items { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 720px) { .now-items { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .now-items { grid-template-columns: repeat(4, 1fr); } }
+  .now-item {
+    display: flex; flex-direction: column; gap: 3px;
+    text-decoration: none; color: var(--fg);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    transition: all 0.18s ease;
+  }
+  .now-item:hover { border-color: var(--warn); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .now-item .when { font-size: 10.5px; font-weight: 700; color: var(--warn); text-transform: uppercase; letter-spacing: 0.04em; }
+  .now-item .what { font-size: 13.5px; font-weight: 700; line-height: 1.35; }
+  .now-item .where { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* Section title */
+  .section-label {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 700;
+    margin: 14px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Cards grid */
+  .cards { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  @media (min-width: 720px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .cards .card.full { grid-column: 1 / -1; }
+  }
+  @media (min-width: 1000px) {
+    .cards { grid-template-columns: repeat(3, 1fr); }
+    .cards .card.full { grid-column: auto; }
+  }
+
+  .card {
+    display: flex; flex-direction: column;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--fg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.22s ease;
+    position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+  .card:hover::before { transform: scaleX(1); }
+  .card.disabled { cursor: default; opacity: 0.65; }
+  .card.disabled:hover { transform: none; box-shadow: var(--shadow-sm); border-color: var(--border); }
+  .card.disabled:hover::before { transform: scaleX(0); }
+  .card.disabled::before { background: var(--muted); }
+
+  .card .icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    line-height: 1;
+  }
+  .card .status {
+    position: absolute;
+    top: 18px; right: 18px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .card .status.active { background: var(--ok-soft); color: var(--ok); }
+  .card .status.soon { background: var(--bg-tint); color: var(--muted); }
+  .card .status.waiting { background: var(--warn-soft); color: var(--warn); }
+  .card.deprioritized { opacity: 0.78; }
+  .card.deprioritized::before { background: var(--warn); }
+  .card h2 {
+    margin: 6px 0 8px;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    line-height: 1.3;
+  }
+  .card .sub {
+    font-size: 13px;
+    color: var(--accent-deep);
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .card.disabled .sub { color: var(--muted); }
+  .card p {
+    margin: 0 0 16px;
+    font-size: 14px;
+    color: var(--fg-soft);
+    line-height: 1.55;
+    flex-grow: 1;
+  }
+  .card .key-points {
+    list-style: none; padding: 0; margin: 0 0 14px;
+    font-size: 13px;
+    color: var(--fg-soft);
+  }
+  .card .key-points li {
+    padding: 4px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+  .card .key-points li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .card.disabled .key-points li::before { color: var(--muted); }
+
+  .card .foot {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-soft);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .card .cta {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card.disabled .cta { color: var(--muted); }
+
+  /* Footer */
+  footer {
+    margin-top: 60px;
+    padding: 24px;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--muted);
+    border-top: 1px solid var(--border-soft);
+    line-height: 1.6;
+  }
+  footer code {
+    background: var(--bg-tint);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent-deep);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 22px 16px 60px; }
+    .hero { padding: 24px 24px; }
+    .hero h1 { font-size: 26px; }
+    .hero .lead { font-size: 15px; }
+    .card { padding: 20px 22px; }
+    .card h2 { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<div class="hero">
+  <div class="crumb">Hub Decizii · Dorin Solomon</div>
+  <h1>Decizii Active</h1>
+  <p class="lead">
+    Hub central al deciziilor strategice deschise pe path-to-NED — fiecare decizie analizată cu pros &amp; cons,
+    riscuri, opțiuni, evidență, gaps și acțiuni concrete. Pagini live, actualizate când apar date noi.
+  </p>
+  <div class="meta-strip">
+    <span>📅 <strong>Ultima actualizare:</strong> 2026-06-12</span>
+    <span>🩺 <strong>Status:</strong> KIF5B::RET confirmat · selper săpt ~19 · răspuns profund M3</span>
+    <span>🎯 <strong>Aldea GR 10.06 ✓</strong> · M6 PET 20–23 iul</span>
+  </div>
+
+</div>
+
+<div class="now-strip">
+  <div class="now-head">📌 Luna aceasta — de făcut</div>
+  <div class="now-items">
+    <a href="m6-plan.html" class="now-item">
+      <span class="when">20–23 iul</span>
+      <span class="what">M6 PET-CT + Brain MRI</span>
+      <span class="where">Anadolu Omni Legend (ancoră) · nod decizie CLT</span>
+    </a>
+    <a href="analize-lunare.html" class="now-item">
+      <span class="when">Lunar</span>
+      <span class="what">Analize + CTX/P1NP baseline</span>
+      <span class="where">oprire denosumab monitorizată</span>
+    </a>
+    <a href="monitorizare.html" class="now-item">
+      <span class="when">De inițiat</span>
+      <span class="what">ctDNA tumor-informed (MRD)</span>
+      <span class="where">din FFPE existent · MET/G810</span>
+    </a>
+    <a href="second-opinions-considerate.html" class="now-item">
+      <span class="when">De contactat</span>
+      <span class="what">Al 2-lea centru — Royal Marsden</span>
+      <span class="where">remote 2nd-op · Prof. Popat</span>
+    </a>
+  </div>
+</div>
+
+<div class="section-label">A · De făcut acum</div>
+
+<div class="cards">
+
+  <a href="m6-plan.html" class="card">
+    <span class="status active">Activ</span>
+    <div class="icon">🗺️</div>
+    <div class="sub">Plan end-to-end · M6 20–23 iul</div>
+    <h2>Plan M6 — PET → CLT → S2</h2>
+    <p>Planul end-to-end al lui M6: PET M6 → ctDNA-MRD → decizie CLT → poartă S2 → execuție iul–aug. Leagă imagistica, terapia locală, S2 și arborele de progresie — fără duplicare. Țintă: CLT iulie–august, ideal pe S2.</p>
+    <ul class="key-points">
+      <li>📍 CLT candidat: Gemelli Roma (consult same-trip)</li>
+      <li>⚠ Conflict timing S2 vs „CLT imediat" → depunere pre-M6 condiționată</li>
+      <li>🚦 Gate: PET + ctDNA-MRD → watch / CLT / progresie</li>
+      <li>🔑 Aldea GR 10.06 ✓ — input CLT/S2 integrat</li>
+    </ul>
+    <div class="foot">
+      <span>Scaffold viu · 5 pași</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+  <a href="analize-lunare.html" class="card">
+    <span class="status active">Activ</span>
+    <div class="icon">🧪</div>
+    <div class="sub">Tracker · Calendar lunar</div>
+    <h2>Analize Lunare</h2>
+    <p>Ce analize, ECG și imagistică trebuie făcute în fiecare lună — cu pathway CAS gratuit (bilet Preda / medic familie) și prețuri Bioclinica + LotusMed pentru testele plătite.</p>
+    <ul class="key-points">
+      <li>🩸 Set lunar CAS + CTX/P1NP baseline (oprire denosumab monitorizată)</li>
+      <li>🧫 Creatinină + Cistatina C la fiecare set (pseudo-AKI selper)</li>
+      <li>📈 ECG lunar Lotus via medic familie (CAS)</li>
+      <li>🗓️ Iulie: M6 PET-CT + Brain MRI decision node</li>
+    </ul>
+    <div class="foot">
+      <span>Lunar · ~5 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+  <a href="monitorizare.html" class="card">
+    <span class="status active">Activ</span>
+    <div class="icon">📡</div>
+    <div class="sub">Plan canonic · imagistică + radiație + ctDNA</div>
+    <h2>Plan de monitorizare</h2>
+    <p>Ce fac, când, cu ce și de ce — cadența imagisticii, ledger-ul de radiație și planul ctDNA într-un singur loc. PET la noduri de decizie (NU whole-body q3 luni), CT workhorse + ctDNA + RMN între ele, radiația minimizată pe motiv de vârstă.</p>
+    <ul class="key-points">
+      <li>📅 M6 PET ~20 iul · M9 CT · M12 PET + RMN q12wk</li>
+      <li>🖥️ Scanner M6 hibrid (D121) — Omni Legend ancoră, uEXPLORER aditiv</li>
+      <li>☢️ Ledger radiație ~28 mSv YTD + reguli dose-sparing</li>
+      <li>🩸 ctDNA tumor-informed q6–8wk din FFPE existent</li>
+    </ul>
+    <div class="foot">
+      <span>8 secțiuni · ~10 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+  <a href="denosumab-decizie.html" class="card">
+    <span class="status waiting">Pending medici</span>
+    <div class="icon">🦴</div>
+    <div class="sub">Decizie · oprire monitorizată · Aldea 10.06 ✓</div>
+    <h2>Denosumab — opresc sau nu?</h2>
+    <p>Recomandarea principală + ce fac concret + ce discut cu Dr. Eda și Dr. Preda. Oprirea după 4 doze e rezonabilă pentru profilul tău, dar ca oprire monitorizată (CTX/P1NP pe analizele lunare + punte ZA condiționată), nu „stop și gata". Alternativă validă: Q12W.</p>
+    <ul class="key-points">
+      <li>✅ Aldea 10.06: nu ar fi inițiat denosumab — se poate opri acum</li>
+      <li>⏳ Pending coordonare Dr. Eda (inițiator) + Dr. Preda — NU oprit încă</li>
+      <li>🩸 CTX + P1NP la analizele lunare (baseline acum)</li>
+      <li>🚨 Durere de spate nouă → RMN urgent</li>
+    </ul>
+    <div class="foot">
+      <span>Recomandare + plan + întrebări medici</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="section-label">B · Când X se întâmplă</div>
+
+<div class="cards">
+
+  <a href="progression-options.html" class="card">
+    <span class="status soon">La progresie</span>
+    <div class="icon">🌳</div>
+    <div class="sub">Strategic GPS · contingență pre-bake · 7 branches</div>
+    <h2>Progression Options</h2>
+    <p>Decision-tree per scenariu rezistență — CE FAC la primul semnal de progresie (ctDNA-rise, lesion nou, scan-progression). Pre-bake decizii ÎNAINTE de criză = câștigăm zile-săptămâni vs deliberare reactivă. 7 branches (A oligo / B MET / C G810 / D MTAP / E neuroendocrine / F other / G systemic) + biopsy overlay + IHC pre-requisite panel + DTP eradication parallel layer + 14-day decision-points calendar.</p>
+    <ul class="key-points">
+      <li>🔥 Branch B MET-amp: Teliso-V (Emrelis) FDA May 2025 c-MET ADC ORR 35%</li>
+      <li>🔥 Branch D MTAP-del: BMS-986504 driver-positive PR confirmed (Ross JTO 2026)</li>
+      <li>🟢 Branch C G810: EP0031 lunbotinib ASCO26 oral 29 May 14:36 CDT</li>
+      <li>🆕 Branch E NEC: Tarlatamab DLL3 BiTE (NEW scenario surfaced 21.05)</li>
+      <li>✅ Genekor țesut 08.06: KIF5B confirmat + MDM2 (nou) + baseline curat</li>
+    </ul>
+    <div class="foot">
+      <span>7 branches + overlays · ~15 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="section-label">C · Ce caut / explorez</div>
+
+<div class="cards">
+
+  <a href="emerging-tech.html" class="card">
+    <span class="status active">Explorez</span>
+    <div class="icon">🚀</div>
+    <div class="sub">Hunt · Pillar 2 + post-progression arsenal</div>
+    <h2>Emerging Tech</h2>
+    <p>Dashboard unificat 6 clase anti-cancer non-TKI · vaccinuri · cell therapy · ADCs · PROTACs · molecular glues · bispecifics. De la disponibile NOW (ADCs FDA approved) la pipeline 2028+ (PROTACs). Tab-uri interactive.</p>
+    <ul class="key-points">
+      <li>💉 Vaccinuri (17) — CRneoVac, FusionVAC, BioNTech, Racotumomab</li>
+      <li>🧬 Cell Therapy (8) — Reuben Lab RET-TCR-T, IMA203, KIR-CAR f12600</li>
+      <li>🎯 ADCs (5) — Telisotuzumab vedotin + Dato-DXd FDA approved</li>
+      <li>⛓ PROTACs · 🧪 Glues · ⚖ Bispecifics</li>
+    </ul>
+    <div class="foot">
+      <span>6 tabs · ~20 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+  <a href="detoxifiere.html" class="card">
+    <span class="status active">Body Health</span>
+    <div class="icon">🌿</div>
+    <div class="sub">Body Health · Optimizare endogenă</div>
+    <h2>Detoxifiere</h2>
+    <p>Suport căi naturale eliminare + recovery post-SBRT T11 + pregătire SBRT mediastinal Jul-Aug + protecție hepatică/GI pe Selpercatinib + sincronizare Xgeva. Stack ~165 EUR/lună, toate cu safety gates CYP3A4/D079/hemoroizi/QTc.</p>
+    <ul class="key-points">
+      <li>AX 1 Post-RT — Delanian PTX+VitE, L-glutamine 30g esofagită</li>
+      <li>AX 2 Pe selper — glycine/taurine/choline, GI integrity, anti-inflam non-curcumin</li>
+      <li>AX 3 Pe Xgeva — Ca+D+K2 MK-7, ONJ prevention, renal</li>
+      <li>Mituri contraindicate + prompt Gemini DR validare externă</li>
+    </ul>
+    <div class="foot">
+      <span>6 secțiuni · ~12 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+  <a href="miscare-forta.html" class="card">
+    <span class="status active">Body Health</span>
+    <div class="icon">🏋️</div>
+    <div class="sub">Body Health · Mișcare & Forță</div>
+    <h2>Mișcare & Forță</h2>
+    <p>Program progresiv acasă: de la mers + 15 min bicicletă → forță, construit în jurul T11 (coloană neutră, fără încărcare axială / Valsalva / impact). Gate de clearance înainte de orice greutate. Țintă: oboseală ↓, masă musculară, prevenția căderilor (North Star #2).</p>
+    <ul class="key-points">
+      <li>Regula T11 — sigur vs de evitat + clearance SINS în 2 pași</li>
+      <li>Program săptămânal: 2 forță + aerobic + exerciții coloană-neutră</li>
+      <li>Semne de STOP (incl. compresie medulară) + plafon permanent de încărcare</li>
+      <li>Echipament minim ~180-350 RON</li>
+    </ul>
+    <div class="foot">
+      <span>8 secțiuni · ~10 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+  <a href="second-opinions-considerate.html" class="card">
+    <span class="status waiting">De contactat</span>
+    <div class="icon">🩺</div>
+    <div class="sub">Hunt · al 2-lea centru durabil, independent</div>
+    <h2>Al 2-lea centru (Royal Marsden)</h2>
+    <p>Alegerea UNUI al 2-lea centru durabil, independent — nu un tracker de outreach. Sinteză 7 agenți (12.06): Royal Marsden / Prof. Popat = top pick; Sheba & Cleveland = runner-up / backup; China = doar armă de rezervă la progresie.</p>
+    <ul class="key-points">
+      <li>🇬🇧 Royal Marsden / Prof. Popat — remote 2nd-op productizat (video, SLA 7z)</li>
+      <li>💷 Cel mai ieftin & transparent: £816 inițial / £550 follow-up</li>
+      <li>🔓 Independent — în afara axei Anadolu/GR ȘI MSK/Drilon</li>
+      <li>🧪 Test-ping paralel Sheba + Cleveland (validează responsivitatea)</li>
+    </ul>
+    <div class="foot">
+      <span>Directory + decizie · ~10 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="section-label">D · Referință</div>
+
+<div class="cards">
+
+  <a href="imagistica.html" class="card">
+    <span class="status soon">Referință</span>
+    <div class="icon">🔬</div>
+    <div class="sub">Reference · Aparate, tehnologii, acces</div>
+    <h2>Imagistică &amp; Monitoring</h2>
+    <p>Care scanner folosim acum (GE Omni Legend Anadolu), ce alternative sunt semnificativ mai bune (LAFOV Quadra, FAPI Heidelberg), unde sunt disponibile (RO + EU), cu ce precizie, eroare, radiație și cost. Obiectiv: detectare progresie cât mai rapidă, radiație minimă.</p>
+    <ul class="key-points">
+      <li>Anadolu = GE Omni Legend (digital 2022, top tier)</li>
+      <li>LAFOV Quadra Bern/Tübingen = -80% radiație, marginal sensibilitate</li>
+      <li>FAPI Heidelberg = contingency Scenariu B/C M6 (CMR FDG)</li>
+      <li>RO best = Sanador Horizon 3R (inferior Anadolu)</li>
+      <li>Decision tree M6 + 6 trigger-uri de switch scanner</li>
+    </ul>
+    <div class="foot">
+      <span>6 secțiuni · ~12 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+  <a href="terapie-locala.html" class="card">
+    <span class="status soon">Atlas</span>
+    <div class="icon">🎯</div>
+    <div class="sub">Atlas · toate modalitățile + aparate + centre</div>
+    <h2>Terapie Locală</h2>
+    <p>Toate tehnologiile de control local — ce există, cât de bune, pe ce sit din corp, cu ce aparat și în ce centre (România → Turcia → Europa → Lume). Matrice comparativă + per-aparat + tehnologii de vârf.</p>
+    <ul class="key-points">
+      <li>16 modalități, structură per-aparat → centre RO/TR/EU/Lume</li>
+      <li>Matrice comparativă + comparație vizuală radioterapie</li>
+      <li>Cel mai bun din RO + verdict «merită deplasarea?»</li>
+      <li>Tehnologii de vârf: FLASH · FAPI Y-90 · PEF · MR-adaptive</li>
+    </ul>
+    <div class="foot">
+      <span>8 secțiuni · ~10 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="section-label">E · Arhivă / Legal</div>
+
+<div class="cards">
+
+  <a href="teste-moleculare-avansate.html" class="card deprioritized">
+    <span class="status soon">Aproape arhivat</span>
+    <div class="icon">🧬</div>
+    <div class="sub">Rezultate țesut + ctDNA PRIMITE 08.06</div>
+    <h2>Teste Moleculare Avansate</h2>
+    <p>Rezultate țesut PRIMITE 08.06: <strong>KIF5B::RET confirmat</strong>, <strong>MDM2 amplificat (nou)</strong>, FANCL confirmat cross-platform, TMB 4.12 low, MSS, HLA heterozigot, baseline rezistență curat (fără MET/STK11/KEAP1/TP53-mut). ✅ ctDNA/lichid primit 08.06: TF 0.22% (low), fără variante detectabile în plasmă (limită de sensibilitate, nu pierdere de marker), <strong>FANCL germline CONFIRMAT</strong>. Gap rămas: IHC add-on (MTAP/HER3/TROP2/c-MET) + consiliere genetică/cascadă familie.</p>
+    <ul class="key-points">
+      <li>✅ KIF5B::RET confirmat (rezolvă D065 → D118)</li>
+      <li>⚠️ MDM2 amplificat — prudență imunoterapie ICI</li>
+      <li>Block /2 INTACT acasă (rezervă constraint hard)</li>
+      <li>✅ ctDNA 08.06: TF 0.22% + FANCL germline confirmat</li>
+      <li>Pending: doar IHC add-on + consiliere genetică</li>
+    </ul>
+    <div class="foot">
+      <span>Rezolvat 08.06 · doar IHC add-on + consiliere</span>
+      <span class="cta">Vezi detalii →</span>
+    </div>
+  </a>
+
+  <a href="discussions.html" class="card">
+    <span class="status soon">Tracker</span>
+    <div class="icon">📬</div>
+    <div class="sub">Tracker · CRM outreach unificat</div>
+    <h2>Discuții Active</h2>
+    <p>CRM unificat outreach experți + instituții + trial PIs. Conversații în desfășurare, archive Wave 1-8, status KOL hunt. Filter live pe status / topic / search.</p>
+    <ul class="key-points">
+      <li>~40 contacte trackate · ~12 replies</li>
+      <li>Aldea GR 10.06 ✓ · Heidelberg MIO · Karolinska · NIH · Wolf</li>
+      <li>Tübingen FusionVAC D109 stalled (reactivare la progresie)</li>
+      <li>Filter live pe status / topic / search</li>
+    </ul>
+    <div class="foot">
+      <span>9 secțiuni · filter live</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+  <a href="malpraxis.html" class="card">
+    <span class="status waiting">Juridic activ</span>
+    <div class="icon">⚖️</div>
+    <div class="sub">Caz Juridic · Malpraxis Radiologic</div>
+    <h2>Caz Malpraxis — RMN Sept 2025</h2>
+    <p>Omisiunea raportării leziunii metastatice T11 pe RMN lombar 03.09.2025, confirmată retroactiv 24.05.2026 (Conf. Univ. Lazar). Cascadă damages: zeci ședințe recuperare contraindicate + 5 prezentări urgență + dx oncologic întârziat 4 luni. Volumul leziunii T11 a crescut de ~4× în 4 luni.</p>
+    <ul class="key-points">
+      <li>5 avocați contactați 25.05 — reply gate 7d/14d</li>
+      <li>Centrokinetic email GDPR trimis — termen ≤ 24.06</li>
+      <li>pCloud dosar evidence pregătit pentru avocați</li>
+      <li>Deadline civil 24.05.2029 · disciplinar 24.05.2027</li>
+    </ul>
+    <div class="foot">
+      <span>Pagină dedicată · ~5 min</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="section-label">F · Familie</div>
+
+<div class="cards">
+
+  <a href="../andreea/index.html" class="card">
+    <span class="status active">Activ</span>
+    <div class="icon">💚</div>
+    <div class="sub">Nod separat · Andreea</div>
+    <h2>Sănătate Andreea</h2>
+    <p>Nodul personal al Andreei — analize de făcut (bilet CAS iulie + plătite/MediHelp), timeline medical complet pe ani și screeningul ginecologic de pus la zi. Priorități: anemie feriprivă + screening gineco restant.</p>
+    <ul class="key-points">
+      <li>🧪 Bilet CAS iulie — anemie feriprivă + lipide</li>
+      <li>🗓️ Timeline 2017→2026 + trenduri (fier, LDL, prolactină)</li>
+      <li>⚠ Ecografie transvaginală + PAP/HPV restante 4,5 ani</li>
+      <li>🛡️ MediHelp COBALT — ambulatoriu 12.000 EUR/an</li>
+    </ul>
+    <div class="foot">
+      <span>oncoguide.github.io/andreea/</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="section-label">G · Învățare de la alți pacienți</div>
+
+<div class="cards">
+
+  <a href="cancer-fighters.html" class="card">
+    <span class="status active">Nou</span>
+    <div class="icon">🥊</div>
+    <div class="sub">Catalog · pacienți reali, surse personale</div>
+    <h2>Cancer Fighters</h2>
+    <p>111 pacienți care își împărtășesc public lupta cu cancerul — de la care învățăm strategie și tactici. Prioritate pe RET-fusion și NSCLC oncogene-driven (profil similar). Card scurt per individ; detalii complete în DB + research.</p>
+    <ul class="key-points">
+      <li>🧬 44 RET / driver-match · 47 NSCLC oncogene-driven</li>
+      <li>🌍 Surse personale, multi-limbă (EN/JA/ZH/NL/DE/FR/…)</li>
+      <li>🔎 Căutare + filtru pe tip · cine, diagnostic, tratamente, rezultate</li>
+      <li>💡 Lecția-cheie reutilizabilă per pacient</li>
+    </ul>
+    <div class="foot">
+      <span>oncoguide.github.io/dorin/cancer-fighters</span>
+      <span class="cta">Deschide →</span>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  Pagini private · acces protejat parolă · indexare blocată<br><br>
+  AI-assisted personal research synthesis. Nu este un plan medical. Echipa medicală deține toate deciziile clinice.
+</footer>
+
+</div>
+</body>
+</html>
