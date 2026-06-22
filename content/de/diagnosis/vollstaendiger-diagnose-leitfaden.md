@@ -107,6 +107,10 @@ Idealerweise fordern Sie **4-8 Biopsiezylinder** an, verteilt auf:
 
 Diese eine Bitte, zum richtigen Zeitpunkt gestellt, kann Behandlungstueren oeffnen, die heute noch nicht existieren.
 
+{{< callout type="tip" >}}
+**Sie wollen die komplette Checkliste?** Wir haben den vollstaendigen Leitfaden **["Tumorgewebe aufbewahren"](/de/diagnosis/tumorgewebe-aufbewahren/)** (von Future of Cancer Care Today) veroeffentlicht -- was Sie fragen sollten, welche Tests moeglich bleiben und was zu tun ist, wenn bereits Gewebe entnommen wurde.
+{{< /callout >}}
+
 ---
 
 ## Schritt 3: Molekulare und genetische Tests -- der am meisten uebersehene Schritt

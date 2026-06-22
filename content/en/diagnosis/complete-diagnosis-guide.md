@@ -107,6 +107,10 @@ Ideally, request **4-8 biopsy cores** distributed between:
 
 This one request, made at the right moment, can open treatment doors that do not yet exist today.
 
+{{< callout type="tip" >}}
+**Want the full checklist?** We have republished the complete guide **["Preserving your tumor tissue"](/en/diagnosis/preserving-tumor-tissue/)** (from Future of Cancer Care Today) -- what to ask, which tests it keeps open, and what to do if tissue was already collected.
+{{< /callout >}}
+
 ---
 
 ## Step 3: Molecular and genetic testing --the most overlooked step

@@ -107,6 +107,10 @@ Idealmente, richiedi **4-8 frustoli bioptici** distribuiti tra:
 
 Questa semplice richiesta, fatta al momento giusto, puo aprire porte terapeutiche che oggi non esistono ancora.
 
+{{< callout type="tip" >}}
+**Vuoi la lista completa?** Abbiamo pubblicato per intero la guida **["Conservare il tessuto tumorale"](/it/diagnosis/conservazione-tessuto-tumorale/)** (di Future of Cancer Care Today) -- cosa chiedere, quali esami restano possibili e cosa fare se il tessuto e gia stato prelevato.
+{{< /callout >}}
+
 ---
 
 ## Passo 3: I test molecolari e genetici -- il passo piu ignorato

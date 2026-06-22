@@ -107,6 +107,10 @@ Ideal, cere **4-8 fragmente (core-uri) de biopsie** distribuite intre:
 
 Aceasta singura cerere, facuta in momentul potrivit, poate deschide usi de tratament care inca nu exista astazi.
 
+{{< callout type="tip" >}}
+**Vrei pașii compleți?** Am publicat integral ghidul **["Conservarea țesutului tumoral"](/ro/diagnosis/conservarea-tesutului-tumoral/)** (de la Future of Cancer Care Today) -- ce să întrebi, ce teste rămân posibile și ce să faci dacă țesutul a fost deja recoltat.
+{{< /callout >}}
+
 ---
 
 ## Pasul 3: Testele moleculare și genetice --pasul cel mai ignorat

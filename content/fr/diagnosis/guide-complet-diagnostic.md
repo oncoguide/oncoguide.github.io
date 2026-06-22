@@ -107,6 +107,10 @@ Idealement, demandez **4 a 8 carottes de biopsie** reparties entre :
 
 Cette seule demande, faite au bon moment, peut ouvrir des portes therapeutiques qui n'existent pas encore aujourd'hui.
 
+{{< callout type="tip" >}}
+**Vous voulez la liste complete ?** Nous avons publie l'integralite du guide **["Preserver votre tissu tumoral"](/fr/diagnosis/conservation-tissu-tumoral/)** (de Future of Cancer Care Today) -- quoi demander, quels tests restent possibles et que faire si le tissu a deja ete preleve.
+{{< /callout >}}
+
 ---
 
 ## Etape 3 : Les tests moleculaires et genetiques -- l'etape la plus negligee

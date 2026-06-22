@@ -107,6 +107,10 @@ Idealmente, solicita **4-8 cilindros de biopsia** distribuidos entre:
 
 Esta unica solicitud, hecha en el momento adecuado, puede abrir puertas de tratamiento que aun no existen hoy.
 
+{{< callout type="tip" >}}
+**Quieres la lista completa?** Hemos publicado la guia completa **["Conservar tu tejido tumoral"](/es/diagnosis/conservacion-tejido-tumoral/)** (de Future of Cancer Care Today) -- que preguntar, que pruebas siguen siendo posibles y que hacer si el tejido ya fue extraido.
+{{< /callout >}}
+
 ---
 
 ## Paso 3: Las pruebas moleculares y geneticas --el paso mas ignorado
