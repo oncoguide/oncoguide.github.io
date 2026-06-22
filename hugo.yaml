@@ -61,6 +61,10 @@ languages:
           name: "Contact"
           url: /en/contact/
           weight: 30
+        - identifier: blog
+          name: "Blog"
+          url: /en/blog/
+          weight: 35
         - identifier: search
           name: "Search"
           url: /en/search/
@@ -107,6 +111,10 @@ languages:
           name: "Contact"
           url: /ro/contact/
           weight: 30
+        - identifier: blog
+          name: "Blog"
+          url: /ro/blog/
+          weight: 35
         - identifier: search
           name: "Cautare"
           url: /ro/search/
@@ -153,6 +161,10 @@ languages:
           name: "Contatto"
           url: /it/contact/
           weight: 30
+        - identifier: blog
+          name: "Blog"
+          url: /it/blog/
+          weight: 35
         - identifier: search
           name: "Cerca"
           url: /it/search/
@@ -199,6 +211,10 @@ languages:
           name: "Contact"
           url: /fr/contact/
           weight: 30
+        - identifier: blog
+          name: "Blog"
+          url: /fr/blog/
+          weight: 35
         - identifier: search
           name: "Recherche"
           url: /fr/search/
@@ -245,6 +261,10 @@ languages:
           name: "Kontakt"
           url: /de/contact/
           weight: 30
+        - identifier: blog
+          name: "Blog"
+          url: /de/blog/
+          weight: 35
         - identifier: search
           name: "Suche"
           url: /de/search/
@@ -291,6 +311,10 @@ languages:
           name: "Contacto"
           url: /es/contact/
           weight: 30
+        - identifier: blog
+          name: "Blog"
+          url: /es/blog/
+          weight: 35
         - identifier: search
           name: "Buscar"
           url: /es/search/
@@ -302,7 +326,7 @@ languages:
 params:
   env: production
   author: "OncoGuide"
-  # Web3Forms access key for the contact form (public by design — routes to nog.opt.3o@icloud.com).
+  # Web3Forms access key for the contact form (public by design — routes to nog.opt.3o@icloud.com).  # nosec -- anonymous iCloud relay (allowed)
   # Get it free at https://web3forms.com (enter that email, copy the Access Key shown).
   web3formsKey: "b619c00c-5bc5-4852-a722-9bc038bc64ec"
   displayFullLangName: true
@@ -333,7 +357,7 @@ params:
   # Social icons — disabled on homepage for clean design
   # socialIcons:
   #   - name: email
-  #     url: "mailto:nog.opt.3o@icloud.com"
+  #     url: "mailto:nog.opt.3o@icloud.com"  # nosec -- anonymous iCloud relay (allowed)
   #   - name: rss
   #     url: "/index.xml"
 

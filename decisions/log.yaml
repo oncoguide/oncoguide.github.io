@@ -751,6 +751,16 @@ decisions:
       - "Collect donor name/address in the 230 flow for a nicer filename -- rejected: the ANAF form has no fields for them; data minimization wins, donor handwrites after printing"
     outcome: "Both generators live behind registru163_active=true: /ro/donate/persoane-fizice (230: CNP+year+mirrors+checkboxes via fields, OncoGuide block via overlay, no in-browser signature, paper-first instructions) and /ro/donate/firme (regime guard from config, ceiling calculator, contract with in-browser signature draft + blank association block for countersignature, pre-filled F177 with amount overlay). Anonymity audit green (1 template checked); 0/66 + 0/101 ANAF widgets altered; key lesson recorded: always verify the BUILT artifact, not only unit harnesses."
 
+  - id: 77
+    date: "2026-06-22"
+    category: "technical"
+    summary: "Added a Blog section to the header menu in all 6 languages, positioned after Contact"
+    context: "User asked for a Blog section on the site, shown in the header menu after Contact, in all languages. Implemented as a standard Hugo content section (content/{lang}/blog/_index.md) so it lists posts as they are added, plus a per-language menu entry in hugo.yaml. The menu is config-driven (site.Menus.main rendered by layouts/partials/header.html), so a new menu item plus the section index page is all that is needed."
+    alternatives_considered:
+      - "Reuse an existing section (e.g. an 'updates' page) — rejected: Blog is its own content type with its own listing and RSS, and the user asked for a distinct section."
+      - "Drive the menu label through i18n strings — rejected: menu labels are defined per-language inline in hugo.yaml (matching every other menu item); 'Blog' is the same loanword across en/ro/it/fr/de/es anyway."
+    outcome: "hugo.yaml: identifier 'blog', name 'Blog', url /{lang}/blog/, weight 35 (between Contact 30 and the Search icon 40) for all 6 languages. New content/{lang}/blog/_index.md (translationKey section-blog, weight 9) with a warm one-line description in each language, matching the native-diacritics + em-dash style of the existing section _index.md files (not the ASCII menu style). CLAUDE.md File Structure updated per the dependency map. Hugo build clean: all 6 /{lang}/blog/ pages render; rendered RO nav order confirmed diagnosis -> imaging -> treatment -> cancer-types -> donate -> contact -> blog -> search. Section starts empty (renders title + description, no posts) until the first post is added. Not yet pushed."
+
   - id: 76
     date: "2026-06-22"
     category: "content"

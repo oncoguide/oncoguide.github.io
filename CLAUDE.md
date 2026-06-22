@@ -88,6 +88,7 @@ content/{en,ro,it,fr,de,es}/    — Content per language
   contact.md                     — Contact page (translationKey: contact)
   archives.md                    — Archives page (translationKey: archives)
   search.md                      — Search page (translationKey: search)
+  blog/                          — Blog: news, stories, updates (section; menu after Contact)
   diagnosis/                     — Diagnosis guides
   cancer-types/                  — Cancer type master guides
   treatment-access/              — Treatment access & patient rights
