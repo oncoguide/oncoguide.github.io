@@ -77,7 +77,7 @@ petct:
       fov_value: "32 cm — extended field"
       ai: true
       ai_feature: "Precision DL"
-      cost: "Self-pay ≈ €850 + €150 oncologist consult"
+      cost: "Self-pay ≈ €1,250 (PET-CT)"
       cas: "no"
       centers:
         - {name: "Anadolu Medical Center", city: "Gebze", country: "TR", region: "intl"}

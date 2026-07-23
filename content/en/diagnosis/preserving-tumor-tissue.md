@@ -19,6 +19,23 @@ This is an OncoGuide reproduction of **"Preserving Your Tumor Tissue"**, publish
 
 This guide is a companion to our [complete diagnosis guide](/en/diagnosis/complete-diagnosis-guide/). It explains one decision that is easy to miss and impossible to undo later: what happens to your tumor tissue.
 
+{{< callout type="warning" >}}
+**An OncoGuide note, added to the FCCT guide below — the one thing we most wish we had understood at the *first* biopsy.** Tissue is finite, it is not renewable, and — this is the part that surprises people — **a good response to treatment can quietly close the door on ever getting more.** Plan for the whole journey, not just the first diagnosis.
+
+Over the course of treatment, one small biopsy may be asked to serve **several separate needs**, each of which consumes material:
+
+- the **first molecular test** (comprehensive DNA/RNA sequencing, "NGS") that chooses your first-line therapy;
+- often a **second molecular test at resistance**, if the cancer changes and a new driver has to be found — that is **at least two full sequencing runs** before anything else;
+- a **tumor-informed blood test for recurrence (MRD)**, built from a one-time tumor sequencing;
+- and, if you ever pursue one, a **personalized (neoantigen) cancer vaccine** — which typically needs **substantially more** material than a routine panel, because it may require whole-**exome** *and* whole-**transcriptome** sequencing, and several centers strongly prefer **fresh-frozen** tissue over paraffin.
+
+A standard core biopsy is often *just* enough for the first diagnosis and little more. So at the **first** procedure — while there is still tumor to sample — it is worth asking, in writing, for **extra cores**, asking whether a portion can be kept **fresh-frozen** (not only fixed in paraffin), and making sure the diagnostic block is **not completely used up** by the first test.
+
+**Why the timing is unforgiving:** if treatment works very well, there may later be **no biopsiable tumor left** — nothing active or large enough to sample safely. That is a good problem to have. But it means the tissue you banked *early* may be the only tissue you will ever have — and a paraffin block that seemed adequate can turn out to hold **less than a millimetre** of usable tumour when a vaccine lab finally measures it. Ask for a written **inventory of what remains** after each test, so you are never surprised late.
+
+If a vaccine is on your mind, we wrote a companion piece on exactly this: **[Personalized cancer vaccines, part 2 — the tissue you need, and why to secure it early](/en/blog/personalized-cancer-vaccines-tissue/)**.
+{{< /callout >}}
+
 ## Why this matters
 
 Tumor tissue is one of the most valuable clinical resources in cancer care. It can be used for diagnosis, molecular testing, treatment planning, clinical trial matching, and, in some cases, more advanced personalized approaches.
