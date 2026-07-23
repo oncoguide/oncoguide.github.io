@@ -34,7 +34,7 @@ Me hice una resonancia magnética (RM) lumbar en una clínica privada. El result
 
 Pero el dolor no se iba. Al contrario, aumentaba.
 
-Mucho más tarde me enteré de algo que todavía me duele: la lesión ya era visible en aquellas imágenes de septiembre. Estaba ahí, pero no se mencionó en el informe. Cuatro meses perdidos, durante los cuales un cáncer de progresión rápida tuvo tiempo de crecer.
+Mucho más tarde entendí cuánto importa una segunda opinión sobre las imágenes cuando un dolor no se va. Es una lección que todavía me duele -- ojalá la hubiera sabido antes: un resultado "limpio" no debería ser la última palabra cuando los síntomas dicen otra cosa.
 
 {{< callout type="important" >}}
 Si tienes un dolor que no se va o que empeora a pesar del tratamiento, insiste. Pide una segunda opinión sobre las imágenes. Un informe "limpio" no siempre significa que todo esté bien.

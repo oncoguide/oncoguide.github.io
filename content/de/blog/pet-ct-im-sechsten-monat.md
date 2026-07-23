@@ -53,7 +53,7 @@ Es reicht nicht. Ich habe in die rohen DICOM-Dateien geschaut -- die technischen
 - **Die Version der Rekonstruktionssoftware** wurde zwischen den beiden Untersuchungen aktualisiert, einschließlich einer zusätzlichen Streustrahlenkorrektur.
 - **Mein Gewicht** ist von 77 auf 79 kg gestiegen. Der SUV wird auf das Körpergewicht bezogen, also fügt das allein rein rechnerisch etwa 2.6 Prozent hinzu.
 - **Die Menge des oralen Kontrastmittels** war etwa halb so groß wie im April. Das betrifft die Lunge nicht, aber es betrifft, wie gut sich die Strukturen im Bauchraum voneinander abgrenzen.
-- **Die EARL-Standardisierung** -- ein Verfahren, bei dem das Labor zusätzlich eine nach einem europäischen Standard kalibrierte Rekonstruktion liefert, gerade damit die Werte über die Zeit vergleichbar sind -- habe ich bei der Terminvereinbarung angefordert. Sie wurde bei keiner der beiden Untersuchungen geliefert.
+- **Die EARL-Standardisierung** -- ein Verfahren, bei dem ein Labor zusätzlich eine nach einem europäischen Standard kalibrierte Rekonstruktion liefern kann, gerade damit die Werte über die Zeit vergleichbar sind. Keine der beiden Untersuchungen enthielt eine solche standardisierte Rekonstruktion.
 
 Ich bin zu einer Erkenntnis gekommen, die ich vorher nicht hatte: **dasselbe Gerät bedeutet nicht automatisch dieselben Bedingungen.** Vergleichbarkeit ist keine Eigenschaft der Maschine, sie ist ein Verfahren, das man jedes Mal ausdrücklich und schriftlich anfordern muss.
 

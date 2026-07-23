@@ -53,7 +53,7 @@ No basta. Miré los archivos DICOM en bruto -- los datos técnicos que el equipo
 - **La versión del software de reconstrucción** se actualizó entre los dos estudios, e incluía además una corrección adicional de dispersión.
 - **Mi peso** subió de 77 a 79 kg. El SUV se normaliza por el peso, así que solo eso ya añade mecánicamente un 2.6 por ciento.
 - **La cantidad de contraste oral** fue aproximadamente la mitad que en abril. No afecta al pulmón, pero sí a lo bien que se separan las estructuras del abdomen.
-- **La estandarización EARL** -- un procedimiento por el cual el laboratorio entrega, además, una reconstrucción calibrada según un estándar europeo, precisamente para que los valores sean comparables en el tiempo -- la pedí al reservar la cita. No se entregó en ninguno de los dos estudios.
+- **La estandarización EARL** -- un procedimiento por el cual un laboratorio puede entregar, además, una reconstrucción calibrada según un estándar europeo, precisamente para que los valores sean comparables en el tiempo. Ninguno de los dos estudios incluyó una reconstrucción estandarizada de este tipo.
 
 He llegado a una conclusión que no conocía: **el mismo equipo no significa automáticamente las mismas condiciones.** La comparabilidad no es una propiedad de la máquina, es un procedimiento que hay que pedir de forma explícita, por escrito, cada vez.
 

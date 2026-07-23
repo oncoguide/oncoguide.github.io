@@ -34,7 +34,7 @@ I had a lumbar MRI at a private clinic. The official result spoke only of degene
 
 But the pain wasn't going away. On the contrary, it was getting worse.
 
-Much later I found out something that still hurts: the lesion was already visible in those September images. It was there, but it wasn't mentioned in the report. Four months lost, during which a fast-progressing cancer had time to grow.
+Much later I understood how much a second opinion on the images matters when a pain won't go away. It's a lesson that still hurts -- I wish I'd known it sooner: a "clean" result shouldn't be the last word when your symptoms say otherwise.
 
 {{< callout type="important" >}}
 If you have pain that won't go away or that gets worse despite treatment, insist. Ask for a second opinion on the images. A "clean" report doesn't always mean everything is fine.

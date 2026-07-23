@@ -53,7 +53,7 @@ It is not. I looked into the raw DICOM files -- the technical data the machine w
 - **The reconstruction software version** was updated between the two scans, including an additional scatter correction.
 - **My weight** went up from 77 to 79 kg. SUV is normalized to body weight, so that alone mechanically adds about 2.6 per cent.
 - **The amount of oral contrast** was roughly half of what it was in April. It does not affect the lung, but it does affect how well the structures in the abdomen separate.
-- **EARL standardization** -- a procedure by which the lab additionally delivers a reconstruction calibrated to a European standard, precisely so that values are comparable over time -- I asked for it at booking. It was not delivered for either scan.
+- **EARL standardization** -- a procedure by which a lab can additionally deliver a reconstruction calibrated to a European standard, precisely so that values are comparable over time. Neither of the two scans included such a standardized reconstruction.
 
 I reached a conclusion I did not know before: **the same machine does not automatically mean the same conditions.** Comparability is not a property of the machine, it is a procedure you have to ask for explicitly, in writing, every single time.
 

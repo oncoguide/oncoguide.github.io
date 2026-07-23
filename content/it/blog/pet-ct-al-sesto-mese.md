@@ -53,7 +53,7 @@ Non basta. Ho guardato nei file DICOM grezzi -- i dati tecnici che la macchina s
 - **La versione del software di ricostruzione** è stata aggiornata tra le due scansioni, includendo anche una correzione aggiuntiva della diffusione.
 - **Il mio peso** è salito da 77 a 79 kg. Il SUV è rapportato al peso, quindi questo da solo aggiunge meccanicamente circa il 2.6 per cento.
 - **La quantità di mezzo di contrasto orale** è stata circa la metà rispetto ad aprile. Non riguarda il polmone, ma riguarda quanto bene si separano le strutture dell'addome.
-- **La standardizzazione EARL** -- una procedura con cui il laboratorio consegna, in più, una ricostruzione calibrata secondo uno standard europeo, proprio perché i valori siano confrontabili nel tempo -- l'ho chiesta alla prenotazione. Non è stata consegnata in nessuna delle scansioni.
+- **La standardizzazione EARL** -- una procedura con cui un laboratorio può consegnare, in più, una ricostruzione calibrata secondo uno standard europeo, proprio perché i valori siano confrontabili nel tempo. Nessuna delle due scansioni ha incluso una ricostruzione standardizzata di questo tipo.
 
 Sono arrivato a una conclusione che non conoscevo: **stessa macchina non significa automaticamente stesse condizioni.** La comparabilità non è una proprietà della macchina, è una procedura che devi chiedere esplicitamente, per iscritto, ogni volta.
 

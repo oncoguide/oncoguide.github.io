@@ -34,7 +34,7 @@ Ich machte eine MRT der Lendenwirbelsäule in einer Privatklinik. Der offizielle
 
 Der Schmerz aber ging nicht weg. Im Gegenteil, er wurde stärker.
 
-Viel später erfuhr ich etwas, das mir bis heute weh tut: Die Läsion war bereits auf jenen Bildern vom September sichtbar. Sie war da, wurde aber im Befund nicht erwähnt. Vier verlorene Monate, in denen ein schnell fortschreitender Krebs Zeit hatte zu wachsen.
+Viel später verstand ich, wie wichtig eine Zweitmeinung zu den Bildern ist, wenn ein Schmerz nicht nachlässt. Es ist eine Lektion, die mir bis heute weh tut -- ich wünschte, ich hätte sie früher gekannt: Ein "sauberes" Ergebnis sollte nicht das letzte Wort sein, wenn die Symptome etwas anderes sagen.
 
 {{< callout type="important" >}}
 Wenn du einen Schmerz hast, der nicht vergeht oder sich trotz Behandlung verschlimmert, bleib hartnäckig. Bitte um eine zweite Meinung zu den Bildern. Ein "sauberer" Befund bedeutet nicht immer, dass alles in Ordnung ist.

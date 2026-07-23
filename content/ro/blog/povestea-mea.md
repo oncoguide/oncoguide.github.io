@@ -34,7 +34,7 @@ Am făcut un RMN lombar la o clinică privată. Rezultatul oficial vorbea doar d
 
 Durerea însă nu trecea. Dimpotrivă, creștea.
 
-Mult mai târziu am aflat ceva ce încă mă doare: leziunea era deja vizibilă în acele imagini din septembrie. Era acolo, dar nu a fost menționată în raport. Patru luni pierdute, în care un cancer cu progresie rapidă a avut timp să crească.
+Mult mai târziu am înțeles cât de mult contează o a doua opinie asupra imaginilor atunci când o durere nu cedează. E o lecție care încă mă doare -- aș fi vrut s-o știu mai devreme: un rezultat "curat" nu ar trebui să fie ultimul cuvânt atunci când simptomele spun altceva.
 
 {{< callout type="important" >}}
 Dacă ai o durere care nu trece sau care se agravează în ciuda tratamentului, insistă. Cere o a doua opinie asupra imaginilor. Un raport "curat" nu înseamnă întotdeauna că totul este în regulă.

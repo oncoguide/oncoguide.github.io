@@ -53,7 +53,7 @@ J'avais pensé à la comparabilité à l'avance. J'ai insisté pour faire tous l
 - **La version du logiciel de reconstruction** a été mise à jour entre les deux examens, avec en plus une correction supplémentaire du rayonnement diffusé.
 - **Mon poids** est passé de 77 à 79 kg. Le SUV est rapporté au poids, donc cela seul ajoute mécaniquement environ 2.6 pour cent.
 - **La quantité de produit de contraste oral** a été à peu près la moitié de celle d'avril. Cela n'affecte pas le poumon, mais cela affecte la façon dont les structures de l'abdomen se distinguent les unes des autres.
-- **La standardisation EARL** -- une procédure par laquelle le service fournit, en plus, une reconstruction calibrée selon un standard européen, justement pour que les valeurs soient comparables dans le temps -- je l'ai demandée à la prise de rendez-vous. Elle n'a été fournie pour aucun des deux examens.
+- **La standardisation EARL** -- une procédure par laquelle un service peut fournir, en plus, une reconstruction calibrée selon un standard européen, justement pour que les valeurs soient comparables dans le temps. Aucun des deux examens n'a inclus une telle reconstruction standardisée.
 
 J'en suis arrivé à une conclusion que je ne connaissais pas : **le même appareil ne veut pas automatiquement dire les mêmes conditions.** La comparabilité n'est pas une propriété de la machine, c'est une procédure qu'il faut demander explicitement, par écrit, à chaque fois.
 

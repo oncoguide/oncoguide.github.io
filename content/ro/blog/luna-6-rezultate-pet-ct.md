@@ -53,7 +53,7 @@ Nu e. M-am uitat în fișierele DICOM brute -- datele tehnice pe care aparatul l
 - **Versiunea softului de reconstrucție** a fost actualizată între cele două scanări, incluzând și o corecție suplimentară de împrăștiere.
 - **Greutatea mea** a crescut de la 77 la 79 kg. SUV se raportează la greutate, deci asta singură adaugă mecanic vreo 2.6 la sută.
 - **Cantitatea de contrast oral** a fost aproximativ jumătate față de aprilie. Nu afectează plămânul, dar afectează cât de bine se separă structurile din abdomen.
-- **Standardizarea EARL** -- o procedură prin care laboratorul livrează, în plus, o reconstrucție calibrată după un standard european, tocmai ca valorile să fie comparabile în timp -- am cerut-o la programare. Nu a fost livrată la niciuna dintre scanări.
+- **Standardizarea EARL** -- o procedură prin care un laborator poate livra, în plus, o reconstrucție calibrată după un standard european, tocmai ca valorile să fie comparabile în timp. Niciuna dintre cele două scanări nu a inclus o astfel de reconstrucție standardizată.
 
 Am ajuns la o concluzie pe care nu o știam: **același aparat nu înseamnă automat aceleași condiții.** Comparabilitatea nu e o proprietate a mașinii, e o procedură pe care trebuie s-o ceri explicit, în scris, de fiecare dată.
 

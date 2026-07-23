@@ -34,7 +34,7 @@ Ho fatto una risonanza magnetica (RM) lombare in una clinica privata. Il referto
 
 Il dolore però non passava. Al contrario, aumentava.
 
-Molto più tardi ho scoperto qualcosa che mi fa ancora male: la lesione era già visibile in quelle immagini di settembre. Era lì, ma non era stata menzionata nel referto. Quattro mesi persi, durante i quali un cancro a progressione rapida ha avuto il tempo di crescere.
+Molto più tardi ho capito quanto conti un secondo parere sulle immagini quando un dolore non passa. È una lezione che mi fa ancora male -- avrei voluto conoscerla prima: un risultato "pulito" non dovrebbe essere l'ultima parola quando i sintomi dicono altro.
 
 {{< callout type="important" >}}
 Se hai un dolore che non passa o che peggiora nonostante il trattamento, insisti. Chiedi una seconda opinione sulle immagini. Un referto "pulito" non significa sempre che sia tutto a posto.

@@ -34,7 +34,7 @@ J'ai fait une IRM lombaire dans une clinique privée. Le compte rendu officiel n
 
 Mais la douleur ne passait pas. Au contraire, elle augmentait.
 
-Bien plus tard, j'ai appris une chose qui me fait encore mal : la lésion était déjà visible sur ces images de septembre. Elle était là, mais elle n'avait pas été mentionnée dans le compte rendu. Quatre mois perdus, pendant lesquels un cancer à progression rapide a eu le temps de grossir.
+Bien plus tard, j'ai compris à quel point un deuxième avis sur les images compte lorsqu'une douleur ne passe pas. C'est une leçon qui me fait encore mal -- j'aurais aimé la connaître plus tôt : un résultat « propre » ne devrait pas être le dernier mot quand les symptômes disent le contraire.
 
 {{< callout type="important" >}}
 Si tu as une douleur qui ne passe pas ou qui s'aggrave malgré le traitement, insiste. Demande un deuxième avis sur les images. Un compte rendu « propre » ne signifie pas toujours que tout va bien.
