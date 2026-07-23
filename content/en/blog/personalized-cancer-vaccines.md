@@ -151,6 +151,20 @@ There is one more thing I have to say about the study the whole idea leans on. I
 
 There is nowhere in the literature the proof that such a junction is really displayed naturally on the surface of a tumour cell. It is a well-argued hypothesis, not a fact.
 
+## How I will know if it is working -- and how I catch it coming back in time
+
+A vaccine is not something you give and then forget. You have to know, as you go, whether it is doing anything -- and, separately, you have to catch in time the moment the disease tries to come back. Two different questions, with two different instruments.
+
+The first: **does the vaccine actually train the defence?** How many targets a vaccine includes is not the same as how many actually provoke a response. The prediction on the computer says what *might* work; only a measurement in the blood, after the first doses, says what *actually* worked. Some clinics do exactly this, halfway through the course. The question I have learned to ask is what they do with a weak result: **redesign the peptides**, or **add a checkpoint inhibitor**? For someone like me, in whom the checkpoint probably does not help, the difference is large.
+
+The second question is about the disease: **how do I catch the first sign that it is coming back, before it shows up on a scan?** The instrument is a blood test that reads the fragments of DNA the tumour leaves in the circulation. It can detect a relapse months before imaging -- and, often, it can also tell **what kind** of relapse it is. Because there is not just one kind: a disease held in check by a targeted pill comes back either because the driver changes a little but stays the same engine -- in which case a next-generation pill can still work -- or because the tumour finds a completely new way to survive, independent of the driver, and the pill no longer helps at all. (More rarely, it transforms into a different type of cancer.) Which of these appears decides the next move.
+
+{{< callout type="tip" >}}
+Hence the reason a vaccine makes sense **alongside** the pill, not instead of it: they fail differently. The pill holds in check the bulk of the driver-dependent disease; the vaccine is an immune layer that can reach cells the pill does not touch, through an entirely different mechanism. And the blood DNA test is the radar that tells you when to adapt -- including, if the disease comes back, when to build a new vaccine on its new form.
+{{< /callout >}}
+
+One last nuance, connected to the thread about tissue above: the most sensitive version of this blood test is not the generic one, but one built specially from your tumour's mutations -- and that one needs, a single time, a sequencing of the tumour. That is, the same rare tissue the vaccine needs. The good news is that **a single sequencing can serve both**: the same mutations that go into the vaccine are the ones the blood test tracks.
+
 ## Why Germany, and why the legislation matters
 
 One thing I did not know at all: if you want a treatment built **specially for you**, outside a clinical trial, the question is not only who can manufacture it. It is where it is legal to give it to you.
@@ -253,8 +267,9 @@ If you have a similar profile -- disease driven by a gene fusion, few mutations,
 6. **What happens if the analysis finds nothing usable?** Do I get the data? Is there a stopping point before the expensive stage? Ask for the answer **in writing**, before any payment.
 7. **Is the peptide long or short?** A peptide of twenty-five to thirty-five amino acids also recruits the helper cells; a short one does not.
 8. **How many targets does the product have?** A single one invites the tumour to escape. Ask whether they can also include an anticipated resistance mutation.
+9. **What do you do if, halfway through the course, the immune response is weak -- do you redesign the peptides, or add a checkpoint inhibitor?** In a fusion-driven cancer, where the checkpoint helps little, the response matters a great deal.
 
-And the two question-zeros, the ones I wish I had asked myself earlier: **how much tissue do I actually have left?** And, more important than all eight above: **who agrees to administer it to me?**
+And the two question-zeros, the ones I wish I had asked myself earlier: **how much tissue do I actually have left?** And, more important than all of the above: **who agrees to administer it to me?**
 
 ## We reason by analogy, because RET data does not exist
 
@@ -309,6 +324,7 @@ If you are a doctor, an oncology navigator or a patient and you have experience 
 4. **Ask any centre, before any payment, what material their product needs**: fresh tissue, paraffin, blood or just a sequence.
 5. **Ask in writing what happens if the analysis finds nothing usable** -- what you get, where you can stop, what data stays yours.
 6. **Do not confuse a manufacturing authorization with proof of efficacy**, and do not confuse a fast reply with a good fit.
+7. **If you want to track the disease through the DNA in your blood, ask whether a single sequencing of the tumour can serve both the blood test and the vaccine** -- so that you do not use up the same rare tissue twice.
 {{< /action-box >}}
 
 ---

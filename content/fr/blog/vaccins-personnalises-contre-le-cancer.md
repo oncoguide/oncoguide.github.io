@@ -151,6 +151,20 @@ Il y a encore une chose que je dois dire sur l'étude sur laquelle repose toute 
 
 Il n'existe, nulle part dans la littérature, de preuve qu'une telle jonction soit vraiment présentée naturellement à la surface d'une cellule tumorale. C'est une hypothèse bien argumentée, pas un fait.
 
+## Comment je saurai si ça marche -- et comment je repère à temps un retour
+
+Un vaccin ne se donne pas pour l'oublier ensuite. Il faut savoir, en cours de route, s'il fait quelque chose -- et, séparément, il faut repérer à temps le moment où la maladie tente de revenir. Deux questions différentes, avec deux instruments différents.
+
+La première : **le vaccin entraîne-t-il vraiment la défense ?** Le nombre de cibles qu'un vaccin met en jeu n'est pas la même chose que le nombre qui déclenche réellement une réponse. La prédiction sur ordinateur dit ce qui *pourrait* fonctionner ; seule une mesure dans le sang, après les premières doses, dit ce qui *a vraiment* fonctionné. Certaines cliniques font exactement cela, à mi-parcours. La question que j'ai appris à poser, c'est ce qu'ils font d'un résultat faible : **reconcevoir les peptides**, ou **ajouter un inhibiteur de checkpoint** ? Pour quelqu'un comme moi, chez qui le checkpoint n'aide probablement pas, la différence est grande.
+
+La deuxième question porte sur la maladie : **comment je repère le premier signe qu'elle revient, avant même qu'elle soit visible à l'imagerie ?** L'instrument est une analyse de sang qui lit les fragments d'ADN que la tumeur laisse dans la circulation. Elle peut détecter une récidive des mois avant l'imagerie -- et, souvent, elle peut dire aussi **de quel type** de récidive il s'agit. Parce qu'il n'y a pas qu'un seul type : une maladie tenue en échec par un comprimé ciblé revient soit parce que le driver change un peu mais reste le même moteur -- auquel cas un comprimé de génération suivante peut encore fonctionner -- soit parce que la tumeur trouve une voie de survie entièrement nouvelle, indépendante du driver, et le comprimé n'aide alors plus du tout. (Plus rarement, elle se transforme en un autre type de cancer.) Lequel des deux survient décide du mouvement suivant.
+
+{{< callout type="tip" >}}
+D'où la raison pour laquelle un vaccin a du sens **à côté** du comprimé, et non à sa place : il échoue autrement. Le comprimé contient le gros de la maladie dépendante du driver ; le vaccin est une couche immunitaire qui peut atteindre des cellules que le comprimé n'atteint pas, par un mécanisme tout autre. Et l'analyse de l'ADN dans le sang est le radar qui te dit quand adapter -- y compris, si la maladie revient, quand construire un nouveau vaccin sur sa nouvelle forme.
+{{< /callout >}}
+
+Une dernière nuance, liée au fil du tissu ci-dessus : la variante la plus sensible de cette analyse de sang n'est pas la générique, mais une analyse construite spécialement à partir des mutations de ta tumeur -- et celle-là a besoin, une seule fois, d'un séquençage de la tumeur. C'est-à-dire du même tissu rare dont le vaccin a besoin lui aussi. La bonne nouvelle, c'est qu'on peut faire **un seul séquençage pour les deux** : les mêmes mutations qui entrent dans le vaccin sont celles que suit l'analyse de sang.
+
 ## Pourquoi l'Allemagne, et pourquoi la législation compte
 
 Une chose que je ne savais pas du tout : si tu veux un traitement construit **spécialement pour toi**, en dehors d'un essai clinique, la question n'est pas seulement qui peut le fabriquer. C'est où il est légal de te le donner.
@@ -253,8 +267,9 @@ Si tu as un profil semblable -- maladie conduite par une fusion génique, peu de
 6. **Que se passe-t-il si l'analyse ne trouve rien d'utilisable ?** Est-ce que je reçois les données ? Y a-t-il un arrêt avant l'étape chère ? Demande la réponse **par écrit**, avant tout paiement.
 7. **Le peptide est-il long ou court ?** Un peptide de vingt-cinq à trente-cinq acides aminés recrute aussi les cellules auxiliaires ; un court, non.
 8. **Combien de cibles a le produit ?** Une seule invite la tumeur à s'échapper. Demande s'ils peuvent inclure aussi une mutation de résistance anticipée.
+9. **Que faites-vous si, à mi-parcours, la réponse immunitaire est faible -- reconcevez-vous les peptides, ou ajoutez-vous un inhibiteur de checkpoint ?** Dans un cancer avec fusion, où le checkpoint aide peu, la réponse compte beaucoup.
 
-Et les deux questions zéro, que j'aurais dû me poser plus tôt : **combien de tissu me reste-t-il, en fait ?** Et, plus important que les huit ci-dessus : **qui accepte de me l'administrer ?**
+Et les deux questions zéro, que j'aurais dû me poser plus tôt : **combien de tissu me reste-t-il, en fait ?** Et, plus important que tout ce qui précède : **qui accepte de me l'administrer ?**
 
 ## Nous raisonnons par analogie, parce qu'il n'existe pas de données sur RET
 
@@ -309,6 +324,7 @@ Si tu es médecin, navigateur en oncologie ou patient et que tu as de l'expérie
 4. **Demande à tout centre, avant tout paiement, de quel matériel a besoin** leur produit : tissu frais, paraffine, sang ou seulement une séquence.
 5. **Demande par écrit ce qui se passe si l'analyse ne trouve rien d'utilisable** -- ce que tu reçois, où tu peux t'arrêter, quelles données restent les tiennes.
 6. **Ne confonds pas une autorisation de fabrication avec une preuve d'efficacité**, et ne confonds pas une réponse rapide avec une bonne adéquation.
+7. **Si tu veux suivre la maladie par l'ADN dans le sang, demande si un seul séquençage de la tumeur peut servir à la fois à l'analyse de sang et au vaccin** -- pour ne pas consommer deux fois le même tissu rare.
 {{< /action-box >}}
 
 ---

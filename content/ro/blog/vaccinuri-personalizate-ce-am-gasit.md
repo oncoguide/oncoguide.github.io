@@ -151,6 +151,20 @@ Mai e un lucru pe care trebuie să-l spun despre studiul pe care se sprijină to
 
 Nu există, nicăieri în literatură, dovada că o astfel de joncțiune e într-adevăr afișată natural la suprafața unei celule tumorale. E o ipoteză bine argumentată, nu un fapt.
 
+## Cum voi ști dacă merge -- și cum prind din timp o întoarcere
+
+Un vaccin nu se dă și se uită. Trebuie știut, pe parcurs, dacă face ceva -- și, separat, trebuie prins din timp momentul în care boala încearcă să revină. Două întrebări diferite, cu două instrumente diferite.
+
+Prima: **chiar antrenează vaccinul apărarea?** Numărul de ținte pe care le pune un vaccin nu e totuna cu numărul care chiar stârnește un răspuns. Predicția pe calculator spune ce *ar putea* funcționa; doar o măsurătoare pe sânge, după primele doze, spune ce *chiar* a funcționat. Unele clinici fac exact asta, la jumătatea curei. Întrebarea pe care am învățat s-o pun e ce fac cu un rezultat slab: **reproiectează peptidele**, sau **adaugă un inhibitor de checkpoint**? Pentru cineva ca mine, la care checkpoint-ul probabil nu ajută, diferența e mare.
+
+A doua întrebare e despre boală: **cum prind primul semn că revine, înainte să se vadă pe scanare?** Instrumentul e o analiză de sânge care citește fragmentele de ADN lăsate de tumoră în circulație. Poate detecta o recidivă cu luni înainte de imagistică -- și, adesea, poate spune și **ce fel** de recidivă e. Pentru că nu e un singur fel: o boală ținută în frâu de o pastilă țintită revine ori pentru că driverul se schimbă puțin dar rămâne același motor -- caz în care o pastilă de generație următoare poate încă funcționa -- ori pentru că tumora găsește o cale complet nouă de supraviețuire, independentă de driver, iar pastila nu mai ajută deloc. (Mai rar, se transformă în alt tip de cancer.) Care dintre ele apare decide mișcarea următoare.
+
+{{< callout type="tip" >}}
+De aici și motivul pentru care un vaccin are sens **alături** de pastilă, nu în locul ei: eșuează diferit. Pastila ține în frâu grosul bolii dependente de driver; vaccinul e un strat imunitar care poate atinge celule pe care pastila nu le atinge, printr-un mecanism cu totul altul. Iar analiza de ADN din sânge e radarul care îți spune când să adaptezi -- inclusiv, dacă boala revine, când să construiești un vaccin nou pe noua ei formă.
+{{< /callout >}}
+
+O ultimă nuanță, legată de firul cu țesutul de mai sus: varianta cea mai sensibilă a acestei analize de sânge nu e cea generică, ci una construită special din mutațiile tumorii tale -- iar aceea are nevoie, o singură dată, de o secvențiere a tumorii. Adică de același țesut rar de care are nevoie și vaccinul. Vestea bună e că se poate face **o singură secvențiere pentru amândouă**: aceleași mutații care intră în vaccin sunt cele pe care le urmărește analiza de sânge.
+
 ## De ce Germania, și de ce contează legislația
 
 Un lucru pe care nu-l știam deloc: dacă vrei un tratament construit **special pentru tine**, în afara unui studiu clinic, întrebarea nu e doar cine poate să-l fabrice. E unde e legal să ți-l dea.
@@ -253,8 +267,9 @@ Dacă ai un profil asemănător -- boală condusă de o fuziune genetică, puți
 6. **Ce se întâmplă dacă analiza nu găsește nimic utilizabil?** Primesc datele? Există o oprire înainte de etapa scumpă? Cere răspunsul **în scris**, înainte de orice plată.
 7. **Peptidul e lung sau scurt?** Un peptid de douăzeci și cinci-treizeci și cinci de aminoacizi recrutează și celulele-ajutor; unul scurt, nu.
 8. **Câte ținte are produsul?** Una singură invită tumora să scape. Întreabă dacă pot include și o mutație de rezistență anticipată.
+9. **Ce faceți dacă, la jumătatea curei, răspunsul imun e slab -- reproiectați peptidele, sau adăugați un inhibitor de checkpoint?** La un cancer cu fuziune, unde checkpoint-ul ajută puțin, răspunsul contează mult.
 
-Iar cele două întrebări zero, pe care mi-aș fi pus mai devreme: **cât țesut mi-a mai rămas, de fapt?** Și, mai important decât toate cele opt de mai sus: **cine acceptă să mi-l administreze?**
+Iar cele două întrebări zero, pe care mi-aș fi pus mai devreme: **cât țesut mi-a mai rămas, de fapt?** Și, mai important decât toate cele de mai sus: **cine acceptă să mi-l administreze?**
 
 ## Raționăm prin analogie, pentru că date pe RET nu există
 
@@ -309,6 +324,7 @@ Dacă ești medic, navigator oncologic sau pacient și ai experiență cu vreunu
 4. **Întreabă orice centru, înainte de orice plată, de ce material are nevoie** produsul lor: țesut proaspăt, parafină, sânge sau doar o secvență.
 5. **Cere în scris ce se întâmplă dacă analiza nu găsește nimic utilizabil** -- ce primești, unde te poți opri, ce date rămân ale tale.
 6. **Nu confunda o autorizație de fabricație cu o dovadă de eficacitate**, și nu confunda un răspuns rapid cu o potrivire bună.
+7. **Dacă vrei să urmărești boala prin ADN-ul din sânge, întreabă dacă o singură secvențiere a tumorii poate servi și analiza de sânge, și vaccinul** -- ca să nu consumi de două ori același țesut rar.
 {{< /action-box >}}
 
 ---

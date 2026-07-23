@@ -151,6 +151,20 @@ Es gibt noch etwas, das ich über die Studie sagen muss, auf die sich die ganze 
 
 Es gibt nirgendwo in der Literatur den Beweis, dass eine solche Junktion tatsächlich natürlicherweise an der Oberfläche einer Tumorzelle präsentiert wird. Es ist eine gut begründete Hypothese, keine Tatsache.
 
+## Wie ich weiß, ob er wirkt -- und wie ich eine Rückkehr früh erkenne
+
+Ein Impfstoff wird nicht gegeben und dann vergessen. Man muss unterwegs wissen, ob er etwas bewirkt -- und, davon getrennt, muss man den Moment rechtzeitig erwischen, in dem die Erkrankung zurückzukehren versucht. Zwei verschiedene Fragen, mit zwei verschiedenen Instrumenten.
+
+Die erste: **trainiert der Impfstoff die Abwehr wirklich?** Die Zahl der Ziele, die ein Impfstoff enthält, ist nicht dasselbe wie die Zahl derer, die tatsächlich eine Antwort hervorrufen. Die Vorhersage am Computer sagt, was funktionieren *könnte*; nur eine Messung im Blut, nach den ersten Dosen, sagt, was *tatsächlich* funktioniert hat. Manche Kliniken machen genau das, auf halbem Weg der Impfserie. Die Frage, die ich gelernt habe zu stellen, ist, was sie mit einem schwachen Ergebnis machen: **die Peptide neu entwerfen** oder **einen Checkpoint-Inhibitor hinzufügen**? Für jemanden wie mich, dem der Checkpoint wahrscheinlich nicht hilft, ist der Unterschied groß.
+
+Die zweite Frage betrifft die Erkrankung: **wie erkenne ich das erste Zeichen einer Rückkehr, bevor es auf einem Scan zu sehen ist?** Das Instrument ist eine Blutuntersuchung, die die DNA-Fragmente liest, die der Tumor im Blutkreislauf hinterlässt. Sie kann einen Rückfall Monate vor der Bildgebung erkennen -- und oft kann sie auch sagen, **welche Art** von Rückfall es ist. Denn es gibt nicht nur eine Art: Eine Erkrankung, die von einer zielgerichteten Tablette in Schach gehalten wird, kehrt entweder deshalb zurück, weil sich der Treiber ein wenig verändert, aber derselbe Motor bleibt -- dann kann eine Tablette der nächsten Generation noch wirken --, oder deshalb, weil der Tumor einen völlig neuen Überlebensweg findet, unabhängig vom Treiber, und die Tablette dann gar nicht mehr hilft. (Seltener wandelt sie sich in eine andere Krebsart um.) Welche davon eintritt, entscheidet den nächsten Zug.
+
+{{< callout type="tip" >}}
+Daher auch der Grund, warum ein Impfstoff **neben** der Tablette Sinn ergibt und nicht an ihrer Stelle: Er versagt anders. Die Tablette hält den Großteil der treiberabhängigen Erkrankung in Schach; der Impfstoff ist eine Immunschicht, die Zellen erreichen kann, die die Tablette nicht erreicht, über einen völlig anderen Mechanismus. Und die Blutuntersuchung auf Tumor-DNA ist das Radar, das dir sagt, wann du anpassen musst -- auch, falls die Erkrankung zurückkehrt, wann du einen neuen Impfstoff auf ihre neue Form bauen musst.
+{{< /callout >}}
+
+Eine letzte Feinheit, die an den Faden mit dem Gewebe von oben anknüpft: Die empfindlichste Variante dieser Blutuntersuchung ist nicht die generische, sondern eine, die eigens aus den Mutationen deines Tumors gebaut ist -- und die braucht, ein einziges Mal, eine Sequenzierung des Tumors. Also dasselbe knappe Gewebe, das auch der Impfstoff braucht. Die gute Nachricht: Man kann **eine einzige Sequenzierung für beide** machen -- dieselben Mutationen, die in den Impfstoff eingehen, sind die, die die Blutuntersuchung verfolgt.
+
 ## Warum Deutschland, und warum die Gesetzgebung zählt
 
 Eine Sache, die ich überhaupt nicht wusste: Wenn du eine Behandlung willst, die **speziell für dich** gebaut ist, außerhalb einer klinischen Studie, dann ist die Frage nicht nur, wer sie herstellen kann. Sie lautet, wo es legal ist, sie dir zu geben.
@@ -253,8 +267,9 @@ Wenn du ein ähnliches Profil hast -- eine von einer Genfusion getriebene Erkran
 6. **Was passiert, wenn die Analyse nichts Verwendbares findet?** Bekomme ich die Daten? Gibt es einen Stopp vor der teuren Etappe? Verlang die Antwort **schriftlich**, vor jeder Zahlung.
 7. **Ist das Peptid lang oder kurz?** Ein Peptid aus fünfundzwanzig bis fünfunddreißig Aminosäuren rekrutiert auch die Helferzellen; ein kurzes nicht.
 8. **Wie viele Ziele hat das Produkt?** Ein einziges lädt den Tumor zum Entkommen ein. Frag, ob sie auch eine erwartete Resistenzmutation einschließen können.
+9. **Was macht ihr, wenn die Immunantwort auf halbem Weg der Impfserie schwach ist -- entwerft ihr die Peptide neu oder fügt ihr einen Checkpoint-Inhibitor hinzu?** Bei einem Krebs mit Fusion, wo der Checkpoint wenig hilft, zählt die Antwort viel.
 
-Und die zwei Nullfragen, die ich mir früher hätte stellen sollen: **wie viel Gewebe ist mir eigentlich geblieben?** Und, wichtiger als alle acht oben: **wer nimmt es auf sich, es mir zu verabreichen?**
+Und die zwei Nullfragen, die ich mir früher hätte stellen sollen: **wie viel Gewebe ist mir eigentlich geblieben?** Und, wichtiger als alle oben genannten: **wer nimmt es auf sich, es mir zu verabreichen?**
 
 ## Wir argumentieren per Analogie, weil es keine Daten zu RET gibt
 
@@ -309,6 +324,7 @@ Wenn du Arzt, Onkologie-Lotse oder Patient bist und Erfahrung mit einem dieser Z
 4. **Frag jedes Zentrum, vor jeder Zahlung, welches Material** sein Produkt braucht: frisches Gewebe, Paraffin, Blut oder nur eine Sequenz.
 5. **Verlang schriftlich, was passiert, wenn die Analyse nichts Verwendbares findet** -- was du bekommst, wo du aufhören kannst, welche Daten deine bleiben.
 6. **Verwechsle keine Herstellungserlaubnis mit einem Wirksamkeitsnachweis**, und verwechsle keine schnelle Antwort mit einer guten Passung.
+7. **Wenn du die Erkrankung über die DNA im Blut verfolgen willst, frag, ob eine einzige Sequenzierung des Tumors sowohl die Blutuntersuchung als auch den Impfstoff bedienen kann** -- damit du nicht zweimal dasselbe knappe Gewebe verbrauchst.
 {{< /action-box >}}
 
 ---

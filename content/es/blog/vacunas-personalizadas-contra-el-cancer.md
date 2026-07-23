@@ -151,6 +151,20 @@ Hay otra cosa que tengo que decir sobre el estudio en el que se apoya toda la id
 
 No existe, en ninguna parte de la literatura, la prueba de que una unión de este tipo se presente de verdad de forma natural en la superficie de una célula tumoral. Es una hipótesis bien argumentada, no un hecho.
 
+## Cómo sabré si funciona -- y cómo detecto a tiempo un regreso
+
+Una vacuna no se pone y se olvida. Hay que saber, sobre la marcha, si está haciendo algo -- y, por separado, hay que detectar a tiempo el momento en que la enfermedad intenta volver. Dos preguntas distintas, con dos instrumentos distintos.
+
+La primera: **¿de verdad entrena la vacuna a la defensa?** El número de dianas que pone una vacuna no es lo mismo que el número que de verdad provoca una respuesta. La predicción por ordenador dice lo que *podría* funcionar; solo una medición en sangre, después de las primeras dosis, dice lo que *de verdad* funcionó. Algunas clínicas hacen exactamente eso, a mitad del tratamiento. La pregunta que aprendí a hacer es qué hacen con un resultado flojo: **¿rediseñan los péptidos**, o **añaden un inhibidor de checkpoint**? Para alguien como yo, a quien el checkpoint probablemente no le ayuda, la diferencia es grande.
+
+La segunda pregunta es sobre la enfermedad: **¿cómo detecto la primera señal de que vuelve, antes de que se vea en un escáner?** El instrumento es un análisis de sangre que lee los fragmentos de ADN que el tumor deja en la circulación. Puede detectar una recaída meses antes que las pruebas de imagen -- y, a menudo, puede decir también **qué tipo** de recaída es. Porque no hay un solo tipo: una enfermedad mantenida a raya por una pastilla dirigida vuelve o bien porque el driver cambia un poco pero sigue siendo el mismo motor -- caso en el que una pastilla de nueva generación puede todavía funcionar -- o bien porque el tumor encuentra una vía de supervivencia completamente nueva, independiente del driver, y la pastilla ya no ayuda en absoluto. (Más raramente, se transforma en otro tipo de cáncer.) Cuál de ellas aparece decide el siguiente movimiento.
+
+{{< callout type="tip" >}}
+De ahí también el motivo por el que una vacuna tiene sentido **junto a** la pastilla, no en su lugar: fracasa de otra manera. La pastilla mantiene a raya el grueso de la enfermedad dependiente del driver; la vacuna es una capa inmunitaria que puede alcanzar células que la pastilla no toca, por un mecanismo completamente distinto. Y el análisis del ADN en sangre es el radar que te dice cuándo adaptarte -- incluido, si la enfermedad vuelve, cuándo construir una vacuna nueva sobre su nueva forma.
+{{< /callout >}}
+
+Un último matiz, ligado al hilo del tejido de más arriba: la variante más sensible de este análisis de sangre no es la genérica, sino una construida especialmente a partir de las mutaciones de tu tumor -- y esa necesita, una sola vez, una secuenciación del tumor. Es decir, el mismo tejido escaso que necesita también la vacuna. La buena noticia es que se puede hacer **una sola secuenciación para las dos cosas**: las mismas mutaciones que entran en la vacuna son las que sigue el análisis de sangre.
+
 ## Por qué Alemania, y por qué importa la legislación
 
 Algo que no sabía en absoluto: si quieres un tratamiento construido **especialmente para ti**, fuera de un ensayo clínico, la pregunta no es solo quién puede fabricarlo. Es dónde es legal que te lo den.
@@ -253,8 +267,9 @@ Si tienes un perfil parecido -- enfermedad conducida por una fusión génica, po
 6. **¿Qué pasa si el análisis no encuentra nada utilizable?** ¿Recibo los datos? ¿Hay una parada antes de la etapa cara? Pide la respuesta **por escrito**, antes de cualquier pago.
 7. **¿El péptido es largo o corto?** Un péptido de veinticinco a treinta y cinco aminoácidos recluta también a las células colaboradoras; uno corto, no.
 8. **¿Cuántas dianas tiene el producto?** Una sola invita al tumor a escapar. Pregunta si pueden incluir también una mutación de resistencia anticipada.
+9. **¿Qué hacen si, a mitad del tratamiento, la respuesta inmunitaria es floja -- rediseñan los péptidos, o añaden un inhibidor de checkpoint?** En un cáncer con fusión, donde el checkpoint ayuda poco, la respuesta importa mucho.
 
-Y las dos preguntas cero, que ojalá me hubiera hecho antes: **¿cuánto tejido me queda, en realidad?** Y, más importante que las ocho de arriba: **¿quién acepta administrármelo?**
+Y las dos preguntas cero, que ojalá me hubiera hecho antes: **¿cuánto tejido me queda, en realidad?** Y, más importante que todo lo anterior: **¿quién acepta administrármelo?**
 
 ## Razonamos por analogía, porque datos sobre RET no hay
 
@@ -309,6 +324,7 @@ Si eres médico, navegador oncológico o paciente y tienes experiencia con algun
 4. **Pregunta a cualquier centro, antes de cualquier pago, qué material necesita** su producto: tejido fresco, parafina, sangre o solo una secuencia.
 5. **Pide por escrito qué pasa si el análisis no encuentra nada utilizable** -- qué recibes, dónde te puedes parar, qué datos siguen siendo tuyos.
 6. **No confundas una autorización de fabricación con una prueba de eficacia**, y no confundas una respuesta rápida con una buena compatibilidad.
+7. **Si quieres seguir la enfermedad a través del ADN en sangre, pregunta si una sola secuenciación del tumor puede servir tanto para el análisis de sangre como para la vacuna** -- para no consumir dos veces el mismo tejido escaso.
 {{< /action-box >}}
 
 ---

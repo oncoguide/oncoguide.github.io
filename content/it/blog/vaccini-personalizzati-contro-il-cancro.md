@@ -151,6 +151,20 @@ C'è un'altra cosa che devo dire sullo studio su cui si appoggia tutta l'idea. N
 
 Non esiste, in nessun punto della letteratura, la prova che una giunzione del genere sia davvero esposta naturalmente sulla superficie di una cellula tumorale. È un'ipotesi ben argomentata, non un fatto.
 
+## Come saprò se funziona -- e come colgo in tempo un ritorno
+
+Un vaccino non si somministra e si dimentica. Bisogna sapere, strada facendo, se sta facendo qualcosa -- e, separatamente, bisogna cogliere in tempo il momento in cui la malattia prova a tornare. Due domande diverse, con due strumenti diversi.
+
+La prima: **il vaccino addestra davvero la difesa?** Il numero di bersagli che un vaccino mette non è la stessa cosa del numero che suscita davvero una risposta. La predizione al computer dice cosa *potrebbe* funzionare; solo una misurazione sul sangue, dopo le prime dosi, dice cosa ha *davvero* funzionato. Alcune cliniche fanno esattamente questo, a metà del ciclo. La domanda che ho imparato a fare è cosa fanno con un risultato debole: **riprogettano i peptidi**, o **aggiungono un inibitore di checkpoint**? Per qualcuno come me, in cui il checkpoint probabilmente non aiuta, la differenza è grande.
+
+La seconda domanda riguarda la malattia: **come colgo il primo segnale che sta tornando, prima che si veda su una scansione?** Lo strumento è un'analisi del sangue che legge i frammenti di DNA che il tumore lascia in circolo. Può rilevare una recidiva con mesi di anticipo rispetto all'imaging -- e, spesso, può dire anche **che tipo** di recidiva è. Perché non ce n'è un tipo solo: una malattia tenuta a bada da una pastiglia mirata torna o perché il driver cambia un po' ma resta lo stesso motore -- caso in cui una pastiglia di nuova generazione può ancora funzionare -- o perché il tumore trova una via di sopravvivenza completamente nuova, indipendente dal driver, e la pastiglia non aiuta più affatto. (Più raramente, si trasforma in un altro tipo di cancro.) Quale dei due casi si verifica decide la mossa successiva.
+
+{{< callout type="tip" >}}
+Da qui anche il motivo per cui un vaccino ha senso **accanto** alla pastiglia, non al suo posto: falliscono in modo diverso. La pastiglia tiene a bada il grosso della malattia dipendente dal driver; il vaccino è uno strato immunitario che può raggiungere cellule che la pastiglia non tocca, attraverso un meccanismo del tutto diverso. E l'analisi del DNA nel sangue è il radar che ti dice quando adattare la strategia -- compreso, se la malattia torna, quando costruire un vaccino nuovo sulla sua nuova forma.
+{{< /callout >}}
+
+Un'ultima sfumatura, legata al discorso sul tessuto di cui sopra: la variante più sensibile di questa analisi del sangue non è quella generica, ma una costruita apposta sulle mutazioni del tuo tumore -- e quella ha bisogno, una volta sola, di un sequenziamento del tumore. Cioè dello stesso tessuto raro di cui ha bisogno anche il vaccino. La buona notizia è che si può fare **un solo sequenziamento per entrambe le cose**: le stesse mutazioni che entrano nel vaccino sono quelle che l'analisi del sangue monitora.
+
 ## Perché la Germania, e perché la legislazione conta
 
 Una cosa che non sapevo affatto: se vuoi un trattamento costruito **apposta per te**, fuori da uno studio clinico, la domanda non è solo chi può fabbricarlo. È dove è legale somministrartelo.
@@ -253,8 +267,9 @@ Se hai un profilo simile -- malattia guidata da una fusione genica, poche mutazi
 6. **Cosa succede se l'analisi non trova niente di utilizzabile?** Ricevo i dati? C'è un punto di arresto prima della fase costosa? Chiedi la risposta **per iscritto**, prima di qualsiasi pagamento.
 7. **Il peptide è lungo o corto?** Un peptide da venticinque-trentacinque aminoacidi recluta anche le cellule helper; uno corto, no.
 8. **Quanti bersagli ha il prodotto?** Uno solo invita il tumore a sfuggire. Chiedi se possono includere anche una mutazione di resistenza anticipata.
+9. **Cosa fate se, a metà del ciclo, la risposta immunitaria è debole -- riprogettate i peptidi, o aggiungete un inibitore di checkpoint?** In un cancro con fusione, in cui il checkpoint aiuta poco, la risposta conta molto.
 
-E le due domande zero, che mi sarei posto prima: **quanto tessuto mi è rimasto, davvero?** E, più importante di tutte le otto qui sopra: **chi accetta di somministrarmelo?**
+E le due domande zero, che mi sarei posto prima: **quanto tessuto mi è rimasto, davvero?** E, più importante di tutte quelle qui sopra: **chi accetta di somministrarmelo?**
 
 ## Ragioniamo per analogia, perché dati su RET non esistono
 
@@ -309,6 +324,7 @@ Se sei un medico, un navigatore oncologico o un paziente e hai esperienza con un
 4. **Chiedi a qualsiasi centro, prima di qualsiasi pagamento, di che materiale ha bisogno** il loro prodotto: tessuto fresco, paraffina, sangue o solo una sequenza.
 5. **Chiedi per iscritto cosa succede se l'analisi non trova niente di utilizzabile** -- cosa ricevi, dove puoi fermarti, quali dati restano tuoi.
 6. **Non confondere un'autorizzazione di produzione con una prova di efficacia**, e non confondere una risposta rapida con una buona corrispondenza.
+7. **Se vuoi seguire la malattia attraverso il DNA nel sangue, chiedi se un solo sequenziamento del tumore può servire sia l'analisi del sangue sia il vaccino** -- così non consumi due volte lo stesso tessuto raro.
 {{< /action-box >}}
 
 ---
