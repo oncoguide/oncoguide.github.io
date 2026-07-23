@@ -19,6 +19,23 @@ Questa e una riproduzione OncoGuide di **"Preserving Your Tumor Tissue"** (Conse
 
 Questa guida e un complemento alla nostra [guida completa alla diagnosi](/it/diagnosis/guida-completa-diagnosi/). Spiega una decisione che e facile trascurare e impossibile annullare in seguito: cosa accade al tuo tessuto tumorale.
 
+{{< callout type="warning" >}}
+**Una nota di OncoGuide, aggiunta alla guida FCCT qui sotto -- la cosa che piu avremmo voluto capire alla *prima* biopsia.** Il tessuto e limitato, non e rinnovabile e -- questa e la parte che sorprende la gente -- **una buona risposta al trattamento puo chiudere silenziosamente la porta alla possibilita di ottenerne altro.** Pianifica per l'intero percorso, non solo per la prima diagnosi.
+
+Nel corso del trattamento, a una singola piccola biopsia puo essere chiesto di soddisfare **diverse esigenze distinte**, ciascuna delle quali consuma materiale:
+
+- il **primo test molecolare** (sequenziamento completo di DNA/RNA, "NGS") che sceglie la tua terapia di prima linea;
+- spesso un **secondo test molecolare al momento della resistenza**, se il cancro cambia e occorre individuare un nuovo driver -- vale a dire **almeno due sequenziamenti completi** prima di ogni altra cosa;
+- un **esame del sangue per la recidiva basato sul tumore (MRD)**, costruito a partire da un sequenziamento del tumore effettuato una volta sola;
+- e, se mai lo intraprenderai, un **vaccino antitumorale personalizzato (a neoantigeni)** -- che di norma richiede **molto piu** materiale di un pannello di routine, perche puo richiedere il sequenziamento completo dell'**esoma** *e* del **trascrittoma**, e diversi centri preferiscono nettamente il tessuto **fresco congelato** rispetto alla paraffina.
+
+Una normale biopsia con ago e spesso *appena* sufficiente per la prima diagnosi e poco piu. Percio, alla **prima** procedura -- quando c'e ancora tumore da campionare -- vale la pena chiedere, per iscritto, **carote aggiuntive**, chiedere se una porzione puo essere conservata **fresca congelata** (non solo fissata in paraffina) e assicurarsi che il blocchetto diagnostico **non venga consumato del tutto** dal primo test.
+
+**Perche la tempistica non perdona:** se il trattamento funziona molto bene, in seguito potrebbe **non esserci piu tumore da biopsiare** -- niente di abbastanza attivo o grande da campionare in sicurezza. E un buon problema da avere. Ma significa che il tessuto che hai messo da parte *presto* potrebbe essere l'unico tessuto che avrai mai -- e un blocchetto di paraffina che sembrava adeguato puo rivelarsi contenere **meno di un millimetro** di tumore utilizzabile quando finalmente un laboratorio di vaccini lo misura. Chiedi un **inventario scritto di cio che rimane** dopo ogni test, cosi da non avere mai sorprese tardive.
+
+Se hai in mente un vaccino, abbiamo scritto un articolo di accompagnamento proprio su questo: **[Vaccini personalizzati contro il cancro, parte 2 -- il tessuto di cui hai bisogno, e perche assicurartelo per tempo](/it/blog/vaccini-personalizzati-tessuto/)**.
+{{< /callout >}}
+
 ## Perche e importante
 
 Il tessuto tumorale e una delle risorse cliniche piu preziose nella cura del cancro. Puo essere utilizzato per la diagnosi, i test molecolari, la pianificazione del trattamento, l'abbinamento a studi clinici e, in alcuni casi, per approcci personalizzati piu avanzati.

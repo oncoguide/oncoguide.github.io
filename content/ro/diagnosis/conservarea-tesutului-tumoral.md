@@ -19,6 +19,23 @@ Acesta este un material OncoGuide preluat după **"Preserving Your Tumor Tissue"
 
 Acest ghid completează [ghidul nostru complet de diagnostic](/ro/diagnosis/ghid-complet-diagnostic/). Explică o decizie ușor de ratat și imposibil de reparat ulterior: ce se întâmplă cu țesutul tumoral.
 
+{{< callout type="warning" >}}
+**O notă OncoGuide, adăugată la ghidul FCCT de mai jos -- lucrul pe care ne-am fi dorit cel mai mult să-l fi înțeles la *prima* biopsie.** Țesutul e finit, nu se reînnoiește și -- asta e partea care îi surprinde pe oameni -- **un răspuns bun la tratament poate închide, pe tăcute, ușa către a mai obține vreodată.** Planifică pentru tot parcursul, nu doar pentru primul diagnostic.
+
+Pe parcursul tratamentului, unei singure biopsii mici i se poate cere să acopere **mai multe nevoi separate**, fiecare dintre ele consumând material:
+
+- **primul test molecular** (secvențiere cuprinzătoare ADN/ARN, "NGS") care îți alege terapia de linia întâi;
+- adesea un **al doilea test molecular la rezistență**, dacă boala se schimbă și trebuie găsit un nou driver -- adică **cel puțin două secvențieri complete** înainte de orice altceva;
+- o **analiză de sânge pentru recidivă, construită pe baza tumorii (MRD)**, pornind de la o secvențiere unică a tumorii;
+- și, dacă îl vei urmări vreodată, un **vaccin personalizat (pe neoantigene) împotriva cancerului** -- care are nevoie, de regulă, de **substanțial mai mult** material decât un panel de rutină, pentru că poate cere secvențierea întregului **exom** *și* a întregului **transcriptom**, iar mai multe centre preferă categoric țesutul **proaspăt congelat** în locul parafinei.
+
+O biopsie cu ac standard e adesea *exact cât trebuie* pentru primul diagnostic și puțin peste. Așa că, la **prima** procedură -- cât timp mai există tumoră de recoltat -- merită să ceri, în scris, **carote suplimentare**, să întrebi dacă o parte poate fi păstrată **proaspăt congelată** (nu doar fixată în parafină) și să te asiguri că blocul de diagnostic **nu este consumat complet** de primul test.
+
+**De ce momentul e neiertător:** dacă tratamentul funcționează foarte bine, s-ar putea ca mai târziu **să nu mai existe tumoră de biopsiat** -- nimic activ sau destul de mare cât să fie recoltat în siguranță. E o problemă bună de avut. Dar înseamnă că țesutul pe care l-ai pus deoparte *devreme* ar putea fi singurul pe care îl vei avea vreodată -- iar un bloc de parafină care părea suficient se poate dovedi că ține **mai puțin de un milimetru** de tumoră utilizabilă atunci când un laborator de vaccinuri îl măsoară în cele din urmă. Cere un **inventar scris al ce a mai rămas** după fiecare test, ca să nu fii surprins târziu.
+
+Dacă te gândești la un vaccin, am scris un material însoțitor exact pe tema asta: **[Vaccinuri personalizate împotriva cancerului, partea a 2-a -- țesutul de care ai nevoie și de ce să-l asiguri devreme](/ro/blog/vaccinuri-personalizate-tesut/)**.
+{{< /callout >}}
+
 ## De ce contează
 
 Țesutul tumoral este una dintre cele mai valoroase resurse clinice în îngrijirea cancerului. Poate fi folosit pentru diagnostic, testare moleculară, planificarea tratamentului, potrivirea cu studii clinice și, în unele cazuri, pentru abordări personalizate mai avansate.

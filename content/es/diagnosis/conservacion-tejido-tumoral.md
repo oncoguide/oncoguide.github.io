@@ -19,6 +19,23 @@ Esta es una reproduccion de OncoGuide de **"Preserving Your Tumor Tissue"** (Con
 
 Esta guia es un complemento de nuestra [guia completa de diagnostico](/es/diagnosis/guia-completa-diagnostico/). Explica una decision que es facil pasar por alto e imposible deshacer mas adelante: que ocurre con tu tejido tumoral.
 
+{{< callout type="warning" >}}
+**Una nota de OncoGuide, anadida a la guia de FCCT que sigue mas abajo -- lo que mas nos habria gustado entender en la *primera* biopsia.** El tejido es finito, no es renovable y -- esta es la parte que sorprende a la gente -- **una buena respuesta al tratamiento puede cerrar en silencio la puerta a conseguir mas.** Planifica para todo el recorrido, no solo para el primer diagnostico.
+
+A lo largo del tratamiento, a una sola biopsia pequena se le puede pedir que cubra **varias necesidades distintas**, cada una de las cuales consume material:
+
+- la **primera prueba molecular** (secuenciacion exhaustiva de ADN/ARN, "NGS") que elige tu terapia de primera linea;
+- a menudo una **segunda prueba molecular en la resistencia**, si el cancer cambia y hay que encontrar un nuevo driver -- eso son **al menos dos secuenciaciones completas** antes que nada;
+- un **analisis de sangre para la recaida basado en el tumor (MRD)**, construido a partir de una unica secuenciacion del tumor;
+- y, si alguna vez la buscas, una **vacuna personalizada (de neoantigenos) contra el cancer** -- que suele necesitar **bastante mas** material que un panel de rutina, porque puede requerir secuenciacion del **exoma** completo *y* del **transcriptoma** completo, y varios centros prefieren claramente tejido **fresco congelado** antes que la parafina.
+
+Una biopsia con aguja gruesa estandar suele ser *justo* suficiente para el primer diagnostico y poco mas. Asi que en el **primer** procedimiento -- mientras todavia hay tumor del que tomar muestra -- vale la pena pedir, por escrito, **cilindros adicionales**, preguntar si una porcion puede conservarse **fresca congelada** (no solo fijada en parafina) y asegurarte de que el bloque diagnostico **no se consuma por completo** con la primera prueba.
+
+**Por que el momento no perdona:** si el tratamiento funciona muy bien, mas adelante puede que **no quede tumor biopsiable** -- nada lo bastante activo o grande como para tomar muestra con seguridad. Es un buen problema que tener. Pero significa que el tejido que guardaste *pronto* puede ser el unico tejido que tengas nunca -- y un bloque de parafina que parecia adecuado puede resultar que contenga **menos de un milimetro** de tumor utilizable cuando un laboratorio de vacunas por fin lo mide. Pide un **inventario por escrito de lo que queda** despues de cada prueba, para que nunca te sorprendan tarde.
+
+Si tienes una vacuna en mente, escribimos un articulo complementario justo sobre esto: **[Vacunas personalizadas contra el cancer, parte 2 -- el tejido que necesitas y por que asegurarlo pronto](/es/blog/vacunas-personalizadas-tejido/)**.
+{{< /callout >}}
+
 ## Por que esto importa
 
 El tejido tumoral es uno de los recursos clinicos mas valiosos en la atencion del cancer. Puede usarse para diagnostico, pruebas moleculares, planificacion del tratamiento, emparejamiento con ensayos clinicos y, en algunos casos, enfoques personalizados mas avanzados.

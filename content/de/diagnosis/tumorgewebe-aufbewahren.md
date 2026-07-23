@@ -19,6 +19,23 @@ Dies ist eine OncoGuide-Reproduktion von **"Preserving Your Tumor Tissue"** ("Ih
 
 Dieser Leitfaden ist eine Ergaenzung zu unserem [vollstaendigen Diagnose-Leitfaden](/de/diagnosis/vollstaendiger-diagnose-leitfaden/). Er erklaert eine Entscheidung, die leicht uebersehen wird und sich spaeter nicht mehr rueckgaengig machen laesst: was mit Ihrem Tumorgewebe geschieht.
 
+{{< callout type="warning" >}}
+**Eine OncoGuide-Anmerkung, dem FCCT-Leitfaden unten hinzugefuegt -- das Eine, von dem wir uns am meisten wuenschten, wir haetten es bei der *ersten* Biopsie verstanden.** Gewebe ist endlich, es ist nicht erneuerbar, und -- das ist der Teil, der die Menschen ueberrascht -- **ein gutes Ansprechen auf die Behandlung kann die Tuer, jemals mehr zu bekommen, leise verschliessen.** Planen Sie fuer den gesamten Weg, nicht nur fuer die erste Diagnose.
+
+Im Verlauf der Behandlung kann von einer einzigen kleinen Biopsie verlangt werden, **mehrere verschiedene Zwecke** zu erfuellen, von denen jeder Material verbraucht:
+
+- der **erste molekulare Test** (umfassende DNA/RNA-Sequenzierung, "NGS"), der Ihre Erstlinientherapie waehlt;
+- oft ein **zweiter molekularer Test bei Resistenz**, wenn sich der Krebs veraendert und ein neuer Treiber gefunden werden muss -- das sind **mindestens zwei vollstaendige Sequenzierungslaeufe**, bevor irgendetwas anderes hinzukommt;
+- ein **tumorinformierter Bluttest auf Rueckfall (MRD)**, der aus einer einmaligen Tumorsequenzierung aufgebaut wird;
+- und, falls Sie ihn jemals verfolgen, ein **personalisierter Krebsimpfstoff (auf Neoantigen-Basis)** -- der in der Regel **erheblich mehr** Material benoetigt als ein Routine-Panel, weil er eine Sequenzierung des gesamten **Exoms** *und* des gesamten **Transkriptoms** erfordern kann, und mehrere Zentren bevorzugen ausdruecklich **frisch gefrorenes** Gewebe gegenueber Paraffin.
+
+Eine standardmaessige Stanzbiopsie reicht oft *gerade* fuer die erste Diagnose und wenig mehr. Deshalb lohnt es sich, beim **ersten** Eingriff -- solange noch Tumor zum Entnehmen vorhanden ist -- schriftlich um **zusaetzliche Stanzzylinder** zu bitten, zu fragen, ob ein Teil **frisch gefroren** aufbewahrt werden kann (nicht nur in Paraffin fixiert), und sicherzustellen, dass der diagnostische Block vom ersten Test **nicht vollstaendig aufgebraucht** wird.
+
+**Warum das Timing unerbittlich ist:** Wenn die Behandlung sehr gut wirkt, ist spaeter moeglicherweise **kein biopsierbarer Tumor mehr uebrig** -- nichts, was aktiv oder gross genug waere, um es sicher zu entnehmen. Das ist ein gutes Problem. Aber es bedeutet, dass das Gewebe, das Sie *frueh* eingelagert haben, das einzige Gewebe sein koennte, das Sie jemals haben werden -- und ein Paraffinblock, der ausreichend schien, kann sich als **weniger als ein Millimeter** verwendbaren Tumors herausstellen, wenn ein Impfstofflabor ihn schliesslich ausmisst. Bitten Sie nach jedem Test um ein schriftliches **Verzeichnis dessen, was uebrig bleibt**, damit Sie nie spaet ueberrascht werden.
+
+Falls Sie ueber einen Impfstoff nachdenken, haben wir dazu einen Begleitartikel geschrieben, genau darueber: **[Personalisierte Krebsimpfstoffe, Teil 2 -- das Gewebe, das Sie brauchen, und warum Sie es frueh sichern sollten](/de/blog/personalisierte-krebsimpfstoffe-gewebe/)**.
+{{< /callout >}}
+
 ## Warum das wichtig ist
 
 Tumorgewebe ist eine der wertvollsten klinischen Ressourcen in der Krebsbehandlung. Es kann zur Diagnose, fuer molekulare Tests, zur Behandlungsplanung, zur Zuordnung zu klinischen Studien und in manchen Faellen fuer fortgeschrittenere personalisierte Ansaetze verwendet werden.

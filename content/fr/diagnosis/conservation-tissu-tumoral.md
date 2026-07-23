@@ -19,6 +19,23 @@ Ceci est une reproduction par OncoGuide de **"Preserving Your Tumor Tissue"** (C
 
 Ce guide est un complement de notre [guide complet du diagnostic](/fr/diagnosis/guide-complet-diagnostic/). Il explique une decision facile a manquer et impossible a defaire ensuite : ce qu'il advient de votre tissu tumoral.
 
+{{< callout type="warning" >}}
+**Une note d'OncoGuide, ajoutee au guide FCCT ci-dessous -- la chose que nous aurions le plus voulu comprendre des la *premiere* biopsie.** Le tissu est fini, il n'est pas renouvelable, et -- c'est la partie qui surprend les gens -- **une bonne reponse au traitement peut discretement fermer la porte a toute possibilite d'en obtenir davantage.** Anticipez tout le parcours, pas seulement le premier diagnostic.
+
+Au cours du traitement, une seule petite biopsie peut etre amenee a servir **plusieurs besoins distincts**, dont chacun consomme du materiel :
+
+- le **premier test moleculaire** (sequencage ADN/ARN complet, "NGS") qui choisit votre traitement de premiere ligne ;
+- souvent un **deuxieme test moleculaire a la resistance**, si le cancer evolue et qu'un nouveau moteur doit etre identifie -- soit **au moins deux sequencages complets** avant toute autre chose ;
+- une **analyse de sang informee par la tumeur pour la recidive (MRD)**, construite a partir d'un sequencage unique de la tumeur ;
+- et, si vous en poursuivez un un jour, un **vaccin anticancereux personnalise (a neoantigenes)** -- qui necessite en general **beaucoup plus** de materiel qu'un panel de routine, car il peut exiger le sequencage complet de l'**exome** *et* du **transcriptome**, et plusieurs centres preferent nettement le tissu **frais congele** a la paraffine.
+
+Une biopsie au trocart standard suffit souvent *tout juste* au premier diagnostic, guere plus. Ainsi, des la **premiere** intervention -- tant qu'il reste de la tumeur a prelever -- il vaut la peine de demander, par ecrit, des **carottes supplementaires**, de demander si une partie peut etre conservee **fraiche congelee** (et pas seulement fixee en paraffine), et de s'assurer que le bloc diagnostique **n'est pas entierement consomme** par le premier test.
+
+**Pourquoi le calendrier est impitoyable :** si le traitement fonctionne tres bien, il se peut qu'il ne reste plus tard **aucune tumeur biopsiable** -- rien d'assez actif ou d'assez volumineux pour etre preleve sans risque. C'est un bon probleme a avoir. Mais cela signifie que le tissu mis de cote *tot* pourrait etre le seul tissu que vous aurez jamais -- et un bloc de paraffine qui semblait suffisant peut se reveler contenir **moins d'un millimetre** de tumeur exploitable lorsqu'un laboratoire de vaccins le mesure enfin. Demandez un **inventaire ecrit de ce qui reste** apres chaque test, pour ne jamais etre surpris trop tard.
+
+Si un vaccin vous preoccupe, nous avons ecrit un article complementaire sur exactement ce sujet : **[Vaccins personnalises contre le cancer, partie 2 -- le tissu dont vous avez besoin, et pourquoi le securiser tot](/fr/blog/vaccins-personnalises-tissu/)**.
+{{< /callout >}}
+
 ## Pourquoi c'est important
 
 Le tissu tumoral est l'une des ressources cliniques les plus precieuses dans la prise en charge du cancer. Il peut servir au diagnostic, au profilage moleculaire, a la planification du traitement, a l'orientation vers des essais cliniques et, dans certains cas, a des approches personnalisees plus avancees.
