@@ -2,6 +2,7 @@
 title: "Our data, together: why we want a patient-built RET registry"
 date: 2026-09-01
 draft: false
+aliases: ["/blog/ret-patient-registry/"]
 description: "The medical data of RET+ patients sits fragmented in institutional registries patients cannot access. Other cancer communities built their own registries and changed research. We propose the same -- and we are asking for your opinion."
 tags: ["patient registry", "RET", "medical data", "data access", "advocacy", "community", "lung cancer", "EHDS", "patient-led research"]
 categories: ["Blog"]

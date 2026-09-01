@@ -2,6 +2,7 @@
 title: "Nos données, ensemble : pourquoi nous voulons un registre RET créé par les patients"
 date: 2026-09-01
 draft: false
+aliases: ["/blog/registre-patients-ret/"]
 description: "Les données médicales des patients RET+ restent fragmentées dans des registres institutionnels auxquels les patients n'ont pas accès. D'autres communautés de patients atteints de cancer ont construit leurs propres registres et ont changé la recherche. Nous proposons la même chose -- et nous demandons votre avis."
 tags: ["registre de patients", "RET", "données médicales", "accès aux données", "advocacy", "communauté", "cancer du poumon", "EHDS", "patient-led research"]
 categories: ["Blog"]

@@ -53,6 +53,10 @@ languages:
           name: "Patient Guides"
           url: /en/cancer-types/
           weight: 20
+        - identifier: registry
+          name: "RET Registry"
+          url: /en/registry/
+          weight: 25
         - identifier: donate
           name: "Donate"
           url: /en/donate/
@@ -103,6 +107,10 @@ languages:
           name: "Ghiduri Pacienti"
           url: /ro/cancer-types/
           weight: 20
+        - identifier: registry
+          name: "Registrul RET"
+          url: /ro/registry/
+          weight: 25
         - identifier: donate
           name: "Doneaza"
           url: /ro/donate/
@@ -153,6 +161,10 @@ languages:
           name: "Guide Pazienti"
           url: /it/cancer-types/
           weight: 20
+        - identifier: registry
+          name: "Registro RET"
+          url: /it/registry/
+          weight: 25
         - identifier: donate
           name: "Dona"
           url: /it/donate/
@@ -203,6 +215,10 @@ languages:
           name: "Guides Patients"
           url: /fr/cancer-types/
           weight: 20
+        - identifier: registry
+          name: "Registre RET"
+          url: /fr/registry/
+          weight: 25
         - identifier: donate
           name: "Faire un don"
           url: /fr/donate/
@@ -253,6 +269,10 @@ languages:
           name: "Patientenleitfaden"
           url: /de/cancer-types/
           weight: 20
+        - identifier: registry
+          name: "RET-Register"
+          url: /de/registry/
+          weight: 25
         - identifier: donate
           name: "Spenden"
           url: /de/donate/
@@ -303,6 +323,10 @@ languages:
           name: "Guias de Pacientes"
           url: /es/cancer-types/
           weight: 20
+        - identifier: registry
+          name: "Registro RET"
+          url: /es/registry/
+          weight: 25
         - identifier: donate
           name: "Donar"
           url: /es/donate/

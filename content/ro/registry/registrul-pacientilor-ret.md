@@ -2,6 +2,7 @@
 title: "Datele noastre, împreună: de ce vrem un registru RET făcut de pacienți"
 date: 2026-09-01
 draft: false
+aliases: ["/blog/registrul-pacientilor-ret/"]
 description: "Datele medicale ale pacienților RET+ stau fragmentate în registre instituționale la care pacienții nu au acces. Alte comunități de cancer și-au construit propriile registre și au schimbat cercetarea. Propunem același lucru -- și cerem părerea voastră."
 tags: ["registru pacienti", "RET", "date medicale", "acces la date", "advocacy", "comunitate", "cancer pulmonar", "EHDS", "patient-led research"]
 categories: ["Blog"]
