@@ -67,7 +67,7 @@ Bis dahin zählt nur eines: dass wir einander finden. Jeder Patient, der jetzt d
 ---
 
 {{< action-box >}}
-1. Heben Sie JETZT die Hand: Schreiben Sie uns über die [Kontaktseite](/de/contact/) mit dem Betreff "REGISTER" -- eine einzige Nachricht, auch eine leere. Wir zählen Sie mit, halten Sie bei jedem Schritt auf dem Laufenden, und Sie gehören zu den Ersten, die eingeladen werden, wenn das Formular in den kommenden Tagen fertig ist.
+1. Heben Sie JETZT die Hand: Schreiben Sie uns über die [Kontaktseite](/de/contact/?subject=REGISTER) mit dem Betreff "REGISTER" -- eine einzige Nachricht, auch eine leere. Wir zählen Sie mit, halten Sie bei jedem Schritt auf dem Laufenden, und Sie gehören zu den Ersten, die eingeladen werden, wenn das Formular in den kommenden Tagen fertig ist.
 2. Teilen Sie den Artikel in den RET-Patientengruppen, in denen Sie sind (Facebook, Foren, WhatsApp). Jeder zusätzliche Patient macht die Daten aller wertvoller -- die kritische Masse ist alles.
 3. Kommen Sie wieder: Der nächste Artikel der Serie bringt das Interessensformular und die Datenliste. Wir bauen öffentlich, in den kommenden Tagen, Schritt für Schritt.
 4. Wenn Sie Arzt, Forscher oder eine RET-Patientenorganisation sind: Schreiben Sie uns -- wir suchen Partner und Kritiker gleichermaßen und ziehen ein gemeinsames Register einem parallelen vor.

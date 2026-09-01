@@ -67,7 +67,7 @@ Până atunci, un singur lucru contează: să ne găsim unii pe alții. Fiecare 
 ---
 
 {{< action-box >}}
-1. Ridică mâna ACUM: scrie-ne prin [pagina de contact](/ro/contact/) cu subiectul "REGISTRU" -- un singur mesaj, chiar și gol. Te numărăm, te ținem la curent la fiecare pas și vei fi printre primii invitați când formularul e gata, în zilele următoare.
+1. Ridică mâna ACUM: scrie-ne prin [pagina de contact](/ro/contact/?subject=REGISTRU) cu subiectul "REGISTRU" -- un singur mesaj, chiar și gol. Te numărăm, te ținem la curent la fiecare pas și vei fi printre primii invitați când formularul e gata, în zilele următoare.
 2. Distribuie articolul în grupurile de pacienți RET din care faci parte (Facebook, forumuri, WhatsApp). Fiecare pacient în plus face datele tuturor mai valoroase -- masa critică e totul.
 3. Revino aici: următorul articol din serie aduce formularul de interes și lista datelor. Construim în public, în zilele următoare, pas cu pas.
 4. Dacă ești medic, cercetător sau organizație de pacienți RET: scrie-ne -- căutăm parteneri și critici în egală măsură, și preferăm un registru comun unuia paralel.

@@ -67,7 +67,7 @@ Hasta entonces, solo una cosa importa: encontrarnos unos a otros. Cada paciente 
 ---
 
 {{< action-box >}}
-1. Levanta la mano AHORA: escríbenos a través de la [página de contacto](/es/contact/) con el asunto "REGISTRO" -- un solo mensaje, aunque sea vacío. Te contamos, te mantenemos al día en cada paso y estarás entre los primeros invitados cuando el formulario esté listo, en los próximos días.
+1. Levanta la mano AHORA: escríbenos a través de la [página de contacto](/es/contact/?subject=REGISTRO) con el asunto "REGISTRO" -- un solo mensaje, aunque sea vacío. Te contamos, te mantenemos al día en cada paso y estarás entre los primeros invitados cuando el formulario esté listo, en los próximos días.
 2. Comparte el artículo en los grupos de pacientes RET de los que formes parte (Facebook, foros, WhatsApp). Cada paciente adicional hace los datos de todos más valiosos -- la masa crítica lo es todo.
 3. Vuelve por aquí: el próximo artículo de la serie trae el formulario de interés y la lista de los datos. Construimos en público, en los próximos días, paso a paso.
 4. Si eres médico, investigador u organización de pacientes RET: escríbenos -- buscamos socios y críticos a partes iguales, y preferimos un registro común a uno paralelo.

@@ -67,7 +67,7 @@ D'ici là, une seule chose compte : nous trouver les uns les autres. Chaque pati
 ---
 
 {{< action-box >}}
-1. Levez la main MAINTENANT : écrivez-nous via la [page de contact](/fr/contact/) avec le sujet « REGISTRE » -- un seul message, même vide. Nous vous comptons, nous vous tenons informé à chaque étape, et vous serez parmi les premiers invités quand le formulaire sera prêt, dans les jours qui viennent.
+1. Levez la main MAINTENANT : écrivez-nous via la [page de contact](/fr/contact/?subject=REGISTRE) avec le sujet « REGISTRE » -- un seul message, même vide. Nous vous comptons, nous vous tenons informé à chaque étape, et vous serez parmi les premiers invités quand le formulaire sera prêt, dans les jours qui viennent.
 2. Partagez l'article dans les groupes de patients RET dont vous faites partie (Facebook, forums, WhatsApp). Chaque patient supplémentaire rend les données de tous plus précieuses -- la masse critique est tout.
 3. Revenez ici : le prochain article de la série apporte le formulaire d'intérêt et la liste des données. Nous construisons en public, dans les jours qui viennent, étape par étape.
 4. Si vous êtes médecin, chercheur ou organisation de patients RET : écrivez-nous -- nous cherchons des partenaires et des critiques à parts égales, et nous préférons un registre commun à un registre parallèle.

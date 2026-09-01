@@ -67,7 +67,7 @@ Until then, only one thing matters: finding each other. Every patient who raises
 ---
 
 {{< action-box >}}
-1. Raise your hand NOW: write to us through the [contact page](/en/contact/) with the subject "REGISTRY" -- a single message, even an empty one. We will count you in, keep you updated at every step, and you will be among the first invited when the form is ready, in the coming days.
+1. Raise your hand NOW: write to us through the [contact page](/en/contact/?subject=REGISTRY) with the subject "REGISTRY" -- a single message, even an empty one. We will count you in, keep you updated at every step, and you will be among the first invited when the form is ready, in the coming days.
 2. Share this article in the RET patient groups you are part of (Facebook, forums, WhatsApp). Every additional patient makes everyone's data more valuable -- critical mass is everything.
 3. Come back here: the next article in the series brings the interest form and the data list. We are building in public, in the coming days, step by step.
 4. If you are a doctor, a researcher or a RET patient organization: write to us -- we are looking for partners and critics in equal measure, and we prefer a joint registry to a parallel one.

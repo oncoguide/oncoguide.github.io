@@ -67,7 +67,7 @@ Fino ad allora, una sola cosa conta: trovarci gli uni con gli altri. Ogni pazien
 ---
 
 {{< action-box >}}
-1. Alza la mano ADESSO: scrivici tramite la [pagina dei contatti](/it/contact/) con oggetto "REGISTRO" -- un solo messaggio, anche vuoto. Ti contiamo, ti teniamo aggiornato a ogni passo e sarai tra i primi invitati quando il modulo sarà pronto, nei prossimi giorni.
+1. Alza la mano ADESSO: scrivici tramite la [pagina dei contatti](/it/contact/?subject=REGISTRO) con oggetto "REGISTRO" -- un solo messaggio, anche vuoto. Ti contiamo, ti teniamo aggiornato a ogni passo e sarai tra i primi invitati quando il modulo sarà pronto, nei prossimi giorni.
 2. Condividi l'articolo nei gruppi di pazienti RET di cui fai parte (Facebook, forum, WhatsApp). Ogni paziente in più rende i dati di tutti più preziosi -- la massa critica è tutto.
 3. Torna qui: il prossimo articolo della serie porta il modulo di interesse e la lista dei dati. Costruiamo in pubblico, nei prossimi giorni, passo dopo passo.
 4. Se sei un medico, un ricercatore o un'organizzazione di pazienti RET: scrivici -- cerchiamo partner e critici in egual misura, e preferiamo un registro comune a uno parallelo.

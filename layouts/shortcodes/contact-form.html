@@ -4,7 +4,6 @@
        Labels localized via i18n. */ -}}
 <form class="onco-contact-form" action="https://api.web3forms.com/submit" method="POST">
   <input type="hidden" name="access_key" value="{{ site.Params.web3formsKey }}">
-  <input type="hidden" name="subject" value="OncoGuide — contact form">
   <input type="hidden" name="from_name" value="OncoGuide">
   <input type="hidden" name="redirect" value="https://oncoguide.github.io/">
   <input type="checkbox" name="botcheck" class="onco-cf-honey" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -12,6 +11,18 @@
     <span>{{ i18n "contactFormName" }}</span>
     <input type="text" name="name" required>
   </label>
+  <label class="onco-cf-field">
+    <span>{{ i18n "contactFormSubject" }}</span>
+    <input type="text" name="subject" id="onco-cf-subject" value="OncoGuide — contact form">
+  </label>
+  <script>
+    (function () {
+      try {
+        var s = new URLSearchParams(window.location.search).get("subject");
+        if (s) { document.getElementById("onco-cf-subject").value = s.slice(0, 120); }
+      } catch (e) {}
+    })();
+  </script>
   <label class="onco-cf-field">
     <span>{{ i18n "contactFormEmail" }}</span>
     <input type="email" name="email" required>

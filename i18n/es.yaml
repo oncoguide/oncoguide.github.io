@@ -32,6 +32,7 @@ scannerRankModalityPetmr: "PET-RM"
 # Formulario de contacto
 contactFormName: "Tu nombre"
 contactFormEmail: "Tu correo electrónico"
+contactFormSubject: "Asunto"
 contactFormMessage: "Tu mensaje"
 contactFormSend: "Enviar"
 
