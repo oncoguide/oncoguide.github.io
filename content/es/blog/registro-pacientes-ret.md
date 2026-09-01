@@ -1,0 +1,77 @@
+---
+title: "Nuestros datos, juntos: por qué queremos un registro RET hecho por pacientes"
+date: 2026-09-01
+draft: false
+description: "Los datos médicos de los pacientes RET+ están fragmentados en registros institucionales a los que los pacientes no tienen acceso. Otras comunidades de cáncer construyeron sus propios registros y cambiaron la investigación. Proponemos lo mismo -- y os pedimos vuestra opinión."
+tags: ["registro de pacientes", "RET", "datos médicos", "acceso a datos", "advocacy", "comunidad", "cáncer de pulmón", "EHDS", "patient-led research"]
+categories: ["Blog"]
+translationKey: "blog-ret-patient-registry"
+weight: 70
+author: "OncoGuide"
+ShowToc: false
+TocOpen: false
+---
+
+**En resumen:** Cada uno de nosotros, los pacientes con cáncer RET-positivo, posee un tesoro: sus propios datos -- el test genético, los tratamientos, la respuesta, los efectos adversos, la progresión. Puestos en común, esos datos responderían a las preguntas que nos quitan el sueño. Hoy están fragmentados: una parte en registros institucionales a los que no tenemos acceso, otra parte en nuestros cajones. Otras comunidades de pacientes resolvieron el problema construyendo sus propios registros -- y cambiaron la investigación de su enfermedad. Creemos que ha llegado el momento de que la comunidad RET también lo haga. Este artículo explica por qué, qué proponemos en concreto y cómo podéis apuntar vuestro interés. Todavía no se recoge nada -- primero queremos saber cuántos somos.
+
+---
+
+## El problema: la información existe, pero no circula
+
+Nuestra enfermedad es rara -- las fusiones RET aparecen en el 1-2% de los cánceres de pulmón. Eso significa que ningún hospital, ninguna ciudad y a menudo ningún país ve suficientes pacientes como para aprender rápido. La única manera de aprender rápido es poner los datos en común.
+
+La buena noticia: la puesta en común ya existe, en parte. Registros académicos internacionales -- por ejemplo el [Global RET Registry (GLORY)](https://pubmed.ncbi.nlm.nih.gov/28447912/) o el registro europeo RET-MAP, de los que [se han publicado análisis valiosos](https://www.jto.org/) -- reúnen datos de decenas de hospitales. Estamos agradecidos a quienes los construyeron: sin ellos sabríamos mucho menos.
+
+La mala noticia, dicha con todo el respeto: para el paciente, este sistema es opaco. Los hospitales deciden si contribuyen y qué contribuyen -- a menudo solo una parte de los datos genéticos de cada caso. Los resultados aparecen años después, comprimidos en unas cuantas diapositivas en congresos que hay que cazar por las redes sociales. Y si un paciente pregunta "¿cuánto dura, de media, la respuesta al tratamiento para alguien con exactamente mi fusión?" -- la pregunta no tiene dónde plantearse. No existe ningún mecanismo por el que un paciente pueda consultar los registros construidos, en parte, con los datos de pacientes como él.
+
+La Unión Europea ya ha reconocido el problema: el [Espacio Europeo de Datos Sanitarios (EHDS)](https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en), en vigor desde 2025, creará gradualmente el derecho de acceso a datos de salud anonimizados para uso secundario. Pero la aplicación completa está programada para finales de la década. Algunos de nosotros no tenemos ese tiempo.
+
+## La prueba de que se puede: los pacientes que ya lo hicieron
+
+No proponemos una utopía. Proponemos copiar, con honestidad, lo que funcionó en otros:
+
+- **EGFR Resisters** -- una comunidad de pacientes con cáncer de pulmón EGFR+, nacida de un grupo de Facebook. A través de [Project PRIORITY](https://www.egfrcancer.org/research/), los pacientes donaron directamente sus datos clínicos y genómicos, con consentimiento, para la investigación -- incluso en colaboración con la industria. El resultado: estudios publicados, preguntas de los pacientes llegadas a la agenda de los investigadores, y una comunidad que ya no espera a ser estudiada -- se estudia a sí misma.
+- **The Metastatic Breast Cancer Project / Count Me In** -- pacientes metastásicos que [se inscriben online](https://joincountmein.org/), envían el consentimiento y los informes, y los datos desidentificados se ponen a disposición de cualquier investigador del mundo, de forma gratuita. Miles de participantes. Sus datos aceleraron descubrimientos que ningún centro por sí solo habría logrado.
+- **The ROS1ders** y **ALK Positive** -- comunidades construidas precisamente sobre drivers raros, como el nuestro, que pasaron de grupos de apoyo a financiar sus propios programas de investigación y datos.
+
+El patrón es idéntico en todas partes: una enfermedad rara, datos fragmentados, instituciones lentas -- y pacientes que decidieron que la velocidad importa más que la inercia. Todas lo hicieron legalmente, con consentimiento explícito, sin vulnerar la confidencialidad de nadie.
+
+## Lo que proponemos: un registro RET de la comunidad
+
+La Asociación OncoGuide -- una organización de pacientes sin ánimo de lucro, registrada legalmente en Rumanía, que administra este sitio -- asume construir la infraestructura: un registro online de pacientes RET+, hecho por pacientes, para todo el mundo.
+
+Los principios, no negociables:
+
+1. **Voluntario, íntegramente.** Contribuye solo quien quiere, cuanto quiere. Cualquiera puede retirarse en cualquier momento, y sus datos se borran a petición.
+2. **Consentimiento explícito y granular.** Cada participante decide por separado: ¿pueden usarse los datos para estadísticas públicas? ¿para investigación académica? ¿pueden compartirse con compañías farmacéuticas que desarrollan tratamientos para nosotros? Cada "sí" se marca individualmente, nada se presupone.
+3. **Seudonimización real.** La identidad y el consentimiento se guardan por separado y en privado. En el registro y en cualquier estadística pública, un participante es "RET-0042" -- nunca un nombre, nunca una combinación de detalles que pudiera identificar a alguien en una enfermedad tan rara. La anonimización no es una casilla que marcar -- es un oficio, y la tratamos como tal.
+4. **Datos alojados en la UE**, bajo el RGPD, con los derechos del paciente respetados al pie de la letra. El RGPD no es el obstáculo aquí -- el consentimiento explícito del paciente es exactamente el mecanismo que el RGPD prevé para esto.
+5. **Acceso abierto a los resultados.** Las estadísticas agregadas -- cuántos somos, qué fusiones tenemos, cuánto duran las respuestas, qué viene tras la progresión -- serán públicas, para pacientes, médicos e investigadores por igual. Ese es todo el propósito: que todos corramos más rápido.
+
+## Qué datos importarían
+
+Para ser útil, el registro reuniría, de quien elija contribuir: el diagnóstico y su fecha, la fusión RET con su partner (KIF5B, CCDC6...) y las co-mutaciones del informe genético (idealmente el propio informe, como documento), los tratamientos en orden -- cuál, desde cuándo, hasta cuándo --, la respuesta a ellos, los efectos adversos significativos, los tratamientos locales (radioterapia, ablación, cirugía), el momento y el tipo de la progresión, y lo que vino después. Dicho de forma sencilla: la historia médica de cada uno, en formato comparable.
+
+Sabemos por experiencia propia lo valiosa que es cada información de esta lista -- porque son exactamente las preguntas que nos hacemos nosotros mismos en cada decisión de tratamiento.
+
+## Un paso dicho abiertamente
+
+Lo decimos con transparencia, porque así queremos trabajar: también hemos comunicado a los investigadores con los que estamos en diálogo que emprendemos esta iniciativa, y vemos el registro de la comunidad como un socio de los registros académicos, no un rival. Los datos recogidos por los pacientes -- adherencia, efectos adversos de la vida real, las decisiones entre líneas de tratamiento -- son exactamente lo que les falta a los registros hospitalarios. Invitamos a cualquier grupo académico que quiera colaborar a escribirnos. Y a las comunidades internacionales de pacientes RET les proponemos explícitamente: construyamos esto juntos, no en paralelo.
+
+## Qué puedes hacer ahora
+
+Por ahora no recogemos datos médicos. El primer paso es contar: ¿cuántos de nosotros contribuiríamos? Si la respuesta es "suficientes", construimos -- y cada paso siguiente se anunciará aquí.
+
+---
+
+{{< action-box >}}
+1. Si eres paciente RET+ (o familiar) y contribuirías con tus datos, con consentimiento y seudonimizados: escríbenos a través de la [página de contacto](/es/contact/) con el asunto "REGISTRO" -- te contamos y te avisamos en cada paso.
+2. Si estás en grupos de pacientes RET (Facebook, foros): comparte el artículo. La masa crítica lo es todo.
+3. Si eres médico o investigador y la idea te parece útil (o equivocada -- eso también nos ayuda): escríbenos. Buscamos socios y críticos, a partes iguales.
+4. Si formas parte de una organización internacional de pacientes RET: contáctanos -- preferimos un registro común a uno paralelo.
+5. No envíes todavía datos médicos. La recogida empieza solo cuando publiquemos el consentimiento, el procedimiento de seudonimización y la plataforma -- todo anunciado aquí.
+{{< /action-box >}}
+
+---
+
+{{< disclaimer >}}{{< /disclaimer >}}
