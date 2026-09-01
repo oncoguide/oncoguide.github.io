@@ -20,7 +20,7 @@ TocOpen: false
 
 Unsere Krankheit ist selten -- RET-Fusionen treten bei 1-2% der Lungenkarzinome auf. Das bedeutet: Kein Krankenhaus, keine Stadt, oft kein Land sieht genug Patienten, um schnell zu lernen. Der einzige Weg, schnell zu lernen, ist das Zusammenführen der Daten.
 
-Die gute Nachricht: Dieses Zusammenführen existiert bereits, teilweise. Internationale akademische Register -- zum Beispiel das [Global RET Registry (GLORY)](https://pubmed.ncbi.nlm.nih.gov/28447912/) oder das europäische Register RET-MAP, aus dem [wertvolle Analysen veröffentlicht wurden](https://www.jto.org/) -- sammeln Daten von Dutzenden Krankenhäusern. Wir sind denen dankbar, die sie aufgebaut haben: Ohne sie wüssten wir viel weniger.
+Die gute Nachricht: Dieses Zusammenführen existiert bereits, teilweise. Internationale akademische Register -- zum Beispiel das [Global RET Registry (GLORY)](https://pubmed.ncbi.nlm.nih.gov/28447912/) oder das europäische Register RET-MAP, aus dem [wertvolle Analysen veröffentlicht wurden](https://pubmed.ncbi.nlm.nih.gov/36646211/) -- sammeln Daten von Dutzenden Krankenhäusern. Wir sind denen dankbar, die sie aufgebaut haben: Ohne sie wüssten wir viel weniger.
 
 Die schlechte Nachricht, mit allem Respekt gesagt: Für den Patienten ist dieses System undurchsichtig. Die Krankenhäuser entscheiden, ob sie beitragen und was sie beitragen -- oft nur einen Teil der genetischen Daten jedes Falls. Die Ergebnisse erscheinen Jahre später, komprimiert in ein paar Folien auf Konferenzen, die man in den sozialen Netzwerken aufspüren muss. Und wenn ein Patient fragt: "Wie lange dauert im Durchschnitt das Ansprechen auf die Behandlung bei jemandem mit genau meiner Fusion?" -- dann gibt es keinen Ort, an dem diese Frage gestellt werden kann. Es existiert kein Mechanismus, über den ein Patient die Register abfragen könnte, die zum Teil aus den Daten von Patienten wie ihm aufgebaut wurden.
 
@@ -30,7 +30,7 @@ Die Europäische Union hat das Problem bereits erkannt: Der [Europäische Gesund
 
 Wir schlagen keine Utopie vor. Wir schlagen vor, ehrlich zu kopieren, was bei anderen funktioniert hat:
 
-- **EGFR Resisters** -- eine Community von Patienten mit EGFR+ Lungenkrebs, entstanden aus einer Facebook-Gruppe. Über [Project PRIORITY](https://www.egfrcancer.org/research/) haben Patienten ihre klinischen und genomischen Daten direkt, mit Einwilligung, für die Forschung gespendet -- auch in Partnerschaft mit der Industrie. Das Ergebnis: veröffentlichte Studien, Patientenfragen, die auf die Agenda der Forscher gelangt sind, und eine Community, die nicht mehr darauf wartet, erforscht zu werden -- sie forscht selbst.
+- **EGFR Resisters** -- eine Community von Patienten mit EGFR+ Lungenkrebs, entstanden aus einer Facebook-Gruppe. Über [Project PRIORITY](https://www.egfrcancer.org/project-priority/) haben Patienten ihre klinischen und genomischen Daten direkt, mit Einwilligung, für die Forschung gespendet -- auch in Partnerschaft mit der Industrie. Das Ergebnis: veröffentlichte Studien, Patientenfragen, die auf die Agenda der Forscher gelangt sind, und eine Community, die nicht mehr darauf wartet, erforscht zu werden -- sie forscht selbst.
 - **The Metastatic Breast Cancer Project / Count Me In** -- metastasierte Patientinnen und Patienten, die sich [online anmelden](https://joincountmein.org/), ihre Einwilligung und Befunde einsenden, und deren de-identifizierte Daten jedem Forscher weltweit kostenlos zur Verfügung gestellt werden. Tausende Teilnehmer. Ihre Daten haben Entdeckungen beschleunigt, die kein einzelnes Zentrum allein gemacht hätte.
 - **The ROS1ders** und **ALK Positive** -- Communities, die genau um seltene Treiber herum aufgebaut wurden, wie unserer, und die von Selbsthilfegruppen zur Finanzierung eigener Forschungs- und Datenprogramme übergegangen sind.
 
@@ -54,21 +54,23 @@ Um nützlich zu sein, würde das Register von jedem, der sich zum Beitragen ents
 
 Wir wissen aus eigener Erfahrung, wie wertvoll jede Information auf dieser Liste ist -- denn es sind genau die Fragen, die wir uns selbst bei jeder Behandlungsentscheidung stellen.
 
-## Ein offen ausgesprochener Schritt
+## Partner, nicht Rivale
 
-Wir sagen es transparent, weil wir so arbeiten wollen: Wir haben auch den Forschern, mit denen wir im Dialog stehen, mitgeteilt, dass wir diesen Schritt gehen, und wir sehen das Community-Register als Partner der akademischen Register, nicht als Rivalen. Die von Patienten gesammelten Daten -- Adhärenz, Nebenwirkungen aus dem echten Leben, die Entscheidungen zwischen Therapielinien -- sind genau das, was den Krankenhausregistern fehlt. Wir laden jede akademische Gruppe, die kooperieren möchte, ein, uns zu schreiben. Und den internationalen RET-Patienten-Communities schlagen wir ausdrücklich vor: Lasst uns das gemeinsam aufbauen, nicht parallel.
+Wir sehen das Community-Register als Partner der akademischen Register, nicht als Rivalen -- und wir werden transparent mit den Forschern zusammenarbeiten, während das Vorhaben Gestalt annimmt. Die von Patienten gesammelten Daten -- Adhärenz, Nebenwirkungen aus dem echten Leben, die Entscheidungen zwischen Therapielinien -- sind genau das, was den Krankenhausregistern fehlt. Wir laden jede akademische Gruppe, die kooperieren möchte, ein, uns zu schreiben. Und den internationalen RET-Patienten-Communities schlagen wir ausdrücklich vor: Lasst uns das gemeinsam aufbauen, nicht parallel.
 
-## Was Sie jetzt tun können
+## Wir legen los -- und das ist erst der Anfang
 
-Vorerst sammeln wir keine medizinischen Daten. Der erste Schritt ist zu zählen: Wie viele von uns würden beitragen? Wenn die Antwort "genug" lautet, bauen wir -- und jeder weitere Schritt wird hier angekündigt.
+Dieser Artikel ist das Intro, nicht der ganze Plan. In den kommenden Tagen veröffentlichen wir hier, Schritt für Schritt: das Formular zur Interessensbekundung, die genaue Liste der Daten, die wir erfragen werden, die Einwilligung und die Form, die das Register haben wird. Wir bauen öffentlich, damit Sie jede Entscheidung sehen und anfechten können.
+
+Bis dahin zählt nur eines: dass wir einander finden. Jeder Patient, der jetzt die Hand hebt, macht das Register für alle anderen wertvoller.
 
 ---
 
 {{< action-box >}}
-1. Wenn Sie RET+ Patient (oder Angehöriger) sind und mit Ihren Daten beitragen würden, mit Einwilligung und pseudonymisiert: Schreiben Sie uns über die [Kontaktseite](/de/contact/) mit dem Betreff "REGISTER" -- wir zählen Sie mit und informieren Sie bei jedem Schritt.
-2. Wenn Sie in RET-Patientengruppen sind (Facebook, Foren): Teilen Sie den Artikel. Die kritische Masse ist alles.
-3. Wenn Sie Arzt oder Forscher sind und die Idee nützlich finden (oder falsch -- auch das hilft uns): Schreiben Sie uns. Wir suchen Partner und Kritiker gleichermaßen.
-4. Wenn Sie Teil einer internationalen RET-Patientenorganisation sind: Kontaktieren Sie uns -- wir ziehen ein gemeinsames Register einem parallelen vor.
+1. Heben Sie JETZT die Hand: Schreiben Sie uns über die [Kontaktseite](/de/contact/) mit dem Betreff "REGISTER" -- eine einzige Nachricht, auch eine leere. Wir zählen Sie mit, halten Sie bei jedem Schritt auf dem Laufenden, und Sie gehören zu den Ersten, die eingeladen werden, wenn das Formular in den kommenden Tagen fertig ist.
+2. Teilen Sie den Artikel in den RET-Patientengruppen, in denen Sie sind (Facebook, Foren, WhatsApp). Jeder zusätzliche Patient macht die Daten aller wertvoller -- die kritische Masse ist alles.
+3. Kommen Sie wieder: Der nächste Artikel der Serie bringt das Interessensformular und die Datenliste. Wir bauen öffentlich, in den kommenden Tagen, Schritt für Schritt.
+4. Wenn Sie Arzt, Forscher oder eine RET-Patientenorganisation sind: Schreiben Sie uns -- wir suchen Partner und Kritiker gleichermaßen und ziehen ein gemeinsames Register einem parallelen vor.
 5. Senden Sie noch keine medizinischen Daten. Die Sammlung beginnt erst, nachdem wir die Einwilligung, das Pseudonymisierungsverfahren und die Plattform veröffentlicht haben -- alles wird hier angekündigt.
 {{< /action-box >}}
 

@@ -20,7 +20,7 @@ TocOpen: false
 
 Our disease is rare -- RET fusions occur in 1-2% of lung cancers. That means no hospital, no city, often no country sees enough patients to learn quickly. The only way to learn quickly is to pool the data.
 
-The good news: pooling already exists, partially. International academic registries -- for example the [Global RET Registry (GLORY)](https://pubmed.ncbi.nlm.nih.gov/28447912/) or the European RET-MAP registry, from which [valuable analyses have been published](https://www.jto.org/) -- gather data from dozens of hospitals. We are grateful to those who built them: without them we would know far less.
+The good news: pooling already exists, partially. International academic registries -- for example the [Global RET Registry (GLORY)](https://pubmed.ncbi.nlm.nih.gov/28447912/) or the European RET-MAP registry, from which [valuable analyses have been published](https://pubmed.ncbi.nlm.nih.gov/36646211/) -- gather data from dozens of hospitals. We are grateful to those who built them: without them we would know far less.
 
 The bad news, said with all due respect: for the patient, this system is opaque. Hospitals decide whether they contribute and what they contribute -- often only part of the genetic data of each case. Results appear years later, compressed into a few slides at conferences you have to hunt down on social media. And if a patient asks "how long, on average, does the response to treatment last for someone with exactly my fusion?" -- there is nowhere to ask that question. There is no mechanism through which a patient can query the registries built, in part, from the data of patients like them.
 
@@ -30,7 +30,7 @@ The European Union has already recognized the problem: the [European Health Data
 
 We are not proposing a utopia. We are proposing to copy, honestly, what worked for others:
 
-- **EGFR Resisters** -- a community of patients with EGFR+ lung cancer, started from a Facebook group. Through [Project PRIORITY](https://www.egfrcancer.org/research/), patients directly donated their clinical and genomic data, with consent, for research -- including in partnership with industry. The result: published studies, patients' questions placed on researchers' agendas, and a community that no longer waits to be studied -- it studies itself.
+- **EGFR Resisters** -- a community of patients with EGFR+ lung cancer, started from a Facebook group. Through [Project PRIORITY](https://www.egfrcancer.org/project-priority/), patients directly donated their clinical and genomic data, with consent, for research -- including in partnership with industry. The result: published studies, patients' questions placed on researchers' agendas, and a community that no longer waits to be studied -- it studies itself.
 - **The Metastatic Breast Cancer Project / Count Me In** -- metastatic patients who [enroll online](https://joincountmein.org/), send in their consent and their reports, and the de-identified data is made available to any researcher in the world, free of charge. Thousands of participants. Their data has accelerated discoveries no single center would have made.
 - **The ROS1ders** and **ALK Positive** -- communities built precisely around rare drivers, like ours, which went from support groups to funding their own research and data programs.
 
@@ -54,21 +54,23 @@ To be useful, the registry would gather, from those who choose to contribute: th
 
 We know from our own experience how valuable every item on that list is -- because these are exactly the questions we ask ourselves at every treatment decision.
 
-## A step taken openly
+## Partner, not rival
 
-We say this transparently, because that is how we want to work: we have also told the researchers we are in dialogue with that we are taking this step, and we see the community registry as a partner of the academic registries, not a rival. The data patients collect -- adherence, real-world side effects, the decisions between treatment lines -- is exactly what hospital registries lack. We invite any academic group that wants to collaborate to write to us. And to the international RET patient communities we propose explicitly: let's build this together, not in parallel.
+We see the community registry as a partner of the academic registries, not a rival -- and we will work transparently with researchers as this effort takes shape. The data patients collect -- adherence, real-world side effects, the decisions between treatment lines -- is exactly what hospital registries lack. We invite any academic group that wants to collaborate to write to us. And to the international RET patient communities we propose explicitly: let's build this together, not in parallel.
 
-## What you can do now
+## We are getting to work -- and this is only the beginning
 
-For now, we are not collecting any medical data. The first step is to count: how many of us would contribute? If the answer is "enough", we build -- and every next step will be announced here.
+This article is the intro, not the whole plan. In the coming days we will publish here, step by step: the interest sign-up form, the exact list of data we will ask for, the consent form, and what the registry will look like. We are building in public, so you can see every decision and challenge it.
+
+Until then, only one thing matters: finding each other. Every patient who raises their hand now makes the registry more valuable for everyone else.
 
 ---
 
 {{< action-box >}}
-1. If you are a RET+ patient (or a caregiver) and you would contribute your data, with consent and pseudonymized: write to us through the [contact page](/en/contact/) with the subject "REGISTRY" -- we will count you in and keep you posted at every step.
-2. If you are in RET patient groups (Facebook, forums): share this article. Critical mass is everything.
-3. If you are a doctor or a researcher and the idea seems useful to you (or wrong -- that helps us too): write to us. We are looking for partners and critics in equal measure.
-4. If you are part of an international RET patient organization: contact us -- we prefer a joint registry to a parallel one.
+1. Raise your hand NOW: write to us through the [contact page](/en/contact/) with the subject "REGISTRY" -- a single message, even an empty one. We will count you in, keep you updated at every step, and you will be among the first invited when the form is ready, in the coming days.
+2. Share this article in the RET patient groups you are part of (Facebook, forums, WhatsApp). Every additional patient makes everyone's data more valuable -- critical mass is everything.
+3. Come back here: the next article in the series brings the interest form and the data list. We are building in public, in the coming days, step by step.
+4. If you are a doctor, a researcher or a RET patient organization: write to us -- we are looking for partners and critics in equal measure, and we prefer a joint registry to a parallel one.
 5. Do not send medical data yet. Collection begins only after we publish the consent form, the pseudonymization procedure and the platform -- all announced here.
 {{< /action-box >}}
 

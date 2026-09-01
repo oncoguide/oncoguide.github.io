@@ -20,7 +20,7 @@ TocOpen: false
 
 Nuestra enfermedad es rara -- las fusiones RET aparecen en el 1-2% de los cánceres de pulmón. Eso significa que ningún hospital, ninguna ciudad y a menudo ningún país ve suficientes pacientes como para aprender rápido. La única manera de aprender rápido es poner los datos en común.
 
-La buena noticia: la puesta en común ya existe, en parte. Registros académicos internacionales -- por ejemplo el [Global RET Registry (GLORY)](https://pubmed.ncbi.nlm.nih.gov/28447912/) o el registro europeo RET-MAP, de los que [se han publicado análisis valiosos](https://www.jto.org/) -- reúnen datos de decenas de hospitales. Estamos agradecidos a quienes los construyeron: sin ellos sabríamos mucho menos.
+La buena noticia: la puesta en común ya existe, en parte. Registros académicos internacionales -- por ejemplo el [Global RET Registry (GLORY)](https://pubmed.ncbi.nlm.nih.gov/28447912/) o el registro europeo RET-MAP, de los que [se han publicado análisis valiosos](https://pubmed.ncbi.nlm.nih.gov/36646211/) -- reúnen datos de decenas de hospitales. Estamos agradecidos a quienes los construyeron: sin ellos sabríamos mucho menos.
 
 La mala noticia, dicha con todo el respeto: para el paciente, este sistema es opaco. Los hospitales deciden si contribuyen y qué contribuyen -- a menudo solo una parte de los datos genéticos de cada caso. Los resultados aparecen años después, comprimidos en unas cuantas diapositivas en congresos que hay que cazar por las redes sociales. Y si un paciente pregunta "¿cuánto dura, de media, la respuesta al tratamiento para alguien con exactamente mi fusión?" -- la pregunta no tiene dónde plantearse. No existe ningún mecanismo por el que un paciente pueda consultar los registros construidos, en parte, con los datos de pacientes como él.
 
@@ -30,7 +30,7 @@ La Unión Europea ya ha reconocido el problema: el [Espacio Europeo de Datos San
 
 No proponemos una utopía. Proponemos copiar, con honestidad, lo que funcionó en otros:
 
-- **EGFR Resisters** -- una comunidad de pacientes con cáncer de pulmón EGFR+, nacida de un grupo de Facebook. A través de [Project PRIORITY](https://www.egfrcancer.org/research/), los pacientes donaron directamente sus datos clínicos y genómicos, con consentimiento, para la investigación -- incluso en colaboración con la industria. El resultado: estudios publicados, preguntas de los pacientes llegadas a la agenda de los investigadores, y una comunidad que ya no espera a ser estudiada -- se estudia a sí misma.
+- **EGFR Resisters** -- una comunidad de pacientes con cáncer de pulmón EGFR+, nacida de un grupo de Facebook. A través de [Project PRIORITY](https://www.egfrcancer.org/project-priority/), los pacientes donaron directamente sus datos clínicos y genómicos, con consentimiento, para la investigación -- incluso en colaboración con la industria. El resultado: estudios publicados, preguntas de los pacientes llegadas a la agenda de los investigadores, y una comunidad que ya no espera a ser estudiada -- se estudia a sí misma.
 - **The Metastatic Breast Cancer Project / Count Me In** -- pacientes metastásicos que [se inscriben online](https://joincountmein.org/), envían el consentimiento y los informes, y los datos desidentificados se ponen a disposición de cualquier investigador del mundo, de forma gratuita. Miles de participantes. Sus datos aceleraron descubrimientos que ningún centro por sí solo habría logrado.
 - **The ROS1ders** y **ALK Positive** -- comunidades construidas precisamente sobre drivers raros, como el nuestro, que pasaron de grupos de apoyo a financiar sus propios programas de investigación y datos.
 
@@ -54,21 +54,23 @@ Para ser útil, el registro reuniría, de quien elija contribuir: el diagnóstic
 
 Sabemos por experiencia propia lo valiosa que es cada información de esta lista -- porque son exactamente las preguntas que nos hacemos nosotros mismos en cada decisión de tratamiento.
 
-## Un paso dicho abiertamente
+## Socio, no rival
 
-Lo decimos con transparencia, porque así queremos trabajar: también hemos comunicado a los investigadores con los que estamos en diálogo que emprendemos esta iniciativa, y vemos el registro de la comunidad como un socio de los registros académicos, no un rival. Los datos recogidos por los pacientes -- adherencia, efectos adversos de la vida real, las decisiones entre líneas de tratamiento -- son exactamente lo que les falta a los registros hospitalarios. Invitamos a cualquier grupo académico que quiera colaborar a escribirnos. Y a las comunidades internacionales de pacientes RET les proponemos explícitamente: construyamos esto juntos, no en paralelo.
+Vemos el registro de la comunidad como un socio de los registros académicos, no un rival -- y trabajaremos con transparencia con los investigadores a medida que la iniciativa tome forma. Los datos recogidos por los pacientes -- adherencia, efectos adversos de la vida real, las decisiones entre líneas de tratamiento -- son exactamente lo que les falta a los registros hospitalarios. Invitamos a cualquier grupo académico que quiera colaborar a escribirnos. Y a las comunidades internacionales de pacientes RET les proponemos explícitamente: construyamos esto juntos, no en paralelo.
 
-## Qué puedes hacer ahora
+## Nos ponemos manos a la obra -- y esto es solo el principio
 
-Por ahora no recogemos datos médicos. El primer paso es contar: ¿cuántos de nosotros contribuiríamos? Si la respuesta es "suficientes", construimos -- y cada paso siguiente se anunciará aquí.
+Este artículo es la introducción, no todo el plan. En los próximos días publicaremos aquí, paso a paso: el formulario de inscripción del interés, la lista exacta de los datos que pediremos, el consentimiento y la forma que tendrá el registro. Construimos en público, para que veáis cada decisión y podáis cuestionarla.
+
+Hasta entonces, solo una cosa importa: encontrarnos unos a otros. Cada paciente que levanta la mano ahora hace el registro más valioso para todos los demás.
 
 ---
 
 {{< action-box >}}
-1. Si eres paciente RET+ (o familiar) y contribuirías con tus datos, con consentimiento y seudonimizados: escríbenos a través de la [página de contacto](/es/contact/) con el asunto "REGISTRO" -- te contamos y te avisamos en cada paso.
-2. Si estás en grupos de pacientes RET (Facebook, foros): comparte el artículo. La masa crítica lo es todo.
-3. Si eres médico o investigador y la idea te parece útil (o equivocada -- eso también nos ayuda): escríbenos. Buscamos socios y críticos, a partes iguales.
-4. Si formas parte de una organización internacional de pacientes RET: contáctanos -- preferimos un registro común a uno paralelo.
+1. Levanta la mano AHORA: escríbenos a través de la [página de contacto](/es/contact/) con el asunto "REGISTRO" -- un solo mensaje, aunque sea vacío. Te contamos, te mantenemos al día en cada paso y estarás entre los primeros invitados cuando el formulario esté listo, en los próximos días.
+2. Comparte el artículo en los grupos de pacientes RET de los que formes parte (Facebook, foros, WhatsApp). Cada paciente adicional hace los datos de todos más valiosos -- la masa crítica lo es todo.
+3. Vuelve por aquí: el próximo artículo de la serie trae el formulario de interés y la lista de los datos. Construimos en público, en los próximos días, paso a paso.
+4. Si eres médico, investigador u organización de pacientes RET: escríbenos -- buscamos socios y críticos a partes iguales, y preferimos un registro común a uno paralelo.
 5. No envíes todavía datos médicos. La recogida empieza solo cuando publiquemos el consentimiento, el procedimiento de seudonimización y la plataforma -- todo anunciado aquí.
 {{< /action-box >}}
 
