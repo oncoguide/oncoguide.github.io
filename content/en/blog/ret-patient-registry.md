@@ -26,6 +26,20 @@ The bad news, said with all due respect: for the patient, this system is opaque.
 
 The European Union has already recognized the problem: the [European Health Data Space (EHDS)](https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en), in force since 2025, will gradually create the right of access to anonymized health data for secondary use. But full implementation is scheduled toward the end of the decade. Some of us do not have that kind of time.
 
+## The questions that keep us up at night -- and that no one can answer today
+
+Be honest: how many of these have you asked yourself, at 2 a.m., after a scan?
+
+- **How long does selpercatinib actually last for someone with *my exact* fusion partner and *my* co-mutations?** Not the trial average -- *my* configuration. Today, no doctor on Earth can answer that, because the data to answer it has never been put in one place.
+- **When my treatment stops working, what did the patients who were exactly where I am do next -- and how did it go?** Hundreds of RET+ patients have already crossed that bridge. Their experience exists. It is just not written down anywhere you or your oncologist can read it.
+- **Are my side effects normal? How many of us reduced the dose -- and did the response hold?** Every one of us negotiates this alone with their oncologist, as if no one had ever done it before.
+- **Which resistance mechanism should *I* be watched for, given my fusion?** Somewhere out there is probably a patient with your exact profile, twelve months ahead of you on the same road. Right now, the two of you have no way to learn from each other.
+- **When a researcher decides what to study next in RET, whose questions are on the table?** Not ours -- because ours have never been collected.
+
+If a registry of a few hundred of us existed, none of these would be unanswerable. That is the whole argument, and it fits in one sentence: **the answers exist, scattered across our lives -- they just have never been added up.**
+
+And to the most skeptical among us -- the ones thinking *"my one case won't change anything"*: in a disease this rare, the opposite is true. When the worldwide pool of comparable cases is measured in hundreds, **one patient is not a rounding error -- one patient is a percentage point.** Rare disease math is the one place where a single "count me in" genuinely moves the needle.
+
 ## Proof that it can be done: the patients who already did it
 
 We are not proposing a utopia. We are proposing to copy, honestly, what worked for others:
@@ -69,7 +83,7 @@ Until then, only one thing matters: finding each other. Every patient who raises
 
 {{< action-box >}}
 1. Raise your hand NOW: write to us through the [contact page](/en/contact/?subject=REGISTRY) with the subject "REGISTRY" -- a single message, even an empty one. We will count you in, keep you updated at every step, and you will be among the first invited when the form is ready, in the coming days.
-2. Share this article in the RET patient groups you are part of (Facebook, forums, WhatsApp). Every additional patient makes everyone's data more valuable -- critical mass is everything.
+2. Be the bridge. You are probably the only person who will bring this to YOUR corner of the community -- your Facebook group, your WhatsApp thread, your oncologist's other RET patient, your country's lung cancer forum, X/Bluesky. Share it there, in your own words, in your own language. In a 1-in-100 disease there is no advertising campaign that can find us -- we can only find each other. Critical mass is everything, and it is built one share at a time.
 3. Come back here: the next article in the series brings the interest form and the data list. We are building in public, in the coming days, step by step.
 4. If you are a doctor, a researcher or a RET patient organization: write to us -- we are looking for partners and critics in equal measure, and we prefer a joint registry to a parallel one.
 5. Do not send medical data yet. Collection begins only after we publish the consent form, the pseudonymization procedure and the platform -- all announced here.

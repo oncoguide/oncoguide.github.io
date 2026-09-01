@@ -26,6 +26,20 @@ La cattiva notizia, detta con tutto il rispetto: per il paziente, questo sistema
 
 L'Unione Europea ha già riconosciuto il problema: lo [Spazio Europeo dei Dati Sanitari (EHDS)](https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en), in vigore dal 2025, creerà gradualmente il diritto di accesso a dati sanitari anonimizzati per uso secondario. Ma l'applicazione completa è prevista verso la fine del decennio. Alcuni di noi non hanno tutto questo tempo.
 
+## Le domande che ci tengono svegli la notte -- e a cui oggi nessuno può rispondere
+
+Sii sincero: quante di queste ti sei posto, alle 2 di notte, dopo una TAC?
+
+- **Quanto dura davvero il selpercatinib per qualcuno con *esattamente* il mio partner di fusione e *le mie* co-mutazioni?** Non la media del trial -- la *mia* configurazione. Oggi nessun medico sulla Terra può rispondere, perché i dati per farlo non sono mai stati messi in un unico posto.
+- **Quando il mio trattamento smetterà di funzionare, cosa hanno fatto dopo i pazienti che erano esattamente dove sono io -- e com'è andata a loro?** Centinaia di pazienti RET+ hanno già attraversato quel ponte. La loro esperienza esiste. Solo che non è scritta da nessuna parte dove tu o il tuo oncologo possiate leggerla.
+- **I miei effetti collaterali sono normali? Quanti di noi hanno ridotto la dose -- e la risposta ha tenuto?** Ognuno di noi negozia questo da solo con il proprio oncologo, come se nessuno l'avesse mai fatto prima.
+- **Quale meccanismo di resistenza andrebbe sorvegliato in *me*, con la mia fusione?** Da qualche parte esiste probabilmente un paziente con esattamente il tuo profilo, dodici mesi davanti a te sulla stessa strada. In questo momento, voi due non avete alcun modo di imparare l'uno dall'altro.
+- **Quando un ricercatore decide cosa studiare dopo nel RET, le domande di chi sono sul tavolo?** Non le nostre -- perché le nostre non sono mai state raccolte.
+
+Se esistesse un registro con qualche centinaio di noi, nessuna di queste domande resterebbe senza risposta. Questo è tutto l'argomento, e sta in una frase: **le risposte esistono, sparse nelle nostre vite -- solo che nessuno le ha mai sommate.**
+
+E ai più scettici tra noi -- quelli che pensano *"il mio singolo caso non cambia nulla"*: in una malattia così rara, è vero l'esatto contrario. Quando il bacino mondiale di casi comparabili si misura in centinaia, **un paziente non è un errore di arrotondamento -- un paziente è un punto percentuale.** La matematica delle malattie rare è l'unico posto dove un singolo "contate su di me" sposta davvero l'ago.
+
 ## La prova che si può fare: i pazienti che l'hanno già fatto
 
 Non proponiamo un'utopia. Proponiamo di copiare, con onestà, ciò che ha funzionato per altri:
@@ -69,7 +83,7 @@ Fino ad allora, una sola cosa conta: trovarci gli uni con gli altri. Ogni pazien
 
 {{< action-box >}}
 1. Alza la mano ADESSO: scrivici tramite la [pagina dei contatti](/it/contact/?subject=REGISTRO) con oggetto "REGISTRO" -- un solo messaggio, anche vuoto. Ti contiamo, ti teniamo aggiornato a ogni passo e sarai tra i primi invitati quando il modulo sarà pronto, nei prossimi giorni.
-2. Condividi l'articolo nei gruppi di pazienti RET di cui fai parte (Facebook, forum, WhatsApp). Ogni paziente in più rende i dati di tutti più preziosi -- la massa critica è tutto.
+2. Sii il ponte. Probabilmente sei l'unica persona che porterà tutto questo nel TUO angolo di comunità -- il tuo gruppo Facebook, la tua chat WhatsApp, l'altro paziente RET del tuo oncologo, il forum sul cancro al polmone del tuo Paese, X/Bluesky. Condividilo lì, con parole tue, nella tua lingua. In una malattia da 1 su 100 non esiste campagna pubblicitaria capace di trovarci -- possiamo solo trovarci a vicenda. La massa critica è tutto, e si costruisce una condivisione alla volta.
 3. Torna qui: il prossimo articolo della serie porta il modulo di interesse e la lista dei dati. Costruiamo in pubblico, nei prossimi giorni, passo dopo passo.
 4. Se sei un medico, un ricercatore o un'organizzazione di pazienti RET: scrivici -- cerchiamo partner e critici in egual misura, e preferiamo un registro comune a uno parallelo.
 5. Non inviare ancora dati medici. La raccolta inizia solo dopo che avremo pubblicato il consenso, la procedura di pseudonimizzazione e la piattaforma -- tutto annunciato qui.

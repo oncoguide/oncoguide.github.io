@@ -26,6 +26,20 @@ Vestea proastă, spusă cu tot respectul: pentru pacient, sistemul ăsta e opac.
 
 Uniunea Europeană a recunoscut deja problema: [Spațiul European al Datelor de Sănătate (EHDS)](https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en), în vigoare din 2025, va crea treptat dreptul de acces la date de sănătate anonimizate pentru utilizare secundară. Dar aplicarea completă e programată spre finalul deceniului. Unii dintre noi nu au timpul ăsta.
 
+## Întrebările care ne țin treji noaptea -- și la care azi nu poate răspunde nimeni
+
+Fii sincer: la câte dintre astea te-ai gândit, la 2 noaptea, după un scan?
+
+- **Cât durează selpercatinib, de fapt, pentru cineva cu *exact* partenerul meu de fuziune și *exact* co-mutațiile mele?** Nu media din trial -- configurația *mea*. Azi, niciun medic de pe Pământ nu poate răspunde, pentru că datele necesare n-au fost niciodată puse la un loc.
+- **Când tratamentul meu nu mai funcționează, ce au făcut mai departe pacienții care au fost exact unde sunt eu -- și cum le-a mers?** Sute de pacienți RET+ au trecut deja podul ăsta. Experiența lor există. Doar că nu e scrisă nicăieri unde tu sau oncologul tău să o puteți citi.
+- **Efectele mele adverse sunt normale? Câți dintre noi au redus doza -- și răspunsul s-a menținut?** Fiecare negociază asta singur cu oncologul lui, ca și cum nimeni n-ar fi făcut-o vreodată înainte.
+- **Ce mecanism de rezistență ar trebui urmărit la *mine*, cu fuziunea mea?** Undeva există, probabil, un pacient cu profilul tău exact, cu douăsprezece luni înaintea ta pe același drum. Azi, voi doi nu aveți nicio cale să învățați unul de la altul.
+- **Când un cercetător decide ce studiază mai departe în RET, ale cui întrebări sunt pe masă?** Nu ale noastre -- pentru că ale noastre n-au fost niciodată adunate.
+
+Dacă ar exista un registru cu câteva sute dintre noi, niciuna dintre întrebările astea n-ar mai fi fără răspuns. Ăsta e tot argumentul, și încape într-o singură frază: **răspunsurile există, împrăștiate prin viețile noastre -- doar că nu le-a adunat nimeni vreodată.**
+
+Iar celor mai sceptici dintre noi -- cei care gândesc *"cazul meu singur nu schimbă nimic"*: într-o boală atât de rară, e exact invers. Când bazinul mondial de cazuri comparabile se măsoară în sute, **un pacient nu e o eroare de rotunjire -- un pacient e un punct procentual.** Matematica bolilor rare e singurul loc în care un singur "mă bag" chiar mută acul.
+
 ## Dovada că se poate: pacienții care au făcut-o deja
 
 Nu propunem o utopie. Propunem să copiem, cu onestitate, ce a funcționat la alții:
@@ -69,7 +83,7 @@ Până atunci, un singur lucru contează: să ne găsim unii pe alții. Fiecare 
 
 {{< action-box >}}
 1. Ridică mâna ACUM: scrie-ne prin [pagina de contact](/ro/contact/?subject=REGISTRU) cu subiectul "REGISTRU" -- un singur mesaj, chiar și gol. Te numărăm, te ținem la curent la fiecare pas și vei fi printre primii invitați când formularul e gata, în zilele următoare.
-2. Distribuie articolul în grupurile de pacienți RET din care faci parte (Facebook, forumuri, WhatsApp). Fiecare pacient în plus face datele tuturor mai valoroase -- masa critică e totul.
+2. Fii puntea. Ești, probabil, singura persoană care va duce asta în colțul TĂU de comunitate -- grupul tău de Facebook, firul tău de WhatsApp, celălalt pacient RET al oncologului tău, forumul de cancer pulmonar din țara ta, X/Bluesky. Distribuie acolo, cu vorbele tale, în limba ta. Într-o boală de 1 la 100 nu există campanie de publicitate care să ne găsească -- ne putem găsi doar unii pe alții. Masa critică e totul, și se construiește distribuire cu distribuire.
 3. Revino aici: următorul articol din serie aduce formularul de interes și lista datelor. Construim în public, în zilele următoare, pas cu pas.
 4. Dacă ești medic, cercetător sau organizație de pacienți RET: scrie-ne -- căutăm parteneri și critici în egală măsură, și preferăm un registru comun unuia paralel.
 5. Nu trimite încă date medicale. Colectarea începe doar după ce publicăm consimțământul, procedura de pseudonimizare și platforma -- toate anunțate aici.

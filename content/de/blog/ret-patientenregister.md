@@ -26,6 +26,20 @@ Die schlechte Nachricht, mit allem Respekt gesagt: Für den Patienten ist dieses
 
 Die Europäische Union hat das Problem bereits erkannt: Der [Europäische Gesundheitsdatenraum (EHDS)](https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en), seit 2025 in Kraft, wird schrittweise ein Zugangsrecht zu anonymisierten Gesundheitsdaten für die Sekundärnutzung schaffen. Aber die vollständige Anwendung ist erst gegen Ende des Jahrzehnts vorgesehen. Manche von uns haben diese Zeit nicht.
 
+## Die Fragen, die uns nachts wachhalten -- und die heute niemand beantworten kann
+
+Seien Sie ehrlich: Wie viele davon haben Sie sich schon gestellt, um 2 Uhr nachts, nach einem Scan?
+
+- **Wie lange wirkt Selpercatinib tatsächlich bei jemandem mit *genau* meinem Fusionspartner und *genau* meinen Co-Mutationen?** Nicht der Studiendurchschnitt -- *meine* Konfiguration. Heute kann das kein Arzt auf der Welt beantworten, weil die Daten dafür nie an einem Ort zusammengeführt wurden.
+- **Wenn meine Behandlung aufhört zu wirken -- was haben die Patienten als Nächstes getan, die genau dort waren, wo ich bin, und wie ist es ihnen ergangen?** Hunderte RET+ Patienten haben diese Brücke bereits überquert. Ihre Erfahrung existiert. Sie ist nur nirgendwo aufgeschrieben, wo Sie oder Ihr Onkologe sie lesen könnten.
+- **Sind meine Nebenwirkungen normal? Wie viele von uns haben die Dosis reduziert -- und hat das Ansprechen gehalten?** Jeder von uns verhandelt das allein mit seinem Onkologen, als hätte es nie jemand zuvor getan.
+- **Auf welchen Resistenzmechanismus sollte man bei *mir*, mit meiner Fusion, achten?** Irgendwo da draußen gibt es wahrscheinlich einen Patienten mit genau Ihrem Profil, zwölf Monate vor Ihnen auf demselben Weg. Im Moment haben Sie beide keine Möglichkeit, voneinander zu lernen.
+- **Wenn ein Forscher entscheidet, was als Nächstes zu RET erforscht wird -- wessen Fragen liegen auf dem Tisch?** Nicht unsere -- denn unsere wurden nie gesammelt.
+
+Gäbe es ein Register mit ein paar Hundert von uns, wäre keine dieser Fragen mehr unbeantwortbar. Das ist das ganze Argument, und es passt in einen Satz: **Die Antworten existieren, verstreut über unsere Leben -- sie wurden nur nie zusammengezählt.**
+
+Und an die Skeptischsten unter uns -- die denken: *"Mein einzelner Fall ändert doch nichts"*: Bei einer so seltenen Krankheit ist das Gegenteil wahr. Wenn der weltweite Pool vergleichbarer Fälle in Hunderten gemessen wird, ist **ein Patient kein Rundungsfehler -- ein Patient ist ein Prozentpunkt.** Die Mathematik der seltenen Krankheiten ist der eine Ort, an dem ein einziges "Ich bin dabei" wirklich etwas bewegt.
+
 ## Der Beweis, dass es geht: Patienten, die es bereits getan haben
 
 Wir schlagen keine Utopie vor. Wir schlagen vor, ehrlich zu kopieren, was bei anderen funktioniert hat:
@@ -69,7 +83,7 @@ Bis dahin zählt nur eines: dass wir einander finden. Jeder Patient, der jetzt d
 
 {{< action-box >}}
 1. Heben Sie JETZT die Hand: Schreiben Sie uns über die [Kontaktseite](/de/contact/?subject=REGISTER) mit dem Betreff "REGISTER" -- eine einzige Nachricht, auch eine leere. Wir zählen Sie mit, halten Sie bei jedem Schritt auf dem Laufenden, und Sie gehören zu den Ersten, die eingeladen werden, wenn das Formular in den kommenden Tagen fertig ist.
-2. Teilen Sie den Artikel in den RET-Patientengruppen, in denen Sie sind (Facebook, Foren, WhatsApp). Jeder zusätzliche Patient macht die Daten aller wertvoller -- die kritische Masse ist alles.
+2. Seien Sie die Brücke. Sie sind wahrscheinlich die einzige Person, die das in IHREN Winkel der Community trägt -- Ihre Facebook-Gruppe, Ihren WhatsApp-Chat, den anderen RET-Patienten Ihres Onkologen, das Lungenkrebs-Forum Ihres Landes, X/Bluesky. Teilen Sie es dort, mit Ihren eigenen Worten, in Ihrer eigenen Sprache. Bei einer 1-von-100-Krankheit gibt es keine Werbekampagne, die uns finden könnte -- wir können nur einander finden. Die kritische Masse ist alles, und sie entsteht Teilen für Teilen.
 3. Kommen Sie wieder: Der nächste Artikel der Serie bringt das Interessensformular und die Datenliste. Wir bauen öffentlich, in den kommenden Tagen, Schritt für Schritt.
 4. Wenn Sie Arzt, Forscher oder eine RET-Patientenorganisation sind: Schreiben Sie uns -- wir suchen Partner und Kritiker gleichermaßen und ziehen ein gemeinsames Register einem parallelen vor.
 5. Senden Sie noch keine medizinischen Daten. Die Sammlung beginnt erst, nachdem wir die Einwilligung, das Pseudonymisierungsverfahren und die Plattform veröffentlicht haben -- alles wird hier angekündigt.
