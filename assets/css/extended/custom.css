@@ -376,7 +376,7 @@ select:focus-visible {
 /* ============================================
    Search Icon in Nav
    ============================================ */
-.nav-search a {
+a.nav-search {
   display: inline-flex;
   align-items: center;
   padding: 4px;
@@ -385,7 +385,7 @@ select:focus-visible {
   transition: opacity 0.2s;
 }
 
-.nav-search a:hover {
+a.nav-search:hover {
   opacity: 1;
   color: var(--onco-teal);
 }
@@ -402,13 +402,21 @@ select:focus-visible {
 }
 
 #menu {
-  gap: 4px;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow: visible;
+  white-space: normal;
+}
+
+#menu li {
+  white-space: nowrap;
 }
 
 #menu li a {
   font-family: var(--font-body);
   font-size: 14px;
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 4px;
   transition: background 0.15s, color 0.15s;
 }
