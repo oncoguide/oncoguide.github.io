@@ -71,7 +71,9 @@ Wir wissen aus eigener Erfahrung, wie wertvoll jede Information auf dieser Liste
 
 ## Partner, nicht Rivale
 
-Wir sehen das Community-Register als Partner der akademischen Register, nicht als Rivalen -- und wir werden transparent mit den Forschern zusammenarbeiten, während das Vorhaben Gestalt annimmt. Die von Patienten gesammelten Daten -- Adhärenz, Nebenwirkungen aus dem echten Leben, die Entscheidungen zwischen Therapielinien -- sind genau das, was den Krankenhausregistern fehlt. Wir laden jede akademische Gruppe, die kooperieren möchte, ein, uns zu schreiben. Und den internationalen RET-Patienten-Communities schlagen wir ausdrücklich vor: Lasst uns das gemeinsam aufbauen, nicht parallel.
+Wir sehen das Community-Register als Partner der akademischen Register, nicht als Rivalen -- und wir werden transparent mit den Forschern zusammenarbeiten, während das Vorhaben Gestalt annimmt. Die von Patienten gesammelten Daten -- Adhärenz, Nebenwirkungen aus dem echten Leben, die Entscheidungen zwischen Therapielinien -- sind genau das, was den Krankenhausregistern fehlt. Wir laden jede akademische Gruppe, die kooperieren möchte, ein, uns zu schreiben.
+
+Und dasselbe gilt -- erst recht -- für die Patienten-Communities, die dieses Ökosystem bereits zusammenhalten: RETpositive, die RET Renegades, die nationalen Lungenkrebsgruppen, die Foren. Das Register ist keine neue Organisation, die um Mitglieder konkurriert -- es ist gemeinsame Infrastruktur, die allen angeboten wird. Konkret: Jede Patienten-Community, die sich anschließt, erhält eine Stimme in der Governance des Registers, die aggregierten Ergebnisse für ihre eigene Advocacy- und Forschungsagenda und die volle Anerkennung für die Beiträge ihrer Mitglieder. Ihre Gruppen haben das Vertrauen und die Reichweite; wir bauen die Leitungen. Den internationalen RET-Patienten-Communities schlagen wir ausdrücklich vor: Lasst uns das gemeinsam aufbauen, nicht parallel -- unter eurem Dach, wenn es das braucht.
 
 ## Wir legen los -- und das ist erst der Anfang
 

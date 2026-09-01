@@ -71,7 +71,9 @@ Nous savons par notre propre expérience à quel point chaque information de cet
 
 ## Partenaire, pas rival
 
-Nous voyons le registre de la communauté comme un partenaire des registres académiques, pas comme un rival -- et nous travaillerons en toute transparence avec les chercheurs, à mesure que la démarche prendra forme. Les données collectées par les patients -- observance, effets indésirables de la vie réelle, décisions entre les lignes de traitement -- sont exactement ce qui manque aux registres hospitaliers. Nous invitons tout groupe académique souhaitant collaborer à nous écrire. Et aux communautés internationales de patients RET, nous le proposons explicitement : construisons cela ensemble, pas en parallèle.
+Nous voyons le registre de la communauté comme un partenaire des registres académiques, pas comme un rival -- et nous travaillerons en toute transparence avec les chercheurs, à mesure que la démarche prendra forme. Les données collectées par les patients -- observance, effets indésirables de la vie réelle, décisions entre les lignes de traitement -- sont exactement ce qui manque aux registres hospitaliers. Nous invitons tout groupe académique souhaitant collaborer à nous écrire.
+
+Et il en va de même -- à plus forte raison -- pour les communautés de patients qui tiennent déjà cet écosystème debout : RETpositive, les RET Renegades, les groupes nationaux de cancer du poumon, les forums. Le registre n'est pas une nouvelle organisation en concurrence pour des membres -- c'est une infrastructure partagée, offerte à toutes. Concrètement : toute communauté de patients qui nous rejoint obtient une voix dans la gouvernance du registre, les résultats agrégés pour nourrir son propre agenda d'advocacy et de recherche, et tout le crédit pour la contribution de ses membres. Vos groupes ont la confiance et la portée ; nous construisons la tuyauterie. Aux communautés internationales de patients RET, nous le proposons explicitement : construisons cela ensemble, pas en parallèle -- sous votre égide, si c'est ce qu'il faut.
 
 ## Nous nous mettons au travail -- et ce n'est que le début
 

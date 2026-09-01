@@ -71,7 +71,9 @@ Sappiamo per esperienza diretta quanto sia preziosa ogni informazione di questa 
 
 ## Partner, non rivale
 
-Vediamo il registro della comunità come un partner dei registri accademici, non un rivale -- e lavoreremo in modo trasparente con i ricercatori, man mano che l'iniziativa prende forma. I dati raccolti dai pazienti -- aderenza, effetti collaterali della vita reale, le decisioni tra le linee di trattamento -- sono esattamente ciò che manca ai registri ospedalieri. Invitiamo qualsiasi gruppo accademico che voglia collaborare a scriverci. E alle comunità internazionali di pazienti RET proponiamo esplicitamente: costruiamo questo insieme, non in parallelo.
+Vediamo il registro della comunità come un partner dei registri accademici, non un rivale -- e lavoreremo in modo trasparente con i ricercatori, man mano che l'iniziativa prende forma. I dati raccolti dai pazienti -- aderenza, effetti collaterali della vita reale, le decisioni tra le linee di trattamento -- sono esattamente ciò che manca ai registri ospedalieri. Invitiamo qualsiasi gruppo accademico che voglia collaborare a scriverci.
+
+E lo stesso vale -- a maggior ragione -- per le comunità di pazienti che già tengono in piedi questo ecosistema: RETpositive, i RET Renegades, i gruppi nazionali sul cancro al polmone, i forum. Il registro non è una nuova organizzazione che compete per i membri -- è infrastruttura condivisa, offerta a tutte. Concretamente: ogni comunità di pazienti che si unisce ottiene voce nella governance del registro, i risultati aggregati per alimentare la propria agenda di advocacy e ricerca, e pieno credito per il contributo dei suoi membri. I vostri gruppi hanno la fiducia e la portata; noi costruiamo l'impianto. Alle comunità internazionali di pazienti RET proponiamo esplicitamente: costruiamo questo insieme, non in parallelo -- sotto il vostro ombrello, se è questo che serve.
 
 ## Ci mettiamo al lavoro -- e questo è solo l'inizio
 

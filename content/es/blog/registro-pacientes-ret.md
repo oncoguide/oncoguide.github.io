@@ -71,7 +71,9 @@ Sabemos por experiencia propia lo valiosa que es cada información de esta lista
 
 ## Socio, no rival
 
-Vemos el registro de la comunidad como un socio de los registros académicos, no un rival -- y trabajaremos con transparencia con los investigadores a medida que la iniciativa tome forma. Los datos recogidos por los pacientes -- adherencia, efectos adversos de la vida real, las decisiones entre líneas de tratamiento -- son exactamente lo que les falta a los registros hospitalarios. Invitamos a cualquier grupo académico que quiera colaborar a escribirnos. Y a las comunidades internacionales de pacientes RET les proponemos explícitamente: construyamos esto juntos, no en paralelo.
+Vemos el registro de la comunidad como un socio de los registros académicos, no un rival -- y trabajaremos con transparencia con los investigadores a medida que la iniciativa tome forma. Los datos recogidos por los pacientes -- adherencia, efectos adversos de la vida real, las decisiones entre líneas de tratamiento -- son exactamente lo que les falta a los registros hospitalarios. Invitamos a cualquier grupo académico que quiera colaborar a escribirnos.
+
+Y lo mismo vale -- con más razón aún -- para las comunidades de pacientes que ya sostienen este ecosistema: RETpositive, los RET Renegades, los grupos nacionales de cáncer de pulmón, los foros. El registro no es una organización nueva que compite por miembros -- es infraestructura compartida, ofrecida a todas ellas. En concreto: cualquier comunidad de pacientes que se sume recibe voz en la gobernanza del registro, los resultados agregados para impulsar su propia agenda de advocacy e investigación, y todo el crédito por lo que aporten sus miembros. Vuestros grupos tienen la confianza y el alcance; nosotros construimos la fontanería. A las comunidades internacionales de pacientes RET les proponemos explícitamente: construyamos esto juntos, no en paralelo -- bajo vuestro paraguas, si eso es lo que hace falta.
 
 ## Nos ponemos manos a la obra -- y esto es solo el principio
 

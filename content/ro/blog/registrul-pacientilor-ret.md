@@ -71,7 +71,9 @@ Ca să fie util, registrul ar aduna, de la cine alege să contribuie: diagnostic
 
 ## Partener, nu rival
 
-Vedem registrul comunității ca pe un partener al registrelor academice, nu un rival -- și vom lucra transparent cu cercetătorii, pe măsură ce demersul prinde contur. Datele colectate de pacienți -- aderență, efecte adverse din viața reală, deciziile dintre linii de tratament -- sunt exact ce lipsește registrelor spitalicești. Invităm orice grup academic care vrea să colaboreze să ne scrie. Iar comunităților internaționale de pacienți RET le propunem explicit: hai să construim asta împreună, nu în paralel.
+Vedem registrul comunității ca pe un partener al registrelor academice, nu un rival -- și vom lucra transparent cu cercetătorii, pe măsură ce demersul prinde contur. Datele colectate de pacienți -- aderență, efecte adverse din viața reală, deciziile dintre linii de tratament -- sunt exact ce lipsește registrelor spitalicești. Invităm orice grup academic care vrea să colaboreze să ne scrie.
+
+Și același lucru e valabil -- cu atât mai mult -- pentru comunitățile de pacienți care țin deja acest ecosistem în picioare: RETpositive, RET Renegades, grupurile naționale de cancer pulmonar, forumurile. Registrul nu e o organizație nouă care concurează pentru membri -- e infrastructură comună, oferită tuturor. Concret: orice comunitate de pacienți care se alătură primește un cuvânt de spus în guvernanța registrului, rezultatele agregate pentru propria agendă de advocacy și cercetare, și credit deplin pentru contribuția membrilor ei. Grupurile voastre au încrederea și acoperirea; noi construim instalația. Comunităților internaționale de pacienți RET le propunem explicit: hai să construim asta împreună, nu în paralel -- sub umbrela voastră, dacă asta e nevoie.
 
 ## Ne apucăm de treabă -- iar ăsta e doar începutul
 

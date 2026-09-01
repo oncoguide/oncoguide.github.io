@@ -71,7 +71,9 @@ We know from our own experience how valuable every item on that list is -- becau
 
 ## Partner, not rival
 
-We see the community registry as a partner of the academic registries, not a rival -- and we will work transparently with researchers as this effort takes shape. The data patients collect -- adherence, real-world side effects, the decisions between treatment lines -- is exactly what hospital registries lack. We invite any academic group that wants to collaborate to write to us. And to the international RET patient communities we propose explicitly: let's build this together, not in parallel.
+We see the community registry as a partner of the academic registries, not a rival -- and we will work transparently with researchers as this effort takes shape. The data patients collect -- adherence, real-world side effects, the decisions between treatment lines -- is exactly what hospital registries lack. We invite any academic group that wants to collaborate to write to us.
+
+And the same goes -- even more so -- for the patient communities that already hold this ecosystem together: RETpositive, the RET Renegades, the national lung cancer groups, the forums. The registry is not a new organization competing for members -- it is shared infrastructure, offered to all of them. Concretely: any patient community that joins gets a voice in the registry's governance, the aggregate results to power its own advocacy and research agenda, and full credit for what its members contribute. Your groups have the trust and the reach; we are building the plumbing. To the international RET patient communities we propose explicitly: let's build this together, not in parallel -- under your umbrella, if that is what it takes.
 
 ## We are getting to work -- and this is only the beginning
 
